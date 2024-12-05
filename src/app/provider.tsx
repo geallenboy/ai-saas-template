@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { NextUIProvider } from "@nextui-org/react";
-import Header from "@/components/Header";
+import Header from "@/app/_components/Header";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { db } from "@/config/db";
