@@ -29,7 +29,7 @@ const DashboardPage = async () => {
         credits={credits}
       />
       <div className="grid gap-6 grid-cols-3 md:grid-cols-4">
-        <RecentImage images={images?.slice(0, 6) ?? []} />
+        <RecentImage images={images?.slice(0, 6) ?? ([] as any)} />
         <div className="h-full col-span-full xl:col-span-1 gap-0 sm:gap-6 xl:gap-0 xl:space-y-6 flex flex-col sm:flex-row xl:flex-col space-y-6">
           <QuickAction />
           <RecentModels models={models ?? []} />
