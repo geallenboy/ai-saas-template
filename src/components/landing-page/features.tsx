@@ -1,12 +1,12 @@
 import React from "react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { cn } from "@/lib/utils";
-import { getI18n } from "@/context";
+import { useI18n } from "@/context";
 import { featureList } from "@/context/home";
 import { useTranslations } from "next-intl";
 
 const Features = () => {
-  const featureData = getI18n(featureList);
+  const featureData = useI18n(featureList);
   const featureT = useTranslations("home.features");
   return (
     <section

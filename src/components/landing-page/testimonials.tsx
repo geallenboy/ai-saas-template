@@ -3,7 +3,7 @@ import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { cn } from "@/lib/utils";
 import Image, { StaticImageData } from "next/image";
 import Marquee from "@/components/ui/marquee";
-import { getI18n } from "@/context";
+import { useI18n } from "@/context";
 import { reviewsList } from "@/context/home";
 import { useTranslations } from "next-intl";
 
@@ -48,7 +48,7 @@ const ReviewCard = ({
 
 const Testimonials = () => {
   const reviewT = useTranslations("home.review");
-  const reviewsData = getI18n(reviewsList);
+  const reviewsData = useI18n(reviewsList);
   const firstRow = reviewsData.slice(0, reviewsData.length / 2);
   const secondRow = reviewsData.slice(reviewsData.length / 2);
   return (
