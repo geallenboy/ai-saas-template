@@ -70,7 +70,7 @@ SUPABASE_ANON_KEY='' # change this to your supabase anon key
 SUPABASE_SERVICE_ROLE_KEY='' # change this to your supabase service role key
 
 # Replicate
-REPLICATE_API_TOKEN='r8_D2n3fbmU0lFPU9zyqrOwNvsKQPDdJI13KpRLe' # change this to your replicate api token
+REPLICATE_API_TOKEN='' # change this to your replicate api token
 NEXT_PUBLIC_REPLICATE_USER_NAME='' # change this to your replicate username
 
 # Use the following in the development environment
