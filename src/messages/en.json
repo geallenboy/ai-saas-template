@@ -10,7 +10,7 @@
     "system": "System"
   },
   "app": {
-    "name": "AI SaaS",
+    "name": "AI Saas",
     "textPro": "Pro"
   },
   "login": {
@@ -80,7 +80,7 @@
       "features": "Features",
       "pricing": "Pricing",
       "faqs": "FAQs",
-      "signup": "Sign up"
+      "login": "Login"
     },
     "faqs": {
       "name": "FAQs",
@@ -127,10 +127,6 @@
   },
   "dashboard": {
     "title": "Welcome back"
-  },
-  "modelTraining": {
-    "title": "Train Model",
-    "desc": "Train anew model with yout own image"
   },
   "account": {
     "title": "Account settings",
@@ -207,13 +203,5 @@
       "selected": "Selected",
       "mostPopular": "Most Popular"
     }
-  },
-  "gallery": {
-    "title": "My Images",
-    "desc": "Here you can see all the images you have generated .Click on an image to view details"
-  },
-  "model": {
-    "title": "My Modles",
-    "desc": "View and manage your trained models"
   }
 }

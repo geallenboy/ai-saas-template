@@ -30,10 +30,10 @@ const NavItemsRight = ({ user }: { user: any }) => {
         </Link>
       ) : (
         <Link
-          href={"/login?state=signup"}
+          href={"/login"}
           className="text-sm font-medium hover:underline underline-offset-4"
         >
-          <Button variant={"outline"}> {homeT("signup")}</Button>
+          <Button variant={"outline"}> {homeT("login")}</Button>
         </Link>
       )}
     </>

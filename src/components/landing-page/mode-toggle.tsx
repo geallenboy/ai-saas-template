@@ -1,9 +1,8 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,34 +11,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 export const ModeToggle = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
-
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mountedTheme, setMountedTheme] = useState<string | null>(null);
   const t = useTranslations("themeConfig");
+  // 组件挂载后，更新主题状态，防止 SSR 不匹配
+  useEffect(() => {
+    setMountedTheme(resolvedTheme || null);
+  }, [resolvedTheme]);
 
+  // 在 SSR 期间，先不渲染完整内容，防止 hydration 错误
+  if (!mountedTheme) {
+    return (
+      <Button variant="outline" size="icon" className="w-[90px]">
+        loading
+      </Button>
+    );
+  }
   return (
-    <DropdownMenu onOpenChange={(open) => setIsOpen(open)}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
           size="icon"
           className="flex items-center gap-1 w-[90px]"
         >
-          {theme === "light" ? (
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          {/* 仅在 theme 存在时渲染图标，防止 hydration 问题 */}
+          {resolvedTheme === "light" ? (
+            <Sun className="h-4 w-4 transition-transform dark:-rotate-90 dark:scale-0" />
           ) : (
-            <Moon className="h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <Moon className="h-4 w-4 transition-transform rotate-90 scale-0 dark:rotate-0 dark:scale-100" />
           )}
-
-          <span>{theme === "light" ? t("light") : t("dark")}</span>
-          <ChevronDown
-            className={`h-4 w-4 transition-transform duration-200 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          />
+          <span>{t(resolvedTheme || "light")}</span>
+          <ChevronDown className="h-4 w-4 transition-transform duration-200" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

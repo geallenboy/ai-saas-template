@@ -11,7 +11,7 @@
   },
 
   "app": {
-    "name": "AI SaaS",
+    "name": "AI Saas",
     "textPro": "专业版"
   },
   "login": {
@@ -81,7 +81,7 @@
       "features": "功能",
       "pricing": "定价",
       "faqs": "常见问题",
-      "signup": "注册"
+      "login": "登录"
     },
     "faqs": {
       "name": "常见问题",
@@ -90,7 +90,7 @@
     },
     "features": {
       "name": "功能",
-      "title": "用  AI 解锁无限可能",
+      "title": "用 AI 解锁无限可能",
       "text": "我们的平台提供了多种功能，旨在提升您的图像创作体验。从易于使用的编辑工具到强大的 AI 驱动的图像生成，我们拥有将您的想法变为现实所需的一切。"
     },
     "hero": {
@@ -128,10 +128,6 @@
   },
   "dashboard": {
     "title": "欢迎回来"
-  },
-  "modelTraining": {
-    "title": "训练模型",
-    "desc": "使用您自己的图像训练一个新模型"
   },
   "account": {
     "title": "账户设置",
@@ -208,13 +204,5 @@
       "selected": "已选择",
       "mostPopular": "最受欢迎"
     }
-  },
-  "gallery": {
-    "title": "我的图像",
-    "desc": "在这里，您可以查看所有生成的图像。点击图像以查看详细信息。"
-  },
-  "model": {
-    "title": "我的模型",
-    "desc": "查看和管理您训练好的模型"
   }
 }
