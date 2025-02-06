@@ -20,7 +20,7 @@
       "email": "email",
       "password": "password",
       "passwordInfo": "Enter your password",
-      "btn": "Submit",
+      "btn": "Login",
       "btn1": "Need an account? Sign up",
       "btn2": "Forgot pasword?",
       "info1": "signup...",
