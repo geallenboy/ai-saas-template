@@ -9,8 +9,8 @@ import "./globals.css";
 const MyAppFont = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Image AI",
-  description: "Generation Image AI ",
+  title: "AI Saas",
+  description: "AI Saas Template",
 };
 
 export default async function RootLayout({
@@ -22,9 +22,6 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="./logo.svg" />
-      </head>
       <body className={`${MyAppFont.className} font-sans`}>
         <ThemeProvider
           attribute="class"

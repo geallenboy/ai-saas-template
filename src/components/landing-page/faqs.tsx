@@ -2,7 +2,7 @@ import React from "react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { cn } from "@/lib/utils";
 import { faqsList } from "@/context/home";
-import { getI18n } from "@/context";
+import { useI18n } from "@/context";
 import {
   Accordion,
   AccordionContent,
@@ -29,7 +29,7 @@ const Question = ({
 };
 
 const Faqs = () => {
-  const faqsData = getI18n(faqsList);
+  const faqsData = useI18n(faqsList);
   const faqsT = useTranslations("home.faqs");
   return (
     <section

@@ -4,7 +4,6 @@ import Features from "@/components/landing-page/features";
 import Footer from "@/components/landing-page/footer";
 import Hero from "@/components/landing-page/hero";
 import Navigtion from "@/components/landing-page/navigation";
-import Ready from "@/components/landing-page/ready";
 
 export default async function HomePage() {
   return (
@@ -13,7 +12,6 @@ export default async function HomePage() {
       <Hero />
       <Features />
       <Faqs />
-      <Ready />
       <Footer />
     </main>
   );

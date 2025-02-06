@@ -58,3 +58,5 @@ export const ModeToggle = () => {
     </DropdownMenu>
   );
 };
+
+export default ModeToggle;
