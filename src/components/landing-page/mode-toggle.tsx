@@ -16,7 +16,7 @@ export const ModeToggle = () => {
   const { resolvedTheme, setTheme } = useTheme();
   const [mountedTheme, setMountedTheme] = useState<string | null>(null);
   const t = useTranslations("themeConfig");
-  // 组件挂载后，更新主题状态，防止 SSR 不匹配
+
   useEffect(() => {
     setMountedTheme(resolvedTheme || null);
   }, [resolvedTheme]);
