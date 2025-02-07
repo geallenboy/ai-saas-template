@@ -13,6 +13,14 @@ const nextConfig: NextConfig = {
             {
                 protocol: "https",
                 hostname: "qwkccrpysbnsdqfweqki.supabase.co"
+            },
+            {
+                protocol: "https",
+                hostname: "lh3.googleusercontent.com"
+            },
+            {
+                protocol: "https",
+                hostname: "avatars.githubusercontent.com"
             }
         ]
     }

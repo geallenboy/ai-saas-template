@@ -15,13 +15,11 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { loginAction, resetPasswordAction } from "@/app/actions/auth-actions";
-import { redirect } from "next/navigation";
+import { resetPasswordAction } from "@/app/actions/auth-actions";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export const ResetPassword = () => {
-  const [loading, setLoading] = useState(false);
   const toastId = useId();
   const resetPasswordT = useTranslations("login.resetPassword");
   const formSchema = z.object({
