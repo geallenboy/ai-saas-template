@@ -153,7 +153,7 @@ yarn dev
 如有问题或建议，请通过以下方式联系我们：
 
 - **Email**: gejialun88@gmail.com
-- **weixin**: gegarron
+- **weixin**: wxgegarron
 - **GitHub Issues**: [提交 Issue](https://github.com/geallenboy/ai-saas-template/issues)
 
 ---
