@@ -76,7 +76,7 @@
     "upgrade": "升级",
     "settings": "设置",
     "billing": "账单",
-    "logout":"退出"
+    "logout": "退出"
   },
   "home": {
     "navigtion": {
@@ -84,6 +84,8 @@
       "features": "功能",
       "pricing": "定价",
       "faqs": "常见问题",
+      "aboutMe": "关于我",
+      "github": "Github",
       "login": "登录"
     },
     "faqs": {

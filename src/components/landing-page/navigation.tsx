@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 
 import { LanguageSwitcher } from "./language-switcher";
 import { ModeToggle } from "./mode-toggle";
+import { AuroraText } from "../magicui/aurora-text";
 
 const NavItemsRight = ({ user }: { user: any }) => {
   const homeT = useTranslations("home.navigtion");
@@ -53,6 +54,18 @@ const NavItemsLeft = () => {
         className="text-sm font-medium hover:underline underline-offset-4"
       >
         {homeT("faqs")}
+      </Link>
+      <Link
+        href={"https://github.com/geallenboy"}
+        className="text-sm font-medium hover:underline underline-offset-4"
+      >
+        <AuroraText>{homeT("aboutMe")}</AuroraText>
+      </Link>
+      <Link
+        href={"https://github.com/geallenboy/ai-saas-template"}
+        className="text-sm font-medium hover:underline underline-offset-4 tracking-tighter"
+      >
+        <AuroraText>{homeT("github")}</AuroraText>
       </Link>
     </>
   );
