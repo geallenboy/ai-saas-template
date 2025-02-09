@@ -15,13 +15,15 @@
     "textPro": "专业版"
   },
   "login": {
+    "google": "Google登录",
+    "github": "Github登录",
     "loginForm": {
       "name": "登录",
       "title1": "在下方输入您的邮箱以登录您的账户",
       "email": "邮箱",
       "password": "密码",
       "passwordInfo": "请输入您的密码",
-      "btn": "提交",
+      "btn": "登录",
       "btn1": "需要账户？注册",
       "btn2": "忘记密码？",
       "info1": "正在登录...",
@@ -73,7 +75,8 @@
     "name": "平台",
     "upgrade": "升级",
     "settings": "设置",
-    "billing": "账单"
+    "billing": "账单",
+    "logout": "退出"
   },
   "home": {
     "navigtion": {
@@ -81,6 +84,8 @@
       "features": "功能",
       "pricing": "定价",
       "faqs": "常见问题",
+      "aboutMe": "关于我",
+      "github": "Github",
       "login": "登录"
     },
     "faqs": {

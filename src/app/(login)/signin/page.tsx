@@ -1,12 +1,12 @@
 import React from "react";
-import LoginForm from "@/components/login/login-form";
+import SignInForm from "@/components/login/sigin-form";
 import LoginImage from "@/components/login/login-image";
-import { createClient } from "@/lib/supabase/server";
+import { createServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/supabase/queries";
 
-const LoginPage = async () => {
-  const supabase = await createClient();
+const SignInPage = async () => {
+  const supabase = await createServer();
   const [user] = await Promise.all([getUser(supabase)]);
 
   if (user) {
@@ -17,11 +17,11 @@ const LoginPage = async () => {
       <LoginImage />
       <div className="relative flex flex-col items-center justify-center p-8 h-full w-full">
         <div className=" w-full md:w-[400px] mx-auto">
-          <LoginForm />
+          <SignInForm />
         </div>
       </div>
     </main>
   );
 };
 
-export default LoginPage;
+export default SignInPage;

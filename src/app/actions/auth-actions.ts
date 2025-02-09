@@ -1,7 +1,10 @@
 "use server"
 
-import { createClient } from "@/lib/supabase/server";
+import { createServer } from "@/lib/supabase/server";
+import { SupabaseClient } from '@supabase/supabase-js';
 import { redirect } from "next/navigation";
+import { cache } from 'react';
+
 
 interface AuthResponse {
     error: null | string;
@@ -9,8 +12,21 @@ interface AuthResponse {
     data: unknown | null;
 }
 
+export const getUser = cache(async (supabase: SupabaseClient) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+});
+
+export const getUserDetails = cache(async (supabase: SupabaseClient) => {
+    const { data: userDetails } = await supabase
+        .from('users')
+        .select('*')
+        .single();
+    return userDetails;
+});
+
 export const signupAction = async (formData: FormData): Promise<AuthResponse> => {
-    const supbase = await createClient();
+    const supbase = await createServer();
     const data = {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
@@ -32,7 +48,7 @@ export const signupAction = async (formData: FormData): Promise<AuthResponse> =>
 }
 
 export const loginAction = async (formData: FormData): Promise<AuthResponse> => {
-    const supbase = await createClient();
+    const supbase = await createServer();
     const data = {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
@@ -49,14 +65,14 @@ export const loginAction = async (formData: FormData): Promise<AuthResponse> => 
 }
 
 export const logoutAction = async (): Promise<void> => {
-    const supbase = await createClient();
+    const supbase = await createServer();
     await supbase.auth.signOut()
-    redirect("/login")
+    redirect("/signin")
 
 }
 
 export const updateProfileAction = async ({ fullName }: { fullName: string }): Promise<AuthResponse> => {
-    const supbase = await createClient();
+    const supbase = await createServer();
 
     const { data: profleData, error } = await supbase.auth.updateUser({
         data: { fullName }
@@ -71,7 +87,7 @@ export const updateProfileAction = async ({ fullName }: { fullName: string }): P
 }
 
 export const resetPasswordAction = async ({ email }: { email: string }): Promise<AuthResponse> => {
-    const supbase = await createClient();
+    const supbase = await createServer();
 
     const { data: profleData, error } = await supbase.auth.resetPasswordForEmail(email)
 
@@ -84,7 +100,7 @@ export const resetPasswordAction = async ({ email }: { email: string }): Promise
 }
 
 export const changePasswordAction = async (newPassword: string): Promise<AuthResponse> => {
-    const supbase = await createClient();
+    const supbase = await createServer();
     const { data, error } = await supbase.auth.updateUser({
         password: newPassword
     })
@@ -95,3 +111,23 @@ export const changePasswordAction = async (newPassword: string): Promise<AuthRes
     }
 
 }
+
+const signInWith = (provider: any) => async () => {
+    const supabase = await createServer()
+    const auth_callback_url = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+            redirectTo: auth_callback_url,
+        },
+    })
+    console.log(data)
+
+    if (error) {
+        console.log(error)
+    }
+    redirect(data.url || "")
+}
+
+export const signinWithGoogle = signInWith('google')
+export const signinWithGithub = signInWith('github')

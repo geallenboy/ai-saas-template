@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { createClient } from "@/lib/supabase/server";
-import { getUser } from "@/lib/supabase/queries";
+
 import { LanguageSwitcher } from "./language-switcher";
 import { ModeToggle } from "./mode-toggle";
+import { AuroraText } from "../magicui/aurora-text";
 
 const NavItemsRight = ({ user }: { user: any }) => {
   const homeT = useTranslations("home.navigtion");
@@ -30,7 +30,7 @@ const NavItemsRight = ({ user }: { user: any }) => {
         </Link>
       ) : (
         <Link
-          href={"/login"}
+          href={"/signin"}
           className="text-sm font-medium hover:underline underline-offset-4"
         >
           <Button variant={"outline"}> {homeT("login")}</Button>
@@ -55,14 +55,23 @@ const NavItemsLeft = () => {
       >
         {homeT("faqs")}
       </Link>
+      <Link
+        href={"https://github.com/geallenboy"}
+        className="text-sm font-medium hover:underline underline-offset-4"
+      >
+        <AuroraText>{homeT("aboutMe")}</AuroraText>
+      </Link>
+      <Link
+        href={"https://github.com/geallenboy/ai-saas-template"}
+        className="text-sm font-medium hover:underline underline-offset-4 tracking-tighter"
+      >
+        <AuroraText>{homeT("github")}</AuroraText>
+      </Link>
     </>
   );
 };
 
-const Navigtion = async () => {
-  const supabase = await createClient();
-  const user = await getUser(supabase);
-
+const Navigtion = async ({ user }: { user: any }) => {
   return (
     <div className="w-full bg-background/60 backdrop-blur-md fixed top-0 px-8 py-4 z-50 shadow-xl overflow-hidden">
       <header className="contariner mx-auto flex items-center ">

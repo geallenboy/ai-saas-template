@@ -10,21 +10,21 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { createClient } from "@/lib/supabase/server";
+import { createServer } from "@/lib/supabase/server";
 import Title from "./title";
 import Link from "next/link";
 
 export const AppSidebar = async ({
   ...props
 }: React.ComponentProps<typeof Sidebar>) => {
-  const supbase = await createClient();
+  const supbase = await createServer();
   const {
     data: { user },
   } = await supbase.auth.getUser();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <Link href={"/dashboard"}>
+        <Link href={"/"}>
           <SidebarMenuButton
             size="lg"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"

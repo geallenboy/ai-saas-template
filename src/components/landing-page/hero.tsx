@@ -49,7 +49,7 @@ const Hero = () => {
           </div>
           <span className="text-sm font-medium"> {heroT("title4")}</span>
         </div>
-        <Link href="/login?state=signup">
+        <Link href="/dashboard">
           <Button className="rounded-md text-base h-12">
             {heroT("title5")}
           </Button>
