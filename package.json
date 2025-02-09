@@ -1,10 +1,10 @@
 {
   "name": "ai-saas-template",
-  "version": "0.1.2",
+  "version": "0.1.23",
   "description": "是一个开箱即用的 Next.js 模板，专为快速构建 AI 项目的 SaaS 应用而设计.",
   "author": "gegarron <gejialun88@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com",
+  "homepage": "https://github.com/geallenboy/ai-saas-template",
   "scripts": {
     "dev": "next dev ",
     "build": "next build",
