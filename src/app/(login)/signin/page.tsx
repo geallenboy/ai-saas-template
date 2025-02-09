@@ -3,11 +3,11 @@ import SignInForm from "@/components/login/sigin-form";
 import LoginImage from "@/components/login/login-image";
 import { createServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getUser } from "@/lib/supabase/queries";
+import { getUser } from "@/app/actions/auth-actions";
 
 const SignInPage = async () => {
   const supabase = await createServer();
-  const [user] = await Promise.all([getUser(supabase)]);
+  const user = await getUser(supabase);
 
   if (user) {
     return redirect("/dashboard");

@@ -1,12 +1,12 @@
+import { getUser } from "@/app/actions/auth-actions";
 import Title from "@/components/dashboard/title";
-import { getUser } from "@/lib/supabase/queries";
 import { createServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import React from "react";
 
 const DashboardPage = async () => {
   const supabase = await createServer();
-  const [user] = await Promise.all([getUser(supabase)]);
+  const user = await getUser(supabase);
   if (!user) {
     return redirect("/signin");
   }

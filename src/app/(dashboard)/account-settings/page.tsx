@@ -1,10 +1,10 @@
 import React from "react";
 import Title from "@/components/account/title";
-import { getUser } from "@/lib/supabase/queries";
 import { redirect } from "next/navigation";
 import AccountForm from "@/components/account/account-form";
 import SecuritySetting from "@/components/account/security-setting";
 import { createServer } from "@/lib/supabase/server";
+import { getUser } from "@/app/actions/auth-actions";
 
 const AccountSettingsPage = async () => {
   const supabase = await createServer();
