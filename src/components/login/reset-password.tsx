@@ -83,8 +83,8 @@ export const ResetPassword = () => {
         </Form>
       </div>
       <div className="text-center">
-        <Link href={"/signin"}>
-          <Button variant={"link"} className="p-0 text-black">
+        <Link href={"/login"}>
+          <Button variant={"link"} className="p-0">
             {resetPasswordT("btn2")}
           </Button>
         </Link>

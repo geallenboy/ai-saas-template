@@ -67,7 +67,7 @@ export const loginAction = async (formData: FormData): Promise<AuthResponse> => 
 export const logoutAction = async (): Promise<void> => {
     const supbase = await createServer();
     await supbase.auth.signOut()
-    redirect("/signin")
+    redirect("/login")
 
 }
 

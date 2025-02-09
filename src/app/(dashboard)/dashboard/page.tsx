@@ -8,7 +8,7 @@ const DashboardPage = async () => {
   const supabase = await createServer();
   const user = await getUser(supabase);
   if (!user) {
-    return redirect("/signin");
+    return redirect("/login");
   }
   return (
     <section className="container mx-auto flex-1 space-y-6">

@@ -5,7 +5,7 @@ import { createServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getUser } from "@/app/actions/auth-actions";
 
-const SignInPage = async () => {
+const LoginPage = async () => {
   const supabase = await createServer();
   const user = await getUser(supabase);
 
@@ -24,4 +24,4 @@ const SignInPage = async () => {
   );
 };
 
-export default SignInPage;
+export default LoginPage;

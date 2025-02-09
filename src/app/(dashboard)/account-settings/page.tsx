@@ -10,7 +10,7 @@ const AccountSettingsPage = async () => {
   const supabase = await createServer();
   const user = await getUser(supabase);
   if (!user) {
-    return redirect("/signin");
+    return redirect("/login");
   }
   return (
     <div className="container mx-auto space-y-4">
