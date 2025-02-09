@@ -5,7 +5,7 @@ import { createServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/supabase/queries";
 
-const LoginPage = async () => {
+const SignInPage = async () => {
   const supabase = await createServer();
   const [user] = await Promise.all([getUser(supabase)]);
 
@@ -24,4 +24,4 @@ const LoginPage = async () => {
   );
 };
 
-export default LoginPage;
+export default SignInPage;

@@ -3,11 +3,8 @@ import {
   ChartNetwork,
   CreditCard,
   Database,
-  ImageIcon,
   LayoutTemplate,
   Network,
-  Package2,
-  Palette,
 } from "lucide-react";
 
 import avatar1 from "@/public/avatars/AutumnTechFocus.jpeg";

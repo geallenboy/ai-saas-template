@@ -1,13 +1,29 @@
 "use server"
 
 import { createServer } from "@/lib/supabase/server";
+import { SupabaseClient } from '@supabase/supabase-js';
 import { redirect } from "next/navigation";
+import { cache } from 'react';
+
 
 interface AuthResponse {
     error: null | string;
     success: boolean;
     data: unknown | null;
 }
+
+export const getUser = cache(async (supabase: SupabaseClient) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+});
+
+export const getUserDetails = cache(async (supabase: SupabaseClient) => {
+    const { data: userDetails } = await supabase
+        .from('users')
+        .select('*')
+        .single();
+    return userDetails;
+});
 
 export const signupAction = async (formData: FormData): Promise<AuthResponse> => {
     const supbase = await createServer();
