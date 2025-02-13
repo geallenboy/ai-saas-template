@@ -63,32 +63,6 @@ yarn install
 
 复制 `.env.example` 文件并重命名为 `.env`，然后填写以下变量：
 
-```env
-# Supabase
-SUPABASE_URL='' # change this to your supabase url
-SUPABASE_ANON_KEY='' # change this to your supabase anon key
-SUPABASE_SERVICE_ROLE_KEY='' # change this to your supabase service role key
-
-# Replicate
-REPLICATE_API_TOKEN='' # change this to your replicate api token
-NEXT_PUBLIC_REPLICATE_USER_NAME='' # change this to your replicate username
-
-# Use the following in the development environment
-NGROK_HOST='' # change this to your ngrok host
-
-# Stripe
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY='' # change this to your stripe publishable key
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE='' # change this to your stripe publishable live key
-STRIPE_SECRET_KEY='' # change this to your stripe secret key
-STRIPE_WEBHOOK_SECRET='' # change this to your stripe webhook secret
-
-# Use the following in the production environment
-NEXT_PUBLIC_SITE_URL='' # change this to your site url
-
-# Resend
-RESEND_API_KEY='' # change this to your resend api key
-```
-
 ### 4. **运行开发服务器**
 
 ```bash
@@ -150,11 +124,12 @@ yarn dev
 
 ## 📞 **联系我**
 
-如有问题或建议，请通过以下方式联系我们：
+如果你有任何问题、合作的想法，或者只是想打个招呼，随时与我联系！
 
-- **Email**: gejialun88@gmail.com
-- **weixin**: wxgegarron
-- **GitHub Issues**: [提交 Issue](https://github.com/geallenboy/ai-saas-template/issues)
+- **电子邮件**：[gejialun88@gmail.com](mailto:gejialun88@gmail.com)
+- **Twitter**：[@gejialun88](https://x.com/gejialun88)
+- **个人网站**：[我的网站](https://gegarron.com)
+- **微信号**：wxgegarron
 
 ---
 
