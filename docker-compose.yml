@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:17.0
+    hostname: localhost
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

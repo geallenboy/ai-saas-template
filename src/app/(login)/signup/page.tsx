@@ -1,17 +1,9 @@
-import LoginImage from "@/components/login/login-image";
-import SignUpForm from "@/components/login/signup-form";
-import { getUser } from "@/lib/supabase/queries";
-import { createServer } from "@/lib/supabase/server";
+import LoginImage from "@/components/custom/login/login-image";
+import SignUpForm from "@/components/custom/login/signup-form";
 import { redirect } from "next/navigation";
 import React from "react";
 
 const SignupPage = async () => {
-  const supabase = await createServer();
-  const [user] = await Promise.all([getUser(supabase)]);
-
-  if (user) {
-    return redirect("/dashboard");
-  }
   return (
     <main className="h-screen grid grid-cols-1 md:grid-cols-2 relative">
       <LoginImage />

@@ -1,18 +1,17 @@
+"use client";
 import React from "react";
-import Faqs from "@/components/landing-page/faqs";
-import Features from "@/components/landing-page/features";
-import Footer from "@/components/landing-page/footer";
-import Hero from "@/components/landing-page/hero";
-import Navigtion from "@/components/landing-page/navigation";
-import { createServer } from "@/lib/supabase/server";
+import Faqs from "@/feature/landing-page/components/faqs";
+import Features from "@/feature/landing-page/components/features";
+import Footer from "@/feature/landing-page/components/footer";
+import Hero from "@/feature/landing-page/components/hero";
+import Navigtion from "@/feature/landing-page/components/navigation";
+import { useUserStore } from "@/store/userStore";
 
-export default async function HomePage() {
-  const supabase = await createServer();
-  const { data } = await supabase.auth.getUser();
-  console.log(data, "data");
+export default function HomePage() {
+  const { user } = useUserStore();
   return (
     <main className="flex flex-col min-h-screen items-center justify-center">
-      <Navigtion user={data?.user} />
+      <Navigtion user={user} />
       <Hero />
       <Features />
       <Faqs />

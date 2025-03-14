@@ -1,5 +1,5 @@
-import LoginImage from "@/components/login/login-image";
-import ResetPassword from "@/components/login/reset-password";
+import LoginImage from "@/components/custom/login/login-image";
+import ResetPassword from "@/components/custom/login/reset-password";
 import React from "react";
 
 const ResetPasswwordPage = () => {
