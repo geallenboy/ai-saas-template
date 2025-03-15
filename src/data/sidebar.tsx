@@ -1,4 +1,9 @@
-import { Settings2, SquareTerminal } from "lucide-react";
+import {
+  Settings2,
+  SquareTerminal,
+  CreditCard,
+  UploadCloud,
+} from "lucide-react";
 
 export const navList = {
   en: [
@@ -7,6 +12,17 @@ export const navList = {
       url: "/dashboard",
       icon: SquareTerminal,
       isActive: true,
+    },
+    {
+      title: "credits",
+      url: "/credits",
+      icon: CreditCard,
+      isActive: true,
+    },
+    {
+      title: "Upload",
+      url: "/upload",
+      icon: UploadCloud,
     },
     {
       title: "Settings",
@@ -20,6 +36,17 @@ export const navList = {
       url: "/dashboard",
       icon: SquareTerminal,
       isActive: true,
+    },
+    {
+      title: "积分",
+      url: "/credits",
+      icon: CreditCard,
+      isActive: true,
+    },
+    {
+      title: "上传图片",
+      url: "/upload",
+      icon: UploadCloud,
     },
     {
       title: "设置",

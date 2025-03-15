@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-import { User } from "@/drizzle/db";
+import { User } from "@/drizzle/schema";
 
 const accountFormSchema = z.object({
   name: z.string().min(1).max(36),

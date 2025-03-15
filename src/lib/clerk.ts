@@ -1,7 +1,7 @@
 
 'use server';
 
-import { getUserByClerkId } from "@/feature/users/db/users"
+import { getUserByClerkId } from "@/services/user/user-service";
 import { auth } from "@clerk/nextjs/server"
 
 export async function getCurrentUser() {
@@ -10,10 +10,8 @@ export async function getCurrentUser() {
   console.log("resUsers:", resUsers)
   if (userId !== null) {
     const user = await getUserByClerkId(userId)
-    console.log(user, "==>")
-    return {
-      ...user
-    }
+
+    return user
   } else {
     return redirectToSignIn()
   }

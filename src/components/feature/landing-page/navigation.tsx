@@ -13,7 +13,7 @@ import { useTranslations } from "next-intl";
 
 import { LanguageSwitcher } from "./language-switcher";
 import { ModeToggle } from "./mode-toggle";
-import { AuroraText } from "../../../components/magicui/aurora-text";
+import { AuroraText } from "../../magicui/aurora-text";
 
 const NavItemsRight = ({ user }: { user: any }) => {
   const homeT = useTranslations("home.navigtion");

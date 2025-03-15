@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import Faqs from "@/feature/landing-page/components/faqs";
-import Features from "@/feature/landing-page/components/features";
-import Footer from "@/feature/landing-page/components/footer";
-import Hero from "@/feature/landing-page/components/hero";
-import Navigtion from "@/feature/landing-page/components/navigation";
+import Faqs from "@/components/feature/landing-page/faqs";
+import Features from "@/components/feature/landing-page/features";
+import Footer from "@/components/feature/landing-page/footer";
+import Hero from "@/components/feature/landing-page/hero";
+import Navigtion from "@/components/feature/landing-page/navigation";
 import { useUserStore } from "@/store/userStore";
 
 export default function HomePage() {

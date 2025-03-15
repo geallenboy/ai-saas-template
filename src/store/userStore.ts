@@ -1,5 +1,6 @@
+import { User } from "@/drizzle/schema";
 import { create } from "zustand";
-import { User } from "@/drizzle/db";
+
 interface UserState {
   user: User | null;
   isLoading: boolean;

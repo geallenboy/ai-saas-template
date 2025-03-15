@@ -1,4 +1,4 @@
-import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { pgEnum, pgTable, text, integer } from "drizzle-orm/pg-core"
 import { createdAt, id, updatedAt } from "../schemaHelpers"
 
 
@@ -14,8 +14,9 @@ export const UserTable = pgTable("users", {
   name: text().notNull(),
   role: userRoleEnum().notNull().default("user"),
   imageUrl: text(),
-  deletedAt: timestamp({ withTimezone: true }),
+  credits: integer().notNull().default(5),
   createdAt,
   updatedAt,
 })
-
+// Export types
+export type User = typeof UserTable.$inferSelect

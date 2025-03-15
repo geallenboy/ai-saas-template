@@ -1,4 +1,4 @@
-import Title from "@/feature/dashboard/components/title";
+import Title from "@/components/feature/dashboard/title";
 import React from "react";
 
 const DashboardPage = async () => {
