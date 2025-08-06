@@ -1,7 +1,7 @@
 import { trpc } from '@/lib/trpc/client'
 
 /**
- * 认证相关hooks
+ * Authentication-related hooks
  */
 export function useAuth() {
   const utils = trpc.useUtils()
@@ -10,7 +10,7 @@ export function useAuth() {
 
   const updateProfile = trpc.auth.updateProfile.useMutation({
     onSuccess: () => {
-      // 更新成功后刷新用户数据
+      // Update successful, refresh user data
       utils.auth.getCurrentUser.invalidate()
     },
   })
@@ -28,7 +28,7 @@ export function useAuth() {
 }
 
 /**
- * 用户管理hooks（管理员）
+ * User management hooks (Admin)
  */
 export function useUsers() {
   const utils = trpc.useUtils()
@@ -41,7 +41,7 @@ export function useUsers() {
 
   const updateUser = trpc.users.updateUser.useMutation({
     onSuccess: () => {
-      // 更新成功后刷新用户列表
+      // Update successful, refresh user list
       utils.users.getUsers.invalidate()
       utils.users.getUserStats.invalidate()
     },
@@ -79,7 +79,7 @@ export function useUsers() {
 }
 
 /**
- * 支付和会员相关hooks
+ * Payment and membership-related hooks
  */
 export function usePayments() {
   const utils = trpc.useUtils()
@@ -95,7 +95,7 @@ export function usePayments() {
 
   const activateMembership = trpc.payments.activateMembership.useMutation({
     onSuccess: () => {
-      // 激活成功后刷新会员状态
+      // Update successful, refresh membership status
       utils.payments.getUserMembershipStatus.invalidate()
     },
   })
@@ -107,7 +107,7 @@ export function usePayments() {
     statusLoading,
     createCheckoutSession,
     activateMembership,
-    // 便捷访问器
+    // Convenient accessors
     hasActiveMembership: Boolean(membershipStatus?.hasActiveMembership),
     currentPlan: membershipStatus?.currentPlan,
     remainingDays: membershipStatus?.remainingDays || 0,

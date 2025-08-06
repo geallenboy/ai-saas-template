@@ -4,92 +4,92 @@ import { trpc } from '@/lib/trpc/client'
 import { toast } from 'sonner'
 
 /**
- * 系统配置管理 Hook
+ * System configuration management Hook
  */
 export function useSystemConfig() {
   const utils = trpc.useUtils()
 
-  // 获取所有配置
+  // Get all configurations
   const getConfigs = trpc.system.getConfigs.useQuery
 
-  // 获取配置分类
+  // Get configuration categories
   const getCategories = trpc.system.getConfigCategories.useQuery
 
-  // 更新配置
+  // Update configuration
   const updateConfig = trpc.system.updateConfig.useMutation({
     onSuccess: data => {
-      toast.success(`配置 "${data?.key}" 更新成功`)
+      toast.success(`Configuration "${data?.key}" updated successfully`)
       utils.system.getConfigs.invalidate()
     },
     onError: error => {
-      toast.error(`更新配置失败: ${error.message}`)
+      toast.error(`Failed to update configuration: ${error.message}`)
     },
   })
 
-  // 创建配置
+  // Create configuration
   const createConfig = trpc.system.createConfig.useMutation({
     onSuccess: data => {
-      toast.success(`配置 "${data?.key}" 创建成功`)
+      toast.success(`Configuration "${data?.key}" created successfully`)
       utils.system.getConfigs.invalidate()
       utils.system.getConfigCategories.invalidate()
     },
     onError: error => {
-      toast.error(`创建配置失败: ${error.message}`)
+      toast.error(`Failed to create configuration: ${error.message}`)
     },
   })
 
-  // 删除配置
+  // Delete configuration
   const deleteConfig = trpc.system.deleteConfig.useMutation({
     onSuccess: () => {
-      toast.success('配置删除成功')
+      toast.success('Configuration deleted successfully')
       utils.system.getConfigs.invalidate()
     },
     onError: error => {
-      toast.error(`删除配置失败: ${error.message}`)
+      toast.error(`Failed to delete configuration: ${error.message}`)
     },
   })
 
-  // 批量更新配置
+  // Batch update configurations
   const batchUpdateConfigs = trpc.system.batchUpdateConfigs.useMutation({
     onSuccess: data => {
-      toast.success(`成功更新 ${data.length} 个配置`)
+      toast.success(`Successfully updated ${data.length} configurations`)
       utils.system.getConfigs.invalidate()
     },
     onError: error => {
-      toast.error(`批量更新失败: ${error.message}`)
+      toast.error(`Failed to batch update configurations: ${error.message}`)
     },
   })
 
-  // 重置配置到默认值
+  // Reset configuration to default
   const resetConfigToDefault = trpc.system.resetConfigToDefault.useMutation({
     onSuccess: data => {
-      toast.success(`配置 "${data?.key}" 已重置到默认值`)
+      toast.success(`Configuration "${data?.key}" reset to default value`)
       utils.system.getConfigs.invalidate()
     },
     onError: error => {
-      toast.error(`重置配置失败: ${error.message}`)
+      toast.error(`Failed to reset configuration: ${error.message}`)
     },
   })
 
   return {
-    // 查询
+    // Query
     getConfigs,
     getCategories,
 
-    // 变更操作
+    // Mutation
     updateConfig,
     createConfig,
     deleteConfig,
     batchUpdateConfigs,
     resetConfigToDefault,
 
-    // 工具函数
+    // Utility functions
     invalidateConfigs: () => utils.system.getConfigs.invalidate(),
   }
 }
 
 /**
- * 获取特定分类的配置
+ * Get configurations by specific category
  */
 export function useSystemConfigByCategory(category: string) {
   return trpc.system.getConfigs.useQuery({
@@ -99,7 +99,7 @@ export function useSystemConfigByCategory(category: string) {
 }
 
 /**
- * 获取单个配置
+ * Get a single configuration
  */
 export function useSystemConfigByKey(key: string) {
   return trpc.system.getConfigByKey.useQuery({ key })

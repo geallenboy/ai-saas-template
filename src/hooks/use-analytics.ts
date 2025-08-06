@@ -7,7 +7,7 @@ import {
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
-// 页面视图跟踪Hook
+// Page View Tracking Hook
 export function usePageTracking() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -20,15 +20,15 @@ export function usePageTracking() {
   }, [pathname, searchParams])
 }
 
-// 用户行为跟踪Hook
+// User behavior tracking hook
 export function useUserTracking() {
   return {
-    // 页面相关
+    // Page related
     trackPageView: (url: string, title?: string) => {
       trackPageView(url, title)
     },
 
-    // 用户行为
+    // User behavior
     trackSignUp: (method = 'email') => {
       trackUserAction.signUp(method)
     },

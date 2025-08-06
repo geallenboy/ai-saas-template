@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
 
 /**
- * 一个自定义 Hook，用于对给定的值进行防抖处理。
+ * A custom Hook that debounces a given value.
  *
- * @template T 值的类型
- * @param {T} value 需要进行防抖处理的值
- * @param {number} delay 防抖延迟时间（毫秒）
- * @returns {T} 经过防抖处理后的值
+ * @template T The type of the value
+ * @param {T} value The value to debounce
+ * @param {number} delay The debounce delay time (in milliseconds)
+ * @returns {T} The debounced value
  *
  * @example
  * const debouncedSearchTerm = useDebounce(searchTerm, 500);
  *
  * useEffect(() => {
  *   if (debouncedSearchTerm) {
- *     // 执行搜索操作
+ *     // Perform a search operation
  *   }
  * }, [debouncedSearchTerm]);
  */
@@ -21,17 +21,17 @@ export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
   useEffect(() => {
-    // 设置一个定时器，在延迟时间后更新防抖值
+    // Set a timer to update the debounced value after the delay time
     const handler = setTimeout(() => {
       setDebouncedValue(value)
     }, delay)
 
-    // 在下一次 effect 执行前或组件卸载时，清除上一个定时器
-    // 这确保了只有当 value 在 delay 时间内没有变化时，才会更新 debouncedValue
+    // Clear the previous timer before the next effect runs or when the component unmounts
+    // This ensures that the debouncedValue is only updated if the value hasn't changed within the delay time
     return () => {
       clearTimeout(handler)
     }
-  }, [value, delay]) // 仅当 value 或 delay 变化时，才重新设置定时器
+  }, [value, delay]) // Only reset the timer if value or delay changes
 
   return debouncedValue
 }
