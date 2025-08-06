@@ -1,9 +1,9 @@
 import type { User } from '@/drizzle/schemas'
 
-// ============== 用户管理相关类型 ==============
+// ============== User management related types ==============
 
 export interface UserListItem extends User {
-  // 扩展字段用于列表显示
+  //  Extended fields for list display
   statusLabel?: string
   roleLabel?: string
 }
@@ -33,7 +33,7 @@ export interface UserStats {
   newUsersThisMonth: number
 }
 
-// ============== 表单类型 ==============
+// ============== Form data type ==============
 
 export interface CreateUserData {
   email: string
@@ -53,7 +53,7 @@ export interface BulkUpdateData {
   isAdmin?: boolean
 }
 
-// ============== 用户操作类型 ==============
+// ============== User action types ==============
 
 export type UserAction =
   | 'view'
@@ -70,7 +70,7 @@ export interface UserActionResult<T = unknown> {
   message?: string
 }
 
-// ============== 用户过滤器类型 ==============
+// ============== User filters type ==============
 
 export interface UserFilters {
   status?: 'all' | 'active' | 'inactive'
@@ -81,7 +81,7 @@ export interface UserFilters {
   }
 }
 
-// ============== 用户导出类型 ==============
+// ============== User export type ==============
 
 export interface UserExportData {
   id: string
@@ -96,7 +96,7 @@ export interface UserExportData {
   totalBlogs: number
 }
 
-// ============== 用户搜索类型 ==============
+// ============== User search type ==============
 
 export interface UserSearchResult {
   users: User[]
@@ -105,7 +105,7 @@ export interface UserSearchResult {
   filters: UserFilters
 }
 
-// ============== 用户活动类型 ==============
+// ============== User activity type ==============
 
 export interface UserActivity {
   id: string
@@ -116,7 +116,7 @@ export interface UserActivity {
   createdAt: Date
 }
 
-// ============== 用户权限类型 ==============
+// ============== User permissions type ==============
 
 export interface UserPermissions {
   canView: boolean

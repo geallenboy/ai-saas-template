@@ -1,10 +1,10 @@
-// 登录表单数据类型
+// Login form data type
 export interface LoginFormData {
   email: string
   password: string
 }
 
-// 登录组件的props类型
+// Login component props type
 export interface LoginFormProps {
   formData: LoginFormData
   setFormData: (data: LoginFormData) => void
@@ -15,7 +15,7 @@ export interface LoginFormProps {
   onClearError: () => void
 }
 
-// useLogin Hook返回类型
+// useLogin Hook return type
 export interface UseLoginReturn {
   formData: LoginFormData
   setFormData: (data: LoginFormData) => void

@@ -1,4 +1,4 @@
-// 通用类型定义
+// Generic type definition
 export interface IconProps {
   className?: string
   size?: number
@@ -31,14 +31,14 @@ export interface CompanyValue {
   icon: IconComponent
 }
 
-// 错误处理类型
+// Error handling type
 export interface ApiError {
   message: string
   code?: string
   details?: unknown
 }
 
-// 表单相关类型
+// Form related types
 export interface FormField {
   id: string
   label: string

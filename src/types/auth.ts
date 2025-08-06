@@ -1,6 +1,6 @@
 import type { User } from '@/drizzle/schemas'
 
-// ============== 认证相关类型 ==============
+// ============== Certification related types ==============
 
 export interface AuthUser extends User {
   sessionId?: string
@@ -20,7 +20,7 @@ export interface UserPreferences {
   timezone: string
 }
 
-// ============== 表单类型 ==============
+// ============== Profile Update Form Types ==============
 
 export interface UpdateProfileData {
   fullName?: string
@@ -40,7 +40,7 @@ export interface SignUpFormData {
   acceptTerms: boolean
 }
 
-// ============== API响应类型 ==============
+// ============== API response type ==============
 
 export interface AuthResponse<T = unknown> {
   success: boolean
@@ -54,7 +54,7 @@ export interface UserSyncResult {
   isNewUser: boolean
 }
 
-// ============== 权限检查类型 ==============
+// ============== Permission check type ==============
 
 export interface PermissionResult {
   hasPermission: boolean
@@ -62,7 +62,7 @@ export interface PermissionResult {
   user?: User
 }
 
-// ============== 认证事件类型 ==============
+// ============== Authentication event type ==============
 
 export type AuthEvent =
   | 'user.created'

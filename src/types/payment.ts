@@ -1,5 +1,5 @@
 /**
- * 支付模块类型定义
+ * Payment module type definition
  */
 
 import type {
@@ -10,7 +10,7 @@ import type {
   UserUsageLimit,
 } from '@/drizzle/schemas'
 
-// ============== 基础导出类型 ==============
+// ============== Basic export type ==============
 
 export type {
   Coupon,
@@ -20,7 +20,7 @@ export type {
   UserUsageLimit,
 }
 
-// ============== 查询参数类型 ==============
+// ============== Query parameter type ==============
 
 export interface MembershipPlanQueryParams {
   isActive?: boolean
@@ -46,7 +46,7 @@ export interface MembershipAdminQueryParams {
   planId?: string
 }
 
-// ============== 分页结果类型 ==============
+// ============== Paginated result type ==============
 
 export interface PaginatedMemberships {
   memberships: UserMembership[]
@@ -76,7 +76,7 @@ export interface PaginatedMembershipsAdmin {
   totalPages: number
 }
 
-// ============== 用户会员状态类型 ==============
+// ============== User membership status type ==============
 
 export interface UserMembershipStatus {
   membership: (UserMembership & { plan?: MembershipPlan }) | null
@@ -98,10 +98,10 @@ export interface UsageLimitCheck {
   resetDate?: Date
 }
 
-// ============== 支付操作类型 ==============
+// ============== Payment operation type ==============
 
 export interface CreateCheckoutSessionInput {
-  planId?: string // 保持向后兼容
+  planId?: string // Maintain backward compatibility
   priceId: string
   planName: string
   durationType: 'monthly' | 'yearly'
@@ -120,7 +120,7 @@ export interface CheckoutSessionResult {
   planName: string
 }
 
-// ============== 优惠券相关类型 ==============
+// ============== Coupon related types ==============
 
 export interface CouponValidationResult {
   isValid: boolean
@@ -128,7 +128,7 @@ export interface CouponValidationResult {
   error?: string
 }
 
-// ============== 统计数据类型 ==============
+// ============== Payment statistics type ==============
 
 export interface PaymentStats {
   totalRevenue: number
@@ -146,7 +146,7 @@ export interface MembershipStats {
   churnRate: number
 }
 
-// ============== API响应类型 ==============
+// ============== API response type ==============
 
 export interface PaymentApiResponse<T = unknown> {
   success: boolean
@@ -160,7 +160,7 @@ export interface UsageIncrementResult {
   error?: string
 }
 
-// ============== 支付方式类型 ==============
+// ============== Payment method type ==============
 
 export type PaymentMethod = 'stripe' | 'paypal' | 'alipay' | 'wechat'
 
@@ -180,7 +180,7 @@ export type Currency = 'USD' | 'CNY'
 
 export type UsageType = 'useCases' | 'tutorials' | 'blogs' | 'apiCalls'
 
-// ============== 会员计划相关类型 ==============
+// ============== Membership program related types ==============
 
 export interface PlanFeature {
   name: string
@@ -208,7 +208,7 @@ export interface PlanConfiguration {
   sortOrder: number
 }
 
-// ============== 支付历史类型 ==============
+// ============== Payment history type ==============
 
 export interface PaymentHistoryItem {
   id: string
@@ -221,7 +221,7 @@ export interface PaymentHistoryItem {
   stripePaymentIntentId?: string
 }
 
-// ============== Stripe相关类型 ==============
+// ============== Stripe related types ==============
 
 export interface StripeCustomer {
   id: string
@@ -248,7 +248,7 @@ export interface StripeWebhookEvent {
   livemode: boolean
 }
 
-// ============== 错误类型 ==============
+// ============== Error type ==============
 
 export interface PaymentError {
   code: string
@@ -256,7 +256,7 @@ export interface PaymentError {
   details?: Record<string, any>
 }
 
-// ============== 表单数据类型 ==============
+// ============== Form data type ==============
 
 export interface CheckoutFormData {
   planId: string
@@ -270,7 +270,7 @@ export interface CouponFormData {
   code: string
 }
 
-// ============== 管理员相关类型 ==============
+// ============== Administrator related types ==============
 
 export interface AdminMembershipFilters {
   status?: MembershipStatus
@@ -288,7 +288,7 @@ export interface AdminPaymentFilters {
   maxAmount?: number
 }
 
-// ============== 使用限额相关类型 ==============
+// ============== Usage limit related types ==============
 
 export interface UsageLimitSettings {
   monthlyUseCases: number

@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# Coolify Nixpacks 部署修复脚本
-# 用于解决常见的部署问题
+# Coolify Nixpacks Deploy the repair script
+# Used to solve common deployment issues
 
-echo "🚀 开始修复 Coolify Nixpacks 部署问题..."
+echo "🚀 Start fixing Coolify Nixpacks deployment issues..."
 
-# 1. 检查必需文件
-echo "📋 检查必需文件..."
+# 1. Check required files
+echo "📋 Check required files..."
 
 if [ ! -f "nixpacks.toml" ]; then
-    echo "❌ 缺少 nixpacks.toml 文件"
-    echo "✅ 创建 nixpacks.toml 文件..."
+    echo "❌ Missing nixpacks.toml file"
+    echo "✅ Creating nixpacks.toml file..."
     cat > nixpacks.toml << 'EOF'
 [variables]
 NIXPACKS_NODE_VERSION = "20"
@@ -29,63 +29,63 @@ cmds = ["SKIP_ENV_VALIDATION=true pnpm run build"]
 cmd = "pnpm start"
 EOF
 else
-    echo "✅ nixpacks.toml 文件存在"
+    echo "✅ nixpacks.toml file exists"
 fi
 
-# 2. 检查 package.json 构建脚本
-echo "📋 检查 package.json 构建脚本..."
+# 2. Check package.json build scripts
+echo "📋 Check package.json build scripts..."
 
 if ! grep -q '"build:docker"' package.json; then
-    echo "⚠️  缺少 build:docker 脚本，添加中..."
-    # 这里需要手动添加，因为 JSON 编辑比较复杂
-    echo "请手动在 package.json 的 scripts 部分添加："
+    echo "⚠️  Missing build:docker script, adding..."
+    # This needs to be added manually because JSON editing is more complicated
+    echo "Please manually add the following to the scripts section of package.json:"
     echo '"build:docker": "SKIP_ENV_VALIDATION=true next build",'
 else
-    echo "✅ build:docker 脚本存在"
+    echo "✅ build:docker script exists"
 fi
 
-# 3. 检查环境变量模板
-echo "📋 检查环境变量模板..."
+# 3. Check environment variable template
+echo "📋 Check environment variable template..."
 
 if [ ! -f ".env.example" ]; then
-    echo "❌ 缺少 .env.example 文件"
+    echo "❌ Missing .env.example file"
 else
-    echo "✅ .env.example 文件存在"
+    echo "✅ .env.example file exists"
 fi
 
-# 4. 清理缓存
-echo "🧹 清理构建缓存..."
+# 4. Check build cache
+echo "🧹 Check build cache..."
 rm -rf .next
 rm -rf node_modules/.cache
 rm -rf dist
 
-# 5. 验证依赖
-echo "📦 验证依赖..."
+# 5. Check dependencies
+echo "📦 Check dependencies..."
 if command -v pnpm &> /dev/null; then
-    echo "✅ pnpm 已安装"
+    echo "✅ pnpm is installed"
     pnpm install --frozen-lockfile
 else
-    echo "❌ pnpm 未安装，请先安装 pnpm"
+    echo "❌ pnpm is not installed, please install pnpm first"
     exit 1
 fi
 
-# 6. 测试构建
-echo "🔨 测试构建..."
+# 6. Check build
+echo "🔨 Check build..."
 SKIP_ENV_VALIDATION=true pnpm run build
 
 if [ $? -eq 0 ]; then
-    echo "✅ 本地构建成功"
+    echo "✅ Build succeeded"
 else
-    echo "❌ 本地构建失败，请检查错误信息"
+    echo "❌ Build failed, please check the error messages"
     exit 1
 fi
 
 echo ""
-echo "🎉 修复完成！"
+echo "🎉 Fix completed!"
 echo ""
-echo "📝 接下来在 Coolify 中："
-echo "1. 确保选择 'nixpacks' 作为构建包"
-echo "2. 添加所有必需的环境变量"
-echo "3. 重新部署项目"
+echo "📝 Next steps in Coolify:"
+echo "1. Make sure to select 'nixpacks' as the build package"
+echo "2. Add all required environment variables"
+echo "3. Redeploy the project"
 echo ""
-echo "🔗 详细部署指南: docs/COOLIFY_DEPLOYMENT.md"
+echo "🔗 Detailed deployment guide: docs/COOLIFY_DEPLOYMENT.md"

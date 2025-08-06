@@ -4,7 +4,7 @@ import createIntlMiddleware from 'next-intl/middleware'
 import { NextResponse } from 'next/server'
 
 const isProtectedRoute = createRouteMatcher([
-  // 将需要登录才能访问的路由放在这里
+  // Place routes that require login here
   '/:locale/dashboard(.*)',
   '/:locale/settings(.*)',
   '/:locale/admin(.*)',
@@ -17,12 +17,12 @@ const intlMiddleware = createIntlMiddleware({
 })
 
 export default clerkMiddleware(async (auth, req: any) => {
-  // 检查是否是 API 路由，如果是则跳过多语言处理
+  // Check if it's an API route, if so, skip intl middleware
   if (
     req.nextUrl.pathname.startsWith('/api/') ||
     req.nextUrl.pathname.startsWith('/trpc/')
   ) {
-    // 对于 API 路由，只进行认证检查（如果需要）
+    // For API routes, only perform auth check (if needed)
     if (isProtectedRoute(req)) {
       const { userId } = await auth()
       if (!userId) {
@@ -35,8 +35,8 @@ export default clerkMiddleware(async (auth, req: any) => {
   if (isProtectedRoute(req)) {
     const { userId } = await auth()
     if (!userId) {
-      // 用户未登录，将他们重定向到登录页面。
-      // 我们在这里构建 URL，以包含区域设置和重定向 URL。
+      // User is not logged in, redirect them to the login page.
+      // We build the URL here to include the locale and redirect URL.
       const locale = req.nextUrl.pathname.split('/')[1] || defaultLocale
       const signInUrl = new URL(`/${locale}/auth/sign-in`, req.nextUrl.origin)
       signInUrl.searchParams.set('redirect_url', req.nextUrl.href)
@@ -44,7 +44,7 @@ export default clerkMiddleware(async (auth, req: any) => {
     }
   }
 
-  // 对于页面路由，都通过 next-intl 中间件处理
+  // For page routes, we handle them with the next-intl middleware
   return intlMiddleware(req)
 })
 

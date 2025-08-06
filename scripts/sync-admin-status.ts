@@ -4,48 +4,48 @@ import { db } from '@/lib/db'
 import { eq } from 'drizzle-orm'
 
 async function syncAdminStatus() {
-  console.log('开始同步管理员状态到Clerk...')
+  console.log('Start syncing administrator status to Clerk...')
 
   try {
-    // 获取所有管理员用户
+    // Get all admin users
     const adminUsers = await db
       .select()
       .from(users)
       .where(eq(users.isAdmin, true))
 
-    console.log(`找到 ${adminUsers.length} 个管理员用户`)
+    console.log(`Found ${adminUsers.length} admin users`)
 
     for (const user of adminUsers) {
       try {
-        console.log(`正在同步用户: ${user.email} (${user.id})`)
+        console.log(`Syncing user: ${user.email} (${user.id})`)
 
-        // 更新Clerk中的publicMetadata
+        // Update publicMetadata in Clerk
         await updateClerkUserMetadata(user.id, {
           isAdmin: true,
           adminLevel: user.adminLevel || 1,
           role: 'admin',
         })
 
-        console.log(`✅ ${user.email} 同步成功`)
+        console.log(`✅ ${user.email} synced successfully`)
       } catch (error) {
-        console.error(`❌ ${user.email} 同步失败:`, error)
+        console.error(`❌ ${user.email} sync failed:`, error)
       }
     }
 
-    console.log('同步完成！')
+    console.log('Sync completed!')
   } catch (error) {
-    console.error('同步过程出错:', error)
+    console.error('Sync process error:', error)
   }
 }
 
-// 如果直接运行此脚本
+// If you run this script directly
 if (require.main === module) {
   syncAdminStatus()
     .then(() => {
       process.exit(0)
     })
     .catch(error => {
-      console.error('脚本执行失败:', error)
+      console.error('Script execution failed:', error)
       process.exit(1)
     })
 }

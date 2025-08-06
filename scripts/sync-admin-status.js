@@ -1,47 +1,51 @@
 const { Pool } = require('pg')
 const { createClerkClient } = require('@clerk/backend')
 
-// 从环境变量获取配置
+// Get configuration from environment variables
 require('dotenv').config()
 
 const DATABASE_URL = process.env.DATABASE_URL
 const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY
 
 if (!(DATABASE_URL && CLERK_SECRET_KEY)) {
-  console.error('❌ 缺少必要的环境变量: DATABASE_URL 或 CLERK_SECRET_KEY')
+  console.error(
+    '❌ Missing necessary environment variables: DATABASE_URL or CLERK_SECRET_KEY'
+  )
   process.exit(1)
 }
 
-// 初始化数据库连接
+// Initialize database connection
 const pool = new Pool({
   connectionString: DATABASE_URL,
 })
 
-// 初始化 Clerk 客户端
+// Initialize Clerk client
 const clerkClient = createClerkClient({
   secretKey: CLERK_SECRET_KEY,
 })
 
 async function syncAdminStatus() {
-  console.log('🚀 开始同步管理员状态到Clerk...')
+  console.log('🚀 Start syncing administrator status to Clerk...')
 
   try {
-    // 查询所有管理员用户
+    // Get all admin users
     const result = await pool.query('SELECT * FROM users WHERE is_admin = true')
     const adminUsers = result.rows
 
-    console.log(`📋 找到 ${adminUsers.length} 个管理员用户`)
+    console.log(`📋 Found ${adminUsers.length} admin users`)
 
     if (adminUsers.length === 0) {
-      console.log('⚠️  没有找到管理员用户，请先在数据库中设置 is_admin = true')
+      console.log(
+        '⚠️  No admin users found, please set is_admin = true in the database first'
+      )
       return
     }
 
     for (const user of adminUsers) {
       try {
-        console.log(`🔄 正在同步用户: ${user.email} (${user.id})`)
+        console.log(`🔄 Syncing user: ${user.email} (${user.id})`)
 
-        // 更新Clerk中的publicMetadata
+        // Update publicMetadata in Clerk
         await clerkClient.users.updateUser(user.id, {
           publicMetadata: {
             isAdmin: true,
@@ -50,27 +54,29 @@ async function syncAdminStatus() {
           },
         })
 
-        console.log(`✅ ${user.email} 同步成功`)
+        console.log(`✅ ${user.email} synced successfully`)
       } catch (error) {
-        console.error(`❌ ${user.email} 同步失败:`, error.message)
+        console.error(`❌ ${user.email} sync failed:`, error.message)
       }
     }
 
-    console.log('🎉 同步完成！现在导航菜单中应该可以看到管理员入口了。')
+    console.log(
+      '🎉 Sync completed! You should now see the admin entry in the navigation menu.'
+    )
   } catch (error) {
-    console.error('💥 同步过程出错:', error.message)
+    console.error('💥 Sync process error:', error.message)
   } finally {
     await pool.end()
   }
 }
 
-// 执行同步
+// Execute sync
 syncAdminStatus()
   .then(() => {
-    console.log('✨ 脚本执行完毕')
+    console.log('✨ Script execution completed')
     process.exit(0)
   })
   .catch(error => {
-    console.error('🚨 脚本执行失败:', error.message)
+    console.error('🚨 Script execution failed:', error.message)
     process.exit(1)
   })

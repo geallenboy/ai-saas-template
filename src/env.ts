@@ -7,28 +7,28 @@ export const env = createEnv({
    * Will throw if you access these variables on the client.
    */
   server: {
-    // Database (必需)
+    // Database (required)
     DATABASE_URL: z.string().url(),
 
-    // Clerk Auth (必需)
+    // Clerk Auth (required)
     CLERK_SECRET_KEY: z.string().min(1),
     CLERK_WEBHOOK_SECRET: z.string().min(1).optional(),
 
-    // Stripe (必需)
+    // Stripe (required)
     STRIPE_SECRET_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
 
-    // AI API Keys (至少需要一个)
+    // AI API Keys (at least one is required)
     OPENAI_API_KEY: z.string().optional(),
     ANTHROPIC_API_KEY: z.string().optional(),
     GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(),
     XAI_API_KEY: z.string().optional(),
 
-    // Redis (用于缓存和限流)
+    // Redis (for caching and rate limiting)
     UPSTASH_REDIS_REST_URL: z.string().url().optional(),
     UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
-    // Email Service (用于通知)
+    // Email Service (for notifications)
     RESEND_API_KEY: z.string().optional(),
     SMTP_HOST: z.string().optional(),
     SMTP_PORT: z.string().optional(),
@@ -72,21 +72,21 @@ export const env = createEnv({
    * 💡 You'll get type errors if these are not prefixed with NEXT_PUBLIC_.
    */
   client: {
-    // Clerk Auth (必需)
+    // Clerk Auth (required)
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string().default('/auth/sign-in'),
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().default('/auth/sign-up'),
     NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: z.string().default('/'),
     NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: z.string().default('/'),
 
-    // Site configuration (必需)
+    // Site configuration (required)
     NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
     NEXT_PUBLIC_APP_URL: z.string().url().optional(),
 
-    // Stripe (必需)
+    // Stripe (required)
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
 
-    // Feature flags (客户端)
+    // Feature flags (client)
     NEXT_PUBLIC_ENABLE_AI_FEATURES: z.string().default('true'),
     NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES: z.string().default('true'),
     NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('zh'),
@@ -98,7 +98,7 @@ export const env = createEnv({
     NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
 
-    // Sentry (客户端监控)
+    // Sentry (client monitoring)
     NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
   },
 
