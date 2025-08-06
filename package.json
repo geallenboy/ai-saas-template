@@ -1,10 +1,10 @@
 {
   "name": "ai-saas-template",
   "version": "1.0.0",
-  "description": "一个现代化、生产就绪的 AI SaaS 应用模板. 基于 Next.js 15 构建，集成了用户认证、支付系统、AI 功能、国际化、文档系统和完整的管理后台。",
-  "author": "gegarron <gejialun88@gmail.com>",
+  "description": "A modern, production-ready AI-powered SaaS application template. Built on Next.js 15, it includes user authentication, payment integration, AI capabilities, internationalization, full documentation, and a comprehensive admin panel.",
+  "author": "alexzanco <alex.zanco@icloud.com>",
   "license": "MIT",
-  "homepage": "https://github.com/geallenboy/ai-saas-template",
+  "homepage": "https://github.com/alexzanco/ai-saas-template.git",
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",

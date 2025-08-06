@@ -5,17 +5,17 @@ module.exports = {
       2,
       'always',
       [
-        'feat', // 新功能
-        'fix', // 修复bug
-        'docs', // 文档更新
-        'style', // 代码格式(不影响代码运行的变动)
-        'refactor', // 重构
-        'test', // 测试
-        'chore', // 构建过程或辅助工具的变动
-        'perf', // 性能优化
-        'ci', // CI配置
-        'build', // 构建系统或外部依赖的变动
-        'revert', // 回滚
+        'feat', // new features
+        'fix', // fix bug
+        'docs', // update documentation
+        'style', // code style changes (non-functional)
+        'refactor', // refactoring
+        'test', // adding or updating tests
+        'chore', // changes to build process or auxiliary tools
+        'perf', // performance improvements
+        'ci', // CI configuration
+        'build', // changes to build system or external dependencies
+        'revert', // revert
       ],
     ],
     'type-case': [2, 'always', 'lower-case'],

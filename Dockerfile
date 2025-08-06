@@ -1,19 +1,19 @@
-# 多阶段构建优化
+# Multi-stage build optimization
 FROM node:20-alpine AS base
 
-# 安装依赖阶段
+# Dependency installation stage
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# 安装 pnpm
+# Install pnpm
 RUN npm install -g pnpm
 
-# 复制依赖文件
+# Copy dependency files
 COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile --prod=false
 
-# 构建阶段
+# Build stage
 FROM base AS builder
 WORKDIR /app
 RUN npm install -g pnpm
@@ -21,14 +21,14 @@ RUN npm install -g pnpm
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# 设置环境变量
+# Set environment variables
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
 
-# 构建应用 - 跳过环境变量验证
+# Build the application - skip environment variable validation
 RUN pnpm run build:docker
 
-# 运行阶段
+# Run stage
 FROM base AS runner
 WORKDIR /app
 
@@ -38,7 +38,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# 复制构建产物
+# Copy build artifacts
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static

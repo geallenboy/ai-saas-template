@@ -1,14 +1,14 @@
 import { defineConfig } from 'drizzle-kit'
 
-// 根据环境获取不同的数据库配置
+// Get different database configurations according to the environment
 const getDbConfig = () => {
   const dbUrl = process.env.DATABASE_URL
 
   if (!dbUrl) {
-    throw new Error('DATABASE_URL 环境变量必须设置')
+    throw new Error('DATABASE_URL Environment variables must be set')
   }
 
-  // 检测是否为云数据库（需要 SSL）
+  // Detecting whether it is a cloud database (SSL required)
   const isCloudDatabase =
     dbUrl.includes('neon.tech') ||
     dbUrl.includes('supabase.co') ||
