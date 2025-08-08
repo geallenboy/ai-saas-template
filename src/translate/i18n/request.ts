@@ -2,7 +2,7 @@ import { getRequestConfig } from 'next-intl/server'
 import { defaultLocale } from './config'
 
 export default getRequestConfig(async ({ locale }) => {
-  // 确保locale不为undefined，使用默认值
+  // Make sure locale is not undefined and use the default value
   const validLocale = locale || defaultLocale
 
   return {

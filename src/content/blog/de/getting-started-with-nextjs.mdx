@@ -1,0 +1,119 @@
+---
+title: Erste Schritte mit Next.js
+description: Lernen Sie, wie Sie moderne Webanwendungen mit Next.js erstellen
+author: AI SaaS Template Team
+date: 2024-01-15
+tags: [Next.js, React, Web-Entwicklung]
+---
+
+# Erste Schritte mit Next.js
+
+Next.js ist ein React-basiertes Full-Stack-Framework, das viele out-of-the-box Funktionen bietet und Entwicklern ermöglicht, schnell hochperformante Webanwendungen zu erstellen.
+
+## Was ist Next.js?
+
+Next.js ist ein von Vercel entwickeltes React-Framework, das die folgenden Kernfunktionen bietet:
+
+- **Server-Side Rendering (SSR)**: Verbessert die Ladezeit der ersten Seite und SEO
+- **Static Site Generation (SSG)**: Erstellt Seiten im Voraus für optimale Leistung
+- **API-Routen**: Erstellen Sie API-Endpunkte innerhalb desselben Projekts
+- **Dateisystem-Routing**: Generiert automatisch Routen basierend auf der Dateistruktur
+- **Eingebaute Optimierungen**: Bild-Optimierung, Schriftarten-Optimierung, etc.
+
+## Schnellstart
+
+### Erstellen eines neuen Projekts
+
+```bash
+npx create-next-app@latest meine-app
+cd meine-app
+npm run dev
+```
+
+### Projektstruktur
+
+```
+meine-app/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── public/
+├── next.config.js
+└── package.json
+```
+
+## App Router vs Pages Router
+
+Next.js 13 führte den neuen App Router ein, der auf React Server Components basiert und bessere Leistung und Entwicklererfahrung bietet.
+
+### Vorteile des App Routers
+
+1. **Bessere Leistung**: Verwendet standardmäßig Server-Komponenten
+2. **Verschachtelte Layouts**: Unterstützt komplexe Layout-Strukturen
+3. **Streaming Rendering**: Progressives Laden von Seiten
+4. **Parallele Routen**: Rendert mehrere Seitensegmente gleichzeitig
+
+## Daten abrufen
+
+### Daten in Server-Komponenten abrufen
+
+```tsx
+async function BlogPost({ params }: { params: { id: string } }) {
+  const post = await fetch(`https://api.example.com/posts/${params.id}`)
+    .then(res => res.json());
+
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+    </article>
+  );
+}
+```
+
+### Daten in Client-Komponenten abrufen
+
+```tsx
+'use client';
+
+import { useState, useEffect } from 'react';
+
+function UserProfile() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/user')
+      .then(res => res.json())
+      .then(setUser);
+  }, []);
+
+  if (!user) return <div>Wird geladen...</div>;
+
+  return <div>Hallo, {user.name}!</div>;
+}
+```
+
+## Styling-Lösungen
+
+Next.js unterstützt mehrere Styling-Lösungen:
+
+- **CSS-Module**: Scoped CSS-Isolation
+- **Tailwind CSS**: Utility-first CSS-Framework
+- **Styled Components**: CSS-in-JS-Lösung
+- **Sass/SCSS**: CSS-Präprozessor
+
+## Deployment
+
+Next.js-Anwendungen können auf mehreren Plattformen bereitgestellt werden:
+
+- **Vercel**: Deployment ohne Konfiguration
+- **Netlify**: Hosting für statische Websites
+- **AWS**: Mit Amplify oder EC2
+- **Docker**: Containerisiertes Deployment
+
+## Zusammenfassung
+
+Next.js ist ein mächtiges React-Framework, das den Entwicklungsprozess moderner Webanwendungen vereinfacht. Durch die Bereitstellung von Server-Side Rendering, statischer Generierung, API-Routen und anderen Funktionen ermöglicht Next.js Entwicklern, sich auf die Implementierung der Geschäftslogik zu konzentrieren.
+
+Ob Sie Anfänger oder erfahrener Entwickler sind, Next.js ist eine ausgezeichnete Wahl für die Erstellung von React-Anwendungen.

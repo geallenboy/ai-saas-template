@@ -1,0 +1,419 @@
+---
+title: Quick Start
+---
+Get your AI SaaS Template project up and running in **5 minutes**! This guide will walk you through the complete setup process from installation to running your first SaaS application.
+
+## 🚀 Overview
+
+By the end of this guide, you'll have:
+- ✅ A fully functional SaaS application running locally
+- ✅ Authentication system with login/sign-up
+- ✅ Database configured and running
+- ✅ Payment system ready for testing
+- ✅ File management system operational
+- ✅ Multi-language support enabled
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+### Required Software
+- **Node.js 18+** - [Download Node.js](https://nodejs.org/)
+- **pnpm** - Package manager (`npm install -g pnpm`)
+- **PostgreSQL** - Database server ([Download PostgreSQL](https://www.postgresql.org/download/))
+- **Git** - Version control system ([Download Git](https://git-scm.com/))
+
+### Optional Services (for full functionality)
+- **Stripe Account** - For payment processing ([Sign up](https://stripe.com/))
+- **Cloudflare R2** or **AWS S3** - For file storage
+- **GitHub OAuth App** - For social authentication
+- **Google OAuth App** - For social authentication
+
+## ⚡ 5-Minute Setup
+
+### Step 1: Clone the Repository
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd AI SaaSr-saas
+
+# Or use GitHub CLI
+gh repo clone <repository-url>
+cd AI SaaSr-saas
+```
+
+### Step 2: Install Dependencies
+
+```bash
+# Install all dependencies
+pnpm install
+
+# This will install:
+# - Next.js 15 and React 18
+# - TypeScript and all type definitions
+# - Tailwind CSS and UI components
+# - Database tools (Drizzle ORM)
+# - Testing frameworks (Jest, Playwright)
+# - And all other project dependencies
+```
+
+### Step 3: Environment Configuration
+
+```bash
+# Copy the environment template
+cp env.example .env
+
+# Open the .env file in your editor
+code .env  # VS Code
+# or
+nano .env  # Terminal editor
+```
+
+**Configure the essential environment variables:**
+
+```bash
+# App Configuration
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+# Database (Required)
+DATABASE_URL="postgresql://username:password@localhost:5432/AI SaaSr_saas"
+
+# Authentication (Required)
+AI SaaSR_AUTH_SECRET="your-super-secret-key-here"
+
+# Admin Configuration
+ADMIN_EMAILS="admin@example.com"
+```
+
+### Step 4: Database Setup
+
+```bash
+# Create the database (if using PostgreSQL locally)
+createdb AI SaaSr_saas
+
+# Push the database schema
+pnpm db:push
+
+# This will:
+# - Create all necessary tables
+# - Set up relationships
+# - Initialize the database structure
+```
+
+### Step 5: Start the Development Server
+
+```bash
+# Start the development server
+pnpm dev
+
+# The application will be available at:
+# http://localhost:3000
+```
+
+🎉 **Congratulations!** Your AI SaaS Template application is now running!
+
+## 🔧 Complete Configuration
+
+For full functionality, configure these additional services:
+
+### Payment Integration (Stripe)
+
+1. **Create a Stripe account** at [stripe.com](https://stripe.com/)
+2. **Get your API keys** from the Stripe dashboard
+3. **Add to your `.env` file:**
+
+```bash
+# Stripe Configuration
+STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key"
+STRIPE_WEBHOOK_SECRET="whsec_your_webhook_secret"
+NEXT_PUBLIC_STRIPE_PRICE_PRO_MONTHLY="price_monthly_id"
+NEXT_PUBLIC_STRIPE_PRICE_PRO_YEARLY="price_yearly_id"
+```
+
+4. **Create products and prices** in your Stripe dashboard
+5. **Set up webhook endpoints** for payment events
+
+### File Storage (Cloudflare R2)
+
+1. **Create a Cloudflare account** and set up R2
+2. **Create a storage bucket**
+3. **Add to your `.env` file:**
+
+```bash
+# Cloudflare R2 Configuration
+R2_BUCKET_NAME="your-bucket-name"
+R2_ACCESS_KEY_ID="your-access-key-id"
+R2_SECRET_ACCESS_KEY="your-secret-access-key"
+R2_ENDPOINT="https://your-account-id.r2.cloudflarestorage.com"
+R2_PUBLIC_URL="https://your-domain.com"
+```
+
+### Social Authentication
+
+#### GitHub OAuth
+
+1. **Create a GitHub OAuth App:**
+   - Go to GitHub Settings → Developer settings → OAuth Apps
+   - Create a new OAuth App
+   - Set Authorization callback URL to: `http://localhost:3000/api/auth/callback/github`
+
+2. **Add to your `.env` file:**
+
+```bash
+# GitHub OAuth
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
+```
+
+#### Google OAuth
+
+1. **Create a Google OAuth App:**
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing
+   - Enable Google+ API
+   - Create OAuth 2.0 credentials
+   - Set redirect URI to: `http://localhost:3000/api/auth/callback/google`
+
+2. **Add to your `.env` file:**
+
+```bash
+# Google OAuth
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+```
+
+## 🎯 Explore Your Application
+
+### 1. Authentication System
+
+Visit `http://localhost:3000/login` to test:
+- ✅ **Email/Password Login** - Create an account and sign in
+- ✅ **Social Login** - Try GitHub or Google authentication
+- ✅ **Password Reset** - Test the password reset flow
+- ✅ **User Registration** - Create new user accounts
+
+### 2. Dashboard Features
+
+Access the dashboard at `http://localhost:3000/dashboard`:
+- ✅ **User Dashboard** - Personal user interface
+- ✅ **Admin Dashboard** - Administrative controls (for admin users)
+- ✅ **File Management** - Upload and manage files
+- ✅ **User Management** - Admin user management interface
+
+### 3. Payment System
+
+Test the payment flow at `http://localhost:3000/pricing`:
+- ✅ **Subscription Plans** - View available pricing plans
+- ✅ **Payment Processing** - Test with Stripe test cards
+- ✅ **Billing Management** - Manage subscriptions and invoices
+- ✅ **Customer Portal** - Self-service billing portal
+
+### 4. File Management
+
+Try file operations at `http://localhost:3000/dashboard/files`:
+- ✅ **File Upload** - Drag and drop file uploads
+- ✅ **Image Processing** - Automatic thumbnail generation
+- ✅ **File Organization** - Organize and manage files
+- ✅ **Access Control** - File permissions and sharing
+
+### 5. Internationalization
+
+Test language switching:
+- ✅ **Language Toggle** - Switch between English and Chinese
+- ✅ **Localized Content** - All UI text is translated
+- ✅ **Localized Routes** - URLs change based on language
+- ✅ **Date/Currency Format** - Proper localization formatting
+
+## 🛠️ Development Commands
+
+Here are the essential commands for development:
+
+### Development Server
+```bash
+# Start development server with hot reload
+pnpm dev
+
+# Start with specific port
+pnpm dev -- --port 3001
+
+# Start with turbo mode (faster builds)
+pnpm dev --turbo
+```
+
+### Database Operations
+```bash
+# Push schema changes to database
+pnpm db:push
+
+# Generate database migrations
+pnpm db:generate
+
+# Run database migrations
+pnpm db:migrate
+
+# Open database studio (GUI)
+pnpm db:studio
+```
+
+### Code Quality
+```bash
+# Run TypeScript type checking
+pnpm typecheck
+
+# Run code formatting and linting
+pnpm check
+
+# Fix code formatting issues
+pnpm check:write
+```
+
+### Testing
+```bash
+# Run all tests
+pnpm test
+
+# Run unit tests only
+pnpm test:unit
+
+# Run integration tests
+pnpm test:integration
+
+# Run end-to-end tests
+pnpm test:e2e
+
+# Run tests with coverage
+pnpm test:coverage
+```
+
+### Build and Production
+```bash
+# Build for production
+pnpm build
+
+# Start production server
+pnpm start
+
+# Build and start (combined)
+pnpm preview
+```
+
+## 🔍 Verification Checklist
+
+Verify your setup is working correctly:
+
+### ✅ Basic Functionality
+- [ ] Application loads at `http://localhost:3000`
+- [ ] No console errors in browser developer tools
+- [ ] Database connection is working
+- [ ] Environment variables are loaded correctly
+
+### ✅ Authentication
+- [ ] User registration works
+- [ ] Email/password login works
+- [ ] Social login works (if configured)
+- [ ] Protected routes redirect to login
+- [ ] User sessions persist correctly
+
+### ✅ Database
+- [ ] Database tables are created
+- [ ] User data is stored correctly
+- [ ] Database studio opens without errors
+- [ ] Migrations run successfully
+
+### ✅ File System
+- [ ] File uploads work
+- [ ] Images are processed correctly
+- [ ] Files are stored in configured location
+- [ ] File permissions work correctly
+
+### ✅ Payment System (if configured)
+- [ ] Stripe integration works
+- [ ] Test payments process correctly
+- [ ] Webhook endpoints receive events
+- [ ] Subscription management works
+
+## 🚨 Common Issues & Solutions
+
+### Database Connection Issues
+
+**Problem:** `Database connection failed`
+```bash
+# Check if PostgreSQL is running
+brew services start postgresql  # macOS
+sudo systemctl start postgresql  # Linux
+net start postgresql-x64-14     # Windows
+
+# Verify connection string
+psql "postgresql://username:password@localhost:5432/AI SaaSr_saas"
+```
+
+### Environment Variables Not Loading
+
+**Problem:** Environment variables are undefined
+```bash
+# Make sure .env file is in the root directory
+ls -la .env
+
+# Check file permissions
+chmod 644 .env
+
+# Restart the development server
+pnpm dev
+```
+
+### Port Already in Use
+
+**Problem:** `Port 3000 is already in use`
+```bash
+# Find and kill process using port 3000
+lsof -ti:3000 | xargs kill -9
+
+# Or use a different port
+pnpm dev -- --port 3001
+```
+
+### Node.js Version Issues
+
+**Problem:** `Node.js version not supported`
+```bash
+# Check your Node.js version
+node --version
+
+# Update to Node.js 18+
+nvm install 18
+nvm use 18
+```
+
+## 📚 Next Steps
+
+Now that your application is running, here's what to do next:
+
+### 1. **Explore the Features**
+- Read the **Architecture** to understand the system design
+- Check out the **Features** for detailed feature explanations
+
+### 2. **Customize Your Application**
+- Follow the **Customization** to make it your own
+- Update branding, colors, and content to match your needs
+
+### 3. **Add Your Content**
+- Replace placeholder content with your own
+- Configure your pricing plans and features
+- Set up your domain and branding
+
+### 4. **Deploy to Production**
+- Follow the **Deployment** for production setup
+- Configure production environment variables
+- Set up monitoring and analytics
+
+## 🎉 You're Ready!
+
+Congratulations! You now have a fully functional SaaS application running locally. The foundation is set for building your next great product.
+
+**Need help?** 
+
+Scan the code to add the author's WeChat, you will be invited to the exclusive Q&A WeChat group to get the video tutorials and practical project codes that come with it.
+<div className="flex justify-center">
+  <img src="/images/wechat.png" alt="WeChat" className="w-1/2 h-auto" />
+</div>

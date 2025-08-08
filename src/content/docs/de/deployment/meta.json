@@ -1,5 +1,5 @@
 {
-  "title": "代码部署",
+  "title": "Deployment",
   "defaultOpen": true,
   "pages": ["vercel", "docker"]
 }

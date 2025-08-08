@@ -1,0 +1,190 @@
+---
+title: Introduction
+---
+AI SaaS Template is a **modern, production-ready SaaS application template** built with Next.js 15 and the latest web technologies. It provides everything you need to build, deploy, and scale your next SaaS application with confidence.
+
+### Why Choose AI SaaS Template?
+
+- **🚀 Production Ready** - Built with enterprise-grade patterns and best practices
+- **⚡ Developer Experience** - Excellent TypeScript support and modern tooling
+- **🔧 Scalable Architecture** - Designed to grow with your business
+- **📦 Comprehensive Features** - Everything you need in one package
+- **🔄 Active Development** - Regular updates and improvements
+- **🌍 Community Support** - Growing community and comprehensive documentation
+
+## 🎯 Key Features
+
+### 🔐 Authentication & Authorization
+- **Multi-provider authentication** with AI SaaSr Auth
+- Email/password and social login (GitHub, Google)
+- **Role-based access control (RBAC)** with admin permissions
+- Session management with database persistence
+- Password reset and email verification
+- Secure session handling and token management
+
+### 💳 Payment & Billing System
+- **Complete Stripe integration** with subscription management
+- Multiple pricing plans and billing cycles (monthly/yearly)
+- **Webhook handling** for real-time payment events
+- Billing dashboard with invoice management
+- **Free trial support** and subscription controls
+- Payment method management and customer portal
+
+### 📁 File Management
+- **Cloud storage integration** (AWS S3/Cloudflare R2)
+- Secure file uploads with validation and processing
+- **Image processing** and automatic thumbnail generation
+- File access control and permission management
+- Support for multiple file types with size limits
+- **Drag-and-drop** file upload interface
+
+### 🌍 Internationalization (i18n)
+- **Multi-language support** with next-intl
+- Built-in English and Chinese translations
+- **Localized routing** and content management
+- Easy to add new languages and regions
+- **SEO-friendly** localized URLs
+- Currency and date formatting support
+
+### 📱 Modern UI/UX
+- **Responsive design** with Tailwind CSS v4
+- Radix UI components for accessibility compliance
+- **Dark/light theme** support with smooth transitions
+- Mobile-first approach with touch-friendly interfaces
+- **Modern design patterns** and micro-interactions
+- Customizable design system
+
+### 📖 Documentation System
+- **Built-in documentation** with Fumadocs
+- **MDX support** for rich content and interactive examples
+- Full-text search functionality
+- **Code highlighting** and live examples
+- API documentation with interactive playground
+- **Multi-language** documentation support
+
+### 🔒 Security & Performance
+- **Protected routes** with middleware-based authentication
+- Type-safe development with comprehensive TypeScript coverage
+- **Optimized bundle** with Next.js 15 App Router
+- Security best practices and vulnerability protection
+- **Performance monitoring** and optimization
+- CSRF protection and secure headers
+
+### 🧪 Comprehensive Testing
+- **Full testing suite** with high coverage
+- **Unit tests** with Jest and React Testing Library
+- **Integration tests** for API endpoints and database operations
+- **End-to-end tests** with Playwright for user workflows
+- **Visual regression testing** and accessibility testing
+- **CI/CD integration** with automated testing
+
+### 👥 Admin Dashboard
+- **User management** with search, filtering, and bulk operations
+- **System configuration** and feature toggles
+- **Analytics dashboard** with real-time metrics
+- **File management** interface for administrators
+- **Subscription management** and billing oversight
+- **Audit logging** and system monitoring
+
+## 🛠️ Technology Stack
+
+### Frontend Technologies
+- **Next.js 15** - React framework with App Router and Server Components
+- **React 18** - Latest React with concurrent features
+- **TypeScript** - Type-safe JavaScript with full coverage
+- **Tailwind CSS v4** - Utility-first CSS framework with custom design system
+- **Radix UI** - Accessible component primitives
+- **Zustand** - Lightweight state management
+- **SWR** - Data fetching with caching and synchronization
+
+### Backend Technologies
+- **Next.js API Routes** - Server-side API endpoints and middleware
+- **AI SaaSr Auth** - Modern authentication and authorization
+- **Drizzle ORM** - Type-safe database toolkit with migrations
+- **PostgreSQL** - Robust relational database
+- **Stripe** - Payment processing and subscription management
+- **Zod** - Schema validation and type inference
+
+### Infrastructure & Tools
+- **Vercel** - Deployment platform with edge functions
+- **Cloudflare R2** - Object storage for files and media
+- **GitHub Actions** - CI/CD pipeline automation
+- **Biome** - Fast code formatting and linting
+- **pnpm** - Fast and efficient package manager
+
+### Development Tools
+- **Jest** - Unit testing framework with coverage
+- **Playwright** - End-to-end testing automation
+- **Storybook** - Component development and documentation
+- **Drizzle Studio** - Database management interface
+
+## 📊 Project Structure
+
+```
+AI SaaSr-saas/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── [locale]/          # Internationalized routes
+│   │   ├── api/               # API endpoints and webhooks
+│   │   └── globals.css        # Global styles
+│   ├── components/            # Reusable UI components
+│   │   ├── ui/                # Base UI components (Radix UI)
+│   │   ├── blocks/            # Page sections and layouts
+│   │   ├── auth/              # Authentication components
+│   │   └── dashboard/         # Dashboard components
+│   ├── lib/                   # Utility libraries and services
+│   │   ├── auth/              # Authentication configuration
+│   │   ├── fumadocs/          # Documentation system
+│   │   └── logger/            # Logging utilities
+│   ├── drizzle/               # Database related
+│   │   ├── schemas/           # Database schemas
+│   │   └── migrations/        # Database migrations
+│   ├── constants/             # Constant definitions
+│   │   ├── auth.ts            # Authentication constants
+│   │   ├── payment.ts         # Payment constants
+│   │   └── user.ts            # User constants
+│   ├── content/               # Content management (MDX)
+│   │   ├── docs/              # Documentation content
+│   │   └── blog/              # Blog content
+│   ├── translate/             # Internationalization
+│   │   ├── i18n/              # Internationalization config
+│   │   └── messages/          # Translation files
+│   ├── hooks/                 # Custom React hooks
+│   │   ├── use-I18n.tsx       # Internationalization Hook
+│   │   ├── use-analytics.ts   # Analytics Hook
+│   │   ├── use-debounce.ts    # Debounce Hook
+│   │   ├── use-membership.ts  # Membership status Hook
+│   │   ├── use-mobile.tsx     # Mobile device detection Hook
+│   │   ├── use-system-config.ts # System configuration Hook
+│   │   └── use-trpc.ts        # tRPC Hook
+│   ├── types/                 # TypeScript definitions
+│   │   ├── auth.ts            # Authentication types
+│   │   ├── blocks.ts          # Component block types
+│   │   ├── common.ts          # Common types
+│   │   ├── index.d.ts         # Global type definitions
+│   │   ├── login.ts           # Login related types
+│   │   ├── payment.ts         # Payment types
+│   │   └── user.ts            # User types
+├── tests/                     # Comprehensive test suite
+│   ├── unit/                  # Unit tests
+│   ├── integration/           # Integration tests
+│   └── e2e/                   # End-to-end tests
+├── docs/                      # Documentation
+└── public/                    # Static assets
+```
+## 🎯 Use Cases
+
+AI SaaS Template is perfect for:
+
+- **SaaS Startups** - Launch your MVP quickly with all essential features
+- **Enterprise Applications** - Build internal tools with enterprise-grade security
+- **E-commerce Platforms** - Create subscription-based e-commerce solutions
+- **Content Management** - Build content platforms with user management
+- **Educational Platforms** - Create learning management systems
+- **Business Tools** - Develop productivity and business management tools
+
+## 🤝 Community & Support
+Scan the code to add the author's WeChat, you will be invited to join the exclusive Q&A WeChat group to get the video tutorials and practical project codes that come with it.
+<div className="flex justify-center">
+  <img src="/images/wechat.png" alt="WeChat" className="w-1/2 h-auto" />
+</div>

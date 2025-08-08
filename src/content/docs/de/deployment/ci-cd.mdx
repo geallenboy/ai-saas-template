@@ -1,25 +1,25 @@
 ---
-title: CI/CD 流水线
-description: 使用 GitHub Actions 为 AI SaaS Template 设置自动化持续集成和部署流水线，包含测试和部署自动化
+title: CI/CD Pipeline
+description: Set up automated continuous integration and deployment pipeline for AI SaaS Template with GitHub Actions, testing, and deployment automation
 ---
 
-# CI/CD 流水线
+# CI/CD Pipeline
 
-本指南涵盖使用 GitHub Actions 为 AI SaaS Template 设置完整的 CI/CD 流水线，包括自动化测试、构建和生产环境部署。
+This guide covers setting up a complete CI/CD pipeline for AI SaaS Template using GitHub Actions, including automated testing, building, and deployment to production environments.
 
-## 概述
+## Overview
 
-我们的 CI/CD 流水线包括：
-- **持续集成**: 自动化测试、代码检查和构建
-- **持续部署**: 自动化部署到预发布和生产环境
-- **质量门控**: 代码质量检查和安全扫描
-- **回滚能力**: 出现问题时快速回滚
+Our CI/CD pipeline includes:
+- **Continuous Integration**: Automated testing, linting, and building
+- **Continuous Deployment**: Automated deployment to staging and production
+- **Quality Gates**: Code quality checks and security scanning
+- **Rollback Capabilities**: Quick rollback in case of issues
 
-## GitHub Actions 工作流
+## GitHub Actions Workflow
 
-### 1. 基本工作流结构
+### 1. Basic Workflow Structure
 
-创建 `.github/workflows/ci-cd.yml`：
+Create `.github/workflows/ci-cd.yml`:
 
 ```yaml
 name: CI/CD Pipeline
@@ -36,7 +36,7 @@ env:
 
 jobs:
   test:
-    name: 测试和质量检查
+    name: Test & Quality Checks
     runs-on: ubuntu-latest
     
     services:
@@ -64,25 +64,25 @@ jobs:
           - 6379:6379
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 设置 pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - name: 获取 pnpm 存储目录
+      - name: Get pnpm store directory
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - name: 设置 pnpm 缓存
+      - name: Setup pnpm cache
         uses: actions/cache@v3
         with:
           path: ${{ env.STORE_PATH }}
@@ -90,46 +90,46 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 运行代码检查
+      - name: Run linting
         run: pnpm lint
 
-      - name: 运行类型检查
+      - name: Run type checking
         run: pnpm type-check
 
-      - name: 运行单元测试
+      - name: Run unit tests
         run: pnpm test
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/AI SaaSrsaas_test
           REDIS_URL: redis://localhost:6379
 
-      - name: 运行集成测试
+      - name: Run integration tests
         run: pnpm test:integration
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/AI SaaSrsaas_test
           REDIS_URL: redis://localhost:6379
 
-      - name: 构建应用
+      - name: Build application
         run: pnpm build
 
-      - name: 运行端到端测试
+      - name: Run E2E tests
         run: pnpm test:e2e
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/AI SaaSrsaas_test
           REDIS_URL: redis://localhost:6379
 
   security:
-    name: 安全扫描
+    name: Security Scan
     runs-on: ubuntu-latest
     needs: test
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 运行 Trivy 漏洞扫描
+      - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
@@ -137,16 +137,16 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
 
-      - name: 上传 Trivy 扫描结果
+      - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
 
-      - name: 审计依赖
+      - name: Audit dependencies
         run: pnpm audit
 
   build:
-    name: 构建 Docker 镜像
+    name: Build Docker Image
     runs-on: ubuntu-latest
     needs: [test, security]
     if: github.ref == 'refs/heads/main'
@@ -156,20 +156,20 @@ jobs:
       image-digest: ${{ steps.build.outputs.digest }}
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 登录容器注册表
+      - name: Log in to Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 提取元数据
+      - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -180,7 +180,7 @@ jobs:
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: 构建并推送 Docker 镜像
+      - name: Build and push Docker image
         id: build
         uses: docker/build-push-action@v5
         with:
@@ -192,14 +192,14 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy-staging:
-    name: 部署到预发布环境
+    name: Deploy to Staging
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/develop'
     environment: staging
 
     steps:
-      - name: 部署到预发布环境
+      - name: Deploy to staging
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.STAGING_HOST }}
@@ -212,14 +212,14 @@ jobs:
             docker system prune -f
 
   deploy-production:
-    name: 部署到生产环境
+    name: Deploy to Production
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main'
     environment: production
 
     steps:
-      - name: 部署到生产环境
+      - name: Deploy to production
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.PRODUCTION_HOST }}
@@ -231,12 +231,12 @@ jobs:
             docker-compose up -d
             docker system prune -f
 
-      - name: 健康检查
+      - name: Health check
         run: |
           sleep 30
           curl -f https://yourdomain.com/health || exit 1
 
-      - name: 通知部署
+      - name: Notify deployment
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
@@ -244,13 +244,13 @@ jobs:
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 ```
 
-### 2. 环境特定工作流
+### 2. Environment-Specific Workflows
 
-#### 预发布环境部署
-创建 `.github/workflows/staging.yml`：
+#### Staging Deployment
+Create `.github/workflows/staging.yml`:
 
 ```yaml
-name: 预发布环境部署
+name: Staging Deployment
 
 on:
   push:
@@ -258,31 +258,31 @@ on:
 
 jobs:
   deploy-staging:
-    name: 部署到预发布环境
+    name: Deploy to Staging
     runs-on: ubuntu-latest
     environment: staging
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: 设置 pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: '8'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 构建应用
+      - name: Build application
         run: pnpm build
 
-      - name: 部署到预发布服务器
+      - name: Deploy to staging server
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.STAGING_HOST }}
@@ -296,17 +296,17 @@ jobs:
             pnpm db:migrate
             sudo systemctl restart AI SaaSr-saas-staging
 
-      - name: 运行冒烟测试
+      - name: Run smoke tests
         run: |
           sleep 30
           curl -f https://staging.yourdomain.com/health || exit 1
 ```
 
-#### 生产环境部署
-创建 `.github/workflows/production.yml`：
+#### Production Deployment
+Create `.github/workflows/production.yml`:
 
 ```yaml
-name: 生产环境部署
+name: Production Deployment
 
 on:
   release:
@@ -314,31 +314,31 @@ on:
 
 jobs:
   deploy-production:
-    name: 部署到生产环境
+    name: Deploy to Production
     runs-on: ubuntu-latest
     environment: production
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: 设置 pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: '8'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 构建应用
+      - name: Build application
         run: pnpm build
 
-      - name: 创建部署备份
+      - name: Create deployment backup
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.PRODUCTION_HOST }}
@@ -352,7 +352,7 @@ jobs:
               --exclude=logs \
               .
 
-      - name: 部署到生产服务器
+      - name: Deploy to production server
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.PRODUCTION_HOST }}
@@ -366,28 +366,28 @@ jobs:
             pnpm db:migrate
             sudo systemctl restart AI SaaSr-saas
 
-      - name: 健康检查
+      - name: Health check
         run: |
           sleep 30
           curl -f https://yourdomain.com/health || exit 1
 
-      - name: 通知部署成功
+      - name: Notify deployment success
         uses: 8398a7/action-slack@v3
         with:
           status: success
           channel: '#deployments'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
-          text: '生产环境部署成功！🚀'
+          text: 'Production deployment successful! 🚀'
 ```
 
-## 质量门控
+## Quality Gates
 
-### 1. 代码质量检查
+### 1. Code Quality Checks
 
-创建 `.github/workflows/quality.yml`：
+Create `.github/workflows/quality.yml`:
 
 ```yaml
-name: 代码质量
+name: Code Quality
 
 on:
   pull_request:
@@ -395,39 +395,39 @@ on:
 
 jobs:
   quality:
-    name: 代码质量检查
+    name: Code Quality Checks
     runs-on: ubuntu-latest
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: 设置 pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: '8'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 运行 ESLint
+      - name: Run ESLint
         run: pnpm lint
 
-      - name: 运行 Prettier
+      - name: Run Prettier
         run: pnpm format:check
 
-      - name: 运行 TypeScript 检查
+      - name: Run TypeScript check
         run: pnpm type-check
 
-      - name: 运行覆盖率测试
+      - name: Run tests with coverage
         run: pnpm test:coverage
 
-      - name: 上传覆盖率到 Codecov
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -435,19 +435,19 @@ jobs:
           flags: unittests
           name: codecov-umbrella
 
-      - name: SonarCloud 扫描
+      - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
 
-### 2. 安全扫描
+### 2. Security Scanning
 
-创建 `.github/workflows/security.yml`：
+Create `.github/workflows/security.yml`:
 
 ```yaml
-name: 安全扫描
+name: Security Scan
 
 on:
   push:
@@ -455,18 +455,18 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '0 2 * * 1' # 每周一凌晨2点
+    - cron: '0 2 * * 1' # Weekly on Monday at 2 AM
 
 jobs:
   security:
-    name: 安全扫描
+    name: Security Scan
     runs-on: ubuntu-latest
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 运行 Trivy 漏洞扫描
+      - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
@@ -474,33 +474,33 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
 
-      - name: 上传 Trivy 扫描结果
+      - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
 
-      - name: 依赖审计
+      - name: Dependency audit
         run: |
           npm audit --audit-level moderate
           pnpm audit
 
-      - name: CodeQL 分析
+      - name: CodeQL Analysis
         uses: github/codeql-action/init@v2
         with:
           languages: javascript, typescript
 
-      - name: 执行 CodeQL 分析
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
 ```
 
-## 数据库迁移
+## Database Migrations
 
-### 1. 迁移工作流
+### 1. Migration Workflow
 
-创建 `.github/workflows/migrations.yml`：
+Create `.github/workflows/migrations.yml`:
 
 ```yaml
-name: 数据库迁移
+name: Database Migrations
 
 on:
   push:
@@ -511,28 +511,28 @@ on:
 
 jobs:
   migrate:
-    name: 运行数据库迁移
+    name: Run Database Migrations
     runs-on: ubuntu-latest
     environment: production
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 设置 Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: 设置 pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: '8'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 在生产环境运行迁移
+      - name: Run migrations on production
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.PRODUCTION_HOST }}
@@ -544,64 +544,64 @@ jobs:
             pnpm db:seed
 ```
 
-### 2. 回滚能力
+### 2. Rollback Capabilities
 
-在 `scripts/rollback.sh` 中创建回滚脚本：
+Create rollback script in `scripts/rollback.sh`:
 
 ```bash
 #!/bin/bash
 
-# AI SaaS Template 部署回滚脚本
+# Rollback script for AI SaaS Template deployment
 set -e
 
 BACKUP_DIR="/opt/backups"
 ROLLBACK_TAG=${1:-"previous"}
 
-echo "开始回滚到 $ROLLBACK_TAG..."
+echo "Starting rollback to $ROLLBACK_TAG..."
 
-# 停止应用
+# Stop application
 sudo systemctl stop AI SaaSr-saas
 
-# 从备份恢复
+# Restore from backup
 if [ -f "$BACKUP_DIR/backup-$ROLLBACK_TAG.tar.gz" ]; then
     cd /opt/AI SaaSr-saas
     tar -xzf "$BACKUP_DIR/backup-$ROLLBACK_TAG.tar.gz"
-    echo "从备份恢复应用文件"
+    echo "Application files restored from backup"
 else
-    echo "未找到备份文件，通过 git 回滚..."
+    echo "Backup file not found, rolling back via git..."
     cd /opt/AI SaaSr-saas
     git checkout $ROLLBACK_TAG
     pnpm install --frozen-lockfile
     pnpm build
 fi
 
-# 如需要，恢复数据库
+# Restore database if needed
 if [ -f "$BACKUP_DIR/db-backup-$ROLLBACK_TAG.sql.gz" ]; then
-    echo "恢复数据库备份..."
+    echo "Restoring database backup..."
     gunzip -c "$BACKUP_DIR/db-backup-$ROLLBACK_TAG.sql.gz" | psql -U AI SaaSrsaas -d AI SaaSrsaas_prod
 fi
 
-# 启动应用
+# Start application
 sudo systemctl start AI SaaSr-saas
 
-# 健康检查
+# Health check
 sleep 30
 if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-    echo "回滚成功！应用运行正常。"
+    echo "Rollback successful! Application is healthy."
 else
-    echo "回滚失败！应用无响应。"
+    echo "Rollback failed! Application is not responding."
     exit 1
 fi
 ```
 
-## 监控和通知
+## Monitoring and Notifications
 
-### 1. Slack 通知
+### 1. Slack Notifications
 
-创建 `.github/workflows/notifications.yml`：
+Create `.github/workflows/notifications.yml`:
 
 ```yaml
-name: 通知
+name: Notifications
 
 on:
   workflow_run:
@@ -611,11 +611,11 @@ on:
 
 jobs:
   notify:
-    name: 发送通知
+    name: Send Notifications
     runs-on: ubuntu-latest
 
     steps:
-      - name: 成功通知
+      - name: Notify on success
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
         uses: 8398a7/action-slack@v3
         with:
@@ -623,12 +623,12 @@ jobs:
           channel: '#deployments'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
           text: |
-            ✅ 部署成功！
-            仓库: ${{ github.repository }}
-            分支: ${{ github.ref }}
-            提交: ${{ github.sha }}
+            ✅ Deployment successful!
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref }}
+            Commit: ${{ github.sha }}
 
-      - name: 失败通知
+      - name: Notify on failure
         if: ${{ github.event.workflow_run.conclusion == 'failure' }}
         uses: 8398a7/action-slack@v3
         with:
@@ -636,19 +636,19 @@ jobs:
           channel: '#deployments'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
           text: |
-            ❌ 部署失败！
-            仓库: ${{ github.repository }}
-            分支: ${{ github.ref }}
-            提交: ${{ github.sha }}
-            请检查日志了解详情。
+            ❌ Deployment failed!
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref }}
+            Commit: ${{ github.sha }}
+            Please check the logs for details.
 ```
 
-### 2. 邮件通知
+### 2. Email Notifications
 
-在工作流中配置邮件通知：
+Configure email notifications in your workflow:
 
 ```yaml
-- name: 发送邮件通知
+- name: Send email notification
   if: failure()
   uses: dawidd6/action-send-mail@v3
   with:
@@ -656,53 +656,53 @@ jobs:
     server_port: 465
     username: ${{ secrets.EMAIL_USERNAME }}
     password: ${{ secrets.EMAIL_PASSWORD }}
-    subject: '部署失败 - AI SaaS Template'
+    subject: 'Deployment Failed - AI SaaS Template'
     body: |
-      部署流水线失败。
+      The deployment pipeline has failed.
       
-      仓库: ${{ github.repository }}
-      分支: ${{ github.ref }}
-      提交: ${{ github.sha }}
+      Repository: ${{ github.repository }}
+      Branch: ${{ github.ref }}
+      Commit: ${{ github.sha }}
       
-      请检查 GitHub Actions 日志获取更多详情。
+      Please check the GitHub Actions logs for more details.
     to: admin@yourdomain.com
     from: noreply@yourdomain.com
 ```
 
-## 环境配置
+## Environment Configuration
 
-### 1. GitHub 密钥
+### 1. GitHub Secrets
 
-在 GitHub 仓库中配置以下密钥：
+Configure the following secrets in your GitHub repository:
 
-#### 生产环境
-- `PRODUCTION_HOST`: 生产服务器 IP/主机名
-- `PRODUCTION_USER`: 生产环境 SSH 用户名
-- `PRODUCTION_SSH_KEY`: 生产环境 SSH 私钥
-- `DATABASE_URL`: 生产数据库连接字符串
-- `AI SaaSR_AUTH_SECRET`: 生产认证密钥
-- `STRIPE_SECRET_KEY`: 生产 Stripe 密钥
-- `CLOUDFLARE_R2_ACCESS_KEY_ID`: 生产 R2 访问密钥
-- `CLOUDFLARE_R2_SECRET_ACCESS_KEY`: 生产 R2 密钥
+#### Production Environment
+- `PRODUCTION_HOST`: Production server IP/hostname
+- `PRODUCTION_USER`: SSH username for production
+- `PRODUCTION_SSH_KEY`: Private SSH key for production
+- `DATABASE_URL`: Production database connection string
+- `AI SaaSR_AUTH_SECRET`: Production auth secret
+- `STRIPE_SECRET_KEY`: Production Stripe secret key
+- `CLOUDFLARE_R2_ACCESS_KEY_ID`: Production R2 access key
+- `CLOUDFLARE_R2_SECRET_ACCESS_KEY`: Production R2 secret key
 
-#### 预发布环境
-- `STAGING_HOST`: 预发布服务器 IP/主机名
-- `STAGING_USER`: 预发布环境 SSH 用户名
-- `STAGING_SSH_KEY`: 预发布环境 SSH 私钥
+#### Staging Environment
+- `STAGING_HOST`: Staging server IP/hostname
+- `STAGING_USER`: SSH username for staging
+- `STAGING_SSH_KEY`: Private SSH key for staging
 
-#### 通知
-- `SLACK_WEBHOOK`: Slack webhook URL
-- `EMAIL_USERNAME`: 邮件通知 SMTP 用户名
-- `EMAIL_PASSWORD`: 邮件通知 SMTP 密码
+#### Notifications
+- `SLACK_WEBHOOK`: Slack webhook URL for notifications
+- `EMAIL_USERNAME`: SMTP username for email notifications
+- `EMAIL_PASSWORD`: SMTP password for email notifications
 
-#### 外部服务
-- `CODECOV_TOKEN`: Codecov 覆盖率报告令牌
-- `SONAR_TOKEN`: SonarCloud 代码质量令牌
-- `GITHUB_TOKEN`: GitHub 令牌（自动提供）
+#### External Services
+- `CODECOV_TOKEN`: Codecov token for coverage reports
+- `SONAR_TOKEN`: SonarCloud token for code quality
+- `GITHUB_TOKEN`: GitHub token (automatically provided)
 
-### 2. 环境文件
+### 2. Environment Files
 
-创建环境特定的配置文件：
+Create environment-specific configuration files:
 
 #### `.env.staging`
 ```
@@ -720,14 +720,14 @@ AI SaaSR_AUTH_URL=https://yourdomain.com
 STRIPE_SECRET_KEY=sk_live_production_key
 ```
 
-## 性能优化
+## Performance Optimization
 
-### 1. 构建优化
+### 1. Build Optimization
 
-优化构建过程：
+Optimize your build process:
 
 ```yaml
-- name: 优化构建
+- name: Build with optimizations
   run: |
     export NODE_ENV=production
     export NEXT_TELEMETRY_DISABLED=1
@@ -736,12 +736,12 @@ STRIPE_SECRET_KEY=sk_live_production_key
     NEXT_TELEMETRY_DISABLED: 1
 ```
 
-### 2. 缓存优化
+### 2. Cache Optimization
 
-实现智能缓存：
+Implement intelligent caching:
 
 ```yaml
-- name: 缓存 node modules
+- name: Cache node modules
   uses: actions/cache@v3
   with:
     path: ~/.pnpm-store
@@ -749,7 +749,7 @@ STRIPE_SECRET_KEY=sk_live_production_key
     restore-keys: |
       ${{ runner.os }}-pnpm-
 
-- name: 缓存 Next.js 构建
+- name: Cache Next.js build
   uses: actions/cache@v3
   with:
     path: |
@@ -760,75 +760,75 @@ STRIPE_SECRET_KEY=sk_live_production_key
       ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### Common Issues
 
-1. **构建失败**
+1. **Build Failures**
    ```bash
-   # 检查日志
+   # Check logs
    cat /var/log/AI SaaSr-saas/build.log
    
-   # 验证依赖
+   # Verify dependencies
    pnpm install --frozen-lockfile
    
-   # 清理缓存
+   # Clear cache
    pnpm store prune
    ```
 
-2. **部署失败**
+2. **Deployment Failures**
    ```bash
-   # 检查服务状态
+   # Check service status
    sudo systemctl status AI SaaSr-saas
    
-   # 检查部署日志
+   # Check deployment logs
    sudo journalctl -u AI SaaSr-saas -f
    
-   # 验证文件权限
+   # Verify file permissions
    ls -la /opt/AI SaaSr-saas
    ```
 
-3. **数据库迁移问题**
+3. **Database Migration Issues**
    ```bash
-   # 检查迁移状态
+   # Check migration status
    pnpm db:status
    
-   # 回滚迁移
+   # Rollback migration
    pnpm db:rollback
    
-   # 重置数据库
+   # Reset database
    pnpm db:reset
    ```
 
-### 调试命令
+### Debugging Commands
 
 ```bash
-# 检查工作流状态
+# Check workflow status
 gh workflow list
 gh workflow view ci-cd.yml
 
-# 检查部署日志
+# Check deployment logs
 ssh user@server 'sudo journalctl -u AI SaaSr-saas -f'
 
-# 本地测试部署
+# Test deployment locally
 docker-compose up -d
 curl -f http://localhost:3000/health
 ```
 
-## 最佳实践
+## Best Practices
 
-1. **分支保护**: 为主分支启用分支保护规则
-2. **必需审查**: 合并前要求代码审查
-3. **状态检查**: 使 CI/CD 检查成为合并的必需条件
-4. **自动化测试**: 保持高测试覆盖率
-5. **安全扫描**: 定期进行安全扫描和依赖更新
-6. **监控**: 监控部署成功和应用健康状态
-7. **回滚策略**: 始终准备好回滚计划
-8. **文档**: 保持部署文档的更新
+1. **Branch Protection**: Enable branch protection rules for main branch
+2. **Required Reviews**: Require code reviews before merging
+3. **Status Checks**: Make CI/CD checks required for merging
+4. **Automated Testing**: Maintain high test coverage
+5. **Security Scanning**: Regular security scans and dependency updates
+6. **Monitoring**: Monitor deployment success and application health
+7. **Rollback Strategy**: Always have a rollback plan ready
+8. **Documentation**: Keep deployment documentation up to date
 
-## 下一步
+## Next Steps
 
-- 设置 [监控和告警](../development/monitoring)
-- 配置 [错误跟踪](../development/error-tracking)
-- 实施 [性能监控](../development/performance)
-- 查看 [安全最佳实践](../development/security) 
+- Set up [Monitoring and Alerting](../development/monitoring)
+- Configure [Error Tracking](../development/error-tracking)
+- Implement [Performance Monitoring](../development/performance)
+- Review [Security Best Practices](../development/security) 

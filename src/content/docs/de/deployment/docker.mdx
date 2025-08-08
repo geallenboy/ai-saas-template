@@ -1,22 +1,19 @@
 ---
-title: Docker 部署
-description: 使用 Docker 容器部署 AI SaaS Template，实现一致且可扩展的部署方案
+title: Docker Deployment
 ---
 
-# Docker 部署
+Deploy AI SaaS Template using Docker containers for consistent, scalable, and portable deployment across different environments.
 
-使用 Docker 容器部署 AI SaaS Template，实现一致、可扩展且便携的跨环境部署。
-
-## 前置要求
+## Prerequisites
 
 - Docker Engine 20.10+
 - Docker Compose 2.0+
-- 2GB+ 可用内存
-- 基础 Docker 知识
+- 2GB+ RAM available
+- Basic Docker knowledge
 
-## Docker 快速开始
+## Quick Start with Docker
 
-### 1. 克隆和设置
+### 1. Clone and Setup
 
 ```bash
 git clone https://github.com/your-org/AI SaaSr-saas.git
@@ -24,15 +21,15 @@ cd AI SaaSr-saas
 cp env.example .env
 ```
 
-### 2. 配置环境变量
+### 2. Configure Environment
 
-编辑 `.env` 文件：
+Edit `.env` file with your configuration:
 
 ```
-# 数据库
+# Database
 DATABASE_URL=postgresql://postgres:password@db:5432/AI SaaSrsaas
 
-# 认证
+# Authentication
 AI SaaSR_AUTH_SECRET=your-super-secret-key-here
 AI SaaSR_AUTH_URL=http://localhost:3000
 
@@ -49,29 +46,29 @@ STRIPE_SECRET_KEY=sk_test_your-stripe-secret-key
 STRIPE_PUBLISHABLE_KEY=pk_test_your-stripe-publishable-key
 STRIPE_WEBHOOK_SECRET=whsec_your-webhook-secret
 
-# 文件存储 (Cloudflare R2)
+# File Storage (Cloudflare R2)
 CLOUDFLARE_R2_ACCESS_KEY_ID=your-access-key
 CLOUDFLARE_R2_SECRET_ACCESS_KEY=your-secret-key
 CLOUDFLARE_R2_BUCKET_NAME=your-bucket-name
 CLOUDFLARE_R2_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
 ```
 
-### 3. 构建和运行
+### 3. Build and Run
 
 ```bash
-# 构建并启动所有服务
+# Build and start all services
 docker-compose up -d
 
-# 查看日志
+# View logs
 docker-compose logs -f
 
-# 停止服务
+# Stop services
 docker-compose down
 ```
 
-## Docker Compose 配置
+## Docker Compose Configuration
 
-创建 `docker-compose.yml`：
+Create `docker-compose.yml`:
 
 ```yaml
 version: '3.8'
@@ -116,50 +113,50 @@ volumes:
   redis_data:
 ```
 
-## Dockerfile 配置
+## Dockerfile
 
-创建优化的 `Dockerfile`：
+Create optimized `Dockerfile`:
 
 ```dockerfile
-# 构建阶段
+# Build stage
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# 安装 pnpm
+# Install pnpm
 RUN npm install -g pnpm
 
-# 复制包文件
+# Copy package files
 COPY package.json pnpm-lock.yaml ./
 COPY packages/ ./packages/
 
-# 安装依赖
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# 复制源代码
+# Copy source code
 COPY . .
 
-# 构建应用
+# Build application
 RUN pnpm build
 
-# 生产阶段
+# Production stage
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# 安装 pnpm
+# Install pnpm
 RUN npm install -g pnpm
 
-# 创建非 root 用户
+# Create non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# 复制构建的应用
+# Copy built application
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# 设置正确的权限
+# Set correct permissions
 RUN chown -R nextjs:nodejs /app
 USER nextjs
 
@@ -171,9 +168,9 @@ ENV HOSTNAME "0.0.0.0"
 CMD ["node", "server.js"]
 ```
 
-## 多阶段构建优化
+## Multi-Stage Build Optimization
 
-### 开发环境 Dockerfile
+### Development Dockerfile
 
 ```dockerfile
 FROM node:18-alpine
@@ -192,7 +189,7 @@ EXPOSE 3000
 CMD ["pnpm", "dev"]
 ```
 
-### 生产环境 Dockerfile
+### Production Dockerfile
 
 ```dockerfile
 FROM node:18-alpine AS deps
@@ -228,9 +225,9 @@ ENV HOSTNAME "0.0.0.0"
 CMD ["node", "server.js"]
 ```
 
-## 环境特定配置
+## Environment-Specific Configurations
 
-### 开发环境
+### Development Environment
 
 ```yaml
 # docker-compose.dev.yml
@@ -267,7 +264,7 @@ volumes:
   postgres_dev_data:
 ```
 
-### 生产环境
+### Production Environment
 
 ```yaml
 # docker-compose.prod.yml
@@ -320,59 +317,59 @@ volumes:
   redis_data:
 ```
 
-## 数据库迁移
+## Database Migration
 
-### 在 Docker 中运行迁移
+### Run Migrations in Docker
 
 ```bash
-# 运行数据库迁移
+# Run database migrations
 docker-compose exec app pnpm db:migrate
 
-# 填充数据
+# Seed database
 docker-compose exec app pnpm db:seed
 
-# 重置数据库
+# Reset database
 docker-compose exec app pnpm db:reset
 ```
 
-### 迁移脚本
+### Migration Script
 
-创建 `scripts/docker-migrate.sh`：
+Create `scripts/docker-migrate.sh`:
 
 ```bash
 #!/bin/bash
 
-# 等待数据库准备就绪
+# Wait for database to be ready
 until docker-compose exec db pg_isready -U postgres; do
-  echo "等待数据库..."
+  echo "Waiting for database..."
   sleep 2
 done
 
-# 运行迁移
+# Run migrations
 docker-compose exec app pnpm db:migrate
 
-# 填充初始数据
+# Seed initial data
 docker-compose exec app pnpm db:seed
 
-echo "数据库迁移完成！"
+echo "Database migration completed!"
 ```
 
-## 健康检查
+## Health Checks
 
-### 应用健康检查
+### Application Health Check
 
 ```dockerfile
-# 添加到 Dockerfile
+# Add to Dockerfile
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:3000/api/health || exit 1
 ```
 
-### Docker Compose 健康检查
+### Docker Compose Health Checks
 
 ```yaml
 services:
   app:
-    # ... 其他配置
+    # ... other config
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 30s
@@ -381,7 +378,7 @@ services:
       start_period: 40s
 
   db:
-    # ... 其他配置
+    # ... other config
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 30s
@@ -389,12 +386,12 @@ services:
       retries: 3
 ```
 
-## 监控和日志
+## Monitoring and Logging
 
-### 集中式日志
+### Centralized Logging
 
 ```yaml
-# 添加到 docker-compose.yml
+# Add to docker-compose.yml
 services:
   app:
     logging:
@@ -404,7 +401,7 @@ services:
         max-file: "3"
 ```
 
-### 使用 Prometheus 监控
+### Monitoring with Prometheus
 
 ```yaml
 # docker-compose.monitoring.yml
@@ -433,32 +430,32 @@ volumes:
   grafana_data:
 ```
 
-## 安全最佳实践
+## Security Best Practices
 
-### 1. 非 Root 用户
+### 1. Non-Root User
 
 ```dockerfile
-# 创建和使用非 root 用户
+# Create and use non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 ```
 
-### 2. 安全扫描
+### 2. Security Scanning
 
 ```bash
-# 扫描漏洞
+# Scan for vulnerabilities
 docker scout cves AI SaaSr-saas:latest
 
-# 使用安全扫描器
+# Use security scanner
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
   aquasec/trivy image AI SaaSr-saas:latest
 ```
 
-### 3. 密钥管理
+### 3. Secrets Management
 
 ```yaml
-# 使用 Docker secrets
+# Use Docker secrets
 services:
   app:
     secrets:
@@ -475,37 +472,37 @@ secrets:
     file: ./secrets/stripe_secret.txt
 ```
 
-## 性能优化
+## Performance Optimization
 
-### 1. 多阶段构建
+### 1. Multi-stage Builds
 
-使用多阶段构建减少镜像大小：
+Use multi-stage builds to reduce image size:
 
 ```dockerfile
-# 分别构建依赖
+# Build dependencies separately
 FROM node:18-alpine AS deps
-# ... 安装生产依赖
+# ... install production dependencies
 
 FROM node:18-alpine AS builder  
-# ... 构建应用
+# ... build application
 
 FROM node:18-alpine AS runner
-# ... 复制构建的应用
+# ... copy built application
 ```
 
-### 2. 层缓存
+### 2. Layer Caching
 
 ```dockerfile
-# 首先复制包文件以获得更好的缓存
+# Copy package files first for AI SaaSr caching
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# 在依赖之后复制源代码
+# Copy source code after dependencies
 COPY . .
 RUN pnpm build
 ```
 
-### 3. 资源限制
+### 3. Resource Limits
 
 ```yaml
 services:
@@ -520,62 +517,62 @@ services:
           memory: 1G
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### Common Issues
 
-1. **端口已被占用**
+1. **Port Already in Use**
    ```bash
-   # 检查端口使用情况
+   # Check what's using the port
    lsof -i :3000
    
-   # 终止进程
+   # Kill the process
    kill -9 <PID>
    ```
 
-2. **数据库连接问题**
+2. **Database Connection Issues**
    ```bash
-   # 检查数据库日志
+   # Check database logs
    docker-compose logs db
    
-   # 测试连接
+   # Test connection
    docker-compose exec db psql -U postgres -d AI SaaSrsaas
    ```
 
-3. **构建失败**
+3. **Build Failures**
    ```bash
-   # 清理构建缓存
+   # Clean build cache
    docker system prune -a
    
-   # 无缓存重新构建
+   # Rebuild without cache
    docker-compose build --no-cache
    ```
 
-### 调试模式
+### Debug Mode
 
 ```bash
-# 使用调试输出运行
+# Run with debug output
 DEBUG=* docker-compose up
 
-# 访问容器 shell
+# Access container shell
 docker-compose exec app sh
 
-# 查看容器日志
+# View container logs
 docker-compose logs -f app
 ```
 
-## 部署命令
+## Deployment Commands
 
 ```bash
-# 开发环境
+# Development
 docker-compose -f docker-compose.dev.yml up -d
 
-# 生产环境
+# Production
 docker-compose -f docker-compose.prod.yml up -d
 
-# 包含监控
+# With monitoring
 docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
 
-# 扩展服务
+# Scale services
 docker-compose up -d --scale app=3
 ```

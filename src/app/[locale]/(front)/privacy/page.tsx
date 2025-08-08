@@ -8,7 +8,7 @@ import {
   Shield,
   Users,
 } from 'lucide-react'
-import { getTranslator } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 import { useTranslations } from 'next-intl'
 
 export async function generateMetadata({
@@ -16,7 +16,7 @@ export async function generateMetadata({
 }: {
   params: { locale: string }
 }) {
-  const t = await getTranslator(locale, 'privacy.metadata')
+  const t = await getTranslations({ locale, namespace: 'privacy.metadata' })
 
   return {
     title: t('title'),

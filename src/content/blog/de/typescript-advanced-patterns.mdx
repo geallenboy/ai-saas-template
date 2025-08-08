@@ -1,18 +1,18 @@
 ---
-title: TypeScript 高级模式与技巧
-description: 深入探索 TypeScript 的高级特性和实用模式
+title: TypeScript Erweiterte Muster und Techniken
+description: Tiefgreifende Betrachtung von TypeScripts erweiterten Funktionen und praktischen Mustern
 author: AI SaaS Template Team
 date: 2024-01-25
-tags: [TypeScript, JavaScript, 类型系统]
+tags: [TypeScript, JavaScript, Type System]
 ---
 
-# TypeScript 高级模式与技巧
+# TypeScript Erweiterte Muster und Techniken
 
-TypeScript 不仅仅是 JavaScript 的类型注解，它还提供了强大的类型系统和高级特性。本文将探索一些实用的 TypeScript 高级模式。
+TypeScript ist mehr als nur Typ-Annotationen für JavaScript – es bietet ein mächtiges Typsystem und erweiterte Funktionen. Dieser Artikel erkundet einige praktische erweiterte TypeScript-Muster.
 
-## 实用类型（Utility Types）
+## Utility-Typen
 
-### 1. Pick 和 Omit
+### 1. Pick und Omit
 
 ```typescript
 interface User {
@@ -23,13 +23,13 @@ interface User {
   createdAt: Date;
 }
 
-// 只选择特定字段
+// Nur bestimmte Felder auswählen
 type PublicUser = Pick<User, 'id' | 'name' | 'email'>;
 
-// 排除特定字段
+// Bestimmte Felder ausschließen
 type CreateUserInput = Omit<User, 'id' | 'createdAt'>;
 
-// 实际使用
+// Praktische Verwendung
 function getPublicUserInfo(user: User): PublicUser {
   return {
     id: user.id,
@@ -39,7 +39,7 @@ function getPublicUserInfo(user: User): PublicUser {
 }
 ```
 
-### 2. Partial 和 Required
+### 2. Partial und Required
 
 ```typescript
 interface Config {
@@ -48,20 +48,20 @@ interface Config {
   retries: number;
 }
 
-// 所有字段都是可选的
+// Alle Felder sind optional
 type PartialConfig = Partial<Config>;
 
-// 所有字段都是必需的
+// Alle Felder sind erforderlich
 type RequiredConfig = Required<PartialConfig>;
 
 function updateConfig(config: PartialConfig): void {
-  // 只更新提供的字段
+  // Nur bereitgestellte Felder aktualisieren
 }
 ```
 
-## 条件类型（Conditional Types）
+## Bedingte Typen
 
-### 基础条件类型
+### Grundlegende Bedingte Typen
 
 ```typescript
 type IsString<T> = T extends string ? true : false;
@@ -69,7 +69,7 @@ type IsString<T> = T extends string ? true : false;
 type Test1 = IsString<string>; // true
 type Test2 = IsString<number>; // false
 
-// 实用的条件类型
+// Praktische bedingte Typen
 type NonNullable<T> = T extends null | undefined ? never : T;
 
 type ApiResponse<T> = T extends string
@@ -79,24 +79,24 @@ type ApiResponse<T> = T extends string
   : { data: T };
 ```
 
-### 分布式条件类型
+### Distributive Bedingte Typen
 
 ```typescript
 type ToArray<T> = T extends any ? T[] : never;
 
 type StringOrNumberArray = ToArray<string | number>;
-// 结果：string[] | number[]
+// Ergebnis: string[] | number[]
 
-// 过滤类型
+// Typen filtern
 type Filter<T, U> = T extends U ? T : never;
 
 type StringsOnly = Filter<string | number | boolean, string>;
-// 结果：string
+// Ergebnis: string
 ```
 
-## 映射类型（Mapped Types）
+## Mapped Types (Abgebildete Typen)
 
-### 基础映射类型
+### Grundlegende Mapped Types
 
 ```typescript
 type Readonly<T> = {
@@ -107,7 +107,7 @@ type Optional<T> = {
   [P in keyof T]?: T[P];
 };
 
-// 添加前缀
+// Präfix hinzufügen
 type Prefixed<T, P extends string> = {
   [K in keyof T as `${P}${string & K}`]: T[K];
 };
@@ -118,23 +118,23 @@ interface User {
 }
 
 type PrefixedUser = Prefixed<User, 'user_'>;
-// 结果：{ user_name: string; user_age: number; }
+// Ergebnis: { user_name: string; user_age: number; }
 ```
 
-### 高级映射类型
+### Erweiterte Mapped Types
 
 ```typescript
-// 深度只读
+// Tiefgreifend readonly
 type DeepReadonly<T> = {
   readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
 };
 
-// 键值对转换
+// Schlüssel-Wert-Paar-Transformation
 type Record<K extends keyof any, T> = {
   [P in K]: T;
 };
 
-// 创建事件处理器类型
+// Event-Handler-Typen erstellen
 type EventHandlers<T> = {
   [K in keyof T as `on${Capitalize<string & K>}`]: (value: T[K]) => void;
 };
@@ -146,16 +146,16 @@ interface FormData {
 }
 
 type FormHandlers = EventHandlers<FormData>;
-// 结果：{
+// Ergebnis: {
 //   onName: (value: string) => void;
 //   onEmail: (value: string) => void;
 //   onAge: (value: number) => void;
 // }
 ```
 
-## 模板字面量类型
+## Template Literal Types
 
-### 基础用法
+### Grundlegende Verwendung
 
 ```typescript
 type Greeting = `Hello, ${string}!`;
@@ -163,7 +163,7 @@ type Greeting = `Hello, ${string}!`;
 const greeting1: Greeting = "Hello, World!"; // ✅
 const greeting2: Greeting = "Hi there!"; // ❌
 
-// 组合类型
+// Kombinierte Typen
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 type Endpoint = `/api/${string}`;
 type ApiCall = `${HttpMethod} ${Endpoint}`;
@@ -171,10 +171,10 @@ type ApiCall = `${HttpMethod} ${Endpoint}`;
 const apiCall: ApiCall = "GET /api/users"; // ✅
 ```
 
-### 高级模板类型
+### Erweiterte Template-Typen
 
 ```typescript
-// 路径参数提取
+// Pfadparameter-Extraktion
 type ExtractParams<T extends string> = T extends `${string}:${infer P}/${infer Rest}`
   ? P | ExtractParams<Rest>
   : T extends `${string}:${infer P}`
@@ -182,9 +182,9 @@ type ExtractParams<T extends string> = T extends `${string}:${infer P}/${infer R
   : never;
 
 type Params = ExtractParams<'/users/:id/posts/:postId'>;
-// 结果：'id' | 'postId'
+// Ergebnis: 'id' | 'postId'
 
-// SQL 查询构建器
+// SQL Query Builder
 type SelectQuery<T, K extends keyof T> = `SELECT ${K extends string ? K : never} FROM ${string}`;
 
 interface User {
@@ -194,12 +194,12 @@ interface User {
 }
 
 type UserQuery = SelectQuery<User, 'name' | 'email'>;
-// 结果：'SELECT name FROM string' | 'SELECT email FROM string'
+// Ergebnis: 'SELECT name FROM string' | 'SELECT email FROM string'
 ```
 
-## 高级函数类型
+## Erweiterte Funktionstypen
 
-### 函数重载
+### Funktionsüberladung
 
 ```typescript
 interface ApiClient {
@@ -211,12 +211,12 @@ interface ApiClient {
 
 class HttpClient implements ApiClient {
   async request(method: string, url: string, data?: any): Promise<any> {
-    // 实现逻辑
+    // Implementierungslogik
   }
 }
 ```
 
-### 泛型约束
+### Generische Einschränkungen
 
 ```typescript
 interface Lengthwise {
@@ -230,9 +230,9 @@ function logLength<T extends Lengthwise>(arg: T): T {
 
 logLength("hello"); // ✅
 logLength([1, 2, 3]); // ✅
-logLength(123); // ❌ 没有 length 属性
+logLength(123); // ❌ Keine length-Eigenschaft
 
-// 键约束
+// Schlüssel-Einschränkungen
 function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
   return obj[key];
 }
@@ -242,9 +242,9 @@ const name = getProperty(person, "name"); // string
 const age = getProperty(person, "age"); // number
 ```
 
-## 装饰器模式
+## Decorator-Muster
 
-### 类装饰器
+### Klassen-Decorators
 
 ```typescript
 function Entity(tableName: string) {
@@ -260,14 +260,14 @@ class User {
   constructor(public name: string) {}
 }
 
-// 方法装饰器
+// Methoden-Decorators
 function Log(target: any, propertyName: string, descriptor: PropertyDescriptor) {
   const method = descriptor.value;
   
   descriptor.value = function (...args: any[]) {
-    console.log(`Calling ${propertyName} with args:`, args);
+    console.log(`Aufruf von ${propertyName} mit Argumenten:`, args);
     const result = method.apply(this, args);
-    console.log(`Result:`, result);
+    console.log(`Ergebnis:`, result);
     return result;
   };
 }
@@ -280,9 +280,9 @@ class Calculator {
 }
 ```
 
-## 类型守卫（Type Guards）
+## Type Guards (Typ-Wächter)
 
-### 自定义类型守卫
+### Benutzerdefinierte Type Guards
 
 ```typescript
 interface Cat {
@@ -297,36 +297,36 @@ interface Dog {
 
 type Animal = Cat | Dog;
 
-// 类型谓词
+// Typ-Prädikat
 function isCat(animal: Animal): animal is Cat {
   return animal.type === 'cat';
 }
 
 function makeSound(animal: Animal) {
   if (isCat(animal)) {
-    animal.meow(); // TypeScript 知道这是 Cat
+    animal.meow(); // TypeScript weiß, dass dies Cat ist
   } else {
-    animal.bark(); // TypeScript 知道这是 Dog
+    animal.bark(); // TypeScript weiß, dass dies Dog ist
   }
 }
 
-// 断言函数
+// Assertion-Funktion
 function assertIsNumber(value: unknown): asserts value is number {
   if (typeof value !== 'number') {
-    throw new Error('Expected number');
+    throw new Error('Zahl erwartet');
   }
 }
 
 function processValue(value: unknown) {
   assertIsNumber(value);
-  // 这里 TypeScript 知道 value 是 number
+  // Hier weiß TypeScript, dass value eine Zahl ist
   console.log(value.toFixed(2));
 }
 ```
 
-## 模块声明和命名空间
+## Modul-Deklarationen und Namespaces
 
-### 环境声明
+### Ambient-Deklarationen
 
 ```typescript
 // global.d.ts
@@ -338,7 +338,7 @@ declare global {
   var ENV: 'development' | 'production' | 'test';
 }
 
-// 模块声明
+// Modul-Deklarationen
 declare module '*.svg' {
   const content: string;
   export default content;
@@ -349,7 +349,7 @@ declare module 'my-library' {
 }
 ```
 
-### 命名空间
+### Namespaces
 
 ```typescript
 namespace Utils {
@@ -370,14 +370,14 @@ namespace Utils {
   }
 }
 
-// 使用
+// Verwendung
 const capitalized = Utils.String.capitalize('hello');
 const uniqueItems = Utils.Array.unique([1, 2, 2, 3]);
 ```
 
-## 实际应用示例
+## Praktische Anwendungsbeispiele
 
-### API 客户端类型安全
+### Typsichere API-Client
 
 ```typescript
 interface ApiEndpoints {
@@ -409,12 +409,12 @@ class TypedApiClient {
   ): Promise<
     ApiEndpoints[Path][Method] extends { response: infer R } ? R : never
   > {
-    // 实现逻辑
-    throw new Error('Not implemented');
+    // Implementierungslogik
+    throw new Error('Nicht implementiert');
   }
 }
 
-// 使用时具有完整的类型安全
+// Vollständige Typsicherheit bei der Verwendung
 const client = new TypedApiClient();
 const users = await client.request('GET', '/users'); // User[]
 const user = await client.request('POST', '/users', {
@@ -422,15 +422,15 @@ const user = await client.request('POST', '/users', {
 }); // User
 ```
 
-## 总结
+## Zusammenfassung
 
-TypeScript 的高级特性为我们提供了强大的类型系统工具：
+TypeScripts erweiterte Funktionen bieten uns mächtige Typsystem-Werkzeuge:
 
-1. **实用类型**：简化常见的类型操作
-2. **条件类型**：基于条件的类型选择
-3. **映射类型**：类型转换和操作
-4. **模板字面量**：字符串类型的精确控制
-5. **类型守卫**：运行时类型检查
-6. **装饰器**：元编程支持
+1. **Utility-Typen**: Vereinfachen häufige Typ-Operationen
+2. **Bedingte Typen**: Typ-Auswahl basierend auf Bedingungen
+3. **Mapped Types**: Typ-Transformation und -Manipulation
+4. **Template Literals**: Präzise Kontrolle über String-Typen
+5. **Type Guards**: Laufzeit-Typprüfung
+6. **Decorators**: Metaprogrammierung-Unterstützung
 
-掌握这些高级模式可以让你编写更安全、更可维护的 TypeScript 代码，充分发挥类型系统的优势。 
+Die Beherrschung dieser erweiterten Muster ermöglicht es Ihnen, sichereren, wartbareren TypeScript-Code zu schreiben und die Vorteile des Typsystems voll auszuschöpfen.

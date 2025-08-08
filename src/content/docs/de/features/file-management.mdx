@@ -1,34 +1,27 @@
 ---
-title: 文件管理
+title: File Management
 ---
-AI SaaS Template 提供强大的文件管理系统，集成云存储（Cloudflare R2/AWS S3）、安全文件上传、图像处理和全面的文件操作，具有适当的权限控制。
 
-import { Callout } from "@/components/widget/callout";
+AI SaaS Template provides a robust file management system with cloud storage integration (Cloudflare R2/AWS S3), secure file uploads, image processing, and comprehensive file operations with proper permission controls.
 
-<Callout type="warning">
-  请注意，文件管理功能只有成功配置管理员账户后才能使用。
-</Callout>
+## Overview
 
+The file management system includes:
+- **Cloud Storage Integration**: Cloudflare R2 and AWS S3 support
+- **Secure File Uploads**: Drag-and-drop interface with validation
+- **Image Processing**: Automatic thumbnail generation and optimization
+- **File Organization**: Folders, tags, and search capabilities
+- **Permission Controls**: User-based and role-based access control
+- **File Sharing**: Secure sharing with expiration and access controls
+- **Bulk Operations**: Upload, download, and delete multiple files
+- **Storage Quotas**: Subscription-based storage limits
 
-## 概述
+## Cloud Storage Configuration
 
-文件管理系统包括：
-- **云存储集成**: 支持 Cloudflare R2 和 AWS S3
-- **安全文件上传**: 拖放界面和文件验证
-- **图像处理**: 自动缩略图生成和优化
-- **文件组织**: 文件夹、标签和搜索功能
-- **权限控制**: 基于用户和角色的访问控制
-- **文件分享**: 带过期时间和访问控制的安全分享
-- **批量操作**: 批量上传、下载和删除文件
-- **存储配额**: 基于订阅的存储限制
-
-
-## 云存储配置
-
-### Cloudflare R2 设置
+### Cloudflare R2 Setup
 
 ```
-# Cloudflare R2 配置
+# Cloudflare R2 Configuration
 CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key_id
 CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_access_key
 CLOUDFLARE_R2_BUCKET_NAME=your_bucket_name
@@ -36,10 +29,10 @@ CLOUDFLARE_R2_ENDPOINT=https://your_account_id.r2.cloudflarestorage.com
 CLOUDFLARE_R2_PUBLIC_URL=https://your_domain.com
 ```
 
-### AWS S3 设置
+### AWS S3 Setup
 
 ```
-# AWS S3 配置
+# AWS S3 Configuration
 AWS_ACCESS_KEY_ID=your_access_key_id
 AWS_SECRET_ACCESS_KEY=your_secret_access_key
 AWS_BUCKET_NAME=your_bucket_name
@@ -47,7 +40,7 @@ AWS_REGION=us-east-1
 AWS_BUCKET_URL=https://your_bucket.s3.amazonaws.com
 ```
 
-### R2 客户端配置
+### R2 Client Configuration
 
 ```typescript
 // src/lib/r2-client.ts
@@ -94,9 +87,9 @@ export async function deleteFile(key: string) {
 }
 ```
 
-## 数据库架构
+## Database Schema
 
-### 文件架构
+### File Schema
 
 ```typescript
 // src/server/db/schema.ts
@@ -108,8 +101,8 @@ export const files = pgTable("files", {
   name: text("name").notNull(),
   originalName: text("originalName").notNull(),
   mimeType: text("mimeType").notNull(),
-  size: integer("size").notNull(), // 以字节为单位
-  key: text("key").notNull(), // S3/R2 键
+  size: integer("size").notNull(), // in bytes
+  key: text("key").notNull(), // S3/R2 key
   url: text("url").notNull(),
   thumbnailUrl: text("thumbnailUrl"),
   folderId: text("folderId").references(() => folders.id, { onDelete: "set null" }),
@@ -149,9 +142,9 @@ export const fileShares = pgTable("fileShares", {
 })
 ```
 
-## 文件服务
+## File Service
 
-### 核心文件服务
+### Core File Service
 
 ```typescript
 // src/lib/file-service.ts
@@ -188,26 +181,26 @@ export class FileService {
     userId: string,
     folderId?: string
   ): Promise<{ id: string; url: string; thumbnailUrl?: string }> {
-    // 验证文件
+    // Validate file
     this.validateFile(file)
 
-    // 生成唯一键
+    // Generate unique key
     const fileExtension = file.name.split('.').pop()
     const key = `${userId}/${nanoid()}.${fileExtension}`
 
-    // 转换文件为缓冲区
+    // Convert file to buffer
     const buffer = Buffer.from(await file.arrayBuffer())
 
-    // 上传到 R2
+    // Upload to R2
     const url = await uploadFile(key, buffer, file.type)
 
-    // 为图像生成缩略图
+    // Generate thumbnail for images
     let thumbnailUrl: string | undefined
     if (file.type.startsWith('image/')) {
       thumbnailUrl = await this.generateThumbnail(buffer, key, file.type)
     }
 
-    // 保存到数据库
+    // Save to database
     const fileId = nanoid()
     await db.insert(files).values({
       id: fileId,
@@ -241,11 +234,11 @@ export class FileService {
 
   private validateFile(file: File): void {
     if (file.size > this.maxFileSize) {
-      throw new Error(`文件大小超过 ${this.maxFileSize / 1024 / 1024}MB 限制`)
+      throw new Error(`File size exceeds ${this.maxFileSize / 1024 / 1024}MB limit`)
     }
 
     if (!this.allowedMimeTypes.includes(file.type)) {
-      throw new Error(`文件类型 ${file.type} 不被允许`)
+      throw new Error(`File type ${file.type} is not allowed`)
     }
   }
 
@@ -263,17 +256,17 @@ export class FileService {
       .where(and(eq(files.id, fileId), eq(files.userId, userId)))
 
     if (!file) {
-      throw new Error('文件未找到')
+      throw new Error('File not found')
     }
 
-    // 从 R2 删除
+    // Delete from R2
     await deleteFile(file.key)
     if (file.thumbnailUrl) {
       const thumbnailKey = file.thumbnailUrl.split('/').pop()!
       await deleteFile(`thumbnails/${thumbnailKey}`)
     }
 
-    // 从数据库删除
+    // Delete from database
     await db.delete(files).where(eq(files.id, fileId))
   }
 
@@ -316,9 +309,9 @@ export class FileService {
 }
 ```
 
-## 文件上传组件
+## File Upload Components
 
-### 文件上传组件
+### File Upload Component
 
 ```tsx
 // src/components/file-manager/file-upload.tsx
@@ -389,7 +382,7 @@ export function FileUpload({
       onUploadComplete?.(uploadedFiles)
       setSelectedFiles([])
     } catch (error) {
-      console.error('上传失败:', error)
+      console.error('Upload failed:', error)
     } finally {
       setUploading(false)
       setUploadProgress(0)
@@ -411,13 +404,13 @@ export function FileUpload({
             <input {...getInputProps()} />
             <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-lg font-medium mb-2">
-              {isDragActive ? '拖放文件到此处' : '拖放文件到此处'}
+              {isDragActive ? 'Drop files here' : 'Drag and drop files here'}
             </p>
             <p className="text-sm text-gray-500 mb-4">
-              或点击选择文件
+              or click to select files
             </p>
             <Button type="button" variant="outline">
-              选择文件
+              Select Files
             </Button>
           </div>
         </CardContent>
@@ -427,7 +420,7 @@ export function FileUpload({
         <Card>
           <CardContent className="p-4">
             <div className="space-y-2">
-              <h3 className="font-medium">已选择文件 ({selectedFiles.length})</h3>
+              <h3 className="font-medium">Selected Files ({selectedFiles.length})</h3>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {selectedFiles.map((file, index) => (
                   <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
@@ -459,7 +452,7 @@ export function FileUpload({
               <div className="mt-4">
                 <Progress value={uploadProgress} className="w-full" />
                 <p className="text-sm text-gray-500 mt-1">
-                  上传中... {uploadProgress}%
+                  Uploading... {uploadProgress}%
                 </p>
               </div>
             )}
@@ -471,14 +464,14 @@ export function FileUpload({
                 onClick={() => setSelectedFiles([])}
                 disabled={uploading}
               >
-                清除
+                Clear
               </Button>
               <Button
                 type="button"
                 onClick={handleUpload}
                 disabled={uploading || selectedFiles.length === 0}
               >
-                {uploading ? '上传中...' : `上传 ${selectedFiles.length} 个文件`}
+                {uploading ? 'Uploading...' : `Upload ${selectedFiles.length} file(s)`}
               </Button>
             </div>
           </CardContent>
@@ -489,7 +482,7 @@ export function FileUpload({
 }
 ```
 
-### 文件管理器组件
+### File Manager Component
 
 ```tsx
 // src/components/file-manager/file-manager.tsx
@@ -549,7 +542,7 @@ export function FileManager({ userId }: FileManagerProps) {
       setFiles(filesData)
       setFolders(foldersData)
     } catch (error) {
-      console.error('加载文件失败:', error)
+      console.error('Failed to load files:', error)
     } finally {
       setLoading(false)
     }
@@ -564,7 +557,7 @@ export function FileManager({ userId }: FileManagerProps) {
       await deleteFile(fileId)
       setFiles(prev => prev.filter(file => file.id !== fileId))
     } catch (error) {
-      console.error('删除文件失败:', error)
+      console.error('Failed to delete file:', error)
     }
   }
 
@@ -580,12 +573,12 @@ export function FileManager({ userId }: FileManagerProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">文件管理器</h1>
+        <h1 className="text-2xl font-bold">File Manager</h1>
         <div className="flex items-center gap-2">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="搜索文件..."
+              placeholder="Search files..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 w-64"
@@ -607,16 +600,16 @@ export function FileManager({ userId }: FileManagerProps) {
       />
 
       {loading ? (
-        <div className="text-center py-8">加载文件中...</div>
+        <div className="text-center py-8">Loading files...</div>
       ) : (
         <div className="space-y-4">
-          {/* 文件夹 */}
+          {/* Folders */}
           {filteredFolders.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Folder className="h-5 w-5" />
-                  文件夹
+                  Folders
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -641,13 +634,13 @@ export function FileManager({ userId }: FileManagerProps) {
             </Card>
           )}
 
-          {/* 文件 */}
+          {/* Files */}
           {filteredFiles.length > 0 ? (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <File className="h-5 w-5" />
-                  文件 ({filteredFiles.length})
+                  Files ({filteredFiles.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -662,9 +655,9 @@ export function FileManager({ userId }: FileManagerProps) {
             <Card>
               <CardContent className="text-center py-8">
                 <File className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-lg font-medium mb-2">未找到文件</p>
+                <p className="text-lg font-medium mb-2">No files found</p>
                 <p className="text-gray-500">
-                  {searchQuery ? '尝试调整搜索查询' : '上传一些文件开始使用'}
+                  {searchQuery ? 'Try adjusting your search query' : 'Upload some files to get started'}
                 </p>
               </CardContent>
             </Card>
@@ -676,9 +669,9 @@ export function FileManager({ userId }: FileManagerProps) {
 }
 ```
 
-## 服务器操作
+## Server Actions
 
-### 文件操作
+### File Actions
 
 ```typescript
 // src/server/actions/file-actions.ts
@@ -698,7 +691,7 @@ export async function uploadFiles(formData: FormData) {
   })
 
   if (!session?.user) {
-    throw new Error("未授权")
+    throw new Error("Unauthorized")
   }
 
   const fileService = FileService.getInstance()
@@ -711,7 +704,7 @@ export async function uploadFiles(formData: FormData) {
       const result = await fileService.uploadFile(file, session.user.id, folderId)
       uploadedFiles.push(result)
     } catch (error) {
-      console.error(`上传 ${file.name} 失败:`, error)
+      console.error(`Failed to upload ${file.name}:`, error)
     }
   }
 
@@ -725,7 +718,7 @@ export async function getUserFiles(folderId?: string) {
   })
 
   if (!session?.user) {
-    throw new Error("未授权")
+    throw new Error("Unauthorized")
   }
 
   const fileService = FileService.getInstance()
@@ -738,7 +731,7 @@ export async function getUserFolders(parentId?: string) {
   })
 
   if (!session?.user) {
-    throw new Error("未授权")
+    throw new Error("Unauthorized")
   }
 
   const fileService = FileService.getInstance()
@@ -751,7 +744,7 @@ export async function deleteFile(fileId: string) {
   })
 
   if (!session?.user) {
-    throw new Error("未授权")
+    throw new Error("Unauthorized")
   }
 
   const fileService = FileService.getInstance()
@@ -766,7 +759,7 @@ export async function createFolder(name: string, parentId?: string) {
   })
 
   if (!session?.user) {
-    throw new Error("未授权")
+    throw new Error("Unauthorized")
   }
 
   const fileService = FileService.getInstance()
@@ -777,9 +770,9 @@ export async function createFolder(name: string, parentId?: string) {
 }
 ```
 
-## 文件分享
+## File Sharing
 
-### 分享管理
+### Share Management
 
 ```typescript
 // src/server/actions/share-actions.ts
@@ -802,17 +795,17 @@ export async function shareFile(
   })
 
   if (!session?.user) {
-    throw new Error("未授权")
+    throw new Error("Unauthorized")
   }
 
-  // 验证文件所有权
+  // Verify file ownership
   const [file] = await db
     .select()
     .from(files)
     .where(and(eq(files.id, fileId), eq(files.userId, session.user.id)))
 
   if (!file) {
-    throw new Error("文件未找到")
+    throw new Error("File not found")
   }
 
   const shareToken = nanoid(32)
@@ -845,21 +838,21 @@ export async function getSharedFile(shareToken: string) {
     .where(eq(fileShares.shareToken, shareToken))
 
   if (!share) {
-    throw new Error("分享未找到")
+    throw new Error("Share not found")
   }
 
-  // 检查分享是否已过期
+  // Check if share has expired
   if (share.share.expiresAt && share.share.expiresAt < new Date()) {
-    throw new Error("分享已过期")
+    throw new Error("Share has expired")
   }
 
   return share
 }
 ```
 
-## 图像处理
+## Image Processing
 
-### 图像优化
+### Image Optimization
 
 ```typescript
 // src/lib/image-processing.ts
@@ -926,9 +919,9 @@ export class ImageProcessor {
 }
 ```
 
-## 测试文件管理
+## Testing File Management
 
-### 单元测试
+### Unit Tests
 
 ```typescript
 // src/lib/file-service.test.ts
@@ -938,18 +931,18 @@ import { FileService } from './file-service'
 describe('FileService', () => {
   const fileService = FileService.getInstance()
 
-  it('应该验证文件大小', () => {
+  it('should validate file size', () => {
     const mockFile = new File([''], 'test.txt', { 
       type: 'text/plain' 
     })
     
-    // 模拟文件大小超过限制
+    // Mock file size to exceed limit
     Object.defineProperty(mockFile, 'size', { value: 20 * 1024 * 1024 })
 
     expect(() => fileService.validateFile(mockFile)).toThrow()
   })
 
-  it('应该验证文件类型', () => {
+  it('should validate file type', () => {
     const mockFile = new File([''], 'test.exe', { 
       type: 'application/exe' 
     })
@@ -957,7 +950,7 @@ describe('FileService', () => {
     expect(() => fileService.validateFile(mockFile)).toThrow()
   })
 
-  it('应该生成唯一的文件名', () => {
+  it('should generate unique file names', () => {
     const name1 = fileService.generateFileName('test.txt')
     const name2 = fileService.generateFileName('test.txt')
     
@@ -967,15 +960,15 @@ describe('FileService', () => {
 })
 ```
 
-### 集成测试
+### Integration Tests
 
 ```typescript
 // tests/integration/file-upload.test.ts
 import { describe, it, expect } from 'vitest'
 import { testClient } from '../utils/test-client'
 
-describe('文件上传 API', () => {
-  it('应该成功上传文件', async () => {
+describe('File Upload API', () => {
+  it('should upload file successfully', async () => {
     const formData = new FormData()
     const file = new File(['test content'], 'test.txt', { type: 'text/plain' })
     formData.append('files', file)
@@ -987,7 +980,7 @@ describe('文件上传 API', () => {
     expect(response.data).toHaveProperty('url')
   })
 
-  it('应该拒绝无效的文件类型', async () => {
+  it('should reject invalid file types', async () => {
     const formData = new FormData()
     const file = new File(['test'], 'test.exe', { type: 'application/exe' })
     formData.append('files', file)
@@ -999,9 +992,9 @@ describe('文件上传 API', () => {
 })
 ```
 
-## 安全最佳实践
+## Security Best Practices
 
-### 文件验证
+### File Validation
 
 ```typescript
 // src/lib/file-validation.ts
@@ -1026,7 +1019,7 @@ export class FileValidator {
       return false
     }
 
-    // 检查魔数
+    // Check magic numbers
     const magicNumbers = this.MAGIC_NUMBERS[file.type as keyof typeof this.MAGIC_NUMBERS]
     if (magicNumbers) {
       const fileHeader = Array.from(buffer.slice(0, magicNumbers.length))
@@ -1049,21 +1042,34 @@ export class FileValidator {
 }
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### Common Issues
 
-1. **文件上传失败**
-   - 检查文件大小和类型限制
-   - 验证 R2/S3 凭据和权限
-   - 检查网络连接
+1. **File Upload Fails**
+   - Check file size and type restrictions
+   - Verify R2/S3 credentials and permissions
+   - Check network connectivity
 
-2. **缩略图未生成**
-   - 验证 Sharp 安装
-   - 检查图像格式支持
-   - 查看错误日志
+2. **Thumbnails Not Generated**
+   - Verify Sharp installation
+   - Check image format support
+   - Review error logs
 
-3. **存储配额超限**
-   - 实施配额检查
-   - 清理旧文件
-   - 升级订阅计划
+3. **Storage Quota Exceeded**
+   - Implement quota checking
+   - Clean up old files
+   - Upgrade subscription plan
+
+### Debug Commands
+
+```bash
+# Check file permissions
+ls -la uploads/
+
+# Test R2 connection
+aws s3 ls s3://your-bucket --endpoint-url=https://your-account.r2.cloudflarestorage.com
+
+# Check Sharp installation
+node -e "console.log(require('sharp'))"
+```

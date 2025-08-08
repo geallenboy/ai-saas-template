@@ -1,56 +1,56 @@
 ---
-title: 生产环境设置
-description: AI SaaS Template 生产环境完整设置指南，包含安全、性能和可靠性最佳实践
+title: Production Setup
+description: Complete guide for setting up AI SaaS Template in production environments with security, performance, and reliability best practices
 ---
 
-# 生产环境设置
+# Production Setup
 
-本指南涵盖 AI SaaS Template 生产环境的完整设置，包括安全加固、性能优化和监控配置。
+This guide covers the complete setup of AI SaaS Template for production environments, including security hardening, performance optimization, and monitoring configuration.
 
-## 前置要求
+## Prerequisites
 
-- Ubuntu 20.04+ 或类似的生产服务器
-- 域名和 DNS 控制权
-- SSL 证书（推荐 Let's Encrypt）
-- 数据库（推荐 PostgreSQL）
-- Redis 实例
-- 云存储（Cloudflare R2 或 AWS S3）
-- 邮件服务（SMTP）
+- Production server with Ubuntu 20.04+ or similar
+- Domain name with DNS control
+- SSL certificate (Let's Encrypt recommended)
+- Database (PostgreSQL recommended)
+- Redis instance
+- Cloud storage (Cloudflare R2 or AWS S3)
+- Email service (SMTP)
 
-## 服务器要求
+## Server Requirements
 
-### 最低配置
-- **CPU**: 2 核心
-- **内存**: 4GB
-- **存储**: 20GB SSD
-- **网络**: 1Gbps
+### Minimum Requirements
+- **CPU**: 2 cores
+- **RAM**: 4GB
+- **Storage**: 20GB SSD
+- **Network**: 1Gbps
 
-### 推荐配置
-- **CPU**: 4+ 核心
-- **内存**: 8GB+
-- **存储**: 50GB+ SSD
-- **网络**: 1Gbps+
+### Recommended Requirements
+- **CPU**: 4+ cores
+- **RAM**: 8GB+
+- **Storage**: 50GB+ SSD
+- **Network**: 1Gbps+
 
-## 环境配置
+## Environment Configuration
 
-### 1. 环境变量
+### 1. Environment Variables
 
-创建生产环境 `.env` 文件：
+Create production `.env` file:
 
 ```
-# 应用配置
+# Application
 NODE_ENV=production
 PORT=3000
 HOSTNAME=0.0.0.0
 
-# 数据库
+# Database
 DATABASE_URL=postgresql://username:password@localhost:5432/AI SaaSrsaas_prod
 
-# 认证
+# Authentication
 AI SaaSR_AUTH_SECRET=your-super-secure-secret-key-minimum-32-chars
 AI SaaSR_AUTH_URL=https://yourdomain.com
 
-# OAuth 提供商
+# OAuth Providers
 GITHUB_CLIENT_ID=your-github-client-id
 GITHUB_CLIENT_SECRET=your-github-client-secret
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -61,13 +61,13 @@ STRIPE_SECRET_KEY=sk_live_your-live-stripe-secret-key
 STRIPE_PUBLISHABLE_KEY=pk_live_your-live-stripe-publishable-key
 STRIPE_WEBHOOK_SECRET=whsec_your-webhook-secret
 
-# 文件存储
+# File Storage
 CLOUDFLARE_R2_ACCESS_KEY_ID=your-access-key
 CLOUDFLARE_R2_SECRET_ACCESS_KEY=your-secret-key
 CLOUDFLARE_R2_BUCKET_NAME=your-production-bucket
 CLOUDFLARE_R2_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
 
-# 邮件
+# Email
 SMTP_HOST=smtp.your-provider.com
 SMTP_PORT=587
 SMTP_USER=your-email@domain.com
@@ -77,20 +77,20 @@ SMTP_FROM=noreply@yourdomain.com
 # Redis
 REDIS_URL=redis://localhost:6379
 
-# 监控
+# Monitoring
 SENTRY_DSN=https://your-sentry-dsn
 LOG_LEVEL=info
 ```
 
-### 2. 安全配置
+### 2. Security Configuration
 
-#### 环境变量安全
+#### Environment Variables Security
 ```bash
-# 设置适当的权限
+# Set proper permissions
 chmod 600 .env
 chown app:app .env
 
-# 使用 systemd 环境文件
+# Use systemd environment files
 sudo mkdir -p /etc/systemd/system/AI SaaSr-saas.service.d
 sudo tee /etc/systemd/system/AI SaaSr-saas.service.d/environment.conf << EOF
 [Service]
@@ -98,35 +98,35 @@ EnvironmentFile=/opt/AI SaaSr-saas/.env
 EOF
 ```
 
-#### 防火墙配置
+#### Firewall Configuration
 ```bash
-# 启用 UFW
+# Enable UFW
 sudo ufw enable
 
-# 允许 SSH
+# Allow SSH
 sudo ufw allow ssh
 
-# 允许 HTTP/HTTPS
+# Allow HTTP/HTTPS
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 
-# 允许数据库（如果是外部数据库）
+# Allow database (if external)
 sudo ufw allow from your-db-server-ip to any port 5432
 
-# 拒绝所有其他入站连接
+# Deny all other incoming
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 ```
 
-## 数据库设置
+## Database Setup
 
-### PostgreSQL 安装
+### PostgreSQL Installation
 ```bash
-# 安装 PostgreSQL
+# Install PostgreSQL
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 
-# 创建数据库和用户
+# Create database and user
 sudo -u postgres psql << EOF
 CREATE DATABASE AI SaaSrsaas_prod;
 CREATE USER AI SaaSrsaas WITH ENCRYPTED PASSWORD 'your-secure-password';
@@ -135,28 +135,28 @@ ALTER USER AI SaaSrsaas CREATEDB;
 EOF
 ```
 
-### 数据库安全
+### Database Security
 ```bash
-# 编辑 PostgreSQL 配置
+# Edit PostgreSQL configuration
 sudo nano /etc/postgresql/14/main/postgresql.conf
 
-# 关键设置：
+# Key settings:
 # listen_addresses = 'localhost'
 # ssl = on
 # log_statement = 'all'
 # log_min_duration_statement = 1000
 
-# 配置认证
+# Configure authentication
 sudo nano /etc/postgresql/14/main/pg_hba.conf
 
-# 添加：
+# Add:
 # local   AI SaaSrsaas_prod    AI SaaSrsaas                        md5
 # host    AI SaaSrsaas_prod    AI SaaSrsaas    127.0.0.1/32        md5
 ```
 
-### 数据库优化
+### Database Optimization
 ```sql
--- 性能调优
+-- Performance tuning
 ALTER SYSTEM SET shared_buffers = '256MB';
 ALTER SYSTEM SET effective_cache_size = '1GB';
 ALTER SYSTEM SET maintenance_work_mem = '64MB';
@@ -164,79 +164,79 @@ ALTER SYSTEM SET checkpoint_completion_target = 0.9;
 ALTER SYSTEM SET wal_buffers = '16MB';
 ALTER SYSTEM SET default_statistics_target = 100;
 
--- 重启 PostgreSQL
+-- Restart PostgreSQL
 -- sudo systemctl restart postgresql
 ```
 
-## Redis 设置
+## Redis Setup
 
-### 安装
+### Installation
 ```bash
-# 安装 Redis
+# Install Redis
 sudo apt install redis-server
 
-# 配置 Redis
+# Configure Redis
 sudo nano /etc/redis/redis.conf
 
-# 关键设置：
+# Key settings:
 # bind 127.0.0.1
 # requirepass your-redis-password
 # maxmemory 512mb
 # maxmemory-policy allkeys-lru
 ```
 
-### Redis 安全
+### Redis Security
 ```bash
-# 设置适当的权限
+# Set proper permissions
 sudo chmod 640 /etc/redis/redis.conf
 sudo chown redis:redis /etc/redis/redis.conf
 
-# 启用并启动 Redis
+# Enable and start Redis
 sudo systemctl enable redis-server
 sudo systemctl start redis-server
 ```
 
-## SSL/TLS 配置
+## SSL/TLS Configuration
 
-### Let's Encrypt 和 Certbot
+### Let's Encrypt with Certbot
 ```bash
-# 安装 Certbot
+# Install Certbot
 sudo apt install certbot python3-certbot-nginx
 
-# 获取证书
+# Obtain certificate
 sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 
-# 测试续期
+# Test renewal
 sudo certbot renew --dry-run
 
-# 设置自动续期
+# Setup auto-renewal
 sudo crontab -e
-# 添加：0 12 * * * /usr/bin/certbot renew --quiet
+# Add: 0 12 * * * /usr/bin/certbot renew --quiet
 ```
 
-### 手动 SSL 设置
+### Manual SSL Setup
 ```bash
-# 创建 SSL 目录
+# Create SSL directory
 sudo mkdir -p /etc/ssl/private
 sudo mkdir -p /etc/ssl/certs
 
-# 复制证书
+# Copy certificates
 sudo cp your-certificate.crt /etc/ssl/certs/
 sudo cp your-private-key.key /etc/ssl/private/
 
-# 设置权限
+# Set permissions
 sudo chmod 600 /etc/ssl/private/your-private-key.key
 sudo chmod 644 /etc/ssl/certs/your-certificate.crt
 ```
 
-## 反向代理设置
+## Reverse Proxy Setup
 
-### Nginx 配置
+### Nginx Configuration
 ```bash
-# 安装 Nginx
+# Install Nginx
 sudo apt install nginx
 
-# 创建站点配置
+# Create site configuration
 sudo nano /etc/nginx/sites-available/AI SaaSr-saas
 ```
 
@@ -255,7 +255,7 @@ server {
     listen 443 ssl http2;
     server_name yourdomain.com www.yourdomain.com;
 
-    # SSL 配置
+    # SSL Configuration
     ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -264,25 +264,25 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 
-    # 安全头
+    # Security Headers
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
 
-    # Gzip 配置
+    # Gzip Configuration
     gzip on;
     gzip_vary on;
     gzip_min_length 1024;
     gzip_proxied expired no-cache no-store private must-revalidate auth;
     gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;
 
-    # 速率限制
+    # Rate Limiting
     limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
     limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m;
 
-    # 主要位置
+    # Main location
     location / {
         proxy_pass http://AI SaaSr_saas;
         proxy_http_version 1.1;
@@ -296,7 +296,7 @@ server {
         proxy_read_timeout 86400;
     }
 
-    # API 速率限制
+    # API rate limiting
     location /api/ {
         limit_req zone=api burst=20 nodelay;
         proxy_pass http://AI SaaSr_saas;
@@ -310,7 +310,7 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 
-    # 登录速率限制
+    # Login rate limiting
     location /api/auth/login {
         limit_req zone=login burst=5 nodelay;
         proxy_pass http://AI SaaSr_saas;
@@ -321,14 +321,14 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # 静态文件
+    # Static files
     location /_next/static/ {
         expires 1y;
         add_header Cache-Control "public, immutable";
         proxy_pass http://AI SaaSr_saas;
     }
 
-    # 健康检查
+    # Health check
     location /health {
         access_log off;
         proxy_pass http://AI SaaSr_saas;
@@ -337,45 +337,45 @@ server {
 ```
 
 ```bash
-# 启用站点
+# Enable site
 sudo ln -s /etc/nginx/sites-available/AI SaaSr-saas /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-## 应用程序部署
+## Application Deployment
 
-### 1. 用户设置
+### 1. User Setup
 ```bash
-# 创建应用用户
+# Create application user
 sudo useradd -m -s /bin/bash app
 sudo mkdir -p /opt/AI SaaSr-saas
 sudo chown app:app /opt/AI SaaSr-saas
 ```
 
-### 2. 应用安装
+### 2. Application Installation
 ```bash
-# 切换到应用用户
+# Switch to app user
 sudo su - app
 
-# 克隆仓库
+# Clone repository
 cd /opt/AI SaaSr-saas
 git clone https://github.com/your-org/AI SaaSr-saas.git .
 
-# 安装依赖
+# Install dependencies
 npm install -g pnpm
 pnpm install --frozen-lockfile
 
-# 构建应用
+# Build application
 pnpm build
 
-# 运行数据库迁移
+# Run database migrations
 pnpm db:migrate
 ```
 
-### 3. Systemd 服务
+### 3. Systemd Service
 ```bash
-# 创建 systemd 服务
+# Create systemd service
 sudo tee /etc/systemd/system/AI SaaSr-saas.service << EOF
 [Unit]
 Description=AI SaaS Template Application
@@ -391,7 +391,7 @@ RestartSec=10
 Environment=NODE_ENV=production
 EnvironmentFile=/opt/AI SaaSr-saas/.env
 
-# 安全设置
+# Security settings
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
@@ -402,20 +402,20 @@ ProtectHome=true
 WantedBy=multi-user.target
 EOF
 
-# 启用并启动服务
+# Enable and start service
 sudo systemctl daemon-reload
 sudo systemctl enable AI SaaSr-saas
 sudo systemctl start AI SaaSr-saas
 ```
 
-## 监控设置
+## Monitoring Setup
 
-### 1. 应用监控
+### 1. Application Monitoring
 ```bash
-# 安装监控工具
+# Install monitoring tools
 sudo apt install htop iotop nethogs
 
-# 设置日志轮转
+# Setup log rotation
 sudo tee /etc/logrotate.d/AI SaaSr-saas << EOF
 /opt/AI SaaSr-saas/logs/*.log {
     daily
@@ -429,50 +429,50 @@ sudo tee /etc/logrotate.d/AI SaaSr-saas << EOF
 EOF
 ```
 
-### 2. 健康检查
-创建健康检查脚本：
+### 2. Health Checks
+Create health check script:
 ```bash
 #!/bin/bash
 # /opt/AI SaaSr-saas/scripts/health-check.sh
 
-# 检查应用程序
+# Check application
 if ! curl -f http://localhost:3000/health > /dev/null 2>&1; then
-    echo "应用程序健康检查失败"
+    echo "Application health check failed"
     exit 1
 fi
 
-# 检查数据库
+# Check database
 if ! pg_isready -h localhost -p 5432 -U AI SaaSrsaas > /dev/null 2>&1; then
-    echo "数据库健康检查失败"
+    echo "Database health check failed"
     exit 1
 fi
 
-# 检查 Redis
+# Check Redis
 if ! redis-cli ping > /dev/null 2>&1; then
-    echo "Redis 健康检查失败"
+    echo "Redis health check failed"
     exit 1
 fi
 
-echo "所有健康检查通过"
+echo "All health checks passed"
 ```
 
-### 3. 自动监控
+### 3. Automated Monitoring
 ```bash
-# 添加到 crontab
+# Add to crontab
 sudo crontab -e
 
-# 每 5 分钟添加健康检查
+# Add health check every 5 minutes
 */5 * * * * /opt/AI SaaSr-saas/scripts/health-check.sh >> /var/log/health-check.log 2>&1
 
-# 添加磁盘空间检查
-0 */6 * * * df -h | grep -E '^/dev/' | awk '{print $5 " " $1}' | while read output; do usage=$(echo $output | awk '{print $1}' | sed 's/%//g'); partition=$(echo $output | awk '{print $2}'); if [ $usage -ge 80 ]; then echo "磁盘使用警告：$partition 使用率为 ${usage}%"; fi; done
+# Add disk space check
+0 */6 * * * df -h | grep -E '^/dev/' | awk '{print $5 " " $1}' | while read output; do usage=$(echo $output | awk '{print $1}' | sed 's/%//g'); partition=$(echo $output | awk '{print $2}'); if [ $usage -ge 80 ]; then echo "Disk usage warning: $partition is ${usage}% full"; fi; done
 ```
 
-## 备份策略
+## Backup Strategy
 
-### 1. 数据库备份
+### 1. Database Backup
 ```bash
-# 创建备份脚本
+# Create backup script
 sudo tee /opt/AI SaaSr-saas/scripts/backup-db.sh << EOF
 #!/bin/bash
 BACKUP_DIR="/opt/backups/database"
@@ -482,21 +482,21 @@ BACKUP_FILE="AI SaaSrsaas_backup_\$DATE.sql"
 mkdir -p \$BACKUP_DIR
 pg_dump -h localhost -U AI SaaSrsaas AI SaaSrsaas_prod > \$BACKUP_DIR/\$BACKUP_FILE
 
-# 压缩备份
+# Compress backup
 gzip \$BACKUP_DIR/\$BACKUP_FILE
 
-# 删除 30 天前的备份
+# Remove backups older than 30 days
 find \$BACKUP_DIR -name "*.gz" -mtime +30 -delete
 
-echo "数据库备份完成：\$BACKUP_FILE.gz"
+echo "Database backup completed: \$BACKUP_FILE.gz"
 EOF
 
 chmod +x /opt/AI SaaSr-saas/scripts/backup-db.sh
 ```
 
-### 2. 文件备份
+### 2. File Backup
 ```bash
-# 创建文件备份脚本
+# Create file backup script
 sudo tee /opt/AI SaaSr-saas/scripts/backup-files.sh << EOF
 #!/bin/bash
 BACKUP_DIR="/opt/backups/files"
@@ -505,66 +505,66 @@ SOURCE_DIR="/opt/AI SaaSr-saas"
 
 mkdir -p \$BACKUP_DIR
 
-# 备份应用文件（排除 node_modules）
+# Backup application files (excluding node_modules)
 tar -czf \$BACKUP_DIR/app_backup_\$DATE.tar.gz \
     --exclude=node_modules \
     --exclude=.next \
     --exclude=logs \
     -C \$SOURCE_DIR .
 
-# 删除 7 天前的备份
+# Remove backups older than 7 days
 find \$BACKUP_DIR -name "*.tar.gz" -mtime +7 -delete
 
-echo "文件备份完成：app_backup_\$DATE.tar.gz"
+echo "File backup completed: app_backup_\$DATE.tar.gz"
 EOF
 
 chmod +x /opt/AI SaaSr-saas/scripts/backup-files.sh
 ```
 
-### 3. 自动备份
+### 3. Automated Backups
 ```bash
-# 添加到 crontab
+# Add to crontab
 sudo crontab -e
 
-# 每天凌晨 2 点数据库备份
+# Daily database backup at 2 AM
 0 2 * * * /opt/AI SaaSr-saas/scripts/backup-db.sh
 
-# 每周日凌晨 3 点文件备份
+# Weekly file backup on Sunday at 3 AM
 0 3 * * 0 /opt/AI SaaSr-saas/scripts/backup-files.sh
 ```
 
-## 性能优化
+## Performance Optimization
 
-### 1. Node.js 优化
+### 1. Node.js Optimization
 ```bash
-# 更新 systemd 服务以用于生产
+# Update systemd service for production
 sudo nano /etc/systemd/system/AI SaaSr-saas.service
 
-# 添加优化标志
+# Add optimization flags
 [Service]
 Environment=NODE_ENV=production
 Environment=NODE_OPTIONS="--max-old-space-size=2048"
 ExecStart=/usr/bin/node --max-old-space-size=2048 server.js
 ```
 
-### 2. 数据库优化
+### 2. Database Optimization
 ```sql
--- 创建索引以提高性能
+-- Create indexes for AI SaaSr performance
 CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
 CREATE INDEX CONCURRENTLY idx_sessions_user_id ON sessions(user_id);
 CREATE INDEX CONCURRENTLY idx_files_user_id ON files(user_id);
 CREATE INDEX CONCURRENTLY idx_subscriptions_user_id ON subscriptions(user_id);
 
--- 分析表
+-- Analyze tables
 ANALYZE;
 ```
 
-### 3. 缓存策略
+### 3. Caching Strategy
 ```bash
-# 用于缓存的 Redis 配置
+# Redis configuration for caching
 sudo nano /etc/redis/redis.conf
 
-# 添加缓存设置
+# Add caching settings
 maxmemory 512mb
 maxmemory-policy allkeys-lru
 save 900 1
@@ -572,84 +572,84 @@ save 300 10
 save 60 10000
 ```
 
-## 安全加固
+## Security Hardening
 
-### 1. 系统安全
+### 1. System Security
 ```bash
-# 更新系统
+# Update system
 sudo apt update && sudo apt upgrade -y
 
-# 自动安装安全更新
+# Install security updates automatically
 sudo apt install unattended-upgrades
 sudo dpkg-reconfigure -plow unattended-upgrades
 
-# 配置 fail2ban
+# Configure fail2ban
 sudo apt install fail2ban
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 
-# SSH 加固
+# SSH hardening
 sudo nano /etc/ssh/sshd_config
-# 设置：PermitRootLogin no
-# 设置：PasswordAuthentication no
-# 设置：Port 2222（可选）
+# Set: PermitRootLogin no
+# Set: PasswordAuthentication no
+# Set: Port 2222 (optional)
 ```
 
-### 2. 应用安全
+### 2. Application Security
 ```bash
-# 设置适当的文件权限
+# Set proper file permissions
 sudo chown -R app:app /opt/AI SaaSr-saas
 sudo chmod -R 755 /opt/AI SaaSr-saas
 sudo chmod 600 /opt/AI SaaSr-saas/.env
 
-# 设置日志监控
+# Setup log monitoring
 sudo apt install logwatch
 sudo logwatch --detail Med --mailto admin@yourdomain.com --service All --range yesterday
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### Common Issues
 
-1. **应用程序无法启动**
+1. **Application Won't Start**
    ```bash
-   # 检查日志
+   # Check logs
    sudo journalctl -u AI SaaSr-saas -f
    
-   # 检查端口使用
+   # Check port usage
    sudo netstat -tlnp | grep :3000
    
-   # 检查权限
+   # Check permissions
    sudo -u app ls -la /opt/AI SaaSr-saas
    ```
 
-2. **数据库连接问题**
+2. **Database Connection Issues**
    ```bash
-   # 测试连接
+   # Test connection
    sudo -u app psql -h localhost -U AI SaaSrsaas -d AI SaaSrsaas_prod
    
-   # 检查 PostgreSQL 日志
+   # Check PostgreSQL logs
    sudo tail -f /var/log/postgresql/postgresql-14-main.log
    ```
 
-3. **SSL 证书问题**
+3. **SSL Certificate Issues**
    ```bash
-   # 检查证书
+   # Check certificate
    sudo certbot certificates
    
-   # 测试 SSL
+   # Test SSL
    openssl s_client -connect yourdomain.com:443
    
-   # 续期证书
+   # Renew certificate
    sudo certbot renew
    ```
 
-### 维护命令
+### Maintenance Commands
 
 ```bash
-# 重启应用
+# Restart application
 sudo systemctl restart AI SaaSr-saas
 
-# 更新应用
+# Update application
 sudo su - app
 cd /opt/AI SaaSr-saas
 git pull origin main
@@ -657,20 +657,20 @@ pnpm install --frozen-lockfile
 pnpm build
 sudo systemctl restart AI SaaSr-saas
 
-# 检查系统资源
+# Check system resources
 htop
 df -h
 free -h
 
-# 查看日志
+# View logs
 sudo journalctl -u AI SaaSr-saas -f
 sudo tail -f /var/log/nginx/access.log
 sudo tail -f /var/log/nginx/error.log
 ```
 
-## 下一步
+## Next Steps
 
-- 设置 [CI/CD 流水线](./ci-cd) 进行自动化部署
-- 配置 [监控和告警](../development/monitoring)
-- 实施 [灾难恢复](../development/disaster-recovery)
-- 查看 [安全最佳实践](../development/security) 
+- Set up [CI/CD Pipeline](./ci-cd) for automated deployments
+- Configure [Monitoring and Alerting](../development/monitoring)
+- Implement [Disaster Recovery](../development/disaster-recovery)
+- Review [Security Best Practices](../development/security) 
