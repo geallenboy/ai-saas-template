@@ -128,7 +128,7 @@
     "subtitle": "Haben Sie Fragen oder benötigen Hilfe? Unser Team steht Ihnen jederzeit zur Verfügung",
     "contactInfo": "Kontaktinformationen",
     "email": "E-Mail",
-    "website": "Website",
+    "website": "Webseite",
     "workingHours": "Arbeitszeiten",
     "monday": "Montag - Freitag",
     "saturday": "Samstag",
@@ -562,5 +562,37 @@
     "description": "Entdecken Sie unsere sorgfältig gestaltete Sammlung von Komponenten, die alle optimiert und bereit für den direkten Einsatz in Ihren Projekten sind",
     "viewComponents": "Komponenten anzeigen",
     "backToBlocks": "Zurück zur Komponentenbibliothek"
+  },
+  "pricingPage": {
+    "title": "Wählen Sie Ihren Plan",
+    "description": "Wir bieten flexible Preispläne, um die Bedürfnisse von Einzelbenutzern bis hin zu Unternehmenskunden zu erfüllen. Alle Pläne beinhalten Kern-KI-Funktionen und können jederzeit aktualisiert werden.",
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "description": "Antworten auf häufig gestellte Fragen zu Preisen und Dienstleistungen.",
+      "questions": {
+        "cancel": {
+          "title": "Kann ich jederzeit kündigen?",
+          "answer": "Ja, Sie können Ihr Abonnement jederzeit kündigen. Nach der Kündigung können Sie den Dienst bis zum Ende des aktuellen Abrechnungszeitraums weiter nutzen."
+        },
+        "payment": {
+          "title": "Welche Zahlungsmethoden werden unterstützt?",
+          "answer": "Wir unterstützen mehrere Zahlungsmethoden, einschließlich Kreditkarten, Debitkarten und Alipay, die alle sicher über Stripe abgewickelt werden."
+        },
+        "upgrade": {
+          "title": "Kann ich meinen Plan hoch- oder herunterstufen?",
+          "answer": "Selbstverständlich. Sie können Ihren Plan jederzeit in Ihren Kontoeinstellungen hoch- oder herunterstufen, und die Kosten werden anteilig berechnet."
+        },
+        "trial": {
+          "title": "Wie lange ist die kostenlose Testphase?",
+          "answer": "Alle kostenpflichtigen Pläne beinhalten eine 14-tägige kostenlose Testphase, in der Sie alle Funktionen kostenlos nutzen können."
+        }
+      }
+    },
+    "contact": {
+      "title": "Haben Sie noch Fragen?",
+      "description": "Unser Kundenservice-Team ist immer für Sie da, um Ihre Fragen zu beantworten.",
+      "contactUs": "Support kontaktieren",
+      "viewDocs": "Dokumentation anzeigen"
+    }
   }
 }

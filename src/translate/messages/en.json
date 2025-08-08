@@ -577,5 +577,37 @@
     "description": "Explore our carefully designed component collection, each optimized for direct use in your projects",
     "viewComponents": "View components",
     "backToBlocks": "Back to Blocks"
+  },
+  "pricingPage": {
+    "title": "Choose Your Plan",
+    "description": "We offer flexible pricing plans to meet the needs of individual users to enterprise customers. All plans include core AI features and can be upgraded at any time.",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Answers to common questions about pricing and services.",
+      "questions": {
+        "cancel": {
+          "title": "Can I cancel anytime?",
+          "answer": "Yes, you can cancel your subscription at any time. After cancellation, you can still use the service until the end of the current billing period."
+        },
+        "payment": {
+          "title": "What payment methods are supported?",
+          "answer": "We support multiple payment methods including credit cards, debit cards, and Alipay, all securely processed through Stripe."
+        },
+        "upgrade": {
+          "title": "Can I upgrade or downgrade my plan?",
+          "answer": "Of course. You can upgrade or downgrade your plan at any time in your account settings, and the cost will be prorated."
+        },
+        "trial": {
+          "title": "How long is the free trial?",
+          "answer": "All paid plans come with a 14-day free trial, during which you can use all features for free."
+        }
+      }
+    },
+    "contact": {
+      "title": "Still have questions?",
+      "description": "Our customer service team is always here to answer your questions.",
+      "contactUs": "Contact Support",
+      "viewDocs": "View Documentation"
+    }
   }
 }
