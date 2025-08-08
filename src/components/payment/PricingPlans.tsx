@@ -63,7 +63,7 @@ export default function PricingSection({
         } else {
           toast.error(
             locale === 'de'
-              ? '支付链接生成失败，请重试'
+              ? 'Die Generierung des Zahlungslinks ist fehlgeschlagen. Bitte versuchen Sie es erneut'
               : 'Payment link generation failed, please try again'
           )
         }
@@ -74,7 +74,7 @@ export default function PricingSection({
         toast.error(
           error.message ||
             (locale === 'de'
-              ? '创建支付会话失败，请重试'
+              ? 'Die Erstellung der Checkout-Sitzung ist fehlgeschlagen. Bitte versuchen Sie es erneut'
               : 'Failed to create checkout session, please try again')
         )
         setCheckoutLoading(null)
@@ -111,13 +111,13 @@ export default function PricingSection({
       if (durationType === 'yearly') {
         const price = plan.priceEURYearly
         return price
-          ? `€${price}`
-          : `€${(Number(plan.priceUSDEYearly) * 0.85).toFixed(0)}`
+          ? `${price}€`
+          : `${(Number(plan.priceUSDEYearly) * 0.85).toFixed(0)}€`
       }
       const price = plan.priceEURMonthly
       return price
-        ? `€${price}`
-        : `€${(Number(plan.priceUSDEMonthly) * 0.85).toFixed(0)}`
+        ? `${price}€`
+        : `${(Number(plan.priceUSDEMonthly) * 0.85).toFixed(0)}€`
     }
     // The English version shows US dollars
     if (durationType === 'yearly') {
@@ -136,16 +136,29 @@ export default function PricingSection({
 
   // Calculate annual savings
   const getYearlySavings = (plan: any) => {
-    if (!(plan.priceUSDYearly && plan.priceUSDMonthly)) {
-      return null
+    if (locale === 'de') {
+      if (!(plan.priceEURYearly && plan.priceEURMonthly)) {
+        return null
+      }
+
+      const monthlyTotal = Number(plan.priceEURMonthly) * 12
+      const yearlyPrice = Number(plan.priceEURYearly)
+      const savings = monthlyTotal - yearlyPrice
+      const savingsPercent = Math.round((savings / monthlyTotal) * 100)
+
+      return { amount: savings, percent: savingsPercent }
+    } else {
+      if (!(plan.priceUSDYearly && plan.priceUSDMonthly)) {
+        return null
+      }
+
+      const monthlyTotal = Number(plan.priceUSDMonthly) * 12
+      const yearlyPrice = Number(plan.priceUSDYearly)
+      const savings = monthlyTotal - yearlyPrice
+      const savingsPercent = Math.round((savings / monthlyTotal) * 100)
+
+      return { amount: savings, percent: savingsPercent }
     }
-
-    const monthlyTotal = Number(plan.priceUSDMonthly) * 12
-    const yearlyPrice = Number(plan.priceUSDYearly)
-    const savings = monthlyTotal - yearlyPrice
-    const savingsPercent = Math.round((savings / monthlyTotal) * 100)
-
-    return { amount: savings, percent: savingsPercent }
   }
 
   // Get plan icon
@@ -193,7 +206,7 @@ export default function PricingSection({
     }
 
     if (isCurrentPlan(plan)) {
-      toast.info(`您已经是${plan.nameZh || plan.name}会员`)
+      toast.info(`You are already a member of ${plan.name}`)
       return
     }
 
@@ -202,7 +215,7 @@ export default function PricingSection({
     let paymentMethod: string
 
     if (locale === 'de') {
-      // German version: Uses Euro price ID, supports Alipay and credit cards
+      // German version: Uses Euro price ID, supports credit card
       if (durationType === 'yearly') {
         priceId =
           plan.stripePriceIdEURYearly || plan.stripePriceIdUSDYearly || ''
@@ -210,7 +223,7 @@ export default function PricingSection({
         priceId =
           plan.stripePriceIdEURMonthly || plan.stripePriceIdUSDMonthly || ''
       }
-      paymentMethod = 'alipay' // The German version uses Alipay first
+      paymentMethod = 'card' // The German version uses credit cards
     } else {
       // English version: Uses USD price ID, payment method is credit card
       if (durationType === 'yearly') {
@@ -250,7 +263,7 @@ export default function PricingSection({
         priceId,
         planName: plan.name,
         durationType,
-        paymentMethod: paymentMethod as 'card' | 'alipay',
+        paymentMethod: paymentMethod as 'card',
         locale: locale as 'de' | 'en',
       })
     } catch (error) {
@@ -509,7 +522,8 @@ export default function PricingSection({
                       )}
                       {isYearly && savings && savings.percent > 0 && (
                         <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                          {locale === 'de' ? 'Sparen Sie' : 'Save'} $
+                          {locale === 'de' ? 'Sparen Sie' : 'Save'}{' '}
+                          {locale === 'de' ? '€' : '$'}
                           {savings.amount.toFixed(2)}
                         </p>
                       )}
@@ -563,7 +577,7 @@ export default function PricingSection({
                       <div className="mt-4 text-center">
                         <p className="text-xs text-gray-500 dark:text-gray-400">
                           {locale === 'de'
-                            ? 'Unterstützung für Zahlungen in Renminbi, Kreditkarten und Alipay'
+                            ? 'Unterstützung für Zahlungen in Euro, Kreditkarten und PayPal'
                             : 'Secure payment with Stripe'}
                         </p>
                       </div>

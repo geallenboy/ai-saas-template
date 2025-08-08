@@ -1,0 +1,566 @@
+{
+  "locale": {
+    "zh": "中文",
+    "en": "English",
+    "de": "Deutsch",
+    "label": "Sprache",
+    "professional": "Professional",
+    "pro": "Pro",
+    "enterprise": "Enterprise",
+    "switchTheme": "Design wechseln",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "pricing": "Preise",
+    "contact": "Kontakt",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "blocks": "Komponenten",
+    "dashboard": "Dashboard",
+    "settings": "Einstellungen",
+    "adminPanel": "Admin-Panel",
+    "signOut": "Abmelden",
+    "blogs": "Blog",
+    "docs": "Dokumentation",
+    "membershipCenter": "Mitgliederbereich"
+  },
+
+  "navbar": {
+    "logo": {
+      "alt": "AI SaaS Template Logo",
+      "title": "AI SaaS Template"
+    },
+    "auth": {
+      "login": "Anmelden",
+      "signup": "Registrieren"
+    },
+    "menu": {
+      "blog": "Blog",
+      "document": "Dokumentation",
+      "components": "Komponenten",
+      "pricing": "Preise",
+      "resources": "Ressourcen",
+      "helpCenter": "Hilfe-Center",
+      "helpCenterDescription": "Hilfe und Support erhalten",
+      "contactUs": "Kontakt",
+      "contactUsDescription": "Kontaktieren Sie unser Team",
+      "status": "Status",
+      "statusDescription": "Systemstatus prüfen",
+      "termsOfService": "Nutzungsbedingungen",
+      "termsOfServiceDescription": "Unsere Geschäftsbedingungen lesen"
+    }
+  },
+
+  "docs": {
+    "title": "Dokumentation",
+    "search": "Dokumentation durchsuchen...",
+    "editPage": "Diese Seite bearbeiten",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "onThisPage": "Auf dieser Seite",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite"
+  },
+
+  "blog": {
+    "title": "Blog",
+    "description": "Lesen Sie unsere neuesten Artikel und Einblicke zur AI SaaS-Entwicklung",
+    "aboutReadingTime": "Ca. {time} Minuten Lesezeit",
+    "backToList": "Zurück zur Blog-Liste",
+    "shareArticle": "Artikel teilen",
+    "backToBlog": "Zurück zum Blog",
+    "noArticles": "Keine Artikel vorhanden"
+  },
+
+  "app": {
+    "name": "AI Saas",
+    "textPro": "Professional"
+  },
+
+  "home": {
+    "hero": {
+      "badge": "Neues AI SaaS Template 2025",
+      "title": "Bauen Sie die KI-Anwendungen der Zukunft",
+      "subtitle": "Starten Sie schnell Ihre nächste KI-gestützte SaaS-Anwendung mit unserem modernen Template. Integriert mit dem neuesten Tech-Stack für eine vollständige Entwicklungslösung.",
+      "startFree": "Kostenlos starten",
+      "viewPricing": "Preise anzeigen",
+      "trustedBy": "Vertraut von 10.000+ Entwicklern",
+      "rating": "5,0 Bewertung"
+    },
+    "features": {
+      "title": "Leistungsstarke Features",
+      "subtitle": "Wir bieten alle Features, die Sie zum Erstellen moderner AI SaaS-Anwendungen benötigen, damit Sie sich auf Ihre Kerngeschäftslogik konzentrieren können",
+      "quickStart": {
+        "title": "Schnellstart",
+        "description": "Basierend auf Next.js 15 und TypeScript für eine moderne Entwicklungserfahrung und beste Performance."
+      },
+      "aiIntegration": {
+        "title": "KI-Integration",
+        "description": "Eingebaute Integration verschiedener AI-Services, unterstützt OpenAI, Anthropic und andere führende AI-Plattformen."
+      },
+      "secureAuth": {
+        "title": "Sichere Authentifizierung",
+        "description": "Integriert mit Clerk-Authentifizierungssystem für sichere und zuverlässige Benutzerverwaltung und Zugriffskontrolle."
+      },
+      "modernUI": {
+        "title": "Modernes UI",
+        "description": "Basierend auf Tailwind CSS und Radix UI für schöne und barrierefreie Benutzeroberflächen-Komponenten."
+      },
+      "multiLanguage": {
+        "title": "Mehrsprachig",
+        "description": "Eingebaute Internationalisierungsunterstützung für einfachen Sprachwechsel und globale Benutzerabdeckung."
+      },
+      "paymentIntegration": {
+        "title": "Zahlungsintegration",
+        "description": "Integriert mit Stripe-Zahlungssystem, unterstützt Abonnements, einmalige Zahlungen und andere Zahlungsmodi."
+      }
+    },
+    "pricing": {
+      "title": "Wählen Sie den passenden Plan",
+      "subtitle": "Beginnen Sie kostenlos und upgraden Sie zu leistungsstärkeren Features, während Ihr Unternehmen wächst"
+    }
+  },
+
+  "contact": {
+    "title": "Kontaktieren Sie uns",
+    "subtitle": "Haben Sie Fragen oder benötigen Hilfe? Unser Team steht Ihnen jederzeit zur Verfügung",
+    "contactInfo": "Kontaktinformationen",
+    "email": "E-Mail",
+    "website": "Website",
+    "workingHours": "Arbeitszeiten",
+    "monday": "Montag - Freitag",
+    "saturday": "Samstag",
+    "sunday": "Sonntag",
+    "closed": "Geschlossen",
+    "sendMessage": "Nachricht senden",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Ihr Name",
+      "email": "E-Mail",
+      "emailPlaceholder": "Ihre E-Mail",
+      "subject": "Betreff",
+      "subjectPlaceholder": "Nachrichtenbetreff",
+      "message": "Nachricht",
+      "messagePlaceholder": "Beschreiben Sie bitte ausführlich Ihr Problem oder Ihren Bedarf...",
+      "send": "Nachricht senden"
+    }
+  },
+
+  "login": {
+    "google": "Mit Google anmelden",
+    "github": "Mit Github anmelden",
+    "loginForm": {
+      "name": "Anmelden",
+      "title1": "Geben Sie unten Ihre E-Mail ein, um sich in Ihr Konto einzuloggen",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "passwordInfo": "Bitte geben Sie Ihr Passwort ein",
+      "btn": "Anmelden",
+      "btn1": "Brauchen Sie ein Konto? Registrieren",
+      "btn2": "Passwort vergessen?",
+      "info1": "Anmeldung läuft...",
+      "info2": "Erfolgreich angemeldet!",
+      "emailMessage": "Bitte geben Sie eine gültige E-Mail-Adresse ein!",
+      "passwordMessage": "Das Passwort muss mindestens 8 Zeichen lang sein."
+    },
+    "signUpForm": {
+      "name": "Registrieren",
+      "title1": "Geben Sie unten Ihre Informationen ein, um ein Konto zu erstellen",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "passwordPlaceholder": "Geben Sie Ihr Passwort ein",
+      "fullNameMessage": "Ihr Name muss mindestens 3 Zeichen lang sein.",
+      "emailMessage": "Bitte geben Sie eine gültige E-Mail-Adresse ein!",
+      "passwordString": "Passwort ist erforderlich!",
+      "passwordMin": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+      "passwordRegex": "Das Passwort muss 8 Zeichen, 1 Großbuchstaben, 1 Kleinbuchstaben, 1 Zahl und 1 Sonderzeichen enthalten.",
+      "confirmPasswordInfo": "Passwort bestätigen ist erforderlich!",
+      "passwordRefine": "Passwörter stimmen nicht überein",
+      "info1": "Anmeldung läuft...",
+      "signupInfo1": "Registrierung läuft...",
+      "info2": "Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse.",
+      "info3": "Noch kein Konto?",
+      "fullName": "Vollständiger Name",
+      "fullNameInfo": "Bitte geben Sie Ihren Namen ein",
+      "passwordInfo": "Bitte geben Sie Ihr Passwort ein",
+      "confirmPassword": "Passwort bestätigen",
+      "confirmPasswordEnter": "Bitte bestätigen Sie Ihr Passwort",
+      "btn1": "Anmelden",
+      "signupBtn1": "Registrieren",
+      "btn2": "Jetzt registrieren",
+      "signupBtn2": "Bereits ein Konto? Anmelden",
+      "btn3": "Durch Klicken auf Registrieren stimmen Sie unseren",
+      "btn4": "Nutzungsbedingungen",
+      "btn5": "und der",
+      "btn6": "Datenschutzrichtlinie zu.",
+      "or": "oder"
+    },
+    "resetPassword": {
+      "name": "Passwort zurücksetzen",
+      "forgotPasswordTitle": "Passwort vergessen",
+      "forgotPasswordSubtitle": "Geben Sie Ihre E-Mail ein, um Ihr Passwort zurückzusetzen",
+      "title1": "Geben Sie unten Ihre E-Mail ein, um Ihr Passwort zurückzusetzen",
+      "email": "E-Mail",
+      "emailMessage": "Bitte geben Sie eine gültige E-Mail-Adresse ein!",
+      "passwordMessage": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "newPassword": "Neues Passwort",
+      "newPasswordPlaceholder": "Bitte geben Sie ein neues Passwort ein (mindestens 8 Zeichen)",
+      "confirmPasswordPlaceholder": "Bitte bestätigen Sie Ihr neues Passwort",
+      "infoLoading": "Passwort-Reset-E-Mail wird gesendet...",
+      "infoSuccess": "Passwort-Reset-E-Mail wurde gesendet! Bitte überprüfen Sie Ihre E-Mails für weitere Anweisungen",
+      "infoError": "Fehler beim Senden der Passwort-Reset-E-Mail",
+      "btn1": "Passwort zurücksetzen",
+      "btn2": "Zurück zur Anmeldung",
+      "sendResetEmail": "Reset-E-Mail senden",
+      "resetSuccess": "Reset erfolgreich!",
+      "resetSuccessDesc": "Ihr Passwort wurde erfolgreich zurückgesetzt, Sie werden zur Anmeldeseite weitergeleitet",
+      "loginNow": "Jetzt anmelden",
+      "resetPageTitle": "Passwort zurücksetzen",
+      "resetPageSubtitle": "Neues Passwort für Ihr Konto festlegen",
+      "invalidLink": "Ungültiger Reset-Link",
+      "invalidLinkDesc": "Der Reset-Link ist ungültig oder abgelaufen",
+      "requestNewReset": "Neuen Passwort-Reset anfordern",
+      "passwordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
+      "passwordMismatch": "Passwort und Bestätigung stimmen nicht überein"
+    }
+  },
+
+  "billing": {
+    "title": "Pläne & Abrechnung",
+    "desc": "Verwalten Sie Ihr Abonnement und Ihre Abrechnungsinformationen.",
+    "planSummarry": {
+      "name": "Plan-Übersicht",
+      "name1": "Preis/Monat",
+      "name2": "Enthaltene Credits",
+      "name3": "Verlängerungsdatum",
+      "noPlan": "Kein Plan",
+      "plan": "Plan",
+      "noInfo1": "Verbleibende Bildgenerierungs-Credits",
+      "noInfo2": "0 verbleibend",
+      "noInfo3": "Verbleibende Modell-Training-Credits",
+      "noInfo4": "Bitte upgraden Sie Ihren Plan, um die App weiter zu nutzen.",
+      "info1": "Bildgenerierungs-Credits",
+      "info2": "Modell-Training-Credits"
+    },
+    "pricingSheet": {
+      "name": "Upgrade",
+      "title": "Abonnement-Plan ändern",
+      "desc": "Wählen Sie einen Plan, der Ihren Bedürfnissen und Ihrem Budget entspricht, um unsere Services weiter zu nutzen."
+    },
+    "price": {
+      "btn1": "Abonnement verwalten",
+      "btn2": "Plan wechseln",
+      "btn3": "Abonnieren",
+      "infoError1": "Ein unbekannter Fehler ist aufgetreten",
+      "infoError2": "Bitte versuchen Sie es später erneut oder kontaktieren Sie uns.",
+      "info1": "Weiterleitung zum Stripe-Portal...",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "selected": "Ausgewählt",
+      "mostPopular": "Am beliebtesten"
+    }
+  },
+  "search": {
+    "noResults": "Keine relevanten Inhalte gefunden"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Willkommen zurück",
+      "subtitle": "Melden Sie sich in Ihr Konto an",
+      "description": "Setzen Sie Ihre AI SaaS-Entwicklungsreise fort",
+      "features": {
+        "secure": "Sichere Anmeldung",
+        "fast": "Schneller Zugriff",
+        "sync": "Datensynchronisation"
+      }
+    },
+    "signUp": {
+      "title": "Starten Sie Ihre AI SaaS-Reise",
+      "subtitle": "Erstellen Sie Ihr Konto",
+      "description": "Treten Sie unserer Community bei und meistern Sie AI SaaS-Entwicklungsfähigkeiten",
+      "benefits": {
+        "learning": "Systematisches Lernen",
+        "projects": "Praxisprojekte",
+        "community": "Professionelle Community",
+        "support": "Technischer Support"
+      }
+    },
+    "verifyEmail": {
+      "title": "E-Mail-Verifizierung",
+      "subtitle": "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Verifizierungslink",
+      "verifying": "Verifizierung läuft...",
+      "verifyingSubtitle": "Ihre E-Mail-Adresse wird verifiziert, bitte warten...",
+      "success": "Verifizierung erfolgreich!",
+      "successSubtitle": "Ihre E-Mail wurde erfolgreich verifiziert, Sie werden zur Anmeldeseite weitergeleitet",
+      "failed": "E-Mail-Verifizierung fehlgeschlagen",
+      "invalidToken": "Verifizierungslink ist ungültig oder abgelaufen",
+      "congratulations": "Herzlichen Glückwunsch! E-Mail-Verifizierung erfolgreich, Sie können jetzt Ihr Konto verwenden.",
+      "loginNow": "Jetzt anmelden",
+      "checkEmail": "Bitte überprüfen Sie Ihre E-Mails (einschließlich Spam-Ordner) und klicken Sie auf den Verifizierungslink.",
+      "tip": "Tipp: Wenn Sie keine E-Mail erhalten haben, überprüfen Sie Ihren Spam-Ordner oder klicken Sie auf die Schaltfläche unten, um sie erneut zu senden.",
+      "resendEmail": "Verifizierungs-E-Mail erneut senden",
+      "resending": "Wird gesendet...",
+      "resendSuccess": "Verifizierungs-E-Mail wurde erneut gesendet, bitte überprüfen Sie Ihre E-Mails.",
+      "resendFailed": "Erneutes Senden der Verifizierungs-E-Mail fehlgeschlagen",
+      "emailMissing": "Verifizierungs-E-Mail kann nicht erneut gesendet werden, E-Mail-Informationen fehlen",
+      "networkError": "Netzwerkfehler, bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut",
+      "verificationCode": "Verifizierungscode",
+      "enterCode": "6-stelligen Verifizierungscode eingeben",
+      "verifyButton": "E-Mail verifizieren",
+      "backToSignup": "Zurück zur Registrierung"
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "subtitle": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen des Passworts",
+      "email": "E-Mail-Adresse",
+      "sendResetLink": "Reset-Link senden",
+      "sending": "Wird gesendet...",
+      "checkEmail": "E-Mails überprüfen",
+      "emailSent": "Wir haben einen Passwort-Reset-Link an Ihre E-Mail gesendet",
+      "emailSentTo": "Reset-Link wurde gesendet an",
+      "didntReceive": "Keine E-Mail erhalten? Überprüfen Sie Ihren Spam-Ordner oder",
+      "tryAgain": "erneut versuchen",
+      "backToLogin": "Zurück zur Anmeldung",
+      "emailNotFound": "Diese E-Mail-Adresse ist nicht registriert",
+      "tooManyRequests": "Zu viele Anfragen, bitte versuchen Sie es später erneut",
+      "sendError": "Fehler beim Senden der Reset-E-Mail, bitte versuchen Sie es später erneut"
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "subtitle": "Bitte geben Sie Ihr neues Passwort ein",
+      "invalidLink": "Ungültiger Reset-Link",
+      "linkExpired": "Dieser Passwort-Reset-Link ist ungültig oder abgelaufen.",
+      "requestNew": "Neuen Reset-Link anfordern",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Neues Passwort bestätigen",
+      "resetButton": "Passwort zurücksetzen",
+      "resetting": "Zurücksetzen...",
+      "success": "Passwort erfolgreich zurückgesetzt!",
+      "successMessage": "Ihr Passwort wurde erfolgreich aktualisiert.",
+      "loginWithNew": "Mit neuem Passwort anmelden",
+      "passwordStrength": "Passwortstärke",
+      "requirements": {
+        "length": "Mindestens 8 Zeichen",
+        "uppercase": "Mindestens ein Großbuchstabe",
+        "lowercase": "Mindestens ein Kleinbuchstabe",
+        "number": "Mindestens eine Zahl"
+      }
+    },
+    "errors": {
+      "needVerification": "Anmeldung erfordert zusätzliche Verifizierungsschritte",
+      "emailNotFound": "Diese E-Mail ist nicht registriert, bitte registrieren Sie sich zuerst",
+      "incorrectPassword": "Falsches Passwort, bitte erneut eingeben",
+      "tooManyAttempts": "Zu viele Versuche, bitte versuchen Sie es später erneut",
+      "loginFailed": "Anmeldung fehlgeschlagen, bitte erneut versuchen",
+      "networkError": "Netzwerkfehler, bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut",
+      "oauthError": "Anmeldung fehlgeschlagen, bitte versuchen Sie es später erneut",
+      "emailExists": "Diese E-Mail ist bereits registriert, bitte melden Sie sich direkt an oder verwenden Sie eine andere E-Mail",
+      "passwordTooWeak": "Passwort ist zu einfach, bitte verwenden Sie ein komplexeres Passwort",
+      "invalidParams": "Registrierungsparameter-Fehler, bitte kontaktieren Sie den Administrator",
+      "signupFailed": "Registrierung fehlgeschlagen, bitte erneut versuchen",
+      "verificationFailed": "Verifizierungscode falsch, bitte erneut versuchen",
+      "syncFailed": "Benutzerinformations-Synchronisation fehlgeschlagen",
+      "unknownError": "Unbekannter Fehler"
+    },
+    "ssoCallback": {
+      "title": "Anmeldung wird abgeschlossen...",
+      "description": "Bitte warten, wir verarbeiten Ihre Anmeldeinformationen",
+      "syncingUser": "Benutzerinformationen werden synchronisiert...",
+      "syncSuccess": "Benutzerinformations-Synchronisation erfolgreich",
+      "syncError": "Synchronisation fehlgeschlagen, erneuter Versuch läuft...",
+      "redirecting": "Anmeldung erfolgreich, Weiterleitung läuft..."
+    }
+  },
+
+  "pricing": {
+    "title": "Wählen Sie Ihren Plan",
+    "description": "Beginnen Sie mit der kostenlosen Version und upgraden Sie jederzeit. Alle Pläne beinhalten Zugriff auf unsere AI-gestützte Workflow-Bibliothek.",
+    "monthly": "Monatlich",
+    "yearly": "Jährlich",
+    "year": "Jahr",
+    "month": "Monat",
+    "save20": "Sparen Sie bis zu 20%",
+    "saveAmount": "Sparen Sie {amount}",
+    "mostPopular": "Am beliebtesten",
+    "currentPlan": "Aktueller Plan",
+    "getStarted": "Loslegen",
+    "subtitle": "Wählen Sie den passenden Abonnement-Plan",
+    "subscribe": "Abonnieren",
+    "upgrade": "Upgrade",
+    "downgrade": "Downgrade",
+    "processing": "Wird verarbeitet...",
+    "upgrading": "Upgrade läuft...",
+    "notAvailable": "Downgrade nicht verfügbar",
+    "upgradeOnly": "Nur Upgrade unterstützt",
+    "switchToYearly": "Zu jährlich wechseln",
+    "switchToMonthly": "Zu monatlich wechseln",
+    "billingNote": "Alle Pläne beinhalten SSL und 24/7 professionellen Support.",
+    "useCases": "Anwendungsfälle",
+    "tutorials": "Tutorials",
+    "blogs": "Blog-Artikel",
+    "unlimited": "Unbegrenzt",
+    "cancelAnytime": "Keine versteckten Gebühren. Jederzeit kündbar.",
+    "freeTrial": "Sofort wirksam",
+    "securePayment": "Sichere Zahlung",
+    "instantAccess": "Sofortiger Zugriff",
+    "page": {
+      "badge": "Abonnement-Pläne",
+      "title": "Wählen Sie den passenden Abonnement-Plan",
+      "description": "Beginnen Sie mit der kostenlosen Version und upgraden Sie jederzeit zu erweiterten Features für mehr Automatisierungsmöglichkeiten",
+      "features": {
+        "securePayment": "Sichere Zahlung",
+        "cancelAnytime": "Jederzeit kündbar",
+        "moneyBack": "Sicher und zuverlässig"
+      },
+      "faq": {
+        "title": "Häufig gestellte Fragen",
+        "description": "Häufig gestellte Fragen zu Abonnements und Zahlungen",
+        "questions": {
+          "cancel": {
+            "title": "Kann ich mein Abonnement jederzeit kündigen?",
+            "answer": "Ja, Sie können Ihr Abonnement jederzeit kündigen. Nach der Kündigung können Sie die bezahlten Features bis zum Ende des aktuellen Abrechnungszeitraums weiter nutzen."
+          },
+          "payment": {
+            "title": "Welche Zahlungsmethoden werden unterstützt?",
+            "answer": "Wir unterstützen alle gängigen Kredit- und Debitkarten, einschließlich Visa, Mastercard, American Express und andere."
+          },
+          "yearly": {
+            "title": "Was sind die Vorteile des Jahresplans?",
+            "answer": "Mit dem Jahresplan sparen Sie 20% der Kosten, was mehr als 2 kostenlosen Monaten entspricht. Außerdem genießen Sie eine stabilere Service-Erfahrung."
+          },
+          "limitations": {
+            "title": "Welche Einschränkungen hat die kostenlose Version?",
+            "answer": "Die kostenlose Version bietet Zugriff auf 10 Fälle, 5 Tutorial-Module und 3 Blog-Artikel. Ein Upgrade auf eine bezahlte Version schaltet alle Inhalte und erweiterte Features frei."
+          }
+        }
+      }
+    }
+  },
+
+  "errorPages": {
+    "error": {
+      "title": "Ein Fehler ist aufgetreten",
+      "description": "Die Anwendung hat einen Fehler festgestellt",
+      "errorMessage": "Fehlermeldung:",
+      "errorId": "Fehler-ID",
+      "development": "Das System hat einen unerwarteten Fehler festgestellt, bitte versuchen Sie es später erneut.",
+      "buttons": {
+        "retry": "Erneut versuchen",
+        "home": "Zurück zur Startseite",
+        "back": "Zurück zur vorherigen Seite"
+      },
+      "support": "Wenn das Problem weiterhin besteht, kontaktieren Sie bitte den technischen Support und geben Sie die Fehler-ID an"
+    },
+    "globalError": {
+      "title": "Systemfehler",
+      "description": "Die Anwendung hat einen schwerwiegenden Fehler festgestellt",
+      "support": "Wenn das Problem weiterhin besteht, kontaktieren Sie bitte den technischen Support"
+    },
+    "notFound": {
+      "title": "Seite nicht gefunden",
+      "description": "Entschuldigung, die angeforderte Seite existiert nicht",
+      "errorCode": "404 Fehler:",
+      "message": "Die angeforderte Seite wurde möglicherweise gelöscht, verschoben oder die URL wurde falsch eingegeben.",
+      "buttons": {
+        "home": "Zurück zur Startseite",
+        "back": "Zurück zur vorherigen Seite",
+        "search": "Inhalte suchen"
+      },
+      "support": "Wenn Sie glauben, dass dies ein Fehler ist, kontaktieren Sie bitte unseren technischen Support"
+    },
+    "unauthorized": {
+      "title": "Zugriff verweigert",
+      "description": "Entschuldigung, Sie haben keine Berechtigung, auf diese Seite zuzugreifen",
+      "permissionDenied": "Unzureichende Berechtigung:",
+      "message": "Diese Seite ist nur für Administratoren zugänglich. Wenn Sie glauben, dass dies ein Fehler ist, kontaktieren Sie bitte den Systemadministrator.",
+      "buttons": {
+        "login": "In Konto anmelden",
+        "home": "Zurück zur Startseite",
+        "back": "Zurück zur vorherigen Seite"
+      },
+      "adminContact": "Für Administrator-Berechtigungen kontaktieren Sie bitte den Systemadministrator"
+    }
+  },
+
+  "user": {
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "billing": "Abrechnung",
+    "logout": "Abmelden"
+  },
+  "errors": {
+    "unauthorized": "Nicht autorisiert",
+    "notFound": "Nicht gefunden",
+    "goHome": "Zur Startseite"
+  },
+  "footer": {
+    "brand": {
+      "name": "AI SaaS Template",
+      "description": "Professionelles AI SaaS-Anwendungs-Entwicklungstemplate mit vollständiger Benutzerauthentifizierung, Zahlungsintegration, Mehrsprachenunterstützung und modernen UI-Komponenten.",
+      "slogan": "Eine moderne AI SAAS-Plattform, die mit Next.js 15 und React 19 erstellt wurde"
+    },
+    "links": {
+      "product": {
+        "title": "Produkt",
+        "features": "Features",
+        "pricing": "Preise",
+        "documentation": "Dokumentation",
+        "templates": "Templates"
+      },
+      "company": {
+        "title": "Unternehmen",
+        "about": "Über uns",
+        "blog": "Blog",
+        "careers": "Karriere",
+        "contact": "Kontakt"
+      },
+      "support": {
+        "title": "Support",
+        "help": "Hilfezentrum",
+        "community": "Gemeinschaft",
+        "status": "Status",
+        "feedback": "Feedback"
+      },
+      "legal": {
+        "title": "Rechtliches",
+        "privacy": "Datenschutzrichtlinie",
+        "terms": "Nutzungsbedingungen",
+        "cookies": "Cookie-Richtlinie"
+      }
+    },
+    "social": {
+      "title": "Folgen Sie uns",
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "discord": "Discord"
+    },
+    "newsletter": {
+      "title": "Bleiben Sie auf dem Laufenden",
+      "description": "Erhalten Sie die neuesten Updates und Nachrichten zur AI SaaS-Entwicklung.",
+      "placeholder": "Geben Sie Ihre E-Mail-Adresse ein",
+      "subscribe": "Abonnieren",
+      "success": "Erfolgreich abonniert!",
+      "error": "Abonnement fehlgeschlagen, bitte versuchen Sie es erneut."
+    },
+    "copyright": "© {year} AI SaaS Template. Alle Rechte vorbehalten.",
+    "madeWith": "Mit ❤️ für Entwickler erstellt",
+    "copyrightText": "© 2024 AI SAAS. Alle Rechte vorbehalten."
+  },
+
+  "Docs": {
+    "searchPlaceholder": "Dokumentation durchsuchen...",
+    "editOnGithub": "Auf GitHub bearbeiten",
+    "lastModified": "Zuletzt geändert"
+  },
+  "blocks": {
+    "title": "Komponentenbibliothek",
+    "description": "Entdecken Sie unsere sorgfältig gestaltete Sammlung von Komponenten, die alle optimiert und bereit für den direkten Einsatz in Ihren Projekten sind",
+    "viewComponents": "Komponenten anzeigen",
+    "backToBlocks": "Zurück zur Komponentenbibliothek"
+  }
+}

@@ -4,7 +4,7 @@ import Stripe from 'stripe'
 
 // Initialize the Stripe client
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-07-30.basil',
+  apiVersion: '2025-06-30.basil',
   typescript: true,
   appInfo: {
     name: 'AI SaaS Template',

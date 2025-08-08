@@ -42,7 +42,7 @@ export default function ContactPage() {
                         {t('email')}
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        gejialun88@gmail.com
+                        alex.zanco@icloud.com
                       </p>
                     </div>
                   </div>
@@ -56,8 +56,11 @@ export default function ContactPage() {
                         {t('website')}
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        <Link href="https://gegarron.com" target="_blank">
-                          https://gegarron.com
+                        <Link
+                          href="https://github.com/alexzanco/ai-saas-template.git"
+                          target="_blank"
+                        >
+                          https://github.com/alexzanco/ai-saas-template.git
                         </Link>
                       </p>
                     </div>

@@ -29,7 +29,8 @@
     "adminPanel": "Admin Panel",
     "signOut": "Sign Out",
     "blogs": "Blog",
-    "docs": "Documentation"
+    "docs": "Documentation",
+    "membershipCenter": "Membership Center"
   },
 
   "navbar": {
@@ -514,7 +515,8 @@
   "footer": {
     "brand": {
       "name": "AI SaaS Template",
-      "description": "Professional AI SaaS application development template, providing complete user authentication, payment integration, multi-language support and modern UI components."
+      "description": "Professional AI SaaS application development template, providing complete user authentication, payment integration, multi-language support and modern UI components.",
+      "slogan": "A modern AI SAAS platform built with Next.js 15 and React 19"
     },
     "links": {
       "product": {
@@ -561,7 +563,8 @@
       "error": "Subscription failed, please try again."
     },
     "copyright": "© {year} AI SaaS Template. All rights reserved.",
-    "madeWith": "Made with ❤️ for developers"
+    "madeWith": "Made with ❤️ for developers",
+    "copyrightText": "© 2024 AI SAAS. All rights reserved."
   },
 
   "Docs": {

@@ -6,23 +6,23 @@
 
 -- Insert free plan
 INSERT INTO membership_plans (
-    name, name_zh, description, description_zh,
-    price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
+    name, name_de, description, description_de,
+    price_usd_monthly, price_eur_monthly, price_usd_yearly, price_eur_yearly,
     yearly_discount_percent,
-    stripe_price_id_usd_monthly, stripe_price_id_cny_monthly, 
-    stripe_price_id_usd_yearly, stripe_price_id_cny_yearly,
-    features, features_zh,
+    stripe_price_id_usd_monthly, stripe_price_id_eur_monthly, 
+    stripe_price_id_usd_yearly, stripe_price_id_eur_yearly,
+    features, features_de,
     max_use_cases, max_tutorials, max_blogs, max_api_calls,
     permissions,
     is_active, is_popular, is_featured, sort_order
 ) VALUES (
-    'Free', '免费版',
-    'Perfect for getting started', '完美的入门选择',
+    'Free', 'Kostenlos',
+    'Perfect for getting started', 'Perfekt für den Start',
     0.00, 0.00, 0.00, 0.00,
     0,
     NULL, NULL, NULL, NULL,
     '["Up to 5 use cases", "Basic tutorials", "Community support", "Basic analytics"]'::json,
-    '["最多5个使用案例", "基础教程", "社区支持", "基础分析"]'::json,
+    '["Bis zu 5 Use-Cases", "Basic Tutorials", "Community-Support", "Basic Analysen"]'::json,
     5, 10, 3, 100,
     '{"apiAccess": false, "customModels": false, "prioritySupport": false, "exportData": false, "bulkOperations": false, "advancedAnalytics": false}'::json,
     true, false, false, 1
@@ -30,24 +30,24 @@ INSERT INTO membership_plans (
 
 -- Insert the base plan (need to replace the actual Stripe price ID)
 INSERT INTO membership_plans (
-    name, name_zh, description, description_zh,
-    price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
+    name, name_de, description, description_de,
+    price_usd_monthly, price_eur_monthly, price_usd_yearly, price_eur_yearly,
     yearly_discount_percent,
-    stripe_price_id_usd_monthly, stripe_price_id_cny_monthly, 
-    stripe_price_id_usd_yearly, stripe_price_id_cny_yearly,
-    features, features_zh,
+    stripe_price_id_usd_monthly, stripe_price_id_eur_monthly, 
+    stripe_price_id_usd_yearly, stripe_price_id_eur_yearly,
+    features, features_de,
     max_use_cases, max_tutorials, max_blogs, max_api_calls,
     permissions,
     is_active, is_popular, is_featured, sort_order
 ) VALUES (
-    'Basic', '基础版',
-    'Great for individuals and small teams', '适合个人和小团队',
-    9.99, 68.00, 99.99, 680.00,
+    'Basic', 'Basic',
+    'Great for individuals and small teams', 'Ideal für Einzelpersonen und kleine Teams',
+    9.99, 8.58, 99.99, 85.80,
     17,
-    'price_basic_monthly_test', 'price_basic_monthly_cny_test',
-    'price_basic_yearly_test', 'price_basic_yearly_cny_test',
+    'price_1Rts5QE3FsUKgee9OkSPQ6aE', 'price_1Rts5oE3FsUKgee9RuPH2wRe',
+    'price_1Rts3wE3FsUKgee9V0Zqn2M2', 'price_1Rts6eE3FsUKgee9lUkEHN4B',
     '["Up to 50 use cases", "Advanced tutorials", "Email support", "Export functionality", "Basic API access"]'::json,
-    '["最多50个使用案例", "高级教程", "邮件支持", "导出功能", "基础API访问"]'::json,
+    '["Bis zu 50 Use-Cases", "Erweiterte Tutorials", "E-Mail-Support", "Exportfunktionalität", "Basis-API-Zugriff"]'::json,
     50, 100, 20, 1000,
     '{"apiAccess": true, "customModels": false, "prioritySupport": false, "exportData": true, "bulkOperations": false, "advancedAnalytics": false}'::json,
     true, true, false, 2
@@ -55,24 +55,24 @@ INSERT INTO membership_plans (
 
 -- Insert professional plan
 INSERT INTO membership_plans (
-    name, name_zh, description, description_zh,
-    price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
+    name, name_de, description, description_de,
+    price_usd_monthly, price_eur_monthly, price_usd_yearly, price_eur_yearly,
     yearly_discount_percent,
-    stripe_price_id_usd_monthly, stripe_price_id_cny_monthly, 
-    stripe_price_id_usd_yearly, stripe_price_id_cny_yearly,
-    features, features_zh,
+    stripe_price_id_usd_monthly, stripe_price_id_eur_monthly, 
+    stripe_price_id_usd_yearly, stripe_price_id_eur_yearly,
+    features, features_de,
     max_use_cases, max_tutorials, max_blogs, max_api_calls,
     permissions,
     is_active, is_popular, is_featured, sort_order
 ) VALUES (
-    'Pro', '专业版',
-    'Perfect for growing businesses', '适合成长型企业',
-    29.99, 198.00, 299.99, 1980.00,
+    'Pro', 'Pro',
+    'Perfect for growing businesses', 'Ideal für wachsende Unternehmen',
+    29.99, 25.80, 299.99, 258.00,
     17,
-    'price_pro_monthly_test', 'price_pro_monthly_cny_test',
-    'price_pro_yearly_test', 'price_pro_yearly_cny_test',
+    'price_1Rts8CE3FsUKgee9tkGHbRzG', 'price_1Rts9SE3FsUKgee9mTbAhvqm',
+    'price_1Rts8gE3FsUKgee9pTLnTfnE', 'price_1RtsA1E3FsUKgee9a8DXuzZY',
     '["Unlimited use cases", "Premium tutorials", "Priority support", "Advanced analytics", "Custom models", "Bulk operations"]'::json,
-    '["无限使用案例", "高级教程", "优先支持", "高级分析", "自定义模型", "批量操作"]'::json,
+    '["Unbegrenzte Anwendungsfälle", "Premium-Tutorials", "Prioritätsunterstützung", "Erweiterte Analysen", "Benutzerdefinierte Modelle", "Bulk-Operationen"]'::json,
     -1, -1, -1, 10000,
     '{"apiAccess": true, "customModels": true, "prioritySupport": true, "exportData": true, "bulkOperations": true, "advancedAnalytics": true}'::json,
     true, false, true, 3
@@ -80,24 +80,24 @@ INSERT INTO membership_plans (
 
 -- Insert business plan
 INSERT INTO membership_plans (
-    name, name_zh, description, description_zh,
-    price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
+    name, name_de, description, description_de,
+    price_usd_monthly, price_eur_monthly, price_usd_yearly, price_eur_yearly,
     yearly_discount_percent,
-    stripe_price_id_usd_monthly, stripe_price_id_cny_monthly, 
-    stripe_price_id_usd_yearly, stripe_price_id_cny_yearly,
-    features, features_zh,
+    stripe_price_id_usd_monthly, stripe_price_id_eur_monthly, 
+    stripe_price_id_usd_yearly, stripe_price_id_eur_yearly,
+    features, features_de,
     max_use_cases, max_tutorials, max_blogs, max_api_calls,
     permissions,
     is_active, is_popular, is_featured, sort_order
 ) VALUES (
-    'Enterprise', '企业版',
-    'For large organizations with advanced needs', '适合有高级需求的大型组织',
-    99.99, 688.00, 999.99, 6880.00,
+    'Enterprise', 'Enterprise',
+    'For large organizations with advanced needs', 'Für große Organisationen mit fortgeschrittenen Anforderungen',
+    99.99, 85.80, 999.99, 858.00,
     17,
-    'price_enterprise_monthly_test', 'price_enterprise_monthly_cny_test',
-    'price_enterprise_yearly_test', 'price_enterprise_yearly_cny_test',
+    'price_1RtsBME3FsUKgee96PQgonV8', 'price_1RtsCME3FsUKgee9lZHvGGfm',
+    'price_1RtsBvE3FsUKgee92QdDqw5Y', 'price_1RtsDCE3FsUKgee9wznvmXZz',
     '["Everything in Pro", "Dedicated support", "Custom integrations", "Advanced security", "SLA guarantee", "White-label options"]'::json,
-    '["包含专业版所有功能", "专属支持", "自定义集成", "高级安全", "SLA保证", "白标选项"]'::json,
+    '["Alles in Pro", "Dedizierter Support", "Benutzerdefinierte Integrationen", "Erweiterte Sicherheit", "SLA-Garantie", "White-Label-Optionen"]'::json,
     -1, -1, -1, -1,
     '{"apiAccess": true, "customModels": true, "prioritySupport": true, "exportData": true, "bulkOperations": true, "advancedAnalytics": true}'::json,
     true, false, false, 4
@@ -105,7 +105,7 @@ INSERT INTO membership_plans (
 
 -- Query verification
 SELECT 
-    name, name_zh, 
+    name, name_de, 
     price_usd_monthly, price_usd_yearly,
     stripe_price_id_usd_monthly, stripe_price_id_usd_yearly,
     is_active, is_popular, sort_order

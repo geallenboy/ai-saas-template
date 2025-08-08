@@ -198,7 +198,7 @@ export default function Navigation() {
                   handleLanguageChange(locale === 'de' ? 'en' : 'de')
                 }
               >
-                {locale === 'de' ? 'EN' : 'Deutsch'}
+                {locale === 'de' ? 'EN' : 'DE'}
               </Button>
             </div>
 
@@ -340,11 +340,7 @@ export default function Navigation() {
                           className="flex items-center text-blue-600 dark:text-blue-400"
                         >
                           <Crown className="mr-2 h-4 w-4" />
-                          <span>
-                            {locale === 'de'
-                              ? 'Mitgliederbereich'
-                              : 'Membership Center'}
-                          </span>
+                          <span>{t('membershipCenter')}</span>
                         </Link>
                       </DropdownMenuItem>
                     )}
@@ -437,7 +433,7 @@ export default function Navigation() {
                       setIsMenuOpen(false)
                     }}
                   >
-                    中文
+                    DE
                   </Button>
                   <Button
                     variant={locale === 'en' ? 'default' : 'outline'}
@@ -454,7 +450,7 @@ export default function Navigation() {
 
               <div className="flex items-center justify-between mt-4">
                 <span className="text-sm font-medium text-muted-foreground">
-                  主题
+                  Theme
                 </span>
                 <div className="flex space-x-2">
                   <Button
@@ -464,7 +460,7 @@ export default function Navigation() {
                     className="transition-all duration-200"
                   >
                     <Sun className="h-4 w-4 mr-1" />
-                    <span className="text-xs">亮色</span>
+                    <span className="text-xs">Light</span>
                   </Button>
                   <Button
                     variant={theme === 'dark' ? 'default' : 'outline'}
@@ -473,7 +469,7 @@ export default function Navigation() {
                     className="transition-all duration-200"
                   >
                     <Moon className="h-4 w-4 mr-1" />
-                    <span className="text-xs">深色</span>
+                    <span className="text-xs">Dark</span>
                   </Button>
                   <Button
                     variant={theme === 'system' ? 'default' : 'outline'}
@@ -482,7 +478,7 @@ export default function Navigation() {
                     className="transition-all duration-200"
                   >
                     <Laptop className="h-4 w-4 mr-1" />
-                    <span className="text-xs">系统</span>
+                    <span className="text-xs">System</span>
                   </Button>
                 </div>
               </div>

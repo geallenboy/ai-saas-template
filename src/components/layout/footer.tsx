@@ -1,10 +1,11 @@
 'use client'
 
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 export default function Footer() {
   const locale = useLocale()
+  const t = useTranslations('footer')
   const localePath = (path: string) => `/${locale}${path}`
 
   return (
@@ -13,16 +14,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center">
-              <span className="text-xl font-bold">AI SAAS</span>
+              <span className="text-xl font-bold">{t('brand.name')}</span>
             </div>
             <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-md">
-              基于 Next.js 15 和 React 19 构建的现代化 AI SAAS 平台
+              {t('brand.slogan')}
             </p>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white tracking-wider uppercase">
-              产品
+              {t('links.product.title')}
             </h3>
             <ul className="mt-4 space-y-4">
               <li>
@@ -30,7 +31,7 @@ export default function Footer() {
                   href={localePath('/pricing')}
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  定价
+                  {t('links.product.pricing')}
                 </Link>
               </li>
               <li>
@@ -38,7 +39,7 @@ export default function Footer() {
                   href={localePath('/docs')}
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  文档
+                  {t('links.product.documentation')}
                 </Link>
               </li>
             </ul>
@@ -46,7 +47,7 @@ export default function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white tracking-wider uppercase">
-              支持
+              {t('links.support.title')}
             </h3>
             <ul className="mt-4 space-y-4">
               <li>
@@ -54,7 +55,7 @@ export default function Footer() {
                   href={localePath('/contact')}
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  联系我们
+                  {t('links.company.contact')}
                 </Link>
               </li>
               <li>
@@ -62,7 +63,7 @@ export default function Footer() {
                   href={localePath('/privacy')}
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  隐私政策
+                  {t('links.legal.privacy')}
                 </Link>
               </li>
             </ul>
@@ -71,7 +72,7 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
           <p className="text-base text-gray-400 text-center">
-            &copy; 2024 AI SAAS. All rights reserved.
+            {t('copyrightText')}
           </p>
         </div>
       </div>
