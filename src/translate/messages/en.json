@@ -388,7 +388,16 @@
       "syncingUser": "Syncing user information...",
       "syncSuccess": "User information synced successfully",
       "syncError": "Sync failed, retrying...",
-      "redirecting": "Login successful, redirecting..."
+      "redirecting": "Login successful, redirecting...",
+      "authenticatingTitle": "Verifying Login",
+      "authenticatingDescription": "Please wait while we securely complete your login...",
+      "authenticatingStatus": "Verifying",
+      "redirectingTitle": "Login Successful!",
+      "redirectingDescription": "Redirecting to homepage in {countdown} seconds...",
+      "redirectingButton": "Redirect Now",
+      "errorTitle": "Login is taking longer than usual",
+      "errorDescription": "Please wait or try refreshing the page.",
+      "errorButton": "Back to Login"
     }
   },
 

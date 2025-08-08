@@ -1,9 +1,14 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, FileQuestion, Home } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 export default function NotFound() {
+  const t = useTranslations('errorPages.notFound')
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-md">
@@ -12,26 +17,24 @@ export default function NotFound() {
             <FileQuestion className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
-            页面未找到
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <p className="text-gray-600 dark:text-gray-300">
-            抱歉，您访问的页面不存在。可能是链接错误或页面已被移动。
-          </p>
+          <p className="text-gray-600 dark:text-gray-300">{t('message')}</p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild variant="outline">
               <Link href="javascript:history.back()">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                返回上页
+                {t('buttons.back')}
               </Link>
             </Button>
 
             <Button asChild>
               <Link href="/">
                 <Home className="w-4 h-4 mr-2" />
-                返回首页
+                {t('buttons.home')}
               </Link>
             </Button>
           </div>

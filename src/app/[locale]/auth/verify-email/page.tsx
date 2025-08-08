@@ -11,12 +11,17 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AlertCircle, ArrowLeft, CheckCircle, Mail } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams()
+  const t = useTranslations('auth.verifyEmail')
+  const tError = useTranslations('errors')
+  const tNav = useTranslations('navigation')
+
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
     'loading'
   )
@@ -27,7 +32,7 @@ export default function VerifyEmailPage() {
 
     if (!token) {
       setStatus('error')
-      setMessage('The verification link is invalid or has expired')
+      setMessage(t('invalidToken'))
       return
     }
 
@@ -35,9 +40,9 @@ export default function VerifyEmailPage() {
     // Temporarily simulate the verification process
     setTimeout(() => {
       setStatus('success')
-      setMessage('Email verification successful!')
+      setMessage(t('success'))
     }, 2000)
-  }, [searchParams])
+  }, [searchParams, t])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -47,10 +52,10 @@ export default function VerifyEmailPage() {
         <Card className="w-full max-w-md shadow-xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-              邮箱验证
+              {t('title')}
             </CardTitle>
             <CardDescription className="text-gray-600 dark:text-gray-300">
-              正在验证您的邮箱地址
+              {t('verifyingSubtitle')}
             </CardDescription>
           </CardHeader>
 
@@ -61,7 +66,7 @@ export default function VerifyEmailPage() {
                   <div className="w-6 h-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                 </div>
                 <p className="text-gray-600 dark:text-gray-300">
-                  正在验证您的邮箱...
+                  {t('verifying')}
                 </p>
               </div>
             )}
@@ -75,11 +80,11 @@ export default function VerifyEmailPage() {
 
                 <div className="space-y-2">
                   <Button asChild className="w-full">
-                    <Link href="/auth/sign-in">立即登录</Link>
+                    <Link href="/auth/sign-in">{t('loginNow')}</Link>
                   </Button>
 
                   <Button asChild variant="outline" className="w-full">
-                    <Link href="/">返回首页</Link>
+                    <Link href="/">{tError('goHome')}</Link>
                   </Button>
                 </div>
               </div>
@@ -96,14 +101,14 @@ export default function VerifyEmailPage() {
                   <Button asChild variant="outline" className="w-full">
                     <Link href="/auth/sign-in">
                       <ArrowLeft className="mr-2 h-4 w-4" />
-                      返回登录
+                      {tNav('signIn')}
                     </Link>
                   </Button>
 
                   <Button asChild variant="outline" className="w-full">
                     <Link href="/auth/sign-up">
                       <Mail className="mr-2 h-4 w-4" />
-                      重新注册
+                      {tNav('signUp')}
                     </Link>
                   </Button>
                 </div>

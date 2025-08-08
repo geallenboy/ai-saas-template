@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect } from 'react'
 
 export default function Error({
@@ -16,6 +17,8 @@ export default function Error({
     console.error(error)
   }, [error])
 
+  const t = useTranslations('errorPages.error')
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-md">
@@ -24,13 +27,11 @@ export default function Error({
             <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
-            出现了一些问题
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <p className="text-gray-600 dark:text-gray-300">
-            抱歉，页面加载时出现了错误。请尝试刷新页面或返回首页。
-          </p>
+          <p className="text-gray-600 dark:text-gray-300">{t('development')}</p>
 
           {process.env.NODE_ENV === 'development' && (
             <div className="text-left bg-gray-100 dark:bg-gray-800 p-3 rounded text-sm">
@@ -43,12 +44,12 @@ export default function Error({
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button onClick={reset} variant="outline">
               <RefreshCw className="w-4 h-4 mr-2" />
-              重试
+              {t('buttons.retry')}
             </Button>
 
             <Button onClick={() => (window.location.href = '/')}>
               <Home className="w-4 h-4 mr-2" />
-              返回首页
+              {t('buttons.home')}
             </Button>
           </div>
         </CardContent>

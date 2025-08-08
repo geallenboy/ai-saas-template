@@ -372,7 +372,16 @@
       "syncingUser": "Benutzerinformationen werden synchronisiert...",
       "syncSuccess": "Benutzerinformations-Synchronisation erfolgreich",
       "syncError": "Synchronisation fehlgeschlagen, erneuter Versuch läuft...",
-      "redirecting": "Anmeldung erfolgreich, Weiterleitung läuft..."
+      "redirecting": "Anmeldung erfolgreich, Weiterleitung läuft...",
+      "authenticatingTitle": "Anmeldung wird überprüft",
+      "authenticatingDescription": "Bitte warten Sie, während wir Ihre Anmeldung sicher abschließen...",
+      "authenticatingStatus": "Überprüfung",
+      "redirectingTitle": "Anmeldung erfolgreich!",
+      "redirectingDescription": "Weiterleitung zur Startseite in {countdown} Sekunden...",
+      "redirectingButton": "Jetzt weiterleiten",
+      "errorTitle": "Die Anmeldung dauert länger als gewöhnlich",
+      "errorDescription": "Bitte warten Sie oder versuchen Sie, die Seite zu aktualisieren.",
+      "errorButton": "Zurück zur Anmeldung"
     }
   },
 
