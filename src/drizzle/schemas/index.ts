@@ -1,5 +1,5 @@
 // ===============================
-// 导入所有表定义
+// Import all table definitions
 // ===============================
 import { conversations, messages, promptTemplates } from './conversations'
 import {
@@ -15,7 +15,7 @@ import { apiKeys, notifications, systemConfigs } from './system'
 import { users } from './users'
 
 // ===============================
-// 用户模块导出
+// User module export
 // ===============================
 export {
   AdminLevel,
@@ -28,7 +28,7 @@ export {
 } from './users'
 
 // ===============================
-// 支付模块导出
+// Payment module export
 // ===============================
 export {
   DiscountType,
@@ -54,7 +54,7 @@ export {
 } from './payments'
 
 // ===============================
-// AI对话模块导出
+// AI conversation module export
 // ===============================
 export {
   ConversationType,
@@ -73,7 +73,7 @@ export {
 } from './conversations'
 
 // ===============================
-// 系统模块导出
+// System module export
 // ===============================
 export {
   ApiScope,
@@ -93,35 +93,35 @@ export {
 } from './system'
 
 // ===============================
-// 所有表的联合导出 (用于Drizzle Kit)
+// Joint export of all tables (for Drizzle Kit)
 // ===============================
 export const schema = {
-  // 用户模块
+  // User module
   users,
 
-  // 支付模块
+  // Payment module
   membershipPlans,
   userMemberships,
   paymentRecords,
   userUsageLimits,
   coupons,
 
-  // AI对话模块
+  // AI conversation module
   conversations,
   messages,
   promptTemplates,
 
-  // 系统模块
+  // System module
   apiKeys,
   notifications,
   systemConfigs,
 }
 
 // ===============================
-// 全局类型定义
+// Global type definitions
 // ===============================
 
-// 通用查询结果类型
+// Common query result type
 export type PaginationResult<T> = {
   data: T[]
   total: number
@@ -130,7 +130,7 @@ export type PaginationResult<T> = {
   totalPages: number
 }
 
-// API响应类型
+// API response type
 export type ApiResponse<T = unknown> = {
   success: boolean
   data?: T
@@ -138,12 +138,12 @@ export type ApiResponse<T = unknown> = {
   message?: string
 }
 
-// 数据库事务类型
+// Database transaction type
 export type DatabaseTransaction = Parameters<
   Parameters<typeof import('@/lib/db').db.transaction>[0]
 >[0]
 
-// 查询过滤器类型
+// Query filter type
 export type QueryFilters = {
   page?: number
   limit?: number
@@ -154,7 +154,7 @@ export type QueryFilters = {
   endDate?: Date
 }
 
-// 用户权限检查结果
+// User permission check results
 export type PermissionCheck = {
   hasPermission: boolean
   reason?: string

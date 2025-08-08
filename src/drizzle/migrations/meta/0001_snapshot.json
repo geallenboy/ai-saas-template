@@ -337,8 +337,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name_zh": {
-          "name": "name_zh",
+        "name_de": {
+          "name": "name_de",
           "type": "varchar(200)",
           "primaryKey": false,
           "notNull": false
@@ -349,8 +349,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "description_zh": {
-          "name": "description_zh",
+        "description_de": {
+          "name": "description_de",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -367,8 +367,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "prompt_zh": {
-          "name": "prompt_zh",
+        "prompt_de": {
+          "name": "prompt_de",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -692,8 +692,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name_zh": {
-          "name": "name_zh",
+        "name_de": {
+          "name": "name_de",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false
@@ -859,8 +859,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name_zh": {
-          "name": "name_zh",
+        "name_de": {
+          "name": "name_de",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false
@@ -871,8 +871,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "description_zh": {
-          "name": "description_zh",
+        "description_de": {
+          "name": "description_de",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -883,8 +883,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "price_cny_monthly": {
-          "name": "price_cny_monthly",
+        "price_eur_monthly": {
+          "name": "price_eur_monthly",
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
@@ -895,8 +895,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "price_cny_yearly": {
-          "name": "price_cny_yearly",
+        "price_eur_yearly": {
+          "name": "price_eur_yearly",
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
@@ -914,8 +914,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "stripe_price_id_cny_monthly": {
-          "name": "stripe_price_id_cny_monthly",
+        "stripe_price_id_eur_monthly": {
+          "name": "stripe_price_id_eur_monthly",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
@@ -926,8 +926,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "stripe_price_id_cny_yearly": {
-          "name": "stripe_price_id_cny_yearly",
+        "stripe_price_id_eur_yearly": {
+          "name": "stripe_price_id_eur_yearly",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
@@ -939,8 +939,8 @@
           "notNull": true,
           "default": "'[]'::jsonb"
         },
-        "features_zh": {
-          "name": "features_zh",
+        "features_de": {
+          "name": "features_de",
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
@@ -1136,8 +1136,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "title_zh": {
-          "name": "title_zh",
+        "title_de": {
+          "name": "title_de",
           "type": "varchar(200)",
           "primaryKey": false,
           "notNull": false
@@ -1148,8 +1148,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "message_zh": {
-          "name": "message_zh",
+        "message_de": {
+          "name": "message_de",
           "type": "text",
           "primaryKey": false,
           "notNull": false

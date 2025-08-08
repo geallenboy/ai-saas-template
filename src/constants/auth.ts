@@ -1,4 +1,4 @@
-// ============== 认证常量 ==============
+// ============== Authentication constants ==============
 
 export const AUTH_ROUTES = {
   SIGN_IN: '/auth/sign-in',
@@ -26,7 +26,7 @@ export const PUBLIC_ROUTES = [
   '/auth/sign-up',
 ] as const
 
-// ============== 用户偏好默认值 ==============
+// ============== User preferences default values ==============
 
 export const DEFAULT_USER_PREFERENCES = {
   theme: 'light' as const,
@@ -35,7 +35,7 @@ export const DEFAULT_USER_PREFERENCES = {
   timezone: 'UTC',
 }
 
-// ============== 管理员权限级别 ==============
+// ============== Administrator permission level ==============
 
 export const ADMIN_LEVELS = {
   USER: 0,
@@ -44,33 +44,33 @@ export const ADMIN_LEVELS = {
 } as const
 
 export const ADMIN_LEVEL_NAMES = {
-  [ADMIN_LEVELS.USER]: '普通用户',
-  [ADMIN_LEVELS.ADMIN]: '管理员',
-  [ADMIN_LEVELS.SUPER_ADMIN]: '超级管理员',
+  [ADMIN_LEVELS.USER]: 'Regular User',
+  [ADMIN_LEVELS.ADMIN]: 'Administrator',
+  [ADMIN_LEVELS.SUPER_ADMIN]: 'Super Administrator',
 } as const
 
-// ============== 认证错误消息 ==============
+// ============== Authentication error messages ==============
 
 export const AUTH_ERRORS = {
-  UNAUTHORIZED: '未授权访问',
-  FORBIDDEN: '权限不足',
-  USER_NOT_FOUND: '用户不存在',
-  INVALID_CREDENTIALS: '用户名或密码错误',
-  ACCOUNT_DISABLED: '账户已被禁用',
-  SESSION_EXPIRED: '会话已过期',
-  SYNC_FAILED: '用户同步失败',
-  UPDATE_FAILED: '更新失败',
+  UNAUTHORIZED: 'Unauthorized access',
+  FORBIDDEN: 'Insufficient permissions',
+  USER_NOT_FOUND: 'User not found',
+  INVALID_CREDENTIALS: 'Invalid username or password',
+  ACCOUNT_DISABLED: 'Account has been disabled',
+  SESSION_EXPIRED: 'Session has expired',
+  SYNC_FAILED: 'User sync failed',
+  UPDATE_FAILED: 'Update failed',
 } as const
 
-// ============== 会话配置 ==============
+// ============== Session configuration ==============
 
 export const SESSION_CONFIG = {
-  MAX_AGE: 30 * 24 * 60 * 60, // 30天 (秒)
-  REFRESH_THRESHOLD: 24 * 60 * 60, // 24小时内刷新 (秒)
-  CLEANUP_INTERVAL: 60 * 60, // 1小时清理一次 (秒)
+  MAX_AGE: 30 * 24 * 60 * 60, // 30 days (seconds)
+  REFRESH_THRESHOLD: 24 * 60 * 60, // Refresh within 24 hours (seconds)
+  CLEANUP_INTERVAL: 60 * 60, // Clean up every hour (seconds)
 } as const
 
-// ============== 用户状态 ==============
+// ============== User status ==============
 
 export const USER_STATUS = {
   ACTIVE: 'active',
@@ -79,21 +79,21 @@ export const USER_STATUS = {
   PENDING: 'pending',
 } as const
 
-// ============== 支持的语言和货币 ==============
+// ============== Supported languages and currencies ==============
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', name: 'English', nativeName: 'English' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文' },
+  { code: 'de', name: 'German', nativeName: 'Deutsch' },
 ] as const
 
 export const SUPPORTED_CURRENCIES = [
   { code: 'USD', name: 'US Dollar', symbol: '$' },
-  { code: 'CNY', name: 'Chinese Yuan', symbol: '¥' },
+  { code: 'EUR', name: 'Euro', symbol: '€' },
 ] as const
 
-// ============== 主题选项 ==============
+// ============== Theme options ==============
 
 export const THEME_OPTIONS = [
-  { value: 'light', label: '浅色主题' },
-  { value: 'dark', label: '深色主题' },
+  { value: 'light', label: 'Light Theme' },
+  { value: 'dark', label: 'Dark Theme' },
 ] as const

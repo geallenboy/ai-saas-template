@@ -14,7 +14,7 @@ import {
 import { users } from './users'
 
 // ===============================
-// 会员计划表 (支持月付和年付)
+// Membership Plan (supports monthly and annual payment)
 // ===============================
 
 export const membershipPlans = pgTable(
@@ -22,47 +22,47 @@ export const membershipPlans = pgTable(
   {
     id: uuid('id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 100 }).notNull(),
-    nameZh: varchar('name_zh', { length: 100 }),
+    nameDe: varchar('name_de', { length: 100 }),
     description: text('description'),
-    descriptionZh: text('description_zh'),
+    descriptionDe: text('description_de'),
 
-    // 月付价格
+    // monthly payment price
     priceUSDMonthly: decimal('price_usd_monthly', {
       precision: 10,
       scale: 2,
     }).notNull(),
-    priceCNYMonthly: decimal('price_cny_monthly', { precision: 10, scale: 2 }),
+    priceEURMonthly: decimal('price_eur_monthly', { precision: 10, scale: 2 }),
 
-    // 年付价格
+    // yearly payment price
     priceUSDYearly: decimal('price_usd_yearly', { precision: 10, scale: 2 }),
-    priceCNYYearly: decimal('price_cny_yearly', { precision: 10, scale: 2 }),
+    priceEURYearly: decimal('price_eur_yearly', { precision: 10, scale: 2 }),
 
-    // 年付折扣
-    yearlyDiscountPercent: integer('yearly_discount_percent').default(0), // 年付折扣百分比
+    // yearly discount
+    yearlyDiscountPercent: integer('yearly_discount_percent').default(0), // annual payment discount percentage
 
-    // Stripe 价格ID
+    // Stripe price ID
     stripePriceIdUSDMonthly: varchar('stripe_price_id_usd_monthly', {
       length: 255,
     }),
-    stripePriceIdCNYMonthly: varchar('stripe_price_id_cny_monthly', {
+    stripePriceIdEURMonthly: varchar('stripe_price_id_eur_monthly', {
       length: 255,
     }),
     stripePriceIdUSDYearly: varchar('stripe_price_id_usd_yearly', {
       length: 255,
     }),
-    stripePriceIdCNYYearly: varchar('stripe_price_id_cny_yearly', {
+    stripePriceIdEURYearly: varchar('stripe_price_id_eur_yearly', {
       length: 255,
     }),
 
-    // 功能配额
+    // Feature quota
     features: jsonb('features').$type<string[]>().notNull().default([]),
-    featuresZh: jsonb('features_zh').$type<string[]>().default([]),
-    maxUseCases: integer('max_use_cases').default(-1), // -1 表示无限制
+    featuresDe: jsonb('features_de').$type<string[]>().default([]),
+    maxUseCases: integer('max_use_cases').default(-1), // -1 means unlimited
     maxTutorials: integer('max_tutorials').default(-1),
     maxBlogs: integer('max_blogs').default(-1),
-    maxApiCalls: integer('max_api_calls').default(-1), // API 调用限制
+    maxApiCalls: integer('max_api_calls').default(-1), // API call limit
 
-    // 高级功能权限
+    // Advanced feature permissions
     permissions: jsonb('permissions')
       .$type<{
         apiAccess: boolean
@@ -81,14 +81,14 @@ export const membershipPlans = pgTable(
         advancedAnalytics: false,
       }),
 
-    // 会员期限
+    // Membership duration
     monthlyDurationDays: integer('monthly_duration_days').default(30),
     yearlyDurationDays: integer('yearly_duration_days').default(365),
 
-    // 显示控制
+    // Display control
     isActive: boolean('is_active').default(true),
     isPopular: boolean('is_popular').default(false),
-    isFeatured: boolean('is_featured').default(false), // 特色推荐
+    isFeatured: boolean('is_featured').default(false), // Featured recommendation
     sortOrder: integer('sort_order').default(0),
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -103,7 +103,7 @@ export const membershipPlans = pgTable(
 )
 
 // ===============================
-// 用户会员权限表
+// User Memberships Table
 // ===============================
 
 export const userMemberships = pgTable(
@@ -117,48 +117,48 @@ export const userMemberships = pgTable(
       .notNull()
       .references(() => membershipPlans.id),
 
-    // 权限核心字段
+    // Permission core fields
     startDate: timestamp('start_date').notNull(),
     endDate: timestamp('end_date').notNull(),
     status: varchar('status', { length: 50 }).notNull().default('active'), // active, expired, cancelled, paused
 
-    // 期限信息
+    // Duration information
     durationType: varchar('duration_type', { length: 20 })
       .notNull()
       .default('monthly'), // monthly, yearly
     durationDays: integer('duration_days').notNull().default(30),
 
-    // 支付信息
+    // Payment information
     purchaseAmount: decimal('purchase_amount', {
       precision: 10,
       scale: 2,
     }).notNull(),
     currency: varchar('currency', { length: 3 }).notNull(),
-    originalPrice: decimal('original_price', { precision: 10, scale: 2 }), // 原价
+    originalPrice: decimal('original_price', { precision: 10, scale: 2 }), // Original price
     discountAmount: decimal('discount_amount', {
       precision: 10,
       scale: 2,
-    }).default('0'), // 折扣金额
+    }).default('0'), // Discount amount
 
-    // Stripe 信息
+    // Stripe information
     stripePaymentIntentId: varchar('stripe_payment_intent_id', { length: 255 }),
     stripeCustomerId: varchar('stripe_customer_id', { length: 255 }),
-    stripeSubscriptionId: varchar('stripe_subscription_id', { length: 255 }), // 如果是订阅
+    stripeSubscriptionId: varchar('stripe_subscription_id', { length: 255 }), // If it's a subscription
 
-    // 续费信息
+    // Renewal information
     autoRenew: boolean('auto_renew').default(false),
     nextRenewalDate: timestamp('next_renewal_date'),
     renewalAttempts: integer('renewal_attempts').default(0),
 
-    // 元数据
+    // Metadata
     paymentMethod: varchar('payment_method', { length: 50 }),
     locale: varchar('locale', { length: 10 }),
     source: varchar('source', { length: 50 }), // web, mobile, admin
 
-    // 取消信息
+    // Cancellation information
     cancelledAt: timestamp('cancelled_at'),
     cancelReason: text('cancel_reason'),
-    cancelledBy: varchar('cancelled_by', { length: 255 }), // user_id 或 admin_id
+    cancelledBy: varchar('cancelled_by', { length: 255 }), // user_id or admin_id
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -175,7 +175,7 @@ export const userMemberships = pgTable(
 )
 
 // ===============================
-// 支付记录表
+// Payment Records Table
 // ===============================
 
 export const paymentRecords = pgTable(
@@ -187,44 +187,44 @@ export const paymentRecords = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     membershipId: uuid('membership_id').references(() => userMemberships.id),
 
-    // Stripe 支付信息
+    // Stripe payment information
     stripePaymentIntentId: varchar('stripe_payment_intent_id', { length: 255 }),
     stripeCheckoutSessionId: varchar('stripe_checkout_session_id', {
       length: 255,
     }),
     stripeInvoiceId: varchar('stripe_invoice_id', { length: 255 }),
 
-    // 金额信息
+    // Amount information
     amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
     currency: varchar('currency', { length: 3 }).notNull(),
     tax: decimal('tax', { precision: 10, scale: 2 }).default('0'),
-    fees: decimal('fees', { precision: 10, scale: 2 }).default('0'), // 手续费
-    netAmount: decimal('net_amount', { precision: 10, scale: 2 }), // 实收金额
+    fees: decimal('fees', { precision: 10, scale: 2 }).default('0'), // Handling fees
+    netAmount: decimal('net_amount', { precision: 10, scale: 2 }), // Actual amount received
 
-    // 支付状态
+    // Payment status
     status: varchar('status', { length: 50 }).notNull(), // pending, succeeded, failed, refunded, cancelled
     paymentMethod: varchar('payment_method', { length: 50 }),
 
-    // 订单信息
+    // Order information
     planName: varchar('plan_name', { length: 100 }).notNull(),
     durationType: varchar('duration_type', { length: 20 }).notNull(),
     membershipDurationDays: integer('membership_duration_days').notNull(),
 
-    // 优惠信息
+    // Discount information
     couponCode: varchar('coupon_code', { length: 50 }),
     discountAmount: decimal('discount_amount', {
       precision: 10,
       scale: 2,
     }).default('0'),
 
-    // 退款信息
+    // Refund information
     refundAmount: decimal('refund_amount', { precision: 10, scale: 2 }).default(
       '0'
     ),
     refundedAt: timestamp('refunded_at'),
     refundReason: text('refund_reason'),
 
-    // 时间信息
+    // Time information
     paidAt: timestamp('paid_at'),
     failedAt: timestamp('failed_at'),
 
@@ -246,7 +246,7 @@ export const paymentRecords = pgTable(
 )
 
 // ===============================
-// 用户使用限额记录表
+// User Usage Limits Table
 // ===============================
 
 export const userUsageLimits = pgTable(
@@ -259,21 +259,21 @@ export const userUsageLimits = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     membershipId: uuid('membership_id').references(() => userMemberships.id),
 
-    // 使用统计
+    // Usage statistics
     usedUseCases: integer('used_use_cases').default(0),
     usedTutorials: integer('used_tutorials').default(0),
     usedBlogs: integer('used_blogs').default(0),
     usedApiCalls: integer('used_api_calls').default(0),
 
-    // 月度统计
+    // Monthly statistics
     monthlyUseCases: integer('monthly_use_cases').default(0),
     monthlyTutorials: integer('monthly_tutorials').default(0),
     monthlyBlogs: integer('monthly_blogs').default(0),
     monthlyApiCalls: integer('monthly_api_calls').default(0),
 
-    // 重置信息
+    // Renewal information
     lastCheckedAt: timestamp('last_checked_at').defaultNow(),
-    resetDate: timestamp('reset_date'), // 配额重置日期
+    resetDate: timestamp('reset_date'), // Quota reset date
     currentPeriodStart: timestamp('current_period_start'),
     currentPeriodEnd: timestamp('current_period_end'),
 
@@ -290,7 +290,7 @@ export const userUsageLimits = pgTable(
 )
 
 // ===============================
-// 优惠券表
+// Coupons Table
 // ===============================
 
 export const coupons = pgTable(
@@ -299,26 +299,26 @@ export const coupons = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     code: varchar('code', { length: 50 }).notNull().unique(),
     name: varchar('name', { length: 100 }).notNull(),
-    nameZh: varchar('name_zh', { length: 100 }),
+    nameDe: varchar('name_de', { length: 100 }),
     description: text('description'),
 
-    // 折扣信息
+    // Discount information
     discountType: varchar('discount_type', { length: 20 }).notNull(), // percent, fixed
     discountValue: decimal('discount_value', {
       precision: 10,
       scale: 2,
     }).notNull(),
 
-    // 适用范围
-    applicablePlans: jsonb('applicable_plans').$type<string[]>(), // 适用计划ID
+    // Applicable plans
+    applicablePlans: jsonb('applicable_plans').$type<string[]>(), // Applicable plan IDs
     minAmount: decimal('min_amount', { precision: 10, scale: 2 }),
 
-    // 使用限制
+    // Usage limits
     maxUses: integer('max_uses'),
     usedCount: integer('used_count').default(0),
     maxUsesPerUser: integer('max_uses_per_user').default(1),
 
-    // 有效期
+    // Validity period
     startsAt: timestamp('starts_at'),
     expiresAt: timestamp('expires_at'),
 
@@ -335,7 +335,7 @@ export const coupons = pgTable(
 )
 
 // ===============================
-// 类型导出
+// Type export
 // ===============================
 
 export type MembershipPlan = typeof membershipPlans.$inferSelect
@@ -354,7 +354,7 @@ export type Coupon = typeof coupons.$inferSelect
 export type NewCoupon = typeof coupons.$inferInsert
 
 // ===============================
-// 枚举定义
+// Enum definitions
 // ===============================
 
 export enum MembershipStatus {
@@ -389,7 +389,7 @@ export enum PaymentSource {
 }
 
 // ===============================
-// 关系定义
+// Relations definitions
 // ===============================
 
 export const membershipPlansRelations = relations(

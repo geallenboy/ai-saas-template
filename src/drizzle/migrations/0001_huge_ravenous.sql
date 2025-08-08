@@ -32,12 +32,12 @@ CREATE TABLE "prompt_templates" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" varchar(255),
 	"name" varchar(200) NOT NULL,
-	"name_zh" varchar(200),
+	"name_de" varchar(200),
 	"description" text,
-	"description_zh" text,
+	"description_de" text,
 	"category" varchar(50) NOT NULL,
 	"prompt" text NOT NULL,
-	"prompt_zh" text,
+	"prompt_de" text,
 	"variables" jsonb DEFAULT '[]'::jsonb,
 	"is_public" boolean DEFAULT false,
 	"is_system" boolean DEFAULT false,
@@ -69,7 +69,7 @@ CREATE TABLE "coupons" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"code" varchar(50) NOT NULL,
 	"name" varchar(100) NOT NULL,
-	"name_zh" varchar(100),
+	"name_de" varchar(100),
 	"description" text,
 	"discount_type" varchar(20) NOT NULL,
 	"discount_value" numeric(10, 2) NOT NULL,
@@ -91,9 +91,9 @@ CREATE TABLE "notifications" (
 	"user_id" varchar(255) NOT NULL,
 	"type" varchar(50) NOT NULL,
 	"title" varchar(200) NOT NULL,
-	"title_zh" varchar(200),
+	"title_de" varchar(200),
 	"message" text NOT NULL,
-	"message_zh" text,
+	"message_de" text,
 	"is_read" boolean DEFAULT false,
 	"read_at" timestamp,
 	"data" jsonb,
@@ -127,8 +127,8 @@ DROP INDEX "users_last_login_idx";--> statement-breakpoint
 DROP INDEX "users_phone_idx";--> statement-breakpoint
 ALTER TABLE "membership_plans" ALTER COLUMN "features" SET DATA TYPE jsonb;--> statement-breakpoint
 ALTER TABLE "membership_plans" ALTER COLUMN "features" SET DEFAULT '[]'::jsonb;--> statement-breakpoint
-ALTER TABLE "membership_plans" ALTER COLUMN "features_zh" SET DATA TYPE jsonb;--> statement-breakpoint
-ALTER TABLE "membership_plans" ALTER COLUMN "features_zh" SET DEFAULT '[]'::jsonb;--> statement-breakpoint
+ALTER TABLE "membership_plans" ALTER COLUMN "features_de" SET DATA TYPE jsonb;--> statement-breakpoint
+ALTER TABLE "membership_plans" ALTER COLUMN "features_de" SET DEFAULT '[]'::jsonb;--> statement-breakpoint
 ALTER TABLE "membership_plans" ALTER COLUMN "created_at" SET NOT NULL;--> statement-breakpoint
 ALTER TABLE "membership_plans" ALTER COLUMN "updated_at" SET NOT NULL;--> statement-breakpoint
 ALTER TABLE "payment_records" ALTER COLUMN "metadata" SET DATA TYPE jsonb;--> statement-breakpoint

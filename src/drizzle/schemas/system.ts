@@ -12,7 +12,7 @@ import {
 import { users } from './users'
 
 // ===============================
-// API 密钥表
+// API key table
 // ===============================
 
 export const apiKeys = pgTable(
@@ -46,7 +46,7 @@ export const apiKeys = pgTable(
 )
 
 // ===============================
-// 通知表
+// Notification table
 // ===============================
 
 export const notifications = pgTable(
@@ -59,9 +59,9 @@ export const notifications = pgTable(
 
     type: varchar('type', { length: 50 }).notNull(),
     title: varchar('title', { length: 200 }).notNull(),
-    titleZh: varchar('title_zh', { length: 200 }),
+    titleDe: varchar('title_de', { length: 200 }),
     message: text('message').notNull(),
-    messageZh: text('message_zh'),
+    messageDe: text('message_de'),
 
     isRead: boolean('is_read').default(false),
     readAt: timestamp('read_at'),
@@ -81,7 +81,7 @@ export const notifications = pgTable(
 )
 
 // ===============================
-// 系统配置表
+// System configuration table
 // ===============================
 
 export const systemConfigs = pgTable(
@@ -110,7 +110,7 @@ export const systemConfigs = pgTable(
 )
 
 // ===============================
-// 类型导出
+// Type export
 // ===============================
 
 export type ApiKey = typeof apiKeys.$inferSelect
@@ -123,7 +123,7 @@ export type SystemConfig = typeof systemConfigs.$inferSelect
 export type NewSystemConfig = typeof systemConfigs.$inferInsert
 
 // ===============================
-// 枚举定义
+// Enum definition
 // ===============================
 
 export enum ApiScope {

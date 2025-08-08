@@ -13,7 +13,7 @@ import {
 import { users } from './users'
 
 // ===============================
-// AI 对话表
+// AI conversation table
 // ===============================
 
 export const conversations = pgTable(
@@ -28,12 +28,12 @@ export const conversations = pgTable(
     model: varchar('model', { length: 50 }).notNull(),
     type: varchar('type', { length: 50 }).default('chat'), // chat, use_case, tutorial, blog
 
-    // 统计
+    // statistics
     messageCount: integer('message_count').default(0),
     totalTokens: integer('total_tokens').default(0),
     totalCost: decimal('total_cost', { precision: 10, scale: 6 }).default('0'),
 
-    // 状态
+    // status
     isArchived: boolean('is_archived').default(false),
     isShared: boolean('is_shared').default(false),
     lastMessageAt: timestamp('last_message_at'),
@@ -52,7 +52,7 @@ export const conversations = pgTable(
 )
 
 // ===============================
-// AI 消息表
+// AI message table
 // ===============================
 
 export const messages = pgTable(
@@ -66,14 +66,14 @@ export const messages = pgTable(
     role: varchar('role', { length: 20 }).notNull(), // user, assistant, system
     content: text('content').notNull(),
 
-    // AI 元数据
+    // AI metadata
     tokens: integer('tokens').default(0),
     cost: decimal('cost', { precision: 10, scale: 6 }).default('0'),
     model: varchar('model', { length: 50 }),
-    latency: integer('latency'), // 响应延迟(ms)
+    latency: integer('latency'), // response delay(ms)
 
-    // 评价
-    rating: integer('rating'), // 1-5星评分
+    // evaluate
+    rating: integer('rating'), // 1-5 star rating
     feedback: text('feedback'),
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -88,7 +88,7 @@ export const messages = pgTable(
 )
 
 // ===============================
-// 提示词模板表
+// Prompt template table
 // ===============================
 
 export const promptTemplates = pgTable(
@@ -100,15 +100,15 @@ export const promptTemplates = pgTable(
     }),
 
     name: varchar('name', { length: 200 }).notNull(),
-    nameZh: varchar('name_zh', { length: 200 }),
+    nameDe: varchar('name_de', { length: 200 }),
     description: text('description'),
-    descriptionZh: text('description_zh'),
+    descriptionDe: text('description_de'),
     category: varchar('category', { length: 50 }).notNull(),
 
     prompt: text('prompt').notNull(),
-    promptZh: text('prompt_zh'),
+    promptDe: text('prompt_de'),
 
-    // 变量定义
+    // variable definition
     variables: jsonb('variables')
       .$type<
         Array<{
@@ -122,12 +122,12 @@ export const promptTemplates = pgTable(
       >()
       .default([]),
 
-    // 访问控制
+    // access control
     isPublic: boolean('is_public').default(false),
     isSystem: boolean('is_system').default(false),
     requiresMembership: boolean('requires_membership').default(false),
 
-    // 统计
+    // statistics
     useCount: integer('use_count').default(0),
     rating: decimal('rating', { precision: 3, scale: 2 }).default('0'),
 
@@ -145,7 +145,7 @@ export const promptTemplates = pgTable(
 )
 
 // ===============================
-// 类型导出
+// Type export
 // ===============================
 
 export type Conversation = typeof conversations.$inferSelect
@@ -158,7 +158,7 @@ export type PromptTemplate = typeof promptTemplates.$inferSelect
 export type NewPromptTemplate = typeof promptTemplates.$inferInsert
 
 // ===============================
-// 枚举定义
+// Enum definition
 // ===============================
 
 export enum ConversationType {

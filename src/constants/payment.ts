@@ -1,5 +1,5 @@
 /**
- * 支付模块常量配置
+ * Payment module constant configuration
  */
 
 import type {
@@ -9,175 +9,166 @@ import type {
   PlanConfiguration,
 } from '@/types/payment'
 
-// ============== 计费周期配置 ==============
+// ============== Billing cycle configuration ==============
 
 export const BILLING_CYCLES = [
-  { value: 'monthly', label: '月付', labelZh: '月付' },
-  { value: 'yearly', label: '年付', labelZh: '年付' },
+  { value: 'monthly', label: 'Monthly', labelDe: 'Monatlich' },
+  { value: 'yearly', label: 'Yearly', labelDe: 'Jährlich' },
 ] as const
 
 export const BILLING_CYCLE_CONFIG = {
   monthly: {
-    label: '月付',
-    labelZh: '月付',
+    label: 'monthly',
+    labelDe: 'Monatlich',
     discount: 0,
-    description: '按月计费',
+    description: 'Billed monthly',
   },
   yearly: {
-    label: '年付',
-    labelZh: '年付',
-    discount: 0.16, // 16% 折扣 (相当于2个月免费)
-    description: '按年计费，节省16%',
+    label: 'Annual payment',
+    labelDe: 'Jährliche Zahlung',
+    discount: 0.16, // 16% discount (equivalent to 2 months free)
+    description: 'Billed annually, save 16%',
   },
 } as const
 
-// ============== 货币配置 ==============
+// ============== Currency allocation ==============
 
 export const CURRENCIES: Array<{
   code: Currency
   name: string
   symbol: string
-  nameZh: string
+  nameDe: string
 }> = [
-  { code: 'USD', name: 'US Dollar', symbol: '$', nameZh: '美元' },
-  { code: 'CNY', name: 'Chinese Yuan', symbol: '¥', nameZh: '人民币' },
+  { code: 'USD', name: 'US Dollar', symbol: '$', nameDe: 'US-Dollar' },
+  { code: 'EUR', name: 'Euro', symbol: '€', nameDe: 'Euro' },
 ]
 
 export const CURRENCY_CONFIG = {
   USD: {
     symbol: '$',
     name: 'US Dollar',
-    nameZh: '美元',
-    position: 'before', // 符号位置
+    nameDe: 'US-Dollar',
+    position: 'before', // Symbol position
     locale: 'en-US',
   },
-  CNY: {
-    symbol: '¥',
-    name: 'Chinese Yuan',
-    nameZh: '人民币',
+  EUR: {
+    symbol: '€',
+    name: 'Euro',
+    nameDe: 'Euro',
     position: 'before',
-    locale: 'zh-CN',
+    locale: 'de-DE',
   },
 } as const
 
-// ============== 支付状态配置 ==============
+// ============== Payment status configuration ==============
 
 export const PAYMENT_STATUS: Record<
   PaymentStatus,
-  { label: string; labelZh: string; color: string }
+  { label: string; labelDe: string; color: string }
 > = {
   pending: {
     label: 'Pending',
-    labelZh: '待处理',
+    labelDe: 'Ausstehend',
     color: 'bg-yellow-100 text-yellow-800',
   },
   processing: {
     label: 'Processing',
-    labelZh: '处理中',
+    labelDe: 'Wird bearbeitet',
     color: 'bg-blue-100 text-blue-800',
   },
   completed: {
     label: 'Completed',
-    labelZh: '已完成',
+    labelDe: 'Abgeschlossen',
     color: 'bg-green-100 text-green-800',
   },
   failed: {
     label: 'Failed',
-    labelZh: '失败',
+    labelDe: 'Fehlgeschlagen',
     color: 'bg-red-100 text-red-800',
   },
   cancelled: {
     label: 'Cancelled',
-    labelZh: '已取消',
+    labelDe: 'Abgebrochen',
     color: 'bg-gray-100 text-gray-800',
   },
   refunded: {
     label: 'Refunded',
-    labelZh: '已退款',
+    labelDe: 'Erstattet',
     color: 'bg-purple-100 text-purple-800',
   },
 }
 
-// ============== 会员状态配置 ==============
+// ============== Membership status configuration ==============
 
 export const MEMBERSHIP_STATUS: Record<
   MembershipStatus,
-  { label: string; labelZh: string; color: string }
+  { label: string; labelDe: string; color: string }
 > = {
   active: {
     label: 'Active',
-    labelZh: '有效',
+    labelDe: 'Aktiv',
     color: 'bg-green-100 text-green-800',
   },
   expired: {
     label: 'Expired',
-    labelZh: '已过期',
+    labelDe: 'Abgelaufen',
     color: 'bg-red-100 text-red-800',
   },
   cancelled: {
     label: 'Cancelled',
-    labelZh: '已取消',
+    labelDe: 'Abgebrochen',
     color: 'bg-gray-100 text-gray-800',
   },
   paused: {
     label: 'Paused',
-    labelZh: '已暂停',
+    labelDe: 'Pausiert',
     color: 'bg-yellow-100 text-yellow-800',
   },
 }
 
-// ============== 优惠券类型 ==============
+// ============== Coupon type ==============
 
 export const COUPON_TYPES = {
   percentage: {
     label: 'Percentage',
-    labelZh: '百分比',
+    labelDe: 'Prozentsatz',
     symbol: '%',
     description: 'Percentage discount',
-    descriptionZh: '百分比折扣',
+    descriptionDe: 'Prozentsatzrabatt',
   },
   fixed: {
     label: 'Fixed Amount',
-    labelZh: '固定金额',
+    labelDe: 'Fester Betrag',
     symbol: '$',
     description: 'Fixed amount discount',
-    descriptionZh: '固定金额折扣',
+    descriptionDe: 'Fester Betrag Rabatt',
   },
 } as const
 
-// ============== 支付方式配置 ==============
+// ============== Payment method configuration ==============
 
 export const PAYMENT_METHODS = [
   {
     id: 'stripe',
     name: 'Credit Card',
-    nameZh: '信用卡',
+    nameDe: 'Kreditkarte',
     icon: '💳',
     description: 'Visa, Mastercard, American Express',
-    descriptionZh: 'Visa、万事达卡、美国运通',
+    descriptionDe: 'Visa, Mastercard, American Express',
     enabled: true,
   },
   {
     id: 'paypal',
     name: 'PayPal',
-    nameZh: 'PayPal',
+    nameDe: 'PayPal',
     icon: '🅿️',
     description: 'Pay with your PayPal account',
-    descriptionZh: '使用您的PayPal账户支付',
-    enabled: false,
-  },
-  {
-    id: 'alipay',
-    name: 'Alipay',
-    nameZh: '支付宝',
-    icon: '🇨🇳',
-    description: 'Pay with Alipay',
-    descriptionZh: '使用支付宝支付',
+    descriptionDe: 'Mit Ihrem PayPal-Konto bezahlen',
     enabled: false,
   },
 ] as const
 
-// ============== 默认配置 ==============
+// ============== Default configuration ==============
 
 export const DEFAULT_PAGINATION = {
   page: 1,
@@ -205,14 +196,14 @@ export const DEFAULT_USAGE_LIMITS = {
     monthlyApiCalls: 10000,
   },
   enterprise: {
-    monthlyUseCases: -1, // 无限
+    monthlyUseCases: -1, // Unlimited
     monthlyTutorials: -1,
     monthlyBlogs: -1,
     monthlyApiCalls: -1,
   },
 } as const
 
-// ============== Stripe配置 ==============
+// ============== Stripe configuration ==============
 
 export const STRIPE_CONFIG = {
   webhookEvents: [
@@ -234,31 +225,31 @@ export const STRIPE_CONFIG = {
   },
 } as const
 
-// ============== 错误消息 ==============
+// ============== Payment error messages ==============
 
 export const PAYMENT_ERRORS = {
-  PLAN_NOT_FOUND: '会员计划不存在',
-  INSUFFICIENT_PERMISSIONS: '权限不足',
-  INVALID_COUPON: '优惠券无效',
-  PAYMENT_FAILED: '支付失败',
-  SUBSCRIPTION_CREATION_FAILED: '订阅创建失败',
-  WEBHOOK_VERIFICATION_FAILED: 'Webhook验证失败',
-  USAGE_LIMIT_EXCEEDED: '使用次数已达上限',
-  MEMBERSHIP_EXPIRED: '会员已过期',
-  INVALID_PAYMENT_METHOD: '支付方式无效',
+  PLAN_NOT_FOUND: 'Membership plan not found',
+  INSUFFICIENT_PERMISSIONS: 'Insufficient permissions',
+  INVALID_COUPON: 'Invalid coupon',
+  PAYMENT_FAILED: 'Payment failed',
+  SUBSCRIPTION_CREATION_FAILED: 'Subscription creation failed',
+  WEBHOOK_VERIFICATION_FAILED: 'Webhook verification failed',
+  USAGE_LIMIT_EXCEEDED: 'Usage limit exceeded',
+  MEMBERSHIP_EXPIRED: 'Membership expired',
+  INVALID_PAYMENT_METHOD: 'Invalid payment method',
 } as const
 
-// ============== 成功消息 ==============
+// ============== Success messages ==============
 
 export const PAYMENT_SUCCESS = {
-  PAYMENT_COMPLETED: '支付完成',
-  SUBSCRIPTION_CREATED: '订阅创建成功',
-  COUPON_APPLIED: '优惠券应用成功',
-  USAGE_INCREMENTED: '使用次数更新成功',
-  MEMBERSHIP_UPDATED: '会员状态更新成功',
+  PAYMENT_COMPLETED: 'Payment completed',
+  SUBSCRIPTION_CREATED: 'Subscription created successfully',
+  COUPON_APPLIED: 'Coupon applied successfully',
+  USAGE_INCREMENTED: 'Usage incremented successfully',
+  MEMBERSHIP_UPDATED: 'Membership updated successfully',
 } as const
 
-// ============== 工具函数 ==============
+// ============== Utility function ==============
 
 export function formatPrice(amount: number, currency: Currency): string {
   const config = CURRENCY_CONFIG[currency]

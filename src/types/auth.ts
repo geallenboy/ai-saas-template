@@ -15,8 +15,8 @@ export interface AuthState {
 
 export interface UserPreferences {
   theme: 'light' | 'dark'
-  language: 'en' | 'zh'
-  currency: 'USD' | 'CNY'
+  language: 'en' | 'de'
+  currency: 'USD' | 'EUR'
   timezone: string
 }
 

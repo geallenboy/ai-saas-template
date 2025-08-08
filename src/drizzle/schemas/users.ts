@@ -10,37 +10,37 @@ import {
 } from 'drizzle-orm/pg-core'
 
 // ===============================
-// 用户表 (Clerk 集成 + 管理员权限)
+// User Table (Clerk Integration + Admin Permissions)
 // ===============================
 
 export const users = pgTable(
   'users',
   {
-    // Clerk 同步字段
+    // Clerk sync fields
     id: varchar('id', { length: 255 }).primaryKey(), // Clerk User ID
     email: varchar('email', { length: 255 }).notNull().unique(),
     fullName: varchar('full_name', { length: 255 }),
     avatarUrl: text('avatar_url'),
 
-    // 管理员权限
-    isAdmin: boolean('is_admin').default(false), // 管理员标识
-    adminLevel: integer('admin_level').default(0), // 管理员等级 (0=普通用户, 1=管理员, 2=超级管理员)
+    // Admin permissions
+    isAdmin: boolean('is_admin').default(false), // Admin flag
+    adminLevel: integer('admin_level').default(0), // Admin level (0=User, 1=Admin, 2=Super Admin)
 
-    // 业务字段
-    totalUseCases: integer('total_use_cases').default(0), // 总使用案例数
-    totalTutorials: integer('total_tutorials').default(0), // 总教程数
-    totalBlogs: integer('total_blogs').default(0), // 总博客数
+    // Business fields
+    totalUseCases: integer('total_use_cases').default(0), // Total use cases
+    totalTutorials: integer('total_tutorials').default(0), // Total tutorials
+    totalBlogs: integer('total_blogs').default(0), // Total blogs
 
-    // 状态
+    // Status
     isActive: boolean('is_active').default(true),
     lastLoginAt: timestamp('last_login_at'),
 
-    // 偏好设置
+    // Preferences
     preferences: jsonb('preferences')
       .$type<{
         theme: 'light' | 'dark'
-        language: 'en' | 'zh'
-        currency: 'USD' | 'CNY'
+        language: 'en' | 'de'
+        currency: 'USD' | 'EUR'
         timezone: string
       }>()
       .default({
@@ -50,9 +50,9 @@ export const users = pgTable(
         timezone: 'UTC',
       }),
 
-    // 地理信息
-    country: varchar('country', { length: 10 }), // 国家代码
-    locale: varchar('locale', { length: 10 }).default('en'), // 语言环境
+    // Geographical information
+    country: varchar('country', { length: 10 }), // Country code
+    locale: varchar('locale', { length: 10 }).default('en'), // Language locale
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -66,14 +66,14 @@ export const users = pgTable(
 )
 
 // ===============================
-// 类型导出
+// Type export
 // ===============================
 
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 
 // ===============================
-// 枚举定义
+// Enum definition
 // ===============================
 
 export enum AdminLevel {
@@ -89,10 +89,10 @@ export enum Theme {
 
 export enum Language {
   EN = 'en',
-  ZH = 'zh',
+  DE = 'de',
 }
 
 export enum Currency {
   USD = 'USD',
-  CNY = 'CNY',
+  EUR = 'EUR',
 }

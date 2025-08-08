@@ -1,12 +1,12 @@
 // ===============================
-// 全局类型定义
+// Global type definition
 // ===============================
 
-// 导入需要在本文件中使用的类型
+// Import the types you need to use in this file
 import type { UserMembership } from './payments'
 import type { AdminLevel } from './users'
 
-// 重新导出所有模块的类型，保持向后兼容
+// Re-export all module types to maintain backward compatibility
 export type {
   AdminLevel,
   Currency,
@@ -61,7 +61,7 @@ export type {
   SystemConfig,
 } from './system'
 
-// 额外的通用类型定义
+// Additional common type definitions
 export type {
   ApiResponse,
   DatabaseTransaction,
@@ -71,10 +71,10 @@ export type {
 } from './index'
 
 // ===============================
-// 业务逻辑相关类型
+// Business logic related types
 // ===============================
 
-// 用户权限级别映射
+// User permission level mapping
 export type UserPermissionLevel = {
   level: AdminLevel
   permissions: string[]
@@ -83,7 +83,7 @@ export type UserPermissionLevel = {
   canViewAnalytics: boolean
 }
 
-// 会员权限检查结果
+// Membership permission check result
 export type MembershipPermissionResult = {
   isValid: boolean
   isActive: boolean
@@ -98,7 +98,7 @@ export type MembershipPermissionResult = {
   }
 }
 
-// 支付处理结果
+// Payment processing result
 export type PaymentProcessResult = {
   success: boolean
   paymentIntentId?: string
@@ -107,7 +107,7 @@ export type PaymentProcessResult = {
   membership?: UserMembership
 }
 
-// AI对话上下文
+// AI conversation context
 export type ConversationContext = {
   conversationId: string
   userId: string
@@ -118,10 +118,10 @@ export type ConversationContext = {
   lastMessageAt?: Date
 }
 
-// 提示词变量值
+// Prompt variable values
 export type PromptVariableValues = Record<string, string | number | boolean>
 
-// 系统健康检查结果
+// System health check result
 export type SystemHealthCheck = {
   status: 'healthy' | 'degraded' | 'down'
   database: boolean
@@ -131,7 +131,7 @@ export type SystemHealthCheck = {
   lastChecked: Date
 }
 
-// 分析数据类型
+// Analytics data type
 export type AnalyticsData = {
   users: {
     total: number

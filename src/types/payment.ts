@@ -24,7 +24,7 @@ export type {
 
 export interface MembershipPlanQueryParams {
   isActive?: boolean
-  currency?: 'USD' | 'CNY'
+  currency?: 'USD' | 'EUR'
 }
 
 export interface UserMembershipQueryParams {
@@ -105,7 +105,7 @@ export interface CreateCheckoutSessionInput {
   priceId: string
   planName: string
   durationType: 'monthly' | 'yearly'
-  paymentMethod: 'card' | 'alipay'
+  paymentMethod: 'card'
   locale: string
   couponCode?: string
   successUrl?: string
@@ -162,7 +162,7 @@ export interface UsageIncrementResult {
 
 // ============== Payment method type ==============
 
-export type PaymentMethod = 'stripe' | 'paypal' | 'alipay' | 'wechat'
+export type PaymentMethod = 'stripe' | 'paypal'
 
 export type PaymentStatus =
   | 'pending'
@@ -176,7 +176,7 @@ export type MembershipStatus = 'active' | 'expired' | 'cancelled' | 'paused'
 
 export type DurationType = 'monthly' | 'yearly'
 
-export type Currency = 'USD' | 'CNY'
+export type Currency = 'USD' | 'EUR'
 
 export type UsageType = 'useCases' | 'tutorials' | 'blogs' | 'apiCalls'
 
@@ -192,17 +192,17 @@ export interface PlanFeature {
 export interface PlanConfiguration {
   id: string
   name: string
-  nameZh?: string
+  nameDe?: string
   description?: string
-  descriptionZh?: string
+  descriptionDe?: string
   features: PlanFeature[]
   monthlyPrice: {
     USD: number
-    CNY: number
+    EUR: number
   }
   yearlyPrice: {
     USD: number
-    CNY: number
+    EUR: number
   }
   isPopular?: boolean
   sortOrder: number
