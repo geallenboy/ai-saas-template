@@ -561,7 +561,19 @@
     "title": "Komponentenbibliothek",
     "description": "Entdecken Sie unsere sorgfältig gestaltete Sammlung von Komponenten, die alle optimiert und bereit für den direkten Einsatz in Ihren Projekten sind",
     "viewComponents": "Komponenten anzeigen",
-    "backToBlocks": "Zurück zur Komponentenbibliothek"
+    "backToBlocks": "Zurück zur Komponentenbibliothek",
+    "beautifulComponents": "Schöne Komponenten",
+    "searchPlaceholder": "Suche Komponenten...",
+    "search": "Suche",
+    "responsive": "100% Responsive",
+    "categoriesTitle": "Komponenten Kategorien",
+    "categoriesDescription": "Durchsuchen Sie unsere sorgfältig gestaltete Komponentenbibliothek nach Kategorien und finden Sie schnell, was Sie benötigen",
+    "popular": "Beliebt",
+    "components": "Komponenten",
+    "startUsing": "Beginnen Sie mit der Verwendung von Komponenten",
+    "startUsingDescription": "Alle Komponenten unterstützen TypeScript und sind vollständig responsiv. Kopieren Sie einfach den Code und verwenden Sie ihn.",
+    "viewDocumentation": "Dokumentation anzeigen",
+    "githubRepository": "GitHub Repository"
   },
   "pricingPage": {
     "title": "Wählen Sie Ihren Plan",
@@ -594,5 +606,20 @@
       "contactUs": "Support kontaktieren",
       "viewDocs": "Dokumentation anzeigen"
     }
+  },
+  "blocksCategoryPage": {
+    "backToComponents": "Zurück zu Komponenten",
+    "noComponents": "In dieser Kategorie sind noch keine Komponenten vorhanden. Bleiben Sie dran!",
+    "browseOtherCategories": "Durchsuchen Sie andere Kategorien",
+    "components": "Komponenten",
+    "featured": "Ausgewählt",
+    "searchPlaceholder": "Suche Komponenten...",
+    "downloadAll": "Alle herunterladen",
+    "copyCode": "Code kopieren",
+    "livePreview": "Live-Vorschau",
+    "needMore": "Brauchen Sie mehr Komponenten?",
+    "exploreMore": "Durchsuchen Sie andere Kategorien, um weitere schöne Komponenten zu entdecken",
+    "browseAllCategories": "Alle Kategorien durchsuchen",
+    "viewDocumentation": "Dokumentation anzeigen"
   }
 }

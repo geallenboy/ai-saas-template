@@ -576,7 +576,19 @@
     "title": "Component Library",
     "description": "Explore our carefully designed component collection, each optimized for direct use in your projects",
     "viewComponents": "View components",
-    "backToBlocks": "Back to Blocks"
+    "backToBlocks": "Back to Blocks",
+    "beautifulComponents": "Beautiful Components",
+    "searchPlaceholder": "Search components...",
+    "search": "Search",
+    "responsive": "100% Responsive",
+    "categoriesTitle": "Component Categories",
+    "categoriesDescription": "Browse our carefully designed component library by category and quickly find what you need",
+    "popular": "Popular",
+    "components": "components",
+    "startUsing": "Start Using Components",
+    "startUsingDescription": "All components support TypeScript and are fully responsive. Just copy the code and start using.",
+    "viewDocumentation": "View Documentation",
+    "githubRepository": "GitHub Repository"
   },
   "pricingPage": {
     "title": "Choose Your Plan",
@@ -609,5 +621,20 @@
       "contactUs": "Contact Support",
       "viewDocs": "View Documentation"
     }
+  },
+  "blocksCategoryPage": {
+    "backToComponents": "Back to Components",
+    "noComponents": "No components in this category yet. Stay tuned!",
+    "browseOtherCategories": "Browse Other Categories",
+    "components": "components",
+    "featured": "Featured",
+    "searchPlaceholder": "Search components...",
+    "downloadAll": "Download All",
+    "copyCode": "Copy Code",
+    "livePreview": "Live Preview",
+    "needMore": "Need More Components?",
+    "exploreMore": "Explore other categories to discover more beautiful components",
+    "browseAllCategories": "Browse All Categories",
+    "viewDocumentation": "View Documentation"
   }
 }

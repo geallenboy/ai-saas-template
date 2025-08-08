@@ -27,7 +27,7 @@ type Props = {
 
 export default async function BlocksPage({ params }: Props) {
   const { locale } = await params
-  const t = await getTranslations('blocks')
+  const t = await getTranslations({ locale, namespace: 'blocks' })
 
   // Count the total number of components
   const totalComponents = categories.reduce(
@@ -65,9 +65,7 @@ export default async function BlocksPage({ params }: Props) {
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 dark:bg-black/20 backdrop-blur-sm border border-white/20 dark:border-white/10 mb-8">
               <ComponentIcon className="w-4 h-4 mr-2 text-emerald-400" />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {locale === 'de'
-                  ? 'Schöne Komponenten'
-                  : 'Beautiful Components'}
+                {t('beautifulComponents')}
               </span>
             </div>
 
@@ -85,11 +83,7 @@ export default async function BlocksPage({ params }: Props) {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 max-w-2xl mx-auto">
               <div className="relative flex-1 w-full">
                 <Input
-                  placeholder={
-                    locale === 'de'
-                      ? 'Suche Komponenten...'
-                      : 'Search components...'
-                  }
+                  placeholder={t('searchPlaceholder')}
                   className="pl-12 pr-4 py-4 text-lg glass-card-improved w-full"
                 />
                 <SearchIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
@@ -98,7 +92,7 @@ export default async function BlocksPage({ params }: Props) {
                 size="lg"
                 className="btn-modern-primary px-8 py-4 w-full sm:w-auto"
               >
-                {locale === 'de' ? 'Suche' : 'Search'}
+                {t('search')}
               </Button>
             </div>
 
@@ -112,10 +106,7 @@ export default async function BlocksPage({ params }: Props) {
                   <CodeIcon className="w-8 h-8 p-1 rounded-full bg-gradient-to-r from-pink-400 to-red-500 text-white border-2 border-white dark:border-gray-900" />
                 </div>
                 <span>
-                  {totalComponents}{' '}
-                  {locale === 'de'
-                    ? 'Schöne Komponenten'
-                    : 'Beautiful Components'}
+                  {totalComponents} {t('beautifulComponents')}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -124,9 +115,7 @@ export default async function BlocksPage({ params }: Props) {
                     <Sparkles key={i} className="w-4 h-4 fill-current" />
                   ))}
                 </div>
-                <span>
-                  {locale === 'de' ? '100% Responsive' : '100% Responsive'}
-                </span>
+                <span>{t('responsive')}</span>
               </div>
             </div>
           </div>
@@ -139,14 +128,10 @@ export default async function BlocksPage({ params }: Props) {
           {/* Category Title */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              {locale === 'de'
-                ? 'Komponenten Kategorien'
-                : 'Component Categories'}
+              {t('categoriesTitle')}
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              {locale === 'de'
-                ? 'Durchsuchen Sie unsere sorgfältig gestaltete Komponentenbibliothek nach Kategorien und finden Sie schnell, was Sie benötigen'
-                : 'Browse our carefully designed component library by category and quickly find what you need'}
+              {t('categoriesDescription')}
             </p>
           </div>
 
@@ -181,7 +166,7 @@ export default async function BlocksPage({ params }: Props) {
                       <div className="absolute -top-2 -right-2 z-10">
                         <Badge className="bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs px-2 py-1">
                           <Sparkles className="w-3 h-3 mr-1" />
-                          {locale === 'de' ? 'Beliebt' : 'Popular'}
+                          {t('popular')}
                         </Badge>
                       </div>
                     )}
@@ -203,8 +188,7 @@ export default async function BlocksPage({ params }: Props) {
                         {category.description}
                       </p>
                       <Badge variant="secondary" className="text-xs">
-                        {category.count}{' '}
-                        {locale === 'de' ? 'Komponenten' : 'components'}
+                        {category.count} {t('components')}
                       </Badge>
                     </div>
 
@@ -236,22 +220,14 @@ export default async function BlocksPage({ params }: Props) {
             <div className="mx-auto max-w-2xl">
               <ComponentIcon className="mx-auto mb-6 h-12 w-12 text-blue-600" />
               <h3 className="mb-4 text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                {locale === 'de'
-                  ? 'Beginnen Sie mit der Verwendung von Komponenten'
-                  : 'Start Using Components'}
+                {t('startUsing')}
               </h3>
               <p className="mb-8 text-lg text-gray-600 dark:text-gray-300">
-                {locale === 'de'
-                  ? 'Alle Komponenten unterstützen TypeScript und sind vollständig responsiv. Kopieren Sie einfach den Code und verwenden Sie ihn.'
-                  : 'All components support TypeScript and are fully responsive. Just copy the code and start using.'}
+                {t('startUsingDescription')}
               </p>
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <Button size="lg" className="btn-modern-primary" asChild>
-                  <Link href={`/${locale}/docs`}>
-                    {locale === 'de'
-                      ? 'Dokumentation anzeigen'
-                      : 'View Documentation'}
-                  </Link>
+                  <Link href={`/${locale}/docs`}>{t('viewDocumentation')}</Link>
                 </Button>
                 <Button
                   size="lg"
@@ -260,9 +236,7 @@ export default async function BlocksPage({ params }: Props) {
                   asChild
                 >
                   <Link href="https://github.com" target="_blank">
-                    {locale === 'de'
-                      ? 'GitHub Repository'
-                      : 'GitHub Repository'}
+                    {t('githubRepository')}
                   </Link>
                 </Button>
               </div>
