@@ -4,14 +4,17 @@ import { AdminGuardClient } from '@/components/auth'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { UserListClient, UserStatsClient } from '@/components/user'
+import { useTranslations } from 'next-intl'
 import { Suspense } from 'react'
 
 function AdminUsersContent() {
+  const t = useTranslations('admin.users')
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">用户管理</h1>
-        <p className="text-muted-foreground">管理平台用户和权限</p>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
 
       <Suspense fallback={<UserStatsSkeleton />}>

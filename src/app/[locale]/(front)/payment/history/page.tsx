@@ -6,10 +6,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { formatPrice } from '@/constants/payment'
 import { trpc } from '@/lib/trpc/client'
 import { useUser } from '@clerk/nextjs'
+import { useTranslations } from 'next-intl'
 import { ArrowLeft, Calendar, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 
 function PaymentHistoryContent() {
+  const t = useTranslations('paymentHistory')
   const { user } = useUser()
 
   const {
@@ -30,7 +32,7 @@ function PaymentHistoryContent() {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">加载支付历史失败，请稍后重试。</p>
+        <p className="text-muted-foreground">{t('loadingError')}</p>
       </div>
     )
   }
@@ -45,24 +47,24 @@ function PaymentHistoryContent() {
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          返回仪表盘
+          {t('backToDashboard')}
         </Link>
-        <h1 className="text-3xl font-bold">支付历史</h1>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
       </div>
 
       {payments.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <CreditCard className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">暂无支付记录</h3>
+            <h3 className="text-lg font-medium mb-2">{t('noRecords')}</h3>
             <p className="text-muted-foreground mb-6">
-              您还没有任何支付记录。立即选择计划开始使用我们的服务！
+              {t('noRecordsDescription')}
             </p>
             <Link
               href="/pricing"
               className="inline-flex items-center justify-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
             >
-              查看定价计划
+              {t('viewPricingPlans')}
             </Link>
           </CardContent>
         </Card>
@@ -71,7 +73,7 @@ function PaymentHistoryContent() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="h-5 w-5" />
-              支付记录
+              {t('paymentRecords')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -87,12 +89,12 @@ function PaymentHistoryContent() {
                     </div>
                     <div>
                       <h3 className="font-medium">
-                        {payment.planName || '会员计划'}
+                        {payment.planName || t('membershipPlan')}
                       </h3>
                       <p className="text-sm text-muted-foreground flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {new Date(payment.createdAt).toLocaleDateString(
-                          'zh-CN',
+                          'en-US',
                           {
                             year: 'numeric',
                             month: 'long',
@@ -120,10 +122,10 @@ function PaymentHistoryContent() {
                         }`}
                       >
                         {payment.status === 'succeeded'
-                          ? '成功'
+                          ? t('status.succeeded')
                           : payment.status === 'pending'
-                            ? '处理中'
-                            : '失败'}
+                            ? t('status.pending')
+                            : t('status.failed')}
                       </span>
                     </div>
                   </div>
@@ -135,8 +137,10 @@ function PaymentHistoryContent() {
               paymentHistory.pagination.totalPages > 1 && (
                 <div className="mt-6 text-center">
                   <p className="text-sm text-muted-foreground">
-                    显示第 {paymentHistory.pagination.page} 页，共{' '}
-                    {paymentHistory.pagination.totalPages} 页
+                    {t('pagination', {
+                      page: paymentHistory.pagination.page,
+                      totalPages: paymentHistory.pagination.totalPages,
+                    })}
                   </p>
                 </div>
               )}

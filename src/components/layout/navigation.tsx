@@ -450,7 +450,7 @@ export default function Navigation() {
 
               <div className="flex items-center justify-between mt-4">
                 <span className="text-sm font-medium text-muted-foreground">
-                  Theme
+                  {localeT('theme')}
                 </span>
                 <div className="flex space-x-2">
                   <Button
@@ -460,7 +460,7 @@ export default function Navigation() {
                     className="transition-all duration-200"
                   >
                     <Sun className="h-4 w-4 mr-1" />
-                    <span className="text-xs">Light</span>
+                    <span className="text-xs">{localeT('light')}</span>
                   </Button>
                   <Button
                     variant={theme === 'dark' ? 'default' : 'outline'}
@@ -469,7 +469,7 @@ export default function Navigation() {
                     className="transition-all duration-200"
                   >
                     <Moon className="h-4 w-4 mr-1" />
-                    <span className="text-xs">Dark</span>
+                    <span className="text-xs">{localeT('dark')}</span>
                   </Button>
                   <Button
                     variant={theme === 'system' ? 'default' : 'outline'}
@@ -478,7 +478,7 @@ export default function Navigation() {
                     className="transition-all duration-200"
                   >
                     <Laptop className="h-4 w-4 mr-1" />
-                    <span className="text-xs">System</span>
+                    <span className="text-xs">{localeT('system')}</span>
                   </Button>
                 </div>
               </div>

@@ -11,31 +11,36 @@ import {
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useTranslations } from 'next-intl'
 import { Suspense } from 'react'
 
 function AdminSettingsContent() {
+  const t = useTranslations('admin.settings')
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">系统设置</h1>
-        <p className="text-muted-foreground">管理系统配置和参数</p>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="general">基础设置</TabsTrigger>
-          <TabsTrigger value="payment">支付配置</TabsTrigger>
-          <TabsTrigger value="ai">AI配置</TabsTrigger>
-          <TabsTrigger value="notification">通知设置</TabsTrigger>
-          <TabsTrigger value="security">安全配置</TabsTrigger>
-          <TabsTrigger value="feature">功能开关</TabsTrigger>
+          <TabsTrigger value="general">{t('tabs.general')}</TabsTrigger>
+          <TabsTrigger value="payment">{t('tabs.payment')}</TabsTrigger>
+          <TabsTrigger value="ai">{t('tabs.ai')}</TabsTrigger>
+          <TabsTrigger value="notification">
+            {t('tabs.notification')}
+          </TabsTrigger>
+          <TabsTrigger value="security">{t('tabs.security')}</TabsTrigger>
+          <TabsTrigger value="feature">{t('tabs.feature')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>基础配置</CardTitle>
-              <CardDescription>网站基本信息和通用设置</CardDescription>
+              <CardTitle>{t('general.title')}</CardTitle>
+              <CardDescription>{t('general.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<ConfigSkeleton />}>
@@ -48,8 +53,8 @@ function AdminSettingsContent() {
         <TabsContent value="payment" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>支付配置</CardTitle>
-              <CardDescription>Stripe支付相关配置和参数</CardDescription>
+              <CardTitle>{t('payment.title')}</CardTitle>
+              <CardDescription>{t('payment.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<ConfigSkeleton />}>
@@ -62,8 +67,8 @@ function AdminSettingsContent() {
         <TabsContent value="ai" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>AI配置</CardTitle>
-              <CardDescription>AI模型和API相关配置</CardDescription>
+              <CardTitle>{t('ai.title')}</CardTitle>
+              <CardDescription>{t('ai.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<ConfigSkeleton />}>
@@ -76,8 +81,8 @@ function AdminSettingsContent() {
         <TabsContent value="notification" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>通知设置</CardTitle>
-              <CardDescription>邮件、短信等通知相关配置</CardDescription>
+              <CardTitle>{t('notification.title')}</CardTitle>
+              <CardDescription>{t('notification.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<ConfigSkeleton />}>
@@ -90,8 +95,8 @@ function AdminSettingsContent() {
         <TabsContent value="security" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>安全配置</CardTitle>
-              <CardDescription>安全策略和访问控制配置</CardDescription>
+              <CardTitle>{t('security.title')}</CardTitle>
+              <CardDescription>{t('security.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<ConfigSkeleton />}>
@@ -104,8 +109,8 @@ function AdminSettingsContent() {
         <TabsContent value="feature" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>功能开关</CardTitle>
-              <CardDescription>各种功能模块的启用/禁用控制</CardDescription>
+              <CardTitle>{t('feature.title')}</CardTitle>
+              <CardDescription>{t('feature.description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<ConfigSkeleton />}>

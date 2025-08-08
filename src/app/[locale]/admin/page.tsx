@@ -4,14 +4,17 @@ import { AdminGuardClient } from '@/components/auth'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { UserStatsClient } from '@/components/user'
+import { useTranslations } from 'next-intl'
 import { Suspense } from 'react'
 
 function AdminDashboardContent() {
+  const t = useTranslations('admin.dashboard')
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">管理仪表盘</h1>
-        <p className="text-muted-foreground">平台运营数据总览</p>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
 
       <Suspense fallback={<UserStatsSkeleton />}>
@@ -21,24 +24,24 @@ function AdminDashboardContent() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>快速操作</CardTitle>
+            <CardTitle>{t('quickActions.title')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <p className="text-sm text-muted-foreground">
-              常用管理功能快捷入口
+              {t('quickActions.description')}
             </p>
             <div className="flex flex-wrap gap-2">
               <a
                 href="/admin/users"
                 className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors"
               >
-                用户管理
+                {t('quickActions.userManagement')}
               </a>
               <a
                 href="/admin/settings"
                 className="text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full hover:bg-green-200 transition-colors"
               >
-                系统设置
+                {t('quickActions.systemSettings')}
               </a>
             </div>
           </CardContent>
@@ -46,21 +49,29 @@ function AdminDashboardContent() {
 
         <Card>
           <CardHeader>
-            <CardTitle>系统状态</CardTitle>
+            <CardTitle>{t('systemStatus.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm">数据库</span>
-                <span className="text-sm text-green-600">正常</span>
+                <span className="text-sm">{t('systemStatus.database')}</span>
+                <span className="text-sm text-green-600">
+                  {t('systemStatus.status')}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm">认证服务</span>
-                <span className="text-sm text-green-600">正常</span>
+                <span className="text-sm">{t('systemStatus.authService')}</span>
+                <span className="text-sm text-green-600">
+                  {t('systemStatus.status')}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm">支付服务</span>
-                <span className="text-sm text-green-600">正常</span>
+                <span className="text-sm">
+                  {t('systemStatus.paymentService')}
+                </span>
+                <span className="text-sm text-green-600">
+                  {t('systemStatus.status')}
+                </span>
               </div>
             </div>
           </CardContent>

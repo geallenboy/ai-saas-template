@@ -8,14 +8,17 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Shield } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Suspense } from 'react'
 
 function SettingsContent() {
+  const t = useTranslations('front.settings')
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">账户设置</h1>
-        <p className="text-muted-foreground mt-2">管理您的账户信息和偏好设置</p>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
+        <p className="text-muted-foreground mt-2">{t('description')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -33,29 +36,31 @@ function SettingsContent() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            账户安全
+            {t('security.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-medium">登录方式</h3>
+                <h3 className="font-medium">{t('security.loginMethod')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  通过 Clerk 认证服务管理
+                  {t('security.loginMethodDescription')}
                 </p>
               </div>
-              <div className="text-sm text-green-600">已启用</div>
+              <div className="text-sm text-green-600">
+                {t('security.enabled')}
+              </div>
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-medium">两步验证</h3>
+                <h3 className="font-medium">{t('security.twoFactor')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  为您的账户提供额外保护
+                  {t('security.twoFactorDescription')}
                 </p>
               </div>
               <div className="text-sm text-muted-foreground">
-                可在 Clerk 中配置
+                {t('security.twoFactorConfig')}
               </div>
             </div>
           </div>

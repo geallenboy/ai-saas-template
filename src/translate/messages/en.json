@@ -15,7 +15,8 @@
     "switchTheme": "Toggle theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "theme": "Theme"
   },
   "navigation": {
     "home": "Home",
@@ -238,7 +239,6 @@
       "passwordMismatch": "Passwords do not match"
     }
   },
-
   "billing": {
     "title": "Plan & Billing",
     "desc": "Manage your subscription and billing information.",
@@ -656,5 +656,273 @@
     "showCode": "Show code",
     "switchToPreview": "Switch to preview mode",
     "viewComponentCode": "View component code"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "description": "Overview of platform operational data",
+      "quickActions": {
+        "title": "Quick Actions",
+        "description": "Shortcuts for common management functions",
+        "userManagement": "User Management",
+        "systemSettings": "System Settings"
+      },
+      "systemStatus": {
+        "title": "System Status",
+        "database": "Database",
+        "authService": "Auth Service",
+        "paymentService": "Payment Service",
+        "status": "Normal"
+      }
+    },
+    "layout": {
+      "title": "Admin Panel",
+      "dashboard": "Dashboard",
+      "userManagement": "User Management",
+      "systemSettings": "System Settings",
+      "goHome": "Back to Home"
+    },
+    "users": {
+      "title": "User Management",
+      "description": "Manage platform users and permissions",
+      "detail": {
+        "title": "User Details",
+        "back": "Back to User List"
+      }
+    },
+    "settings": {
+      "title": "System Settings",
+      "description": "Manage system configuration and parameters",
+      "tabs": {
+        "general": "General Settings",
+        "payment": "Payment Config",
+        "ai": "AI Config",
+        "notification": "Notification Settings",
+        "security": "Security Config",
+        "feature": "Feature Toggles"
+      },
+      "general": {
+        "title": "General Config",
+        "description": "Basic website information and general settings"
+      },
+      "payment": {
+        "title": "Payment Config",
+        "description": "Stripe payment related configuration and parameters"
+      },
+      "ai": {
+        "title": "AI Config",
+        "description": "AI model and API related configuration"
+      },
+      "notification": {
+        "title": "Notification Settings",
+        "description": "Email, SMS and other notification related configuration"
+      },
+      "security": {
+        "title": "Security Config",
+        "description": "Security policies and access control configuration"
+      },
+      "feature": {
+        "title": "Feature Toggles",
+        "description": "Enable/disable various feature modules"
+      }
+    },
+    "front": {
+      "settings": {
+        "title": "Account Settings",
+        "description": "Manage your account information and preferences",
+        "security": {
+          "title": "Account Security",
+          "loginMethod": "Login Method",
+          "loginMethodDescription": "Managed by Clerk authentication service",
+          "twoFactor": "Two-Factor Authentication",
+          "twoFactorDescription": "Provide additional protection for your account",
+          "twoFactorConfig": "Configurable in Clerk",
+          "enabled": "Enabled"
+        }
+      }
+    }
+  },
+  "privacy": {
+    "metadata": {
+      "title": "Privacy Policy - AI SaaS Template",
+      "description": "Learn how AI SaaS Template collects, uses, and protects your personal information. We are committed to safeguarding your privacy rights."
+    },
+    "hero": {
+      "badge": "Privacy Protection",
+      "title": "Privacy Policy",
+      "subtitle": "We value and protect your privacy. This policy explains how we collect, use, and protect your personal information.",
+      "lastUpdated": "Last updated: January 1, 2024"
+    },
+    "commitment": {
+      "title": "Our Commitment",
+      "description": "AI SaaS Template is committed to protecting your privacy and personal information security. We adhere to the highest privacy protection standards to ensure your data is handled properly."
+    },
+    "sections": {
+      "informationCollection": {
+        "title": "Information Collection",
+        "content": [
+          "We collect information you actively provide, such as your name and email address when registering an account.",
+          "We automatically collect technical information, including IP address, browser type, device information, etc.",
+          "We use analytics data to help us improve service quality.",
+          "We collect information through cookies and similar technologies."
+        ]
+      },
+      "informationUse": {
+        "title": "Information Use",
+        "content": [
+          "We use your information to provide, maintain, and improve our services.",
+          "We process transactions and send related notifications.",
+          "We respond to your inquiries and provide customer support.",
+          "We send important updates and marketing information (you can opt-out).",
+          "We prevent fraud and ensure the security of our services."
+        ]
+      },
+      "informationSharing": {
+        "title": "Information Sharing",
+        "content": [
+          "We do not sell your personal information to third parties.",
+          "We may share necessary information with service providers to deliver our services.",
+          "We may disclose information when required by law or to protect rights.",
+          "In the event of a business transfer, information may be transferred as part of the assets."
+        ]
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "content": [
+          "We use industry-standard encryption technologies to protect data transmission.",
+          "We implement strict access controls and authentication measures.",
+          "We conduct regular security audits and vulnerability assessments.",
+          "Employees receive training on privacy and security.",
+          "Data backup and disaster recovery plans are in place."
+        ]
+      },
+      "internationalTransfers": {
+        "title": "International Transfers",
+        "content": [
+          "Your information may be processed outside of your country/region.",
+          "We ensure that cross-border data transfers comply with applicable laws and regulations.",
+          "Appropriate safeguards are in place to ensure data security.",
+          "We comply with relevant privacy regulations such as GDPR and CCPA."
+        ]
+      },
+      "dataRetention": {
+        "title": "Data Retention",
+        "content": [
+          "We retain your personal information only for as long as necessary.",
+          "After account deletion, we will delete relevant data within a reasonable timeframe.",
+          "Certain information may need to be retained for a longer period due to legal requirements.",
+          "You can request the deletion of your personal information at any time."
+        ]
+      }
+    },
+    "userRights": {
+      "title": "Your Rights",
+      "description": "Under applicable privacy laws, you have the following rights regarding your personal information.",
+      "rights": {
+        "access": {
+          "title": "Access Rights",
+          "description": "You have the right to know what personal information we have collected about you."
+        },
+        "correction": {
+          "title": "Correction Rights",
+          "description": "You can request the correction of inaccurate or incomplete personal information."
+        },
+        "deletion": {
+          "title": "Deletion Rights",
+          "description": "In certain circumstances, you can request the deletion of your personal information."
+        },
+        "restriction": {
+          "title": "Restriction Rights",
+          "description": "You can request the restriction of processing your personal information."
+        },
+        "portability": {
+          "title": "Data Portability Rights",
+          "description": "You have the right to obtain your data in a structured, commonly used format."
+        },
+        "objection": {
+          "title": "Objection Rights",
+          "description": "You can object to the processing of your personal information based on legitimate interests."
+        }
+      }
+    },
+    "contact": {
+      "title": "Have privacy-related questions?",
+      "description": "If you have any questions about our privacy policy, or wish to exercise your privacy rights, please feel free to contact us.",
+      "contactUs": "Contact Us",
+      "dataRequest": "Data Request"
+    },
+    "updates": {
+      "title": "Policy Updates",
+      "description": "We may update this privacy policy from time to time. We will notify you of significant changes via email or on our website. We recommend that you periodically review this policy for the latest information."
+    }
+  },
+  "paymentSuccess": {
+    "title": "Payment Successful!",
+    "subtitle": "Thank you for your purchase, your membership has been successfully activated.",
+    "membershipInfo": "Membership Information",
+    "membershipPlan": "Membership Plan",
+    "billingCycle": "Billing Cycle",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "paymentAmount": "Payment Amount",
+    "validity": "Validity",
+    "days": "days",
+    "expirationDate": "Expiration Date",
+    "featuresTitle": "You can now enjoy the following features",
+    "goToDashboard": "Go to Dashboard",
+    "viewPaymentHistory": "View Payment History",
+    "contactSupport": "Contact Support",
+    "supportText": "If you have any questions, please",
+    "debugInfo": "Debug Information",
+    "paymentProcessing": "Payment Processing",
+    "paymentProcessingSubtitle": "Your payment is being processed, please check your membership status later.",
+    "backToPricing": "Back to Pricing Page"
+  },
+  "paymentHistory": {
+    "loadingError": "Failed to load payment history, please try again later.",
+    "backToDashboard": "Back to Dashboard",
+    "title": "Payment History",
+    "noRecords": "No Payment History",
+    "noRecordsDescription": "You don't have any payment records yet. Choose a plan to start using our service!",
+    "viewPricingPlans": "View Pricing Plans",
+    "paymentRecords": "Payment Records",
+    "membershipPlan": "Membership Plan",
+    "status": {
+      "succeeded": "Succeeded",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "pagination": "Showing page {page} of {totalPages}"
+  },
+  "paymentCancelled": {
+    "title": "Payment Canceled",
+    "description": "Your payment has been canceled, and no charges were made.",
+    "needHelp": "Need help?",
+    "paymentIssues": "Having trouble with payment?",
+    "paymentIssuesDescription": "If you're experiencing technical issues during payment, please try refreshing the page or using a different payment method.",
+    "moreInfo": "Need more information?",
+    "moreInfoDescription": "You can view our pricing details or contact customer support for more information about membership plans.",
+    "tryAgain": "Try again later",
+    "tryAgainDescription": "You can return to the pricing page at any time to choose a suitable membership plan.",
+    "backToPricing": "Back to Pricing Page",
+    "goToDashboard": "Go to Dashboard",
+    "contactSupport": "Contact Support",
+    "viewDocs": "View Help Docs",
+    "faq": "Frequently Asked Questions",
+    "whyCancelled": "Why was the payment canceled?",
+    "whyCancelledDescription": "Payment may have been interrupted due to network issues, card restrictions, or if you manually canceled it.",
+    "willBeCharged": "Will my card be charged?",
+    "willBeChargedDescription": "No, canceled payments will not result in any charges.",
+    "howToRetry": "How can I try paying again?",
+    "howToRetryDescription": "You can go back to the pricing page and select a membership plan to try paying again."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back! This is your personal workspace.",
+    "quickActions": "Quick Actions",
+    "upgradePlan": "Upgrade Plan",
+    "accountSettings": "Account Settings",
+    "paymentHistory": "Payment History",
+    "viewDocs": "View Docs"
   }
 }

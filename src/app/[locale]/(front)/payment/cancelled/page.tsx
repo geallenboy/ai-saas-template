@@ -1,9 +1,23 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 import { ArrowLeft, HelpCircle, XCircle } from 'lucide-react'
 import Link from 'next/link'
 
+export async function generateMetadata({
+  params: { locale },
+}: { params: { locale: string } }) {
+  const t = await getTranslations({ locale, namespace: 'paymentCancelled' })
+  return {
+    title: t('title'),
+    description: t('description'),
+  }
+}
+
 export default function PaymentCancelledPage() {
+  const t = useTranslations('paymentCancelled')
+
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full space-y-8">
@@ -18,10 +32,10 @@ export default function PaymentCancelledPage() {
           {/* Cancel message */}
           <div className="space-y-4">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              支付已取消
+              {t('title')}
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300">
-              您的支付已被取消，没有产生任何费用
+              {t('description')}
             </p>
           </div>
 
@@ -30,29 +44,29 @@ export default function PaymentCancelledPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <HelpCircle className="h-5 w-5" />
-                需要帮助？
+                {t('needHelp')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div>
-                  <h4 className="font-medium mb-1">支付遇到问题？</h4>
+                  <h4 className="font-medium mb-1">{t('paymentIssues')}</h4>
                   <p className="text-sm text-muted-foreground">
-                    如果您在支付过程中遇到技术问题，请尝试刷新页面或使用其他支付方式。
+                    {t('paymentIssuesDescription')}
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-1">需要更多信息？</h4>
+                  <h4 className="font-medium mb-1">{t('moreInfo')}</h4>
                   <p className="text-sm text-muted-foreground">
-                    您可以查看我们的定价详情，或联系客服了解更多关于会员计划的信息。
+                    {t('moreInfoDescription')}
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-1">稍后再试</h4>
+                  <h4 className="font-medium mb-1">{t('tryAgain')}</h4>
                   <p className="text-sm text-muted-foreground">
-                    您可以随时回到定价页面重新选择适合的会员计划。
+                    {t('tryAgainDescription')}
                   </p>
                 </div>
               </div>
@@ -64,12 +78,12 @@ export default function PaymentCancelledPage() {
             <Button asChild size="lg">
               <Link href="/pricing">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                返回定价页面
+                {t('backToPricing')}
               </Link>
             </Button>
 
             <Button asChild variant="outline" size="lg">
-              <Link href="/dashboard">前往仪表盘</Link>
+              <Link href="/dashboard">{t('goToDashboard')}</Link>
             </Button>
           </div>
 
@@ -78,46 +92,46 @@ export default function PaymentCancelledPage() {
             <Button asChild variant="ghost" size="sm">
               <Link href="/contact">
                 <HelpCircle className="mr-2 h-4 w-4" />
-                联系客服
+                {t('contactSupport')}
               </Link>
             </Button>
 
             <Button asChild variant="ghost" size="sm">
-              <Link href="/docs">查看帮助文档</Link>
+              <Link href="/docs">{t('viewDocs')}</Link>
             </Button>
           </div>
 
           {/* FAQ */}
           <Card className="text-left">
             <CardHeader>
-              <CardTitle className="text-lg">常见问题</CardTitle>
+              <CardTitle className="text-lg">{t('faq')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div>
                   <h4 className="font-medium text-sm mb-1">
-                    为什么支付被取消了？
+                    {t('whyCancelled')}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    支付可能因为网络问题、银行卡限制或您主动取消而中断。
+                    {t('whyCancelledDescription')}
                   </p>
                 </div>
 
                 <div>
                   <h4 className="font-medium text-sm mb-1">
-                    我的银行卡会被扣费吗？
+                    {t('willBeCharged')}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    不会，取消的支付不会产生任何费用。
+                    {t('willBeChargedDescription')}
                   </p>
                 </div>
 
                 <div>
                   <h4 className="font-medium text-sm mb-1">
-                    如何重新尝试支付？
+                    {t('howToRetry')}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    您可以返回定价页面，重新选择会员计划进行支付。
+                    {t('howToRetryDescription')}
                   </p>
                 </div>
               </div>
@@ -127,9 +141,4 @@ export default function PaymentCancelledPage() {
       </div>
     </main>
   )
-}
-
-export const metadata = {
-  title: '支付已取消',
-  description: '支付已取消，没有产生任何费用',
 }

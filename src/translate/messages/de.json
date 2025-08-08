@@ -10,7 +10,8 @@
     "switchTheme": "Design wechseln",
     "light": "Hell",
     "dark": "Dunkel",
-    "system": "System"
+    "system": "System",
+    "theme": "Thema"
   },
   "navigation": {
     "home": "Startseite",
@@ -641,5 +642,273 @@
     "showCode": "Code anzeigen",
     "switchToPreview": "In den Vorschaumodus wechseln",
     "viewComponentCode": "Komponentencode anzeigen"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin-Dashboard",
+      "description": "Übersicht der Betriebsdaten der Plattform",
+      "quickActions": {
+        "title": "Schnellaktionen",
+        "description": "Verknüpfungen für gängige Verwaltungsfunktionen",
+        "userManagement": "Benutzerverwaltung",
+        "systemSettings": "Systemeinstellungen"
+      },
+      "systemStatus": {
+        "title": "Systemstatus",
+        "database": "Datenbank",
+        "authService": "Authentifizierungsdienst",
+        "paymentService": "Zahlungsdienst",
+        "status": "Normal"
+      }
+    },
+    "layout": {
+      "title": "Admin-Bereich",
+      "dashboard": "Dashboard",
+      "userManagement": "Benutzerverwaltung",
+      "systemSettings": "Systemeinstellungen",
+      "goHome": "Zurück zur Startseite"
+    },
+    "users": {
+      "title": "Benutzerverwaltung",
+      "description": "Plattformbenutzer und Berechtigungen verwalten",
+      "detail": {
+        "title": "Benutzerdetails",
+        "back": "Zurück zur Benutzerliste"
+      }
+    },
+    "settings": {
+      "title": "Systemeinstellungen",
+      "description": "Systemkonfiguration und -parameter verwalten",
+      "tabs": {
+        "general": "Allgemeine Einstellungen",
+        "payment": "Zahlungskonfiguration",
+        "ai": "KI-Konfiguration",
+        "notification": "Benachrichtigungseinstellungen",
+        "security": "Sicherheitskonfiguration",
+        "feature": "Funktionsschalter"
+      },
+      "general": {
+        "title": "Allgemeine Konfiguration",
+        "description": "Grundlegende Website-Informationen und allgemeine Einstellungen"
+      },
+      "payment": {
+        "title": "Zahlungskonfiguration",
+        "description": "Stripe-Zahlungskonfiguration und -parameter"
+      },
+      "ai": {
+        "title": "KI-Konfiguration",
+        "description": "KI-Modell- und API-bezogene Konfiguration"
+      },
+      "notification": {
+        "title": "Benachrichtigungseinstellungen",
+        "description": "E-Mail-, SMS- und andere benachrichtigungsbezogene Konfigurationen"
+      },
+      "security": {
+        "title": "Sicherheitskonfiguration",
+        "description": "Sicherheitsrichtlinien und Zugriffskontrollkonfiguration"
+      },
+      "feature": {
+        "title": "Funktionsschalter",
+        "description": "Aktivieren/Deaktivieren verschiedener Funktionsmodule"
+      }
+    },
+    "front": {
+      "settings": {
+        "title": "Kontoeinstellungen",
+        "description": "Verwalten Sie Ihre Kontoinformationen und Einstellungen",
+        "security": {
+          "title": "Kontosicherheit",
+          "loginMethod": "Anmeldemethode",
+          "loginMethodDescription": "Verwaltet durch den Clerk-Authentifizierungsdienst",
+          "twoFactor": "Zwei-Faktor-Authentifizierung",
+          "twoFactorDescription": "Bieten Sie zusätzlichen Schutz für Ihr Konto",
+          "twoFactorConfig": "Konfigurierbar in Clerk",
+          "enabled": "Aktiviert"
+        }
+      }
+    }
+  },
+  "privacy": {
+    "metadata": {
+      "title": "Datenschutzrichtlinie - AI SaaS Template",
+      "description": "Erfahren Sie, wie AI SaaS Template Ihre persönlichen Daten sammelt, verwendet und schützt. Wir verpflichten uns, Ihre Datenschutzrechte zu wahren."
+    },
+    "hero": {
+      "badge": "Datenschutz",
+      "title": "Datenschutzrichtlinie",
+      "subtitle": "Wir schätzen und schützen Ihre Privatsphäre. Diese Richtlinie erklärt, wie wir Ihre persönlichen Daten sammeln, verwenden und schützen.",
+      "lastUpdated": "Zuletzt aktualisiert: 1. Januar 2024"
+    },
+    "commitment": {
+      "title": "Unsere Verpflichtung",
+      "description": "AI SaaS Template verpflichtet sich, Ihre Privatsphäre und die Sicherheit Ihrer persönlichen Daten zu schützen. Wir halten uns an die höchsten Datenschutzstandards, um sicherzustellen, dass Ihre Daten ordnungsgemäß behandelt werden."
+    },
+    "sections": {
+      "informationCollection": {
+        "title": "Informationssammlung",
+        "content": [
+          "Wir sammeln Informationen, die Sie aktiv bereitstellen, wie z.B. Ihren Namen und Ihre E-Mail-Adresse bei der Registrierung eines Kontos.",
+          "Wir sammeln automatisch technische Informationen, einschließlich IP-Adresse, Browsertyp, Geräteinformationen usw.",
+          "Wir verwenden Analysedaten, um die Servicequalität zu verbessern.",
+          "Wir sammeln Informationen durch Cookies und ähnliche Technologien."
+        ]
+      },
+      "informationUse": {
+        "title": "Informationsverwendung",
+        "content": [
+          "Wir verwenden Ihre Informationen, um unsere Dienste bereitzustellen, zu warten und zu verbessern.",
+          "Wir verarbeiten Transaktionen und senden zugehörige Benachrichtigungen.",
+          "Wir beantworten Ihre Anfragen und bieten Kundensupport.",
+          "Wir senden wichtige Updates und Marketinginformationen (Sie können sich abmelden).",
+          "Wir verhindern Betrug und gewährleisten die Sicherheit unserer Dienste."
+        ]
+      },
+      "informationSharing": {
+        "title": "Informationsweitergabe",
+        "content": [
+          "Wir verkaufen Ihre persönlichen Daten nicht an Dritte.",
+          "Wir können notwendige Informationen an Dienstleister weitergeben, um unsere Dienste zu erbringen.",
+          "Wir können Informationen offenlegen, wenn dies gesetzlich vorgeschrieben ist oder um Rechte zu schützen.",
+          "Im Falle einer Geschäftsübertragung können Informationen als Teil der Vermögenswerte übertragen werden."
+        ]
+      },
+      "dataSecurity": {
+        "title": "Datensicherheit",
+        "content": [
+          "Wir verwenden branchenübliche Verschlüsselungstechnologien zum Schutz der Datenübertragung.",
+          "Wir implementieren strenge Zugriffskontrollen und Authentifizierungsmaßnahmen.",
+          "Wir führen regelmäßige Sicherheitsaudits und Schwachstellenbewertungen durch.",
+          "Mitarbeiter erhalten Schulungen zu Datenschutz und Sicherheit.",
+          "Datensicherungs- und Notfallwiederherstellungspläne sind vorhanden."
+        ]
+      },
+      "internationalTransfers": {
+        "title": "Internationale Überweisungen",
+        "content": [
+          "Ihre Informationen können außerhalb Ihres Landes/Ihrer Region verarbeitet werden.",
+          "Wir stellen sicher, dass grenzüberschreitende Datenübertragungen den geltenden Gesetzen und Vorschriften entsprechen.",
+          "Angemessene Schutzmaßnahmen sind vorhanden, um die Datensicherheit zu gewährleisten.",
+          "Wir halten uns an relevante Datenschutzbestimmungen wie DSGVO und CCPA."
+        ]
+      },
+      "dataRetention": {
+        "title": "Datenaufbewahrung",
+        "content": [
+          "Wir bewahren Ihre persönlichen Daten nur so lange auf, wie es notwendig ist.",
+          "Nach der Löschung des Kontos werden wir relevante Daten innerhalb eines angemessenen Zeitraums löschen.",
+          "Bestimmte Informationen müssen aufgrund gesetzlicher Anforderungen möglicherweise für einen längeren Zeitraum aufbewahrt werden.",
+          "Sie können jederzeit die Löschung Ihrer persönlichen Daten beantragen."
+        ]
+      }
+    },
+    "userRights": {
+      "title": "Ihre Rechte",
+      "description": "Nach den geltenden Datenschutzgesetzen haben Sie die folgenden Rechte in Bezug auf Ihre persönlichen Daten.",
+      "rights": {
+        "access": {
+          "title": "Auskunftsrecht",
+          "description": "Sie haben das Recht zu erfahren, welche persönlichen Daten wir über Sie gesammelt haben."
+        },
+        "correction": {
+          "title": "Berichtigungsrecht",
+          "description": "Sie können die Berichtigung unrichtiger oder unvollständiger persönlicher Daten verlangen."
+        },
+        "deletion": {
+          "title": "Recht auf Löschung",
+          "description": "Unter bestimmten Umständen können Sie die Löschung Ihrer persönlichen Daten verlangen."
+        },
+        "restriction": {
+          "title": "Recht auf Einschränkung",
+          "description": "Sie können die Einschränkung der Verarbeitung Ihrer persönlichen Daten verlangen."
+        },
+        "portability": {
+          "title": "Recht auf Datenübertragbarkeit",
+          "description": "Sie haben das Recht, Ihre Daten in einem strukturierten, gängigen Format zu erhalten."
+        },
+        "objection": {
+          "title": "Widerspruchsrecht",
+          "description": "Sie können der Verarbeitung Ihrer persönlichen Daten aufgrund berechtigter Interessen widersprechen."
+        }
+      }
+    },
+    "contact": {
+      "title": "Haben Sie Fragen zum Datenschutz?",
+      "description": "Wenn Sie Fragen zu unserer Datenschutzrichtlinie haben oder Ihre Datenschutzrechte ausüben möchten, können Sie uns gerne kontaktieren.",
+      "contactUs": "Kontaktiere uns",
+      "dataRequest": "Datenanfrage"
+    },
+    "updates": {
+      "title": "Richtlinienaktualisierungen",
+      "description": "Wir können diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Wir werden Sie über wesentliche Änderungen per E-Mail oder auf unserer Website informieren. Wir empfehlen Ihnen, diese Richtlinie regelmäßig auf die neuesten Informationen zu überprüfen."
+    }
+  },
+  "paymentSuccess": {
+    "title": "Zahlung erfolgreich!",
+    "subtitle": "Vielen Dank für Ihren Kauf, Ihre Mitgliedschaft wurde erfolgreich aktiviert.",
+    "membershipInfo": "Informationen zur Mitgliedschaft",
+    "membershipPlan": "Mitgliedschaftsplan",
+    "billingCycle": "Abrechnungszeitraum",
+    "yearly": "Jährlich",
+    "monthly": "Monatlich",
+    "paymentAmount": "Zahlungsbetrag",
+    "validity": "Gültigkeit",
+    "days": "Tage",
+    "expirationDate": "Ablaufdatum",
+    "featuresTitle": "Sie können jetzt die folgenden Funktionen nutzen",
+    "goToDashboard": "Zum Dashboard gehen",
+    "viewPaymentHistory": "Zahlungsverlauf anzeigen",
+    "contactSupport": "Support kontaktieren",
+    "supportText": "Wenn Sie Fragen haben, bitte",
+    "debugInfo": "Debug-Informationen",
+    "paymentProcessing": "Zahlung wird bearbeitet",
+    "paymentProcessingSubtitle": "Ihre Zahlung wird bearbeitet, bitte überprüfen Sie Ihren Mitgliedsstatus später.",
+    "backToPricing": "Zurück zur Preisseite"
+  },
+  "paymentHistory": {
+    "loadingError": "Zahlungsverlauf konnte nicht geladen werden, bitte versuchen Sie es später erneut.",
+    "backToDashboard": "Zurück zum Dashboard",
+    "title": "Zahlungsverlauf",
+    "noRecords": "Kein Zahlungsverlauf",
+    "noRecordsDescription": "Sie haben noch keine Zahlungsaufzeichnungen. Wählen Sie einen Plan, um unseren Service zu nutzen!",
+    "viewPricingPlans": "Preispläne anzeigen",
+    "paymentRecords": "Zahlungsaufzeichnungen",
+    "membershipPlan": "Mitgliedschaftsplan",
+    "status": {
+      "succeeded": "Erfolgreich",
+      "pending": "Ausstehend",
+      "failed": "Fehlgeschlagen"
+    },
+    "pagination": "Seite {page} von {totalPages}"
+  },
+  "paymentCancelled": {
+    "title": "Zahlung abgebrochen",
+    "description": "Ihre Zahlung wurde abgebrochen und es wurden keine Gebühren erhoben.",
+    "needHelp": "Benötigen Sie Hilfe?",
+    "paymentIssues": "Probleme bei der Zahlung?",
+    "paymentIssuesDescription": "Wenn Sie während der Zahlung auf technische Probleme stoßen, versuchen Sie bitte, die Seite zu aktualisieren oder eine andere Zahlungsmethode zu verwenden.",
+    "moreInfo": "Benötigen Sie weitere Informationen?",
+    "moreInfoDescription": "Sie können unsere Preisdetails einsehen oder den Kundensupport für weitere Informationen zu den Mitgliedschaftsplänen kontaktieren.",
+    "tryAgain": "Versuchen Sie es später erneut",
+    "tryAgainDescription": "Sie können jederzeit zur Preisseite zurückkehren, um einen passenden Mitgliedschaftsplan auszuwählen.",
+    "backToPricing": "Zurück zur Preisseite",
+    "goToDashboard": "Zum Dashboard",
+    "contactSupport": "Support kontaktieren",
+    "viewDocs": "Hilfedokumente anzeigen",
+    "faq": "Häufig gestellte Fragen",
+    "whyCancelled": "Warum wurde die Zahlung abgebrochen?",
+    "whyCancelledDescription": "Die Zahlung wurde möglicherweise aufgrund von Netzwerkproblemen, Kartenbeschränkungen oder durch Ihre manuelle Stornierung unterbrochen.",
+    "willBeCharged": "Wird meine Karte belastet?",
+    "willBeChargedDescription": "Nein, abgebrochene Zahlungen führen zu keinen Gebühren.",
+    "howToRetry": "Wie kann ich die Zahlung erneut versuchen?",
+    "howToRetryDescription": "Sie können zur Preisseite zurückkehren und einen Mitgliedschaftsplan auswählen, um die Zahlung erneut zu versuchen."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Willkommen zurück! Dies ist Ihr persönlicher Arbeitsbereich.",
+    "quickActions": "Schnellaktionen",
+    "upgradePlan": "Plan aktualisieren",
+    "accountSettings": "Kontoeinstellungen",
+    "paymentHistory": "Zahlungsverlauf",
+    "viewDocs": "Dokumentation anzeigen"
   }
 }

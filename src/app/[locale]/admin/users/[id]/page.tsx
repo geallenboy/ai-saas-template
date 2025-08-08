@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { UserDetailClient } from '@/components/user'
 import { ArrowLeft } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
@@ -14,16 +15,18 @@ interface UserDetailPageProps {
 }
 
 function UserDetailContent({ userId }: { userId: string }) {
+  const t = useTranslations('admin.users.detail')
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
           <Link href="/admin/users">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            返回用户列表
+            {t('back')}
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold">用户详情</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
       </div>
 
       <Suspense fallback={<UserDetailSkeleton />}>

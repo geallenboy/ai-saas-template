@@ -8,112 +8,67 @@ import {
   Shield,
   Users,
 } from 'lucide-react'
+import { getTranslator } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
-export const metadata = {
-  title: 'Privacy Policy - AI SaaS Template',
-  description:
-    'Learn how AI SaaS Template collects, uses, and protects your personal information. We are committed to safeguarding your privacy rights.',
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
+  const t = await getTranslator(locale, 'privacy.metadata')
+
+  return {
+    title: t('title'),
+    description: t('description'),
+  }
 }
 
-const privacySections = [
-  {
+const privacySectionsData = {
+  informationCollection: {
     icon: Database,
-    title: 'Information Collection',
-    content: [
-      'We collect information you actively provide, such as your name and email address when registering an account.',
-      'We automatically collect technical information, including IP address, browser type, device information, etc.',
-      'We use analytics data to help us improve service quality.',
-      'We collect information through cookies and similar technologies.',
-    ],
+    contentCount: 4,
   },
-  {
+  informationUse: {
     icon: Eye,
-    title: 'Information Use',
-    content: [
-      'We use your information to provide, maintain, and improve our services.',
-      'We process transactions and send related notifications.',
-      'We respond to your inquiries and provide customer support.',
-      'We send important updates and marketing information (you can opt-out).',
-      'We prevent fraud and ensure the security of our services.',
-    ],
+    contentCount: 5,
   },
-  {
+  informationSharing: {
     icon: Users,
-    title: 'Information Sharing',
-    content: [
-      'We do not sell your personal information to third parties.',
-      'We may share necessary information with service providers to deliver our services.',
-      'We may disclose information when required by law or to protect rights.',
-      'In the event of a business transfer, information may be transferred as part of the assets.',
-    ],
+    contentCount: 4,
   },
-  {
+  dataSecurity: {
     icon: Lock,
-    title: 'Data Security',
-    content: [
-      'We use industry-standard encryption technologies to protect data transmission.',
-      'We implement strict access controls and authentication measures.',
-      'We conduct regular security audits and vulnerability assessments.',
-      'Employees receive training on privacy and security.',
-      'Data backup and disaster recovery plans are in place.',
-    ],
+    contentCount: 5,
   },
-  {
+  internationalTransfers: {
     icon: Globe,
-    title: 'International Transfers',
-    content: [
-      'Your information may be processed outside of your country/region.',
-      'We ensure that cross-border data transfers comply with applicable laws and regulations.',
-      'Appropriate safeguards are in place to ensure data security.',
-      'We comply with relevant privacy regulations such as GDPR and CCPA.',
-    ],
+    contentCount: 4,
   },
-  {
+  dataRetention: {
     icon: Calendar,
-    title: 'Data Retention',
-    content: [
-      'We retain your personal information only for as long as necessary.',
-      'After account deletion, we will delete relevant data within a reasonable timeframe.',
-      'Certain information may need to be retained for a longer period due to legal requirements.',
-      'You can request the deletion of your personal information at any time.',
-    ],
+    contentCount: 4,
   },
+}
+
+const userRightsKeys = [
+  'access',
+  'correction',
+  'deletion',
+  'restriction',
+  'portability',
+  'objection',
 ]
 
-const userRights = [
-  {
-    title: 'Access Rights',
-    description:
-      'You have the right to know what personal information we have collected about you.',
-  },
-  {
-    title: 'Correction Rights',
-    description:
-      'You can request the correction of inaccurate or incomplete personal information.',
-  },
-  {
-    title: 'Deletion Rights',
-    description:
-      'In certain circumstances, you can request the deletion of your personal information.',
-  },
-  {
-    title: 'Restriction Rights',
-    description:
-      'You can request the restriction of processing your personal information.',
-  },
-  {
-    title: 'Data Portability Rights',
-    description:
-      'You have the right to obtain your data in a structured, commonly used format.',
-  },
-  {
-    title: 'Objection Rights',
-    description:
-      'You can object to the processing of your personal information based on legitimate interests.',
-  },
-]
-
-function PrivacySection({ section }: { section: (typeof privacySections)[0] }) {
+function PrivacySection({
+  section,
+}: {
+  section: {
+    icon: React.ElementType
+    title: string
+    content: string[]
+  }
+}) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
       <div className="flex items-center mb-4">
@@ -137,6 +92,23 @@ function PrivacySection({ section }: { section: (typeof privacySections)[0] }) {
 }
 
 export default function PrivacyPage() {
+  const t = useTranslations('privacy')
+
+  const privacySections = Object.entries(privacySectionsData).map(
+    ([key, { icon, contentCount }]) => ({
+      icon,
+      title: t(`sections.${key}.title`),
+      content: Array.from({ length: contentCount }, (_, i) =>
+        t(`sections.${key}.content.${i}`)
+      ),
+    })
+  )
+
+  const userRights = userRightsKeys.map(key => ({
+    title: t(`userRights.rights.${key}.title`),
+    description: t(`userRights.rights.${key}.description`),
+  }))
+
   return (
     <>
       <main className="min-h-screen bg-gradient-to-br from-white via-gray-50/90 to-blue-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -145,14 +117,16 @@ export default function PrivacyPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8">
               <Shield className="w-4 h-4 mr-2" />
-              <span className="text-sm font-medium">隐私保护</span>
+              <span className="text-sm font-medium">{t('hero.badge')}</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">隐私政策</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              {t('hero.title')}
+            </h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              我们重视并保护您的隐私。本政策说明我们如何收集、使用和保护您的个人信息
+              {t('hero.subtitle')}
             </p>
             <div className="mt-8 text-sm text-blue-200">
-              最后更新：2024年1月1日
+              {t('hero.lastUpdated')}
             </div>
           </div>
         </section>
@@ -162,11 +136,10 @@ export default function PrivacyPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                我们的承诺
+                {t('commitment.title')}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                AI SaaS
-                Template致力于保护您的隐私和个人信息安全。我们遵循最高的隐私保护标准，确保您的数据得到妥善处理。
+                {t('commitment.description')}
               </p>
             </div>
           </div>
@@ -188,10 +161,10 @@ export default function PrivacyPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                您的权利
+                {t('userRights.title')}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                根据适用的隐私法律，您对自己的个人信息享有以下权利
+                {t('userRights.description')}
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -217,16 +190,16 @@ export default function PrivacyPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center">
               <Mail className="w-12 h-12 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold mb-4">有隐私相关问题？</h2>
+              <h2 className="text-3xl font-bold mb-4">{t('contact.title')}</h2>
               <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-                如果您对我们的隐私政策有任何疑问，或希望行使您的隐私权利，请随时联系我们
+                {t('contact.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors">
-                  联系我们
+                  {t('contact.contactUs')}
                 </button>
                 <button className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 rounded-lg font-semibold transition-colors">
-                  数据请求
+                  {t('contact.dataRequest')}
                 </button>
               </div>
             </div>
@@ -238,10 +211,10 @@ export default function PrivacyPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6">
               <h3 className="text-lg font-bold text-yellow-800 dark:text-yellow-200 mb-3">
-                政策更新
+                {t('updates.title')}
               </h3>
               <p className="text-yellow-700 dark:text-yellow-300">
-                我们可能会不时更新本隐私政策。重大变更时，我们会通过邮件或网站通知您。建议您定期查看本政策以了解最新信息。
+                {t('updates.description')}
               </p>
             </div>
           </div>

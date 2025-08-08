@@ -70,7 +70,7 @@ export default function SignInPage() {
         await setActive({ session: result.createdSessionId })
 
         // Login successful, will automatically sync to database (via webhook)
-        logger.info('用户登录成功')
+        logger.info('User login successful')
 
         router.push('/')
       } else {
