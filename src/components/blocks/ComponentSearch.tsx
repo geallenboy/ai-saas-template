@@ -37,12 +37,12 @@ export function ComponentSearch({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* 搜索框 */}
+      {/* search box */}
       <div className="relative">
         <Input
           placeholder={
-            locale === 'zh'
-              ? '搜索组件名称或描述...'
+            locale === 'de'
+              ? 'Suche nach Komponentenname oder -beschreibung...'
               : 'Search components by name or description...'
           }
           value={searchTerm}
@@ -62,12 +62,12 @@ export function ComponentSearch({
         )}
       </div>
 
-      {/* 分类过滤 */}
+      {/* Filtering */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 text-sm font-medium">
             <FilterIcon className="h-4 w-4" />
-            {locale === 'zh' ? '按分类筛选' : 'Filter by category'}
+            {locale === 'de' ? 'Nach Kategorie filtern' : 'Filter by category'}
           </label>
           {hasFilters && (
             <Button
@@ -76,7 +76,7 @@ export function ComponentSearch({
               onClick={clearAllFilters}
               className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
             >
-              {locale === 'zh' ? '清除筛选' : 'Clear filters'}
+              {locale === 'de' ? 'Filter zurücksetzen' : 'Clear filters'}
             </Button>
           )}
         </div>
@@ -103,7 +103,7 @@ export function ComponentSearch({
         </div>
       </div>
 
-      {/* 快速筛选按钮 */}
+      {/* Quick filter button */}
       <div className="flex flex-wrap gap-2">
         <Button
           variant={selectedCategory === null ? 'default' : 'outline'}
@@ -111,35 +111,35 @@ export function ComponentSearch({
           onClick={() => handleCategoryToggle('')}
           className="text-xs"
         >
-          {locale === 'zh' ? '全部' : 'All'}
+          {locale === 'de' ? '全部' : 'All'}
         </Button>
         <Button
           variant="outline"
           size="sm"
           className="text-xs"
           onClick={() => {
-            // 这里可以添加最新组件的逻辑
+            // Here you can add the logic for the latest components
           }}
         >
-          {locale === 'zh' ? '最新' : 'Latest'}
+          {locale === 'de' ? 'Neueste' : 'Latest'}
         </Button>
         <Button
           variant="outline"
           size="sm"
           className="text-xs"
           onClick={() => {
-            // 这里可以添加热门组件的逻辑
+            // Here you can add the logic for the popular components
           }}
         >
-          {locale === 'zh' ? '热门' : 'Popular'}
+          {locale === 'de' ? 'Beliebt' : 'Popular'}
         </Button>
       </div>
 
-      {/* 搜索结果统计 */}
+      {/* Search results statistics */}
       {hasFilters && (
         <div className="text-sm text-muted-foreground">
           <span className="flex items-center gap-2">
-            {locale === 'zh' ? '已应用筛选条件' : 'Filters applied'}
+            {locale === 'de' ? 'Angewendete Filter' : 'Filters applied'}
             {selectedCategory && (
               <Badge variant="secondary" className="text-xs">
                 {categories.find(c => c.id === selectedCategory)?.name}

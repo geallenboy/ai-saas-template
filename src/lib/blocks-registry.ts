@@ -2,19 +2,19 @@ import { HelpCircle, Layout, Users, Zap } from 'lucide-react'
 
 import type { CategoryInfo, ComponentInfo } from '@/types/blocks'
 
-// 组件分类定义
+// Component classification definition
 export const categories: CategoryInfo[] = [
   {
     id: 'hero',
     name: 'Hero Sections',
-    description: '首页主要展示区域组件',
+    description: 'Main display area components for the homepage',
     icon: Layout,
     count: 1,
   },
   {
     id: '/',
     name: 'Feature Sections',
-    description: '产品特性展示组件',
+    description: 'Product feature display component',
     icon: Zap,
     count: 2,
   },
@@ -22,25 +22,26 @@ export const categories: CategoryInfo[] = [
   {
     id: 'faq',
     name: 'FAQ Sections',
-    description: '常见问题组件',
+    description: 'Frequently Asked Questions component',
     icon: HelpCircle,
     count: 1,
   },
   {
     id: 'footer',
     name: 'Footer Sections',
-    description: '页脚组件',
+    description: 'Footer component',
     icon: Users,
     count: 1,
   },
 ]
 
-// 组件注册表（不包含实际组件引用）
+// Component registry (without actual component references)
 export const components: Omit<ComponentInfo, 'component'>[] = [
   {
     id: 'modern-hero',
     name: 'Modern Hero',
-    description: '现代化的首页主要展示区域，包含标题、描述、按钮和用户评价',
+    description:
+      'Modern hero section with title, description, button, and user reviews',
     category: 'hero',
     code: `import { Star } from 'lucide-react';
 import React from 'react';
@@ -99,14 +100,15 @@ export { Hero7 };`,
   {
     id: 'tech-stack',
     name: 'Tech Stack',
-    description: '技术栈展示组件，展示项目使用的技术',
+    description:
+      'Technology stack display component, showing the technology used in the project',
     category: '/',
     code: '// Tech Stack component code here',
   },
   {
     id: '/',
     name: '/ Grid',
-    description: '特性网格展示组件',
+    description: 'Feature grid display component',
     category: '/',
     code: '// / component code here',
   },
@@ -114,20 +116,20 @@ export { Hero7 };`,
   {
     id: 'faq3',
     name: 'FAQ Accordion',
-    description: '折叠式常见问题组件',
+    description: 'Accordion FAQ widget',
     category: 'faq',
     code: '// FAQ component code here',
   },
   {
     id: 'footer-7',
     name: 'Footer with Links',
-    description: '包含链接的页脚组件',
+    description: 'Footer component with links',
     category: 'footer',
     code: '// Footer component code here',
   },
 ]
 
-// 辅助函数
+// Helper functions
 export function getComponentsByCategory(
   categoryId: string
 ): Omit<ComponentInfo, 'component'>[] {

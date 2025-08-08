@@ -30,11 +30,11 @@ export function ProfileForm() {
 
   const updateProfileMutation = trpc.auth.updateProfile.useMutation({
     onSuccess: () => {
-      // 刷新用户数据
+      // Refresh user data
       utils.auth.getCurrentUser.invalidate()
       setState({ success: true })
 
-      // 3秒后清除成功消息
+      // Clear success message after 3 seconds
       setTimeout(() => {
         setState(null)
       }, 3000)
@@ -54,8 +54,8 @@ export function ProfileForm() {
       fullName: formData.get('fullName') as string,
       preferences: {
         theme: formData.get('theme') as 'light' | 'dark',
-        language: formData.get('language') as 'en' | 'zh',
-        currency: formData.get('currency') as 'USD' | 'CNY',
+        language: formData.get('language') as 'en' | 'de',
+        currency: formData.get('currency') as 'USD' | 'EUR',
       },
     }
 

@@ -27,15 +27,15 @@ export default function VerifyEmailPage() {
 
     if (!token) {
       setStatus('error')
-      setMessage('验证链接无效或已过期')
+      setMessage('The verification link is invalid or has expired')
       return
     }
 
-    // 这里应该调用API验证邮箱
-    // 暂时模拟验证过程
+    // Here should call API to verify email
+    // Temporarily simulate the verification process
     setTimeout(() => {
       setStatus('success')
-      setMessage('邮箱验证成功！')
+      setMessage('Email verification successful!')
     }, 2000)
   }, [searchParams])
 

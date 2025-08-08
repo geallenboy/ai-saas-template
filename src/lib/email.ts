@@ -3,16 +3,16 @@ import { logger } from '@/lib/logger'
 import nodemailer from 'nodemailer'
 import { Resend } from 'resend'
 
-// 邮件服务类型
+// Mail service type
 type EmailProvider = 'resend' | 'smtp'
 
-// 邮件配置
+// Mail configuration
 interface EmailConfig {
   provider: EmailProvider
   from: string
 }
 
-// 邮件内容接口
+// Email content interface
 interface EmailContent {
   to: string | string[]
   subject: string
@@ -28,26 +28,26 @@ interface EmailContent {
   }>
 }
 
-// 邮件模板类型
+// Email template interface
 interface EmailTemplate {
   subject: string
   html: string
   text?: string
 }
 
-// 初始化邮件服务
+// Initialize mail service
 class EmailService {
   private resend?: Resend
   private nodemailer?: nodemailer.Transporter
   private config: EmailConfig
 
   constructor() {
-    // 根据环境变量选择邮件提供商
+    // Selecting an email provider based on an environment variable
     if (env.RESEND_API_KEY) {
       this.resend = new Resend(env.RESEND_API_KEY)
       this.config = {
         provider: 'resend',
-        from: 'AI SaaS <noreply@yourdomain.com>', // 替换为你的域名
+        from: 'AI SaaS <noreply@yourdomain.com>', // Replace with your domain
       }
     } else if (env.SMTP_HOST && env.SMTP_USERNAME && env.SMTP_PASSWORD) {
       this.nodemailer = nodemailer.createTransport({
@@ -64,11 +64,13 @@ class EmailService {
         from: `AI SaaS <${env.SMTP_USERNAME}>`,
       }
     } else {
-      throw new Error('未配置邮件服务，请设置 RESEND_API_KEY 或 SMTP 配置')
+      throw new Error(
+        'Mail service is not configured, please set RESEND_API_KEY or SMTP configuration'
+      )
     }
   }
 
-  // 发送邮件
+  // Send email
   async sendEmail(content: EmailContent): Promise<boolean> {
     try {
       if (this.config.provider === 'resend' && this.resend) {
@@ -76,20 +78,22 @@ class EmailService {
       } else if (this.config.provider === 'smtp' && this.nodemailer) {
         await this.sendWithSMTP(content)
       } else {
-        throw new Error('邮件服务未正确初始化')
+        throw new Error('The mail service was not initialized correctly')
       }
 
-      logger.info(`邮件发送成功: ${content.subject} -> ${content.to}`)
+      logger.info(
+        `Email sent successfully: ${content.subject} -> ${content.to}`
+      )
       return true
     } catch (error) {
-      logger.error('邮件发送失败:', error as Error)
+      logger.error('Email sending failed:', error as Error)
       throw error
     }
   }
 
-  // 使用 Resend 发送
+  // Send using Resend
   private async sendWithResend(content: EmailContent) {
-    if (!this.resend) throw new Error('Resend 未初始化')
+    if (!this.resend) throw new Error('Resend is not initialized')
 
     const result = await this.resend.emails.send({
       from: this.config.from,
@@ -107,13 +111,13 @@ class EmailService {
     })
 
     if (result.error) {
-      throw new Error(`Resend 错误: ${result.error.message}`)
+      throw new Error(`Resend error: ${result.error.message}`)
     }
   }
 
-  // 使用 SMTP 发送
+  // Send using SMTP
   private async sendWithSMTP(content: EmailContent) {
-    if (!this.nodemailer) throw new Error('SMTP 未初始化')
+    if (!this.nodemailer) throw new Error('SMTP is not initialized')
 
     await this.nodemailer.sendMail({
       from: this.config.from,
@@ -128,7 +132,7 @@ class EmailService {
     })
   }
 
-  // 使用模板发送邮件
+  // Send using template
   async sendWithTemplate(
     to: string | string[],
     templateName: string,
@@ -143,21 +147,21 @@ class EmailService {
     })
   }
 
-  // 获取邮件模板
+  // Get email template
   private async getTemplate(
     templateName: string,
     variables: Record<string, any>
   ): Promise<EmailTemplate> {
-    // 这里可以从数据库或文件系统加载模板
-    // 目前使用内置模板
+    // Here you can load templates from a database or file system
+    // Currently using built-in templates
     const templates = getBuiltinTemplates()
     const template = templates[templateName]
 
     if (!template) {
-      throw new Error(`模板不存在: ${templateName}`)
+      throw new Error(`Template not found: ${templateName}`)
     }
 
-    // 替换模板变量
+    // Replace template variables
     const subject = this.replaceVariables(template.subject, variables)
     const html = this.replaceVariables(template.html, variables)
     const text = template.text
@@ -167,7 +171,7 @@ class EmailService {
     return { subject, html, text }
   }
 
-  // 替换模板变量
+  // Replace template variables
   private replaceVariables(
     template: string,
     variables: Record<string, any>
@@ -178,10 +182,10 @@ class EmailService {
   }
 }
 
-// 创建邮件服务实例
+// Create email service instance
 export const emailService = new EmailService()
 
-// 便捷发送方法
+// Convenient send method
 export const sendEmail = (content: EmailContent) =>
   emailService.sendEmail(content)
 export const sendEmailWithTemplate = (
@@ -190,156 +194,156 @@ export const sendEmailWithTemplate = (
   variables: Record<string, any>
 ) => emailService.sendWithTemplate(to, templateName, variables)
 
-// 内置邮件模板
+// Built-in email templates
 function getBuiltinTemplates(): Record<string, EmailTemplate> {
   return {
-    // 欢迎邮件
+    // Welcome email
     welcome: {
-      subject: '欢迎加入 AI SaaS！',
+      subject: 'Welcome to AI SaaS!',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #333;">欢迎，{{userName}}！</h1>
-          <p>感谢您注册 AI SaaS 平台。我们很高兴您加入我们的社区。</p>
-          <p>您现在可以：</p>
+          <h1 style="color: #333;">Welcome, {{userName}}!</h1>
+          <p>Thank you for signing up for AI SaaS. We're excited to have you on board.</p>
+          <p>You can now:</p>
           <ul>
-            <li>探索我们的 AI 功能</li>
-            <li>查看教程和案例</li>
-            <li>升级到付费计划获得更多功能</li>
+            <li>Explore our AI features</li>
+            <li>Check out tutorials and case studies</li>
+            <li>Upgrade to a paid plan for more features</li>
           </ul>
           <div style="margin: 30px 0;">
             <a href="{{dashboardUrl}}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
-              开始使用
+              Get Started
             </a>
           </div>
-          <p>如有任何问题，请随时联系我们的支持团队。</p>
-          <p>祝好，<br>AI SaaS 团队</p>
+          <p>If you have any questions, feel free to reach out to our support team.</p>
+          <p>Best regards,<br>AI SaaS Team</p>
         </div>
       `,
-      text: `欢迎，{{userName}}！感谢您注册 AI SaaS 平台。访问 {{dashboardUrl}} 开始使用。`,
+      text: `Welcome, {{userName}}! Thank you for signing up for AI SaaS. Visit {{dashboardUrl}} to get started.`,
     },
 
-    // 密码重置
+    // Password reset
     passwordReset: {
-      subject: '重置您的密码',
+      subject: 'Reset Your Password',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #333;">重置密码</h1>
-          <p>您好，{{userName}}！</p>
-          <p>我们收到了重置您账户密码的请求。请点击下面的链接重置密码：</p>
+          <h1 style="color: #333;">Reset Your Password</h1>
+          <p>Hello, {{userName}}!</p>
+          <p>We received a request to reset your account password. Please click the link below to reset your password:</p>
           <div style="margin: 30px 0;">
             <a href="{{resetUrl}}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
-              重置密码
+              Reset Password
             </a>
           </div>
-          <p>此链接将在 24 小时后过期。</p>
-          <p>如果您没有请求重置密码，请忽略此邮件。</p>
-          <p>祝好，<br>AI SaaS 团队</p>
+          <p>This link will expire in 24 hours.</p>
+          <p>If you did not request a password reset, please ignore this email.</p>
+          <p>Best regards,<br>AI SaaS Team</p>
         </div>
       `,
-      text: `重置密码：{{resetUrl}} （24小时内有效）`,
+      text: `Reset Password: {{resetUrl}} (Valid for 24 hours)`,
     },
 
-    // 支付成功
+    // Payment success
     paymentSuccess: {
-      subject: '支付成功确认',
+      subject: 'Payment Successful',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #28a745;">支付成功！</h1>
-          <p>您好，{{userName}}！</p>
-          <p>我们已收到您的支付，感谢您升级到 {{planName}} 计划。</p>
+          <h1 style="color: #28a745;">Payment Successful!</h1>
+          <p>Hello, {{userName}}!</p>
+          <p>We have received your payment. Thank you for upgrading to the {{planName}} plan.</p>
           <div style="background: #f8f9fa; padding: 20px; border-radius: 4px; margin: 20px 0;">
-            <h3>订单详情</h3>
-            <p><strong>计划：</strong>{{planName}}</p>
-            <p><strong>金额：</strong>{{amount}} {{currency}}</p>
-            <p><strong>期限：</strong>{{duration}}</p>
-            <p><strong>到期时间：</strong>{{expiryDate}}</p>
+            <h3>Order Details</h3>
+            <p><strong>Plan:</strong> {{planName}}</p>
+            <p><strong>Amount:</strong> {{amount}} {{currency}}</p>
+            <p><strong>Duration:</strong> {{duration}}</p>
+            <p><strong>Expiry Date:</strong> {{expiryDate}}</p>
           </div>
           <div style="margin: 30px 0;">
             <a href="{{dashboardUrl}}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
-              查看仪表板
+              View Dashboard
             </a>
           </div>
-          <p>祝好，<br>AI SaaS 团队</p>
+          <p>Best regards,<br>AI SaaS Team</p>
         </div>
       `,
-      text: `支付成功！您已升级到 {{planName}} 计划。访问 {{dashboardUrl}} 查看详情。`,
+      text: `Payment Successful! You have upgraded to the {{planName}} plan. Visit {{dashboardUrl}} for details.`,
     },
 
-    // 支付失败
+    // Payment failed
     paymentFailed: {
-      subject: '支付失败通知',
+      subject: 'Payment Failed Notification',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #dc3545;">支付失败</h1>
-          <p>您好，{{userName}}！</p>
-          <p>很抱歉，您的支付未能成功处理。请检查您的支付信息并重试。</p>
+          <h1 style="color: #dc3545;">Payment Failed</h1>
+          <p>Hello, {{userName}}!</p>
+          <p>We are sorry, but your payment could not be processed. Please check your payment information and try again.</p>
           <div style="background: #f8f9fa; padding: 20px; border-radius: 4px; margin: 20px 0;">
-            <h3>失败详情</h3>
-            <p><strong>计划：</strong>{{planName}}</p>
-            <p><strong>金额：</strong>{{amount}} {{currency}}</p>
-            <p><strong>原因：</strong>{{failureReason}}</p>
+            <h3>Failure Details</h3>
+            <p><strong>Plan:</strong> {{planName}}</p>
+            <p><strong>Amount:</strong> {{amount}} {{currency}}</p>
+            <p><strong>Reason:</strong> {{failureReason}}</p>
           </div>
           <div style="margin: 30px 0;">
             <a href="{{retryUrl}}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
-              重新支付
+              Retry Payment
             </a>
           </div>
-          <p>如需帮助，请联系我们的支持团队。</p>
-          <p>祝好，<br>AI SaaS 团队</p>
+          <p>If you need assistance, please contact our support team.</p>
+          <p>Best regards,<br>AI SaaS Team</p>
         </div>
       `,
-      text: `支付失败：{{planName}} {{amount}} {{currency}}。访问 {{retryUrl}} 重新支付。`,
+      text: `Payment Failed: {{planName}} {{amount}} {{currency}}. Visit {{retryUrl}} to retry payment.`,
     },
 
-    // 试用期即将结束
+    // Trial ending soon
     trialEnding: {
-      subject: '试用期即将结束',
+      subject: 'Trial Ending Soon',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #ffc107;">试用期即将结束</h1>
-          <p>您好，{{userName}}！</p>
-          <p>您的试用期将在 {{daysLeft}} 天后结束。为了继续享受我们的服务，请选择适合的付费计划。</p>
+          <h1 style="color: #ffc107;">Trial Ending Soon</h1>
+          <p>Hello, {{userName}}!</p>
+          <p>Your trial will end in {{daysLeft}} days. To continue enjoying our services, please choose a suitable paid plan.</p>
           <div style="margin: 30px 0;">
             <a href="{{pricingUrl}}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
-              查看付费计划
+              View Pricing Plans
             </a>
           </div>
-          <p>升级后您将获得：</p>
+          <p>Upgrading will give you:</p>
           <ul>
-            <li>无限制的 AI 功能使用</li>
-            <li>优先客户支持</li>
-            <li>高级功能访问</li>
+            <li>Unlimited access to AI features</li>
+            <li>Priority customer support</li>
+            <li>Access to premium features</li>
           </ul>
-          <p>祝好，<br>AI SaaS 团队</p>
+          <p>Best regards,<br>AI SaaS Team</p>
         </div>
       `,
-      text: `试用期将在 {{daysLeft}} 天后结束。访问 {{pricingUrl}} 选择付费计划。`,
+      text: `Trial will end in {{daysLeft}} days. Visit {{pricingUrl}} to choose a paid plan.`,
     },
 
-    // 订阅即将到期
+    // Subscription expiring
     subscriptionExpiring: {
-      subject: '订阅即将到期',
+      subject: 'Subscription Expiring Soon',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #ffc107;">订阅即将到期</h1>
-          <p>您好，{{userName}}！</p>
-          <p>您的 {{planName}} 订阅将在 {{expiryDate}} 到期。</p>
-          <p>为了确保服务不中断，请及时续费。</p>
+          <h1 style="color: #ffc107;">Subscription Expiring Soon</h1>
+          <p>Hello, {{userName}}!</p>
+          <p>Your {{planName}} subscription will expire on {{expiryDate}}.</p>
+          <p>To ensure uninterrupted service, please renew your subscription in a timely manner.</p>
           <div style="margin: 30px 0;">
             <a href="{{renewUrl}}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
-              立即续费
+              Renew Now
             </a>
           </div>
-          <p>如有任何问题，请联系我们的支持团队。</p>
-          <p>祝好，<br>AI SaaS 团队</p>
+          <p>If you have any questions, please contact our support team.</p>
+          <p>Best regards,<br>AI SaaS Team</p>
         </div>
       `,
-      text: `您的 {{planName}} 订阅将在 {{expiryDate}} 到期。访问 {{renewUrl}} 续费。`,
+      text: `Your {{planName}} subscription will expire on {{expiryDate}}. Visit {{renewUrl}} to renew.`,
     },
   }
 }
 
-// 发送特定类型的邮件
+// Sending specific types of emails
 export const sendWelcomeEmail = (
   to: string,
   userName: string,
@@ -412,7 +416,7 @@ export const sendSubscriptionExpiringEmail = (
     renewUrl,
   })
 
-// 验证邮件服务配置
+// Verify email service configuration
 export const isEmailConfigured = (): boolean => {
   return !!(
     env.RESEND_API_KEY ||
@@ -420,17 +424,17 @@ export const isEmailConfigured = (): boolean => {
   )
 }
 
-// 测试邮件发送
+// Test email sending
 export const testEmailService = async (to: string): Promise<boolean> => {
   try {
     return await sendEmail({
       to,
-      subject: 'AI SaaS 邮件服务测试',
-      html: '<p>这是一封测试邮件，确认邮件服务工作正常。</p>',
-      text: '这是一封测试邮件，确认邮件服务工作正常。',
+      subject: 'AI SaaS Email Service Test',
+      html: '<p>This is a test email to confirm that the email service is working correctly.</p>',
+      text: 'This is a test email to confirm that the email service is working correctly.',
     })
   } catch (error) {
-    logger.error('邮件服务测试失败:', error as Error)
+    logger.error('Email service test failed:', error as Error)
     return false
   }
 }

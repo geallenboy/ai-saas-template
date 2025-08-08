@@ -38,20 +38,20 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
   const utils = trpc.useUtils()
   const bulkUpdateMutation = trpc.users.bulkUpdateUsers.useMutation({
     onSuccess: () => {
-      // 刷新用户列表和统计数据
+      // Refresh user lists and statistics
       utils.users.getUsers.invalidate()
       utils.users.getUserStats.invalidate()
 
       setState({
         success: true,
-        message: `成功更新 ${selectedUserIds.length} 个用户`,
+        message: `Successfully updated ${selectedUserIds.length} users`,
       })
       onSuccess()
     },
     onError: error => {
       setState({
         success: false,
-        error: error.message || '操作失败，请重试',
+        error: error.message || 'The operation failed, please try again',
       })
     },
     onSettled: () => {
@@ -113,7 +113,7 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
           <div className="flex items-center space-x-2">
             <Select value={selectedAction} onValueChange={handleActionSelect}>
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="选择操作" />
+                <SelectValue placeholder="Select action" />
               </SelectTrigger>
               <SelectContent>
                 {BULK_ACTIONS.map(action => (
@@ -158,7 +158,7 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
                 selectedAction === 'delete' ? 'bg-red-600 hover:bg-red-700' : ''
               }
             >
-              {bulkUpdateMutation.isPending ? '执行中...' : '确认执行'}
+              {bulkUpdateMutation.isPending ? 'Executing...' : 'Confirm'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

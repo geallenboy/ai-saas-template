@@ -46,40 +46,40 @@ export function UserActions({ user }: UserActionsProps) {
 
   const deleteUserMutation = trpc.users.deleteUser.useMutation({
     onSuccess: () => {
-      // 刷新数据并返回列表页面
+      // Refresh data and return to the list page
       utils.users.getUsers.invalidate()
       utils.users.getUserStats.invalidate()
       setShowDeleteDialog(false)
       router.push('/admin/users')
     },
     onError: error => {
-      console.error('删除用户失败:', error)
+      console.error('Failed to delete user:', error)
     },
   })
 
   const toggleStatusMutation = trpc.users.toggleUserStatus.useMutation({
     onSuccess: () => {
-      // 刷新用户详情和列表数据
+      // Refresh user details and list data
       utils.users.getUserById.invalidate({ id: user.id })
       utils.users.getUsers.invalidate()
       utils.users.getUserStats.invalidate()
       setShowToggleDialog(false)
     },
     onError: error => {
-      console.error('切换用户状态失败:', error)
+      console.error('Failed to switch user status:', error)
     },
   })
 
   const updateUserMutation = trpc.users.updateUser.useMutation({
     onSuccess: () => {
-      // 刷新用户详情和列表数据
+      // Refresh user details and list data
       utils.users.getUserById.invalidate({ id: user.id })
       utils.users.getUsers.invalidate()
       utils.users.getUserStats.invalidate()
       setShowPromoteDialog(false)
     },
     onError: error => {
-      console.error('更新用户失败:', error)
+      console.error('Update user failed:', error)
     },
   })
 
@@ -157,7 +157,7 @@ export function UserActions({ user }: UserActionsProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* 删除确认对话框 */}
+      {/* Delete confirmation dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -173,53 +173,56 @@ export function UserActions({ user }: UserActionsProps) {
               disabled={isPending}
               className="bg-red-600 hover:bg-red-700"
             >
-              {deleteUserMutation.isPending ? '删除中...' : '确认删除'}
+              {deleteUserMutation.isPending ? 'Deleting...' : 'Confirm Delete'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* 状态切换确认对话框 */}
+      {/* Status toggle confirmation dialog */}
       <AlertDialog open={showToggleDialog} onOpenChange={setShowToggleDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {user.isActive ? '禁用用户' : '激活用户'}
+              {user.isActive ? 'Disable User' : 'Activate User'}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              您确定要{user.isActive ? '禁用' : '激活'}用户 {user.email} 吗？
+              Are you sure you want to {user.isActive ? 'disable' : 'activate'}{' '}
+              user {user.email}?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>取消</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleToggleStatus}
               disabled={isPending}
             >
               {toggleStatusMutation.isPending
-                ? '处理中...'
-                : `确认${user.isActive ? '禁用' : '激活'}`}
+                ? 'Processing...'
+                : `Confirm ${user.isActive ? 'Disable' : 'Activate'}`}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* 管理员权限切换确认对话框 */}
+      {/* Admin role toggle confirmation dialog */}
       <AlertDialog open={showPromoteDialog} onOpenChange={setShowPromoteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {user.isAdmin ? '取消管理员权限' : '设为管理员'}
+              {user.isAdmin ? 'Revoke Admin Role' : 'Grant Admin Role'}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              您确定要{user.isAdmin ? '取消' : '授予'}用户 {user.email}{' '}
-              的管理员权限吗？
+              Are you sure you want to {user.isAdmin ? 'revoke' : 'grant'} user{' '}
+              {user.email} admin privileges?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>取消</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleToggleAdmin} disabled={isPending}>
-              {updateUserMutation.isPending ? '处理中...' : '确认操作'}
+              {updateUserMutation.isPending
+                ? 'Processing...'
+                : 'Confirm Action'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

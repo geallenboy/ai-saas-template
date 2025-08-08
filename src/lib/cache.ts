@@ -2,26 +2,26 @@ import { env } from '@/env'
 import { logger } from '@/lib/logger'
 import { Redis } from '@upstash/redis'
 
-// 缓存配置
+// Cache configuration
 interface CacheConfig {
-  ttl: number // 默认过期时间（秒）
-  keyPrefix: string // 键前缀
+  ttl: number // Default expiration time (seconds)
+  keyPrefix: string // Key prefix
 }
 
-// 缓存项接口
+// Cache item interface
 interface CacheItem<T = any> {
   value: T
   createdAt: number
   expiresAt?: number
 }
 
-// 缓存服务类
+// Cache service class
 class CacheService {
   private redis?: Redis
   private memoryCache: Map<string, CacheItem> = new Map()
   private useMemoryFallback = false
   private config: CacheConfig = {
-    ttl: 3600, // 1小时
+    ttl: 3600, // 1 hour
     keyPrefix: 'ai-saas:',
   }
 
@@ -29,7 +29,7 @@ class CacheService {
     this.initializeRedis()
   }
 
-  // 初始化Redis连接
+  // Initialize Redis connection
   private initializeRedis() {
     try {
       if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
@@ -37,33 +37,38 @@ class CacheService {
           url: env.UPSTASH_REDIS_REST_URL,
           token: env.UPSTASH_REDIS_REST_TOKEN,
         })
-        logger.info('Redis缓存服务初始化成功')
+        logger.info('Redis cache service initialized successfully')
       } else {
         this.useMemoryFallback = true
-        logger.warn('Redis未配置，使用内存缓存作为后备')
+        logger.warn(
+          'Redis is not configured, using in-memory cache as fallback'
+        )
       }
     } catch (error) {
       this.useMemoryFallback = true
-      logger.error('Redis初始化失败，使用内存缓存:', error as Error)
+      logger.error(
+        'Failed to initialize Redis, using in-memory cache:',
+        error as Error
+      )
     }
   }
 
-  // 生成缓存键
+  // Generate cache key
   private generateKey(key: string): string {
     return `${this.config.keyPrefix}${key}`
   }
 
-  // 设置缓存
+  // Set cache
   async set<T>(key: string, value: T, ttl?: number): Promise<void> {
     const fullKey = this.generateKey(key)
     const expirationTime = ttl || this.config.ttl
 
     try {
       if (this.redis && !this.useMemoryFallback) {
-        // 使用Redis
+        // Use Redis
         await this.redis.setex(fullKey, expirationTime, JSON.stringify(value))
       } else {
-        // 使用内存缓存
+        // Use in-memory cache
         const expiresAt = Date.now() + expirationTime * 1000
         this.memoryCache.set(fullKey, {
           value,
@@ -73,26 +78,26 @@ class CacheService {
         this.cleanupExpiredMemoryCache()
       }
     } catch (error) {
-      logger.error(`缓存设置失败 ${key}:`, error as Error)
+      logger.error(`Cache setup failed ${key}:`, error as Error)
       throw error
     }
   }
 
-  // 获取缓存
+  // Get cache
   async get<T>(key: string): Promise<T | null> {
     const fullKey = this.generateKey(key)
 
     try {
       if (this.redis && !this.useMemoryFallback) {
-        // 使用Redis
+        // Using Redis
         const result = await this.redis.get(fullKey)
         return result ? JSON.parse(result as string) : null
       } else {
-        // 使用内存缓存
+        // Using in-memory cache
         const item = this.memoryCache.get(fullKey)
         if (!item) return null
 
-        // 检查是否过期
+        // Check if expired
         if (item.expiresAt && Date.now() > item.expiresAt) {
           this.memoryCache.delete(fullKey)
           return null
@@ -101,12 +106,12 @@ class CacheService {
         return item.value
       }
     } catch (error) {
-      logger.error(`缓存获取失败 ${key}:`, error as Error)
+      logger.error(`Cache retrieval failed ${key}:`, error as Error)
       return null
     }
   }
 
-  // 删除缓存
+  // Delete cache
   async del(key: string): Promise<boolean> {
     const fullKey = this.generateKey(key)
 
@@ -118,12 +123,12 @@ class CacheService {
         return this.memoryCache.delete(fullKey)
       }
     } catch (error) {
-      logger.error(`缓存删除失败 ${key}:`, error as Error)
+      logger.error(`Cache deletion failed ${key}:`, error as Error)
       return false
     }
   }
 
-  // 检查缓存是否存在
+  // Check if cache exists
   async exists(key: string): Promise<boolean> {
     const fullKey = this.generateKey(key)
 
@@ -143,12 +148,12 @@ class CacheService {
         return true
       }
     } catch (error) {
-      logger.error(`缓存检查失败 ${key}:`, error as Error)
+      logger.error(`Cache existence check failed ${key}:`, error as Error)
       return false
     }
   }
 
-  // 设置过期时间
+  // Set expiration time
   async expire(key: string, seconds: number): Promise<boolean> {
     const fullKey = this.generateKey(key)
 
@@ -165,12 +170,12 @@ class CacheService {
         return false
       }
     } catch (error) {
-      logger.error(`设置过期时间失败 ${key}:`, error as Error)
+      logger.error(`Failed to set expiration time ${key}:`, error as Error)
       return false
     }
   }
 
-  // 获取剩余过期时间
+  // Get remaining expiration time
   async ttl(key: string): Promise<number> {
     const fullKey = this.generateKey(key)
 
@@ -185,12 +190,12 @@ class CacheService {
         return remaining > 0 ? remaining : -2
       }
     } catch (error) {
-      logger.error(`获取TTL失败 ${key}:`, error as Error)
+      logger.error(`Failed to get TTL ${key}:`, error as Error)
       return -1
     }
   }
 
-  // 批量获取
+  // Batch get
   async mget<T>(keys: string[]): Promise<(T | null)[]> {
     const fullKeys = keys.map(k => this.generateKey(k))
 
@@ -214,18 +219,18 @@ class CacheService {
         })
       }
     } catch (error) {
-      logger.error('批量获取缓存失败:', error as Error)
+      logger.error('Batch cache retrieval failed:', error as Error)
       return keys.map(() => null)
     }
   }
 
-  // 批量设置
+  // Batch set
   async mset(
     pairs: Array<{ key: string; value: any; ttl?: number }>
   ): Promise<void> {
     try {
       if (this.redis && !this.useMemoryFallback) {
-        // Redis批量设置
+        // Use Redis for batch set
         const pipeline = this.redis.pipeline()
         pairs.forEach(({ key, value, ttl }) => {
           const fullKey = this.generateKey(key)
@@ -234,7 +239,7 @@ class CacheService {
         })
         await pipeline.exec()
       } else {
-        // 内存缓存批量设置
+        // Use in-memory cache for batch set
         pairs.forEach(({ key, value, ttl }) => {
           const fullKey = this.generateKey(key)
           const expirationTime = ttl || this.config.ttl
@@ -248,12 +253,12 @@ class CacheService {
         this.cleanupExpiredMemoryCache()
       }
     } catch (error) {
-      logger.error('批量设置缓存失败:', error as Error)
+      logger.error('Batch cache setup failed:', error as Error)
       throw error
     }
   }
 
-  // 清理过期的内存缓存
+  // Clean up expired memory cache
   private cleanupExpiredMemoryCache() {
     const now = Date.now()
     for (const [key, item] of this.memoryCache.entries()) {
@@ -263,7 +268,7 @@ class CacheService {
     }
   }
 
-  // 清空所有缓存
+  // Flush all cache
   async flush(): Promise<void> {
     try {
       if (this.redis && !this.useMemoryFallback) {
@@ -271,14 +276,14 @@ class CacheService {
       } else {
         this.memoryCache.clear()
       }
-      logger.info('缓存清空成功')
+      logger.info('Cache flushed successfully')
     } catch (error) {
-      logger.error('清空缓存失败:', error as Error)
+      logger.error('Failed to flush cache:', error as Error)
       throw error
     }
   }
 
-  // 获取缓存统计信息
+  // Get cache statistics
   async getStats(): Promise<{
     type: string
     keyCount: number
@@ -300,7 +305,7 @@ class CacheService {
         }
       }
     } catch (error) {
-      logger.error('获取缓存统计失败:', error as Error)
+      logger.error('Failed to get cache statistics:', error as Error)
       return {
         type: this.useMemoryFallback ? 'memory' : 'redis',
         keyCount: 0,
@@ -308,17 +313,17 @@ class CacheService {
     }
   }
 
-  // 估算内存使用量
+  // Estimate memory usage
   private estimateMemoryUsage(): number {
     let totalSize = 0
     for (const [key, item] of this.memoryCache.entries()) {
-      totalSize += key.length * 2 // Unicode字符占2字节
+      totalSize += key.length * 2 // Unicode characters take up 2 bytes
       totalSize += JSON.stringify(item).length * 2
     }
     return totalSize
   }
 
-  // 健康检查
+  // Health check
   async healthCheck(): Promise<boolean> {
     try {
       const testKey = 'health-check'
@@ -330,16 +335,16 @@ class CacheService {
 
       return !!result && (result as any).timestamp === testValue.timestamp
     } catch (error) {
-      logger.error('缓存健康检查失败:', error as Error)
+      logger.error('Failed to perform health check:', error as Error)
       return false
     }
   }
 }
 
-// 创建缓存服务实例
+// Create a cache service instance
 export const cacheService = new CacheService()
 
-// 便捷方法
+// Convenience methods
 export const cache = {
   set: <T>(key: string, value: T, ttl?: number) =>
     cacheService.set(key, value, ttl),
@@ -356,7 +361,7 @@ export const cache = {
   health: () => cacheService.healthCheck(),
 }
 
-// 缓存装饰器
+// cache decorator
 export function Cached(key: string, ttl?: number) {
   return (
     target: any,
@@ -368,16 +373,16 @@ export function Cached(key: string, ttl?: number) {
     descriptor.value = async function (...args: any[]) {
       const cacheKey = `${key}:${JSON.stringify(args)}`
 
-      // 尝试从缓存获取
+      // Try to get it from cache
       const cached = await cache.get(cacheKey)
       if (cached !== null) {
         return cached
       }
 
-      // 执行原方法
+      // Execute original method
       const result = await method.apply(this, args)
 
-      // 存入缓存
+      // Store in cache
       if (result !== null && result !== undefined) {
         await cache.set(cacheKey, result, ttl)
       }
@@ -387,7 +392,7 @@ export function Cached(key: string, ttl?: number) {
   }
 }
 
-// 缓存帮助函数
+// Cache helper function
 export const withCache = async <T>(
   key: string,
   fn: () => Promise<T>,
@@ -406,12 +411,12 @@ export const withCache = async <T>(
   return result
 }
 
-// 缓存键生成器
+// Cache key generator
 export const generateCacheKey = (...parts: (string | number)[]): string => {
   return parts.join(':')
 }
 
-// 常用缓存键
+// Common cache keys
 export const CacheKeys = {
   user: (userId: string) => `user:${userId}`,
   userMembership: (userId: string) => `user:${userId}:membership`,
@@ -423,7 +428,7 @@ export const CacheKeys = {
   sessionCount: (userId: string) => `sessions:${userId}`,
 } as const
 
-// 批量清理用户相关缓存
+// Batch clear user-related cache
 export const clearUserCache = async (userId: string): Promise<void> => {
   const keys = [
     CacheKeys.user(userId),
@@ -435,14 +440,14 @@ export const clearUserCache = async (userId: string): Promise<void> => {
   await Promise.all(keys.map(key => cache.del(key)))
 }
 
-// 预热缓存
+// Warm up cache
 export const warmupCache = async (): Promise<void> => {
   try {
-    // 预热会员计划
+    // Warm up membership plans
     // await cache.set(CacheKeys.membershipPlans(), await getMembershipPlans(), 3600)
 
-    logger.info('缓存预热完成')
+    logger.info('Cache warmed up successfully')
   } catch (error) {
-    logger.error('缓存预热失败:', error as Error)
+    logger.error('Failed to warm up cache:', error as Error)
   }
 }

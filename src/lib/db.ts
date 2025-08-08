@@ -2,7 +2,7 @@ import { env } from '@/env'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
-// 导入所有schema和关系定义
+// Import all schema and relationship definitions
 import * as schema from '@/drizzle/schemas'
 
 const connection = postgres(env.DATABASE_URL)
@@ -12,16 +12,16 @@ export const db = drizzle(connection, {
   logger: env.NODE_ENV === 'development',
 })
 
-// 导出schema以便在其他地方使用
+// Export schema for use in other places
 export { schema }
 
-// 导出常用类型
+// Export common types
 export type Database = typeof db
 export type DatabaseTransaction = Parameters<
   Parameters<typeof db.transaction>[0]
 >[0]
 
-// 健康检查函数
+// Health check function
 export async function checkDatabaseHealth(): Promise<boolean> {
   try {
     await db.execute('SELECT 1')
@@ -32,7 +32,7 @@ export async function checkDatabaseHealth(): Promise<boolean> {
   }
 }
 
-// 关闭数据库连接 (用于优雅关闭)
+// Close database connection (for graceful shutdown)
 export async function closeDatabaseConnection(): Promise<void> {
   try {
     await connection.end()

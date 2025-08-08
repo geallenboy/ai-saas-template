@@ -57,7 +57,7 @@ export function MembershipCenter() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
-      {/* 页面标题 */}
+      {/* Page title */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">会员中心</h1>
@@ -81,7 +81,7 @@ export function MembershipCenter() {
           <TabsTrigger value="settings">设置</TabsTrigger>
         </TabsList>
 
-        {/* 概览标签页 */}
+        {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <MembershipStatusCard
@@ -103,7 +103,7 @@ export function MembershipCenter() {
           </div>
         </TabsContent>
 
-        {/* 使用统计标签页 */}
+        {/* Usage Statistics tab */}
         <TabsContent value="usage" className="space-y-6">
           <UsageStatsCard
             usageData={usageData}
@@ -112,13 +112,13 @@ export function MembershipCenter() {
           />
         </TabsContent>
 
-        {/* 账单管理标签页 */}
+        {/* Billing Management Tab */}
         <TabsContent value="billing" className="space-y-6">
           <BillingManagementCard membershipStatus={membershipStatus} />
           <PaymentHistoryClient />
         </TabsContent>
 
-        {/* 设置标签页 */}
+        {/* Set up tabs */}
         <TabsContent value="settings" className="space-y-6">
           <MembershipSettingsCard membershipStatus={membershipStatus} />
           <div className="pt-8">
@@ -131,7 +131,7 @@ export function MembershipCenter() {
   )
 }
 
-// 会员状态卡片
+// Member status card
 function MembershipStatusCard({
   membershipStatus,
   isLoading,
@@ -198,7 +198,7 @@ function MembershipStatusCard({
             <Crown className="h-5 w-5 text-yellow-500" />
             {currentPlan?.nameZh || currentPlan?.name}
           </div>
-          <Badge className={statusConfig?.color}>{statusConfig?.labelZh}</Badge>
+          <Badge className={statusConfig?.color}>{statusConfig?.labelDe}</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -239,7 +239,7 @@ function MembershipStatusCard({
   )
 }
 
-// 快捷操作卡片
+// Quick action card
 function QuickActionsCard() {
   return (
     <Card>
@@ -273,7 +273,7 @@ function QuickActionsCard() {
   )
 }
 
-// 使用概览卡片
+// Use overview cards
 function UsageOverviewCard({
   usageData,
   membershipStatus,
@@ -378,7 +378,7 @@ function UsageItem({
   )
 }
 
-// 详细使用统计卡片
+// Detailed usage statistics card
 function UsageStatsCard({
   usageData,
   membershipStatus,
@@ -520,7 +520,7 @@ function DetailedUsageItem({
   )
 }
 
-// 会员权益卡片
+// Member benefits card
 function MembershipBenefitsCard({
   membershipStatus,
 }: { membershipStatus: any }) {
@@ -561,7 +561,7 @@ function BenefitItem({ label, enabled }: { label: string; enabled: boolean }) {
   )
 }
 
-// 账单管理卡片
+// Bill management card
 function BillingManagementCard({
   membershipStatus,
 }: { membershipStatus: any }) {
@@ -617,7 +617,7 @@ function BillingManagementCard({
   )
 }
 
-// 会员设置卡片
+// Member settings card
 function MembershipSettingsCard({
   membershipStatus,
 }: { membershipStatus: any }) {

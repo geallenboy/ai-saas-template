@@ -19,8 +19,8 @@ export function UserProfileClient({
     isLoading,
     error,
   } = trpc.auth.getCurrentUser.useQuery(undefined, {
-    staleTime: 3 * 60 * 1000, // 3分钟缓存
-    gcTime: 5 * 60 * 1000, // 5分钟垃圾回收
+    staleTime: 3 * 60 * 1000, // 3 minutes cache
+    gcTime: 5 * 60 * 1000, // 5 minutes garbage collection
   })
 
   if (isLoading) {
@@ -83,14 +83,14 @@ export function UserProfileClient({
           <div>
             <p className="text-sm font-medium">注册时间</p>
             <p className="text-sm text-muted-foreground">
-              {user.createdAt?.toLocaleDateString('zh-CN')}
+              {user.createdAt?.toLocaleDateString('de-DE')}
             </p>
           </div>
 
           <div>
             <p className="text-sm font-medium">最后登录</p>
             <p className="text-sm text-muted-foreground">
-              {user.lastLoginAt?.toLocaleDateString('zh-CN') || '从未登录'}
+              {user.lastLoginAt?.toLocaleDateString('de-DE') || '从未登录'}
             </p>
           </div>
 
@@ -104,7 +104,7 @@ export function UserProfileClient({
           <div>
             <p className="text-sm font-medium">语言偏好</p>
             <p className="text-sm text-muted-foreground">
-              {user.preferences?.language === 'zh' ? '中文' : 'English'}
+              {user.preferences?.language === 'de' ? 'Deutsch' : 'English'}
             </p>
           </div>
         </div>

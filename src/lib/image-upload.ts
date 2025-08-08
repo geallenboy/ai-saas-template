@@ -1,20 +1,20 @@
 /**
- * 图片上传工具函数
- * 支持文件上传和URL上传到Cloudflare Images
+ * Image upload utility functions
+ * Supports uploading files and URLs to Cloudflare Images
  */
 
 /**
- * 获取API的完整URL
- * @param path - API路径
- * @returns 完整的API URL
+ * Get the full API URL
+ * @param path - API path
+ * @returns The full API URL
  */
 function getApiUrl(path: string): string {
-  // 在客户端，使用当前域名
+  // In the client, use the current domain
   if (typeof window !== 'undefined') {
     return `${window.location.origin}${path}`
   }
 
-  // 在服务器端，必须使用完整URL
+  // On the server side, must use the full URL
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_APP_URL ||
@@ -38,8 +38,8 @@ export interface ImageUploadResult {
 }
 
 /**
- * 上传文件到服务器
- * @param file - 要上传的文件
+ * Upload a file to the server
+ * @param file - The file to upload
  * @returns Promise<ImageUploadResult>
  */
 export async function uploadImageFile(file: File): Promise<ImageUploadResult> {
@@ -78,9 +78,9 @@ export async function uploadImageFile(file: File): Promise<ImageUploadResult> {
 }
 
 /**
- * 通过URL上传图片到服务器
- * @param url - 图片URL
- * @param filename - 可选的文件名
+ * Upload an image to the server via URL
+ * @param url - The image URL
+ * @param filename - Optional filename
  * @returns Promise<ImageUploadResult>
  */
 export async function uploadImageFromUrl(
@@ -113,7 +113,7 @@ export async function uploadImageFromUrl(
     const { logger } = require('@/lib/logger')
     logger.error('URL upload failed', error as Error, {
       category: 'upload',
-      url: url.substring(0, 100), // 限制URL长度避免日志过长
+      url: url.substring(0, 100), // Limit URL length to avoid overly long logs
       action: 'url_upload',
     })
     return {
@@ -124,8 +124,8 @@ export async function uploadImageFromUrl(
 }
 
 /**
- * 获取图片信息
- * @param imageId - 图片ID
+ * Get image information
+ * @param imageId - The image ID
  * @returns Promise<ImageUploadResult>
  */
 export async function getImageInfo(
@@ -161,15 +161,15 @@ export async function getImageInfo(
 }
 
 /**
- * 验证文件是否为有效的图片
- * @param file - 要验证的文件
- * @returns 验证结果
+ * Verify that the file is a valid image.
+ * @param file - the file to be verified.
+ * @returns the verification result.
  */
 export function validateImageFile(file: File): {
   isValid: boolean
   error?: string
 } {
-  // 验证文件类型
+  // Validate file type
   const allowedTypes = [
     'image/jpeg',
     'image/jpg',
@@ -186,7 +186,7 @@ export function validateImageFile(file: File): {
     }
   }
 
-  // 验证文件大小 (最大 10MB)
+  // Validate file size (max 10MB)
   const maxSize = 10 * 1024 * 1024 // 10MB
   if (file.size > maxSize) {
     return {
@@ -199,9 +199,9 @@ export function validateImageFile(file: File): {
 }
 
 /**
- * 验证URL是否为有效的图片URL
- * @param url - 要验证的URL
- * @returns 验证结果
+ * Verify that the URL is a valid image URL
+ * @param url - URL to verify
+ * @returns Verification result
  */
 export function validateImageUrl(url: string): {
   isValid: boolean
@@ -210,7 +210,7 @@ export function validateImageUrl(url: string): {
   try {
     const parsedUrl = new URL(url)
 
-    // 检查协议
+    // Check protocol
     if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
       return {
         isValid: false,
@@ -218,14 +218,14 @@ export function validateImageUrl(url: string): {
       }
     }
 
-    // 检查文件扩展名（可选）
+    // Check file extension (optional)
     const pathname = parsedUrl.pathname.toLowerCase()
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp']
     const hasImageExtension = imageExtensions.some(ext =>
       pathname.endsWith(ext)
     )
 
-    // 如果URL中没有明显的图片扩展名，给出警告但仍然允许
+    // If the URL does not have a clear image extension, issue a warning but still allow
     if (!hasImageExtension) {
       const { logger } = require('@/lib/logger')
       logger.warn('URL may not be an image', {
@@ -246,8 +246,8 @@ export function validateImageUrl(url: string): {
 }
 
 /**
- * 将文件转换为Data URL用于预览
- * @param file - 要转换的文件
+ * Convert a file to a Data URL for preview
+ * @param file - The file to convert
  * @returns Promise<string>
  */
 export function fileToDataUrl(file: File): Promise<string> {
@@ -260,11 +260,11 @@ export function fileToDataUrl(file: File): Promise<string> {
 }
 
 /**
- * 压缩图片（如果需要）
- * @param file - 原始文件
- * @param maxWidth - 最大宽度
- * @param maxHeight - 最大高度
- * @param quality - 压缩质量 (0-1)
+ * Compress an image (if needed)
+ * @param file - The original file
+ * @param maxWidth - The maximum width
+ * @param maxHeight - The maximum height
+ * @param quality - The compression quality (0-1)
  * @returns Promise<File>
  */
 export function compressImage(
@@ -279,7 +279,7 @@ export function compressImage(
     const img = new Image()
 
     img.onload = () => {
-      // 计算新的尺寸
+      // Calculate new dimensions
       let { width, height } = img
 
       if (width > maxWidth) {
@@ -295,7 +295,7 @@ export function compressImage(
       canvas.width = width
       canvas.height = height
 
-      // 绘制压缩后的图片
+      // Draw the compressed image
       ctx?.drawImage(img, 0, 0, width, height)
 
       canvas.toBlob(

@@ -89,8 +89,8 @@ export const env = createEnv({
     // Feature flags (client)
     NEXT_PUBLIC_ENABLE_AI_FEATURES: z.string().default('true'),
     NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES: z.string().default('true'),
-    NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('zh'),
-    NEXT_PUBLIC_SUPPORTED_LOCALES: z.string().default('zh,en'),
+    NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('en'),
+    NEXT_PUBLIC_SUPPORTED_LOCALES: z.string().default('de,en'),
 
     // Analytics
     NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),

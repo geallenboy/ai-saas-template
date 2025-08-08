@@ -14,11 +14,11 @@ export default function SSOCallback() {
   const router = useRouter()
   const locale = useLocale()
 
-  // 监听认证状态变化
+  // Monitor authentication status changes
   useEffect(() => {
     if (isLoaded && isSignedIn) {
       setLoadingState('redirecting')
-      // 登录成功，开始倒计时并重定向
+      // Login successful, start countdown and redirect
       const timer = setInterval(() => {
         setCountdown(prev => {
           if (prev <= 1) {
@@ -31,17 +31,17 @@ export default function SSOCallback() {
 
       return () => clearInterval(timer)
     }
-    // 确保所有代码路径都有返回值
+    // Ensure all code paths have a return value
     return () => {}
   }, [isLoaded, isSignedIn, router, locale])
 
-  // 超时处理
+  // Timeout handling
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (loadingState === 'authenticating') {
         setLoadingState('error')
       }
-    }, 15000) // 15秒超时
+    }, 15000) // 15 seconds timeout
 
     return () => clearTimeout(timeout)
   }, [loadingState])

@@ -9,7 +9,7 @@ export default function HeroSection() {
 
   return (
     <header className="hero-enhanced relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-      {/* 动态背景元素 */}
+      {/* Dynamic background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-96 h-96 bg-blue-400/20 dark:bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl animate-float" />
         <div
@@ -23,15 +23,15 @@ export default function HeroSection() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-pink-400/10 rounded-full filter blur-3xl animate-pulse" />
       </div>
 
-      {/* 网格背景 */}
+      {/* Grid background */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10" />
 
-      {/* 渐变覆盖层 */}
+      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-white/20 dark:from-gray-900/30 dark:via-transparent dark:to-gray-900/20" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
-          {/* 标签 */}
+          {/* Tag */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 dark:bg-black/20 backdrop-blur-sm border border-white/20 dark:border-white/10 mb-8">
             <Sparkles className="w-4 h-4 mr-2 text-blue-400" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -39,17 +39,17 @@ export default function HeroSection() {
             </span>
           </div>
 
-          {/* 主标题 */}
+          {/* Main title */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
             <span className="text-gradient-improved">{t('title')}</span>
           </h1>
 
-          {/* 副标题 */}
+          {/* Subtitle */}
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
             {t('subtitle')}
           </p>
 
-          {/* 按钮组 */}
+          {/* Button group */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <Link href="/auth/sign-up">
               <button className="btn-modern-primary text-lg px-10 py-4 w-full sm:w-auto min-w-[220px] group">
@@ -65,7 +65,7 @@ export default function HeroSection() {
             </Link>
           </div>
 
-          {/* 信任指标 */}
+          {/* Trust indicators */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">

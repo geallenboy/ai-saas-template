@@ -24,8 +24,8 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
   } = trpc.users.getUserById.useQuery(
     { id: userId },
     {
-      staleTime: 2 * 60 * 1000, // 2分钟缓存
-      gcTime: 5 * 60 * 1000, // 5分钟垃圾回收
+      staleTime: 2 * 60 * 1000, // 2 minutes cache
+      gcTime: 5 * 60 * 1000, // 5 minutes garbage collection
     }
   )
 
@@ -38,7 +38,9 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
       <Card>
         <CardContent className="p-6">
           <p className="text-destructive">
-            {error ? '加载用户信息失败' : '用户不存在或已被删除'}
+            {error
+              ? 'Failed to load user information'
+              : 'User does not exist or has been deleted'}
           </p>
         </CardContent>
       </Card>
@@ -75,7 +77,7 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
 
             <div className="space-y-2">
               <h2 className="text-2xl font-semibold">
-                {user.fullName || '未设置姓名'}
+                {user.fullName || 'No name set'}
               </h2>
               <p className="text-muted-foreground">{user.email}</p>
 
@@ -152,14 +154,14 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
                 <div>
                   <p className="text-sm font-medium">主题</p>
                   <p className="text-sm text-muted-foreground">
-                    {user.preferences.theme === 'dark' ? '深色' : '浅色'}
+                    {user.preferences.theme === 'dark' ? 'Dark' : 'Light'}
                   </p>
                 </div>
 
                 <div>
                   <p className="text-sm font-medium">语言</p>
                   <p className="text-sm text-muted-foreground">
-                    {user.preferences.language === 'zh' ? '中文' : 'English'}
+                    {user.preferences.language === 'de' ? 'Deutsch' : 'English'}
                   </p>
                 </div>
 

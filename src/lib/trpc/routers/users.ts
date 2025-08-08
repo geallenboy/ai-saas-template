@@ -6,7 +6,7 @@ import { adminProcedure, createTRPCRouter } from '../server'
 
 export const usersRouter = createTRPCRouter({
   /**
-   * 获取用户列表（分页、搜索、排序）
+   * Get user list (paging, searching, sorting)
    */
   getUsers: adminProcedure
     .input(
@@ -26,7 +26,7 @@ export const usersRouter = createTRPCRouter({
       const { page, limit, search, sortBy, sortOrder, isActive, isAdmin } =
         input
 
-      // 构建查询条件
+      // Build query conditions
       const conditions = []
 
       if (search) {
@@ -46,7 +46,7 @@ export const usersRouter = createTRPCRouter({
 
       const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
-      // 获取总数
+      // Get total count
       const totalResult = await ctx.db
         .select({ total: count() })
         .from(users)
@@ -54,7 +54,7 @@ export const usersRouter = createTRPCRouter({
 
       const total = totalResult[0]?.total || 0
 
-      // 获取用户列表
+      // Get user list
       const orderColumn = users[sortBy]
       const orderDirection =
         sortOrder === 'asc' ? asc(orderColumn) : desc(orderColumn)
@@ -77,7 +77,7 @@ export const usersRouter = createTRPCRouter({
     }),
 
   /**
-   * 根据ID获取用户详情
+   * Get user details by ID
    */
   getUserById: adminProcedure
     .input(z.object({ id: z.string() }))
@@ -89,7 +89,7 @@ export const usersRouter = createTRPCRouter({
       if (!user) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '用户不存在',
+          message: 'User does not exist',
         })
       }
 
@@ -97,7 +97,7 @@ export const usersRouter = createTRPCRouter({
     }),
 
   /**
-   * 获取用户统计数据
+   * Get user statistics
    */
   getUserStats: adminProcedure.query(async ({ ctx }) => {
     const [stats] = await ctx.db
@@ -113,7 +113,7 @@ export const usersRouter = createTRPCRouter({
   }),
 
   /**
-   * 更新用户信息
+   * Update user information
    */
   updateUser: adminProcedure
     .input(
@@ -140,11 +140,11 @@ export const usersRouter = createTRPCRouter({
       if (!updatedUser) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '用户不存在',
+          message: 'User does not exist',
         })
       }
 
-      ctx.logger.info(`管理员更新用户: ${updatedUser.email}`, {
+      ctx.logger.info(`Admin updated user: ${updatedUser.email}`, {
         adminId: ctx.userId,
         targetUserId: id,
         changes: updateData,
@@ -154,7 +154,7 @@ export const usersRouter = createTRPCRouter({
     }),
 
   /**
-   * 切换用户状态
+   * Toggle user status
    */
   toggleUserStatus: adminProcedure
     .input(z.object({ id: z.string() }))
@@ -166,7 +166,7 @@ export const usersRouter = createTRPCRouter({
       if (!user) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '用户不存在',
+          message: 'User does not exist',
         })
       }
 
@@ -180,7 +180,7 @@ export const usersRouter = createTRPCRouter({
         .returning()
 
       ctx.logger.info(
-        `管理员切换用户状态: ${updatedUser?.email} -> ${updatedUser?.isActive ? '激活' : '禁用'}`,
+        `Admin toggled user status: ${updatedUser?.email} -> ${updatedUser?.isActive ? 'Activated' : 'Deactivated'}`,
         {
           adminId: ctx.userId,
           targetUserId: input.id,
@@ -191,7 +191,7 @@ export const usersRouter = createTRPCRouter({
     }),
 
   /**
-   * 删除用户
+   * Delete user
    */
   deleteUser: adminProcedure
     .input(z.object({ id: z.string() }))
@@ -203,30 +203,30 @@ export const usersRouter = createTRPCRouter({
       if (!user) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '用户不存在',
+          message: 'User does not exist',
         })
       }
 
-      // 检查是否为超级管理员，防止误删
+      // Check if the user is a super admin to prevent accidental deletion
       if (user.adminLevel === 2) {
         throw new TRPCError({
           code: 'FORBIDDEN',
-          message: '无法删除超级管理员账户',
+          message: 'Cannot delete super admin account',
         })
       }
 
       await ctx.db.delete(users).where(eq(users.id, input.id))
 
-      ctx.logger.info(`管理员删除用户: ${user.email}`, {
+      ctx.logger.info(`Admin deleted user: ${user.email}`, {
         adminId: ctx.userId,
         targetUserId: input.id,
       })
 
-      return { message: '用户删除成功' }
+      return { message: 'User deleted successfully' }
     }),
 
   /**
-   * 批量更新用户
+   * Batch update users
    */
   bulkUpdateUsers: adminProcedure
     .input(
@@ -247,17 +247,17 @@ export const usersRouter = createTRPCRouter({
         })
         .where(sql`id = ANY(${userIds})`)
 
-      ctx.logger.info(`管理员批量更新用户: ${userIds.length} 个用户`, {
+      ctx.logger.info(`Admin bulk updated users: ${userIds.length} users`, {
         adminId: ctx.userId,
         userIds,
         changes: updateData,
       })
 
-      return { message: `成功更新 ${userIds.length} 个用户` }
+      return { message: `Successfully updated ${userIds.length} users` }
     }),
 
   /**
-   * 创建新用户
+   * Create new user
    */
   createUser: adminProcedure
     .input(
@@ -270,7 +270,7 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // 检查邮箱是否已存在
+      // Check if email already exists
       const existingUser = await ctx.db.query.users.findFirst({
         where: eq(users.email, input.email),
       })
@@ -278,11 +278,11 @@ export const usersRouter = createTRPCRouter({
       if (existingUser) {
         throw new TRPCError({
           code: 'CONFLICT',
-          message: '该邮箱已存在',
+          message: 'Email already exists',
         })
       }
 
-      // 生成临时用户ID (在实际应用中可能需要与Clerk集成)
+      // Generate temporary user ID (may need to integrate with Clerk in actual application)
       const tempUserId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
       const [newUser] = await ctx.db
@@ -300,12 +300,12 @@ export const usersRouter = createTRPCRouter({
           totalBlogs: 0,
           preferences: {
             theme: 'light',
-            language: 'zh',
-            currency: 'CNY',
-            timezone: 'Asia/Shanghai',
+            language: 'de',
+            currency: 'EUR',
+            timezone: 'Europe/Berlin',
           },
           country: null,
-          locale: 'zh',
+          locale: 'de',
           lastLoginAt: null,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -315,11 +315,11 @@ export const usersRouter = createTRPCRouter({
       if (!newUser) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: '创建用户失败',
+          message: 'Failed to create user',
         })
       }
 
-      ctx.logger.info(`管理员创建用户: ${newUser.email}`, {
+      ctx.logger.info(`Admin created user: ${newUser.email}`, {
         adminId: ctx.userId,
         newUserId: newUser.id,
         userEmail: input.email,

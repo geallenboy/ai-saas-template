@@ -7,7 +7,7 @@ export default async function LocaleLayout({
   params: paramsPromise,
 }: {
   children: React.ReactNode
-  params: Promise<{ locale: 'zh' | 'en' }>
+  params: Promise<{ locale: 'de' | 'en' }>
 }) {
   const { locale } = await paramsPromise
   const messages = await getMessages({ locale })

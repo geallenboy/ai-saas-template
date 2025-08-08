@@ -40,15 +40,15 @@ function DashboardContent() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* 左侧：用户资料和会员状态 */}
+          {/* Left: User profile and membership status*/}
           <div className="lg:col-span-1 space-y-6">
             <UserProfileClient />
             <MembershipStatusClient />
           </div>
 
-          {/* 右侧：主要内容区域 */}
+          {/* Right: Main content area */}
           <div className="lg:col-span-3 space-y-6">
-            {/* 快速操作区域 */}
+            {/* Quick actions area */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
@@ -97,7 +97,7 @@ function DashboardContent() {
               </CardContent>
             </Card>
 
-            {/* 支付历史 */}
+            {/* Payment history */}
             <PaymentHistoryClient />
           </div>
         </div>
@@ -116,7 +116,7 @@ function DashboardSkeleton() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-1 space-y-6">
-          {/* 用户资料骨架 */}
+          {/* User profile skeleton */}
           <Card>
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center space-x-4">
@@ -129,7 +129,7 @@ function DashboardSkeleton() {
             </CardContent>
           </Card>
 
-          {/* 会员状态骨架 */}
+          {/* Member status skeleton */}
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-8 w-24 mb-4" />
@@ -142,7 +142,7 @@ function DashboardSkeleton() {
         </div>
 
         <div className="lg:col-span-3 space-y-6">
-          {/* 概览卡片骨架 */}
+          {/* Overview Card Skeleton */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <Card key={i}>
@@ -159,7 +159,7 @@ function DashboardSkeleton() {
             ))}
           </div>
 
-          {/* 快速操作骨架 */}
+          {/* Quick operation skeleton */}
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-24 mb-4" />
@@ -171,7 +171,7 @@ function DashboardSkeleton() {
             </CardContent>
           </Card>
 
-          {/* 支付历史骨架 */}
+          {/* Payment history skeleton */}
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-24 mb-4" />

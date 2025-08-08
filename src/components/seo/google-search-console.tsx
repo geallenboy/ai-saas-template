@@ -14,10 +14,10 @@ export function GoogleSearchConsole({
 
   return (
     <>
-      {/* Google Search Console验证 */}
+      {/* Google Search Console verification */}
       <meta name="google-site-verification" content={siteVerification} />
 
-      {/* Google Search Console的数据层 */}
+      {/* Google Search Console data layer */}
       <Script
         id="google-search-console-data"
         strategy="afterInteractive"
@@ -26,7 +26,7 @@ export function GoogleSearchConsole({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             
-            // 为Search Console提供结构化数据
+            // Providing structured data for Search Console
             gtag('event', 'page_view', {
               'custom_map': {
                 'metric1': 'search_console_page'
@@ -39,19 +39,19 @@ export function GoogleSearchConsole({
   )
 }
 
-// Google Search Console相关的SEO工具函数
+// Google Search Console related SEO tool functions
 export const searchConsoleUtils = {
-  // 生成站点地图URL
+  // Generate sitemap URL
   generateSitemapUrl: (baseUrl: string) => {
     return `${baseUrl}/sitemap.xml`
   },
 
-  // 生成robots.txt URL
+  // Generate robots.txt URL
   generateRobotsUrl: (baseUrl: string) => {
     return `${baseUrl}/robots.txt`
   },
 
-  // 提交URL到Google索引（需要在服务端实现）
+  // Submit URL to Google Index (needs to be implemented on the server)
   submitUrlForIndexing: async (url: string, accessToken: string) => {
     try {
       const response = await fetch(

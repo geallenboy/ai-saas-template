@@ -1,5 +1,5 @@
 /**
- * 通用分页组件
+ * Universal paging component
  */
 
 import { Button } from '@/components/ui/button'
@@ -54,7 +54,7 @@ export function AdminPagination({
       rangeWithDots.push(totalPages)
     }
 
-    // 去重
+    // Remove duplicates
     return Array.from(new Set(rangeWithDots))
   }
 

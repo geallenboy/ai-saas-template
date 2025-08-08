@@ -23,22 +23,22 @@ export function CouponForm({ onCouponApplied }: CouponFormProps) {
     setError(null)
 
     try {
-      // TODO: 实现优惠券验证逻辑
+      // TODO: Implementing coupon validation logic
       // const result = await validateCoupon(code)
-      console.log('验证优惠券:', code)
+      console.log('Validating coupon:', code)
 
-      // 模拟成功
+      // Simulate success
       const mockCoupon = {
         code,
         discountType: 'percentage' as const,
         discountValue: '10',
-        description: '10% 折扣',
+        description: '10% discount',
       }
 
       setAppliedCoupon(mockCoupon)
       onCouponApplied?.(mockCoupon)
     } catch (_error) {
-      setError('优惠券无效或已过期')
+      setError('Coupon is invalid or expired')
     } finally {
       setLoading(false)
     }

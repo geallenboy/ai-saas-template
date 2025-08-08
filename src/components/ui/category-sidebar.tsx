@@ -54,7 +54,7 @@ export function CategorySidebar({
   onClearFilters,
   showClearButton = false,
   stats,
-  locale = 'zh',
+  locale = 'de',
   totalCount = 0,
   allCategoriesText = '全部分类',
   allCategoriesIcon: AllIcon = Filter,
@@ -195,13 +195,13 @@ export function CategorySidebar({
                             : 'text-foreground group-hover:text-blue-600'
                         )}
                       >
-                        {locale === 'zh'
+                        {locale === 'de'
                           ? category.nameZh || category.name
                           : category.name}
                       </div>
                       {(category.description || category.descriptionZh) && (
                         <div className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-tight">
-                          {locale === 'zh'
+                          {locale === 'de'
                             ? category.descriptionZh || category.description
                             : category.description}
                         </div>

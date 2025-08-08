@@ -36,14 +36,14 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
 
   const createUser = trpc.users.createUser.useMutation({
     onSuccess: data => {
-      toast.success(`用户 "${data.fullName}" 创建成功`)
+      toast.success(`User "${data.fullName}" created successfully`)
       utils.users.getUsers.invalidate()
       utils.users.getUserStats.invalidate()
       setOpen(false)
       resetForm()
     },
     onError: error => {
-      toast.error(`创建用户失败: ${error.message}`)
+      toast.error(`Failed to create user: ${error.message}`)
     },
   })
 
@@ -62,7 +62,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
 
     const isFormValid = formData.email && formData.fullName
     if (!isFormValid) {
-      toast.error('请填写必填字段')
+      toast.error('Please fill in the required fields')
       return
     }
 
@@ -123,7 +123,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
               onChange={e =>
                 setFormData({ ...formData, fullName: e.target.value })
               }
-              placeholder="请输入用户姓名"
+              placeholder="Please enter user name"
               required
             />
           </div>
@@ -178,7 +178,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
                       adminLevel: Number(e.target.value),
                     })
                   }
-                  placeholder="0-2 (0=普通用户, 1=管理员, 2=超级管理员)"
+                  placeholder="0-2 (0=normal user, 1=administrator, 2=super administrator)"
                 />
                 <p className="text-xs text-muted-foreground">
                   0: 普通用户 | 1: 管理员 | 2: 超级管理员
@@ -207,7 +207,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
             {createUser.isPending && (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             )}
-            {createUser.isPending ? '创建中...' : '创建用户'}
+            {createUser.isPending ? 'Creating...' : 'Create User'}
           </Button>
         </DialogFooter>
       </DialogContent>

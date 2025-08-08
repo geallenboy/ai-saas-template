@@ -1,4 +1,4 @@
-// 简单的日志记录器
+// Simple logger
 interface LogContext {
   [key: string]: any
 }

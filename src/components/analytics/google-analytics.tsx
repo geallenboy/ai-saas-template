@@ -15,9 +15,9 @@ declare global {
 
 export function GoogleAnalyticsComponent({ gaId }: GoogleAnalyticsProps) {
   useEffect(() => {
-    // 确保Google Analytics已加载
+    // Make sure Google Analytics is loaded
     if (typeof window !== 'undefined' && window.gtag) {
-      // 配置Google Analytics
+      // Configure Google Analytics
       window.gtag('config', gaId, {
         page_title: document.title,
         page_location: window.location.href,
@@ -28,7 +28,7 @@ export function GoogleAnalyticsComponent({ gaId }: GoogleAnalyticsProps) {
   return <GoogleAnalytics gaId={gaId} />
 }
 
-// 用于跟踪页面视图的函数
+// Function to track page views
 export const trackPageView = (url: string, title?: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('config', env.NEXT_PUBLIC_GA_MEASUREMENT_ID!, {
@@ -38,7 +38,7 @@ export const trackPageView = (url: string, title?: string) => {
   }
 }
 
-// 用于跟踪事件的函数
+// Function for tracking events
 export const trackEvent = (
   action: string,
   category: string,
@@ -54,49 +54,49 @@ export const trackEvent = (
   }
 }
 
-// 用于跟踪用户行为的预定义事件
+// Predefined events for tracking user actions
 export const trackUserAction = {
-  // 用户注册
+  // User sign up
   signUp: (method = 'email') => {
     trackEvent('sign_up', 'engagement', method)
   },
 
-  // 用户登录
+  // User login
   login: (method = 'email') => {
     trackEvent('login', 'engagement', method)
   },
 
-  // 内容查看
+  // Content view
   viewContent: (contentType: string, contentId: string) => {
     trackEvent('view_item', 'engagement', `${contentType}_${contentId}`)
   },
 
-  // 搜索
+  // Search
   search: (searchTerm: string) => {
     trackEvent('search', 'engagement', searchTerm)
   },
 
-  // 下载
+  // Download
   download: (fileName: string) => {
     trackEvent('download', 'engagement', fileName)
   },
 
-  // 分享
+  // Share
   share: (method: string, contentType: string) => {
     trackEvent('share', 'engagement', `${method}_${contentType}`)
   },
 
-  // 订阅
+  // Subscribe
   subscribe: (planName: string) => {
     trackEvent('purchase', 'ecommerce', planName)
   },
 
-  // 教程开始
+  // Tutorial start
   startTutorial: (tutorialId: string) => {
     trackEvent('tutorial_begin', 'engagement', tutorialId)
   },
 
-  // 教程完成
+  // Tutorial complete
   completeTutorial: (tutorialId: string) => {
     trackEvent('tutorial_complete', 'engagement', tutorialId)
   },

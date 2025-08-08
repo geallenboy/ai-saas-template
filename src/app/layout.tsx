@@ -16,10 +16,10 @@ const MyAppFont = {
 }
 
 interface LocaleLayoutParams {
-  params: Promise<{ locale: 'zh' | 'en' }>
+  params: Promise<{ locale: 'de' | 'en' }>
 }
 
-// 生成网站根metadata
+// Generate website root metadata
 export async function generateMetadata({
   params: paramsPromise,
 }: LocaleLayoutParams): Promise<Metadata> {
@@ -36,10 +36,10 @@ export default async function LocaleLayout({
   params: paramsPromise,
 }: {
   children: React.ReactNode
-  params: Promise<{ locale: 'zh' | 'en' }>
+  params: Promise<{ locale: 'de' | 'en' }>
 }) {
   const { locale } = await paramsPromise
-  const langConfig = SEO_CONFIG[locale] || SEO_CONFIG.zh
+  const langConfig = SEO_CONFIG[locale] || SEO_CONFIG.en
 
   const websiteStructuredData = generateWebsiteStructuredData({
     siteName: SEO_CONFIG.siteName,

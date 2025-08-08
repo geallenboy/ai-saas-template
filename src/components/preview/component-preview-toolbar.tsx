@@ -23,17 +23,17 @@ interface ComponentPreviewToolbarProps {
 const viewportConfig = {
   desktop: {
     icon: Monitor,
-    label: '桌面端',
+    label: 'Desktop',
     width: '100%',
   },
   tablet: {
     icon: Tablet,
-    label: '平板端',
+    label: 'Tablet',
     width: '768px',
   },
   mobile: {
     icon: Smartphone,
-    label: '移动端',
+    label: 'Mobile',
     width: '375px',
   },
 }
@@ -50,7 +50,7 @@ export function ComponentPreviewToolbar({
     <div className="flex items-center justify-between border-b bg-background p-3">
       <div className="flex items-center gap-2">
         <TooltipProvider>
-          {/* 响应式切换按钮 */}
+          {/* Responsive switch button */}
           <div className="flex items-center gap-1">
             {(Object.keys(viewportConfig) as ViewportSize[]).map(size => {
               const config = viewportConfig[size]
@@ -80,7 +80,7 @@ export function ComponentPreviewToolbar({
 
         <Separator orientation="vertical" className="h-6" />
 
-        {/* 主题切换按钮 */}
+        {/* Theme switch button */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -101,7 +101,7 @@ export function ComponentPreviewToolbar({
         </TooltipProvider>
       </div>
 
-      {/* 显示代码按钮 */}
+      {/* Show code button */}
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>

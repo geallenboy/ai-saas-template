@@ -7,22 +7,22 @@ import { NextResponse } from 'next/server'
 
 export async function POST() {
   try {
-    // 检查是否有认证
+    // Check if there is certification
     const { userId } = await auth()
     if (!userId) {
-      return NextResponse.json({ error: '未授权' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // 检查当前用户是否是管理员
+    // Check if the current user is an admin
     const currentUser = await db.query.users.findFirst({
       where: eq(users.id, userId),
     })
 
     if (!currentUser?.isAdmin) {
-      return NextResponse.json({ error: '权限不足' }, { status: 403 })
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    // 获取所有管理员用户
+    // Get all admin users
     const adminUsers = await db
       .select()
       .from(users)
@@ -52,24 +52,24 @@ export async function POST() {
           userId: user.id,
           email: user.email,
           status: 'failed',
-          error: error instanceof Error ? error.message : '未知错误',
+          error: error instanceof Error ? error.message : 'Unknown error',
         })
       }
     }
 
     return NextResponse.json({
-      message: '管理员权限同步完成',
+      message: 'Admin permission synchronization completed',
       total: adminUsers.length,
       successCount,
       failedCount,
       results,
     })
   } catch (error) {
-    console.error('同步管理员权限失败:', error)
+    console.error('Failed to synchronize admin permissions:', error)
     return NextResponse.json(
       {
-        error: '同步失败',
-        details: error instanceof Error ? error.message : '未知错误',
+        error: 'Synchronization failed',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     )

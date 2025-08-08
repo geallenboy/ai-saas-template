@@ -11,7 +11,7 @@ interface GlobalProvidersProps {
   children: ReactNode
 }
 
-// 错误回退组件
+// Error fallback component
 function ErrorFallback({ error, resetErrorBoundary }: any) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-red-50">
@@ -32,7 +32,7 @@ function ErrorFallback({ error, resetErrorBoundary }: any) {
   )
 }
 
-// 加载回退组件
+// Loading the fallback component
 function LoadingFallback() {
   return (
     <div className="min-h-screen flex items-center justify-center">

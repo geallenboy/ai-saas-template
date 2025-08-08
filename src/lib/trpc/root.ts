@@ -5,8 +5,8 @@ import { usersRouter } from './routers/users'
 import { createTRPCRouter } from './server'
 
 /**
- * 主tRPC路由器
- * 组合所有子路由器
+ * Main tRPC router
+ * Groups all sub-routers
  */
 export const appRouter = createTRPCRouter({
   auth: authRouter,
@@ -15,5 +15,5 @@ export const appRouter = createTRPCRouter({
   system: systemRouter,
 })
 
-// 导出类型定义，用于客户端类型推断
+// Export type definitions for client-side type inference
 export type AppRouter = typeof appRouter

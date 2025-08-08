@@ -1,28 +1,28 @@
 /**
- * 图片优化系统
- * 提供图片压缩、格式转换、懒加载和响应式图片功能
+ * Image optimization system
+ * Provides image compression, format conversion, lazy loading, and responsive image features
  */
 
 import { logger } from '@/lib/logger'
 
-// 图片优化配置
+// Image optimization configuration
 interface ImageOptimizationConfig {
-  quality: number // 压缩质量 (0-1)
-  maxWidth: number // 最大宽度
-  maxHeight: number // 最大高度
+  quality: number // Compression quality (0-1)
+  maxWidth: number // Maximum width
+  maxHeight: number // Maximum height
   format: 'webp' | 'avif' | 'jpeg' | 'png' | 'auto'
-  progressive: boolean // 渐进式加载
-  placeholder: boolean // 生成占位符
+  progressive: boolean // Progressive loading
+  placeholder: boolean // Generate placeholder
 }
 
-// 响应式图片配置
+// Responsive image configuration
 interface ResponsiveImageConfig {
-  breakpoints: number[] // 断点宽度
-  devicePixelRatio: number[] // 设备像素比
-  formats: string[] // 支持的格式
+  breakpoints: number[] // Breakpoint widths
+  devicePixelRatio: number[] // Device pixel ratios
+  formats: string[] // Supported formats
 }
 
-// 图片元数据
+// Image metadata
 interface ImageMetadata {
   width: number
   height: number
@@ -31,7 +31,7 @@ interface ImageMetadata {
   aspectRatio: number
 }
 
-// 默认配置
+// Default configuration
 const DEFAULT_CONFIG: ImageOptimizationConfig = {
   quality: 0.8,
   maxWidth: 1920,
@@ -62,7 +62,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 压缩图片
+   * Compress image
    */
   async compressImage(
     file: File,
@@ -76,13 +76,13 @@ export class ImageOptimizer {
     const config = { ...this.config, ...options }
 
     try {
-      // 获取图片元数据
+      // Get image metadata
       const originalMetadata = await this.getImageMetadata(file)
 
-      // 创建图片元素
+      // Create image element
       const img = await this.createImageElement(file)
 
-      // 计算目标尺寸
+      // Calculate target dimensions
       const targetDimensions = this.calculateTargetDimensions(
         originalMetadata.width,
         originalMetadata.height,
@@ -90,12 +90,12 @@ export class ImageOptimizer {
         config.maxHeight
       )
 
-      // 设置画布尺寸
+      // Set canvas dimensions
       if (this.canvas && this.ctx) {
         this.canvas.width = targetDimensions.width
         this.canvas.height = targetDimensions.height
 
-        // 绘制图片
+        // Draw image
         this.ctx.drawImage(
           img,
           0,
@@ -104,7 +104,7 @@ export class ImageOptimizer {
           targetDimensions.height
         )
 
-        // 转换为目标格式
+        // Convert to target format
         const targetFormat = this.getTargetFormat(config.format, file.type)
         const compressedBlob = await this.canvasToBlob(
           this.canvas,
@@ -112,7 +112,7 @@ export class ImageOptimizer {
           config.quality
         )
 
-        // 创建压缩后的文件
+        // Create compressed file
         const compressedFile = new File(
           [compressedBlob],
           this.getOptimizedFileName(file.name, targetFormat),
@@ -145,7 +145,7 @@ export class ImageOptimizer {
         fileSize: file.size,
       })
 
-      // 返回原始文件作为降级
+      // Return original file as fallback
       const metadata = await this.getImageMetadata(file)
       return {
         file,
@@ -156,7 +156,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 生成响应式图片
+   * Generate responsive images
    */
   async generateResponsiveImages(
     file: File,
@@ -172,7 +172,7 @@ export class ImageOptimizer {
     try {
       const originalMetadata = await this.getImageMetadata(file)
 
-      // 为每个断点和格式生成图片
+      // Generate images for each breakpoint and format
       for (const width of responsiveConfig.breakpoints) {
         if (width <= originalMetadata.width) {
           for (const format of responsiveConfig.formats) {
@@ -193,7 +193,7 @@ export class ImageOptimizer {
         }
       }
 
-      // 生成 srcSet 字符串
+      // Generate srcSet string
       const srcSet = this.generateSrcSet(images)
       const sizes = this.generateSizes(responsiveConfig.breakpoints)
 
@@ -215,24 +215,24 @@ export class ImageOptimizer {
   }
 
   /**
-   * 生成图片占位符
+   * Generate image placeholder
    */
   async generatePlaceholder(file: File, size = 20): Promise<string> {
     try {
       const img = await this.createImageElement(file)
 
       if (this.canvas && this.ctx) {
-        // 生成小尺寸占位符
+        // Generate small placeholder
         this.canvas.width = size
         this.canvas.height = size
 
         this.ctx.drawImage(img, 0, 0, size, size)
 
-        // 应用模糊效果
+        // Apply blur effect
         this.ctx.filter = 'blur(2px)'
         this.ctx.drawImage(this.canvas, 0, 0)
 
-        // 转换为 base64
+        // Convert to base64
         const placeholder = this.canvas.toDataURL('image/jpeg', 0.1)
 
         logger.debug('Placeholder generated', {
@@ -251,13 +251,13 @@ export class ImageOptimizer {
         fileName: file.name,
       })
 
-      // 返回默认占位符
+      // Return default placeholder
       return this.getDefaultPlaceholder()
     }
   }
 
   /**
-   * 获取图片元数据
+   * Get image metadata
    */
   private async getImageMetadata(file: File): Promise<ImageMetadata> {
     return new Promise((resolve, reject) => {
@@ -279,7 +279,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 创建图片元素
+   * Create image element
    */
   private async createImageElement(file: File): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
@@ -300,7 +300,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 计算目标尺寸
+   * Calculate target dimensions
    */
   private calculateTargetDimensions(
     originalWidth: number,
@@ -313,13 +313,13 @@ export class ImageOptimizer {
     let targetWidth = originalWidth
     let targetHeight = originalHeight
 
-    // 按宽度限制
+    // Limit by width
     if (targetWidth > maxWidth) {
       targetWidth = maxWidth
       targetHeight = targetWidth / aspectRatio
     }
 
-    // 按高度限制
+    // Limit by height
     if (targetHeight > maxHeight) {
       targetHeight = maxHeight
       targetWidth = targetHeight * aspectRatio
@@ -332,11 +332,11 @@ export class ImageOptimizer {
   }
 
   /**
-   * 获取目标格式
+   * Get target format
    */
   private getTargetFormat(configFormat: string, originalType: string): string {
     if (configFormat === 'auto') {
-      // 自动选择最佳格式
+      // Automatically select best format
       if (this.isFormatSupported('avif')) return 'image/avif'
       if (this.isFormatSupported('webp')) return 'image/webp'
       return originalType
@@ -346,7 +346,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 检查格式支持
+   * Check format support
    */
   private isFormatSupported(format: string): boolean {
     if (typeof window === 'undefined') return false
@@ -364,7 +364,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * Canvas 转 Blob
+   * Canvas to Blob
    */
   private canvasToBlob(
     canvas: HTMLCanvasElement,
@@ -387,7 +387,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 获取优化后的文件名
+   * Get optimized file name
    */
   private getOptimizedFileName(
     originalName: string,
@@ -399,7 +399,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 生成 srcSet 字符串
+   * Generate srcSet string
    */
   private generateSrcSet(
     images: { width: number; file: File; format: string }[]
@@ -410,7 +410,7 @@ export class ImageOptimizer {
   }
 
   /**
-   * 生成 sizes 字符串
+   * Generate sizes string
    */
   private generateSizes(breakpoints: number[]): string {
     return breakpoints
@@ -424,10 +424,10 @@ export class ImageOptimizer {
   }
 
   /**
-   * 获取默认占位符
+   * Get default placeholder
    */
   private getDefaultPlaceholder(): string {
-    // 生成简单的 SVG 占位符
+    // Generate simple SVG placeholder
     const svg = `
       <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
         <rect width="100%" height="100%" fill="#f3f4f6"/>
@@ -441,10 +441,10 @@ export class ImageOptimizer {
   }
 }
 
-// 创建全局图片优化器实例
+// Create global image optimizer instance
 export const imageOptimizer = new ImageOptimizer()
 
-// 懒加载观察器
+// Lazy loading observer
 export class LazyImageObserver {
   private observer: IntersectionObserver | null = null
   private images = new Set<HTMLImageElement>()
@@ -454,7 +454,7 @@ export class LazyImageObserver {
       this.observer = new IntersectionObserver(
         this.handleIntersection.bind(this),
         {
-          rootMargin: '50px 0px', // 提前50px开始加载
+          rootMargin: '50px 0px', // Start loading 50px early
           threshold: 0.01,
         }
       )
@@ -462,7 +462,7 @@ export class LazyImageObserver {
   }
 
   /**
-   * 观察图片元素
+   * Observe image element
    */
   observe(img: HTMLImageElement): void {
     if (this.observer) {
@@ -472,7 +472,7 @@ export class LazyImageObserver {
   }
 
   /**
-   * 停止观察图片元素
+   * Unobserve image element
    */
   unobserve(img: HTMLImageElement): void {
     if (this.observer) {
@@ -482,7 +482,7 @@ export class LazyImageObserver {
   }
 
   /**
-   * 处理交叉事件
+   * Handle intersection events
    */
   private handleIntersection(entries: IntersectionObserverEntry[]): void {
     entries.forEach(entry => {
@@ -495,7 +495,7 @@ export class LazyImageObserver {
   }
 
   /**
-   * 加载图片
+   * Load image
    */
   private loadImage(img: HTMLImageElement): void {
     const src = img.dataset.src
@@ -521,7 +521,7 @@ export class LazyImageObserver {
   }
 
   /**
-   * 销毁观察器
+   * Destroy observer
    */
   destroy(): void {
     if (this.observer) {
@@ -531,5 +531,5 @@ export class LazyImageObserver {
   }
 }
 
-// 创建全局懒加载观察器
+// Create global lazy loading observer
 export const lazyImageObserver = new LazyImageObserver()

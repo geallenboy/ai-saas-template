@@ -4,7 +4,7 @@ import { Globe, Palette, Rocket, Shield, Sparkles, Zap } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type React from 'react'
 
-// 现代功能卡片组件
+// Modern functional card component
 function ModernFeature({
   icon: Icon,
   title,
@@ -36,7 +36,7 @@ function ModernFeature({
           {description}
         </p>
 
-        {/* 装饰性元素 */}
+        {/* Decorative element */}
         <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
     </div>
@@ -88,7 +88,7 @@ export default function FeaturesSection() {
   return (
     <section className="py-20 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 标题区域 */}
+        {/* Title area */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             {t('title')}
@@ -98,7 +98,7 @@ export default function FeaturesSection() {
           </p>
         </div>
 
-        {/* 功能网格 */}
+        {/* Functional grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <ModernFeature

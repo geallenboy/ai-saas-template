@@ -13,7 +13,7 @@ export default function AdminLayout({
   return (
     <AdminGuardClient>
       <div className="flex h-screen bg-background">
-        {/* 侧边栏 */}
+        {/* sidebar */}
         <aside className="w-64 bg-card border-r">
           <div className="p-6">
             <h2 className="text-xl font-semibold">管理后台</h2>
@@ -52,7 +52,7 @@ export default function AdminLayout({
           </nav>
         </aside>
 
-        {/* 主内容区 */}
+        {/* main content area */}
         <main className="flex-1 overflow-y-auto">
           <div className="container mx-auto p-6">{children}</div>
         </main>

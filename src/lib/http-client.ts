@@ -6,7 +6,7 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios'
 
-// 响应数据类型
+// Response data type
 export interface ApiResponse<T = any> {
   success: boolean
   data?: T
@@ -14,19 +14,19 @@ export interface ApiResponse<T = any> {
   message?: string
 }
 
-// 扩展axios配置类型
+// Extending axios configuration type
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
   skipAuth?: boolean
   skipErrorHandler?: boolean
 }
 
-// 请求配置类型
+// Request configuration type
 export interface HttpClientConfig extends AxiosRequestConfig {
   skipAuth?: boolean
   skipErrorHandler?: boolean
 }
 
-// 创建axios实例
+// Create axios instance
 const createHttpClient = (): AxiosInstance => {
   const client = axios.create({
     baseURL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
@@ -36,13 +36,13 @@ const createHttpClient = (): AxiosInstance => {
     },
   })
 
-  // 请求拦截器
+  // Request interceptor
   client.interceptors.request.use(
     async (config: ExtendedAxiosRequestConfig) => {
-      // 添加认证头 (在客户端运行时通过其他方式获取token)
+      // Add auth header (in client-side, token can be obtained in other ways)
       if (!config.skipAuth && typeof window !== 'undefined') {
         try {
-          // 在客户端环境下，可以从localStorage或其他地方获取token
+          // In client-side, token can be obtained from localStorage or other places
           const token =
             localStorage.getItem('auth_token') ||
             sessionStorage.getItem('auth_token')
@@ -58,7 +58,7 @@ const createHttpClient = (): AxiosInstance => {
         }
       }
 
-      // 添加请求ID用于追踪
+      // Add request ID for tracking
       config.headers = config.headers || {}
       config.headers['X-Request-ID'] =
         `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
@@ -70,14 +70,14 @@ const createHttpClient = (): AxiosInstance => {
     }
   )
 
-  // 响应拦截器
+  // Response interceptor
   client.interceptors.response.use(
     (response: AxiosResponse<ApiResponse>) => {
-      // 统一处理成功响应
+      // Unified handling of successful responses
       return response
     },
     (error: AxiosError<ApiResponse>) => {
-      // 统一错误处理
+      // Unified error handling
       const config = error.config as ExtendedAxiosRequestConfig
       if (!config?.skipErrorHandler) {
         handleHttpError(error)
@@ -89,12 +89,12 @@ const createHttpClient = (): AxiosInstance => {
   return client
 }
 
-// 错误处理函数
+// Error handling function
 const handleHttpError = (error: AxiosError<ApiResponse>) => {
   const { response, request, message } = error
 
   if (response) {
-    // 服务器响应了错误状态码
+    // The server responded with an error status code
     const { status, data } = response
     const requestId = response.config?.headers?.['X-Request-ID'] as string
 
@@ -105,13 +105,13 @@ const handleHttpError = (error: AxiosError<ApiResponse>) => {
       method: response.config?.method?.toUpperCase(),
       url: response.config?.url,
       requestId,
-      errorMessage: data?.error || data?.message || '请求失败',
+      errorMessage: data?.error || data?.message || 'Request failed',
       responseData: data,
       userAgent:
         typeof window !== 'undefined' ? window.navigator.userAgent : undefined,
     })
 
-    // 特殊状态码处理
+    // Special status code handling
     switch (status) {
       case 401:
         console.warn('Authentication required:', {
@@ -163,16 +163,16 @@ const handleHttpError = (error: AxiosError<ApiResponse>) => {
         })
     }
   } else if (request) {
-    // 请求已发出但没有收到响应
+    // The request was made but no response was received
     console.error('Network error:', {
       category: 'network',
-      message: '请求超时或网络不可用',
+      message: 'Request timed out or network unavailable',
       url: request.responseURL || 'unknown',
       timeout: request.timeout,
       action: 'retry_request',
     })
   } else {
-    // 请求配置错误
+    // Request configuration error
     console.error('Request configuration error:', {
       category: 'http',
       message,
@@ -181,10 +181,10 @@ const handleHttpError = (error: AxiosError<ApiResponse>) => {
   }
 }
 
-// 创建HTTP客户端实例
+// Create HTTP client instance
 export const httpClient = createHttpClient()
 
-// 便捷方法
+// Convenient methods
 export const http = {
   get: <T = any>(url: string, config?: HttpClientConfig) =>
     httpClient.get<ApiResponse<T>>(url, config),
@@ -202,7 +202,7 @@ export const http = {
     httpClient.delete<ApiResponse<T>>(url, config),
 }
 
-// 文件上传专用方法
+// Special method for file upload
 export const uploadFile = async (
   url: string,
   file: File | FormData,
@@ -232,7 +232,7 @@ export const uploadFile = async (
   })
 }
 
-// 外部API请求（跳过认证和错误处理）
+// External API requests (bypass auth and error handling)
 export const externalHttp = {
   get: <T = any>(url: string, config?: AxiosRequestConfig) =>
     axios.get<T>(url, config),
@@ -247,5 +247,5 @@ export const externalHttp = {
     axios.delete<T>(url, config),
 }
 
-// 导出类型
+// Export types
 export type { AxiosError, AxiosRequestConfig, AxiosResponse }

@@ -4,30 +4,30 @@ import superjson from 'superjson'
 import type { AppRouter } from './root'
 
 /**
- * 创建tRPC React客户端
+ * Creating a tRPC React Client
  */
 export const trpc = createTRPCReact<AppRouter>()
 
 /**
- * 获取基础URL
+ * Get base URL
  */
 function getBaseUrl() {
   if (typeof window !== 'undefined') {
-    // 浏览器环境，使用相对路径
+    // Browser environment, use relative path
     return ''
   }
 
   if (process.env.VERCEL_URL) {
-    // 在Vercel环境中运行，返回Vercel URL
+    // Running in Vercel environment, return Vercel URL
     return `https://${process.env.VERCEL_URL}`
   }
 
-  // 开发环境或其他环境
+  // Development or other environments
   return `http://localhost:${process.env.PORT ?? 3000}`
 }
 
 /**
- * tRPC客户端配置
+ * tRPC client configuration
  */
 export function getTRPCClientConfig() {
   return trpc.createClient({
@@ -42,7 +42,7 @@ export function getTRPCClientConfig() {
         transformer: superjson,
         headers() {
           return {
-            // 添加自定义头部，如果需要的话
+            // Add custom headers here if needed
           }
         },
       }),

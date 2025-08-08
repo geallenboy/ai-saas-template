@@ -41,7 +41,7 @@ export default function SignInPage() {
   })
   const [error, setError] = useState('')
 
-  // 检查用户是否已登录，如果已登录则重定向
+  // Check if the user is logged in, redirect if so
   useEffect(() => {
     if (isSignedIn) {
       router.push('/')
@@ -59,29 +59,29 @@ export default function SignInPage() {
     }
 
     try {
-      // 使用 Clerk 进行登录
+      // Use Clerk for sign-in
       const result = await signIn.create({
         identifier: formData.email.trim(),
         password: formData.password,
       })
 
       if (result.status === 'complete') {
-        // 登录成功，设置活动会话
+        // Login successful, set active session
         await setActive({ session: result.createdSessionId })
 
-        // 登录成功后会自动同步到数据库（通过webhook）
+        // Login successful, will automatically sync to database (via webhook)
         logger.info('用户登录成功')
 
         router.push('/')
       } else {
-        // 可能需要额外的验证步骤
-        logger.info('需要额外验证', { result })
+        // Additional verification steps may be required
+        logger.info('Requires additional verification', { result })
         setError(errorT('needVerification'))
       }
     } catch (err: any) {
-      logger.error('登录错误', err as Error)
+      logger.error('Login error', err as Error)
 
-      // 处理常见的错误情况
+      // Handle common error cases
       if (err.errors && err.errors.length > 0) {
         const errorCode = err.errors[0].code
         switch (errorCode) {
@@ -114,14 +114,14 @@ export default function SignInPage() {
     setError('')
 
     try {
-      const locale = window.location.pathname.split('/')[1] || 'zh'
+      const locale = window.location.pathname.split('/')[1] || 'de'
       await signIn.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: `/${locale}/auth/sso-callback`,
         redirectUrlComplete: `/${locale}`,
       })
     } catch (err: unknown) {
-      logger.error(`${provider} OAuth 错误`, err as Error)
+      logger.error(`${provider} OAuth error`, err as Error)
       setError(
         `${provider === 'oauth_google' ? 'Google' : 'GitHub'} ${errorT('oauthError')}`
       )
@@ -131,7 +131,7 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* 使用统一的导航组件 */}
+      {/* Use a unified navigation component */}
       <Navigation />
 
       <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] p-4">

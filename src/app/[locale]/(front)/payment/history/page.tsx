@@ -106,7 +106,7 @@ function PaymentHistoryContent() {
                     <div className="font-medium">
                       {formatPrice(
                         Number(payment.amount),
-                        payment.currency as 'USD' | 'CNY'
+                        payment.currency as 'USD' | 'EUR'
                       )}
                     </div>
                     <div className="text-sm">

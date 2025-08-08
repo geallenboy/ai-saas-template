@@ -11,11 +11,11 @@ export async function POST(req: NextRequest) {
     const body = await req.text()
     const headersList = await headers()
 
-    // 使用真实的Clerk webhook签名验证
+    // Use real Clerk webhook signature verification
     const event = verifyClerkWebhook(body, headersList)
-    logger.info(`收到Clerk webhook: ${event.type}`)
+    logger.info(`Received Clerk webhook: ${event.type}`)
 
-    // 处理不同类型的事件
+    // Handle different types of events
     switch (event.type) {
       case 'user.created':
         await handleUserCreated(event.data)
@@ -54,33 +54,38 @@ export async function POST(req: NextRequest) {
         break
 
       default:
-        logger.info(`未处理的Clerk事件类型: ${event.type}`)
+        logger.info(`Unhandled Clerk event type: ${event.type}`)
     }
 
     return NextResponse.json({ received: true })
   } catch (error) {
-    logger.error('处理Clerk webhook失败:', error as Error)
-    return NextResponse.json({ error: 'Webhook处理失败' }, { status: 500 })
+    logger.error('Failed to process Clerk webhook:', error as Error)
+    return NextResponse.json(
+      { error: 'Failed to process webhook' },
+      { status: 500 }
+    )
   }
 }
 
-// 处理用户创建
+// Handle user creation
 async function handleUserCreated(userData: any) {
   try {
-    logger.info('开始处理用户创建事件', { userId: userData.id })
+    logger.info('Start processing user creation events', {
+      userId: userData.id,
+    })
     const formattedUser = formatClerkUser(userData)
 
-    // 检查用户是否已存在
+    // Check if user already exists
     const existingUser = await db.query.users.findFirst({
       where: eq(users.id, formattedUser.id),
     })
 
     if (existingUser) {
-      logger.info(`用户已存在，跳过创建: ${formattedUser.id}`)
+      logger.info(`User already exists, skipping creation: ${formattedUser.id}`)
       return
     }
 
-    // 创建新用户
+    // Create new user
     await db.insert(users).values({
       id: formattedUser.id,
       email: formattedUser.email,
@@ -100,27 +105,29 @@ async function handleUserCreated(userData: any) {
       updatedAt: formattedUser.updatedAt,
     })
 
-    logger.info(`用户创建成功: ${formattedUser.id} (${formattedUser.email})`)
+    logger.info(
+      `User created successfully: ${formattedUser.id} (${formattedUser.email})`
+    )
   } catch (error) {
-    logger.error('处理user.created失败:', error as Error)
-    logger.error('用户数据: ' + JSON.stringify(userData))
+    logger.error('Failed to process user.created:', error as Error)
+    logger.error('User data: ' + JSON.stringify(userData))
     throw error
   }
 }
 
-// 处理用户更新
+// Handle user update
 async function handleUserUpdated(userData: any) {
   try {
     const formattedUser = formatClerkUser(userData)
 
-    // 更新用户信息
+    // Update user information
     const result = await db
       .update(users)
       .set({
         email: formattedUser.email,
         fullName: formattedUser.fullName,
         avatarUrl: formattedUser.avatarUrl,
-        isActive: true, // 默认激活状态，可以根据业务需求调整
+        isActive: true, // Default active status, can be adjusted based on business needs
         isAdmin: formattedUser.isAdmin,
         adminLevel: formattedUser.adminLevel,
         country: formattedUser.country,
@@ -131,23 +138,25 @@ async function handleUserUpdated(userData: any) {
       .returning()
 
     if (result.length === 0) {
-      // 如果用户不存在，创建新用户
+      // If user does not exist, create new user
       await handleUserCreated(userData)
     } else {
-      logger.info(`用户更新成功: ${formattedUser.id} (${formattedUser.email})`)
+      logger.info(
+        `User updated successfully: ${formattedUser.id} (${formattedUser.email})`
+      )
     }
   } catch (error) {
-    logger.error('处理user.updated失败:', error as Error)
+    logger.error('Failed to process user.updated:', error as Error)
     throw error
   }
 }
 
-// 处理用户删除
+// Handle user deletion
 async function handleUserDeleted(userData: any) {
   try {
     const userId = userData.id
 
-    // 软删除用户（设置为非活跃状态）
+    // Soft delete user (set to inactive)
     await db
       .update(users)
       .set({
@@ -156,19 +165,19 @@ async function handleUserDeleted(userData: any) {
       })
       .where(eq(users.id, userId))
 
-    logger.info(`用户删除处理成功: ${userId}`)
+    logger.info(`User deletion processed successfully: ${userId}`)
   } catch (error) {
-    logger.error('处理user.deleted失败:', error as Error)
+    logger.error('Failed to process user.deleted:', error as Error)
     throw error
   }
 }
 
-// 处理会话创建（登录）
+// Handle session creation (login)
 async function handleSessionCreated(sessionData: any) {
   try {
     const userId = sessionData.user_id
 
-    // 更新最后登录时间
+    // Update last login time
     await db
       .update(users)
       .set({
@@ -177,36 +186,36 @@ async function handleSessionCreated(sessionData: any) {
       })
       .where(eq(users.id, userId))
 
-    logger.info(`用户登录记录更新: ${userId}`)
+    logger.info(`User login record updated: ${userId}`)
   } catch (error) {
-    logger.error('处理session.created失败:', error as Error)
-    // 登录记录失败不应该影响登录流程，只记录错误
+    logger.error('Failed to process session.created:', error as Error)
+    // Login record failure should not affect login process, just log the error
   }
 }
 
-// 处理会话结束（登出）
+// Handle session end (logout)
 async function handleSessionEnded(sessionData: any) {
   try {
     const userId = sessionData.user_id
 
-    // 这里可以添加登出相关的清理逻辑
-    // 比如清除缓存、记录登出时间等
+    // Here you can add logout-related cleanup logic
+    // For example, clearing cache, recording logout time, etc.
 
-    logger.info(`用户登出记录: ${userId}`)
+    logger.info(`User logout record: ${userId}`)
   } catch (error) {
-    logger.error('处理session.ended失败:', error as Error)
-    // 登出记录失败不应该影响登出流程，只记录错误
+    logger.error('Failed to process session.ended:', error as Error)
+    // Logout record failure should not affect logout process, just log the error
   }
 }
 
-// 处理邮箱创建
+// Handle email creation
 async function handleEmailCreated(emailData: any) {
   try {
     const userId = emailData.object?.user_id
     const emailAddress = emailData.email_address
 
     if (userId && emailAddress) {
-      // 更新用户邮箱（如果是主邮箱）
+      // Update user email (if primary email)
       if (emailData.object?.primary) {
         await db
           .update(users)
@@ -216,55 +225,65 @@ async function handleEmailCreated(emailData: any) {
           })
           .where(eq(users.id, userId))
 
-        logger.info(`用户主邮箱更新: ${userId} -> ${emailAddress}`)
+        logger.info(`User primary email updated: ${userId} -> ${emailAddress}`)
       }
     }
   } catch (error) {
-    logger.error('处理email.created失败:', error as Error)
+    logger.error('Failed to process email.created:', error as Error)
     throw error
   }
 }
 
-// 处理组织创建
+// Handle organization creation
 async function handleOrganizationCreated(orgData: any) {
   try {
     const organizationId = orgData.id
     const name = orgData.name
     const createdBy = orgData.created_by
 
-    // TODO: 如果需要组织功能，在这里添加组织创建逻辑
-    logger.info(`组织创建: ${organizationId} (${name}) by ${createdBy}`)
+    // TODO: If organization features are needed, add organization creation logic here
+    logger.info(
+      `Organization created: ${organizationId} (${name}) by ${createdBy}`
+    )
   } catch (error) {
-    logger.error('处理organization.created失败:', error as Error)
+    logger.error('Failed to process organization.created:', error as Error)
     throw error
   }
 }
 
-// 处理组织成员创建
+// Handle organization membership creation
 async function handleOrganizationMembershipCreated(membershipData: any) {
   try {
     const userId = membershipData.public_user_data?.user_id
     const organizationId = membershipData.organization?.id
     const role = membershipData.role
 
-    // TODO: 如果需要组织功能，在这里添加成员管理逻辑
-    logger.info(`组织成员添加: ${userId} -> ${organizationId} (${role})`)
+    // TODO: If organization features are needed, add membership management logic here
+    logger.info(
+      `Organization member added: ${userId} -> ${organizationId} (${role})`
+    )
   } catch (error) {
-    logger.error('处理organizationMembership.created失败:', error as Error)
+    logger.error(
+      'Failed to process organizationMembership.created:',
+      error as Error
+    )
     throw error
   }
 }
 
-// 处理组织成员删除
+// Handle organization membership deletion
 async function handleOrganizationMembershipDeleted(membershipData: any) {
   try {
     const userId = membershipData.public_user_data?.user_id
     const organizationId = membershipData.organization?.id
 
-    // TODO: 如果需要组织功能，在这里添加成员删除逻辑
-    logger.info(`组织成员移除: ${userId} -> ${organizationId}`)
+    // TODO: If organization features are needed, add membership deletion logic here
+    logger.info(`Organization member removed: ${userId} -> ${organizationId}`)
   } catch (error) {
-    logger.error('处理organizationMembership.deleted失败:', error as Error)
+    logger.error(
+      'Failed to process organizationMembership.deleted:',
+      error as Error
+    )
     throw error
   }
 }

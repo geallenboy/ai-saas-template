@@ -1,10 +1,10 @@
--- 创建测试会员计划数据
--- 注意：这些是测试数据，price_xxx 需要替换为真实的Stripe价格ID
+-- Creating test membership program data
+-- Note: These are test data, price_xxx needs to be replaced with real Stripe price IDs
 
--- 清空现有数据（可选）
+-- Clear existing data (optional)
 -- DELETE FROM membership_plans;
 
--- 插入免费计划
+-- Insert free plan
 INSERT INTO membership_plans (
     name, name_zh, description, description_zh,
     price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
@@ -28,7 +28,7 @@ INSERT INTO membership_plans (
     true, false, false, 1
 );
 
--- 插入基础计划 (需要替换真实的Stripe价格ID)
+-- Insert the base plan (need to replace the actual Stripe price ID)
 INSERT INTO membership_plans (
     name, name_zh, description, description_zh,
     price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
@@ -53,7 +53,7 @@ INSERT INTO membership_plans (
     true, true, false, 2
 );
 
--- 插入专业计划
+-- Insert professional plan
 INSERT INTO membership_plans (
     name, name_zh, description, description_zh,
     price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
@@ -78,7 +78,7 @@ INSERT INTO membership_plans (
     true, false, true, 3
 );
 
--- 插入企业计划
+-- Insert business plan
 INSERT INTO membership_plans (
     name, name_zh, description, description_zh,
     price_usd_monthly, price_cny_monthly, price_usd_yearly, price_cny_yearly,
@@ -103,7 +103,7 @@ INSERT INTO membership_plans (
     true, false, false, 4
 );
 
--- 查询验证
+-- Query verification
 SELECT 
     name, name_zh, 
     price_usd_monthly, price_usd_yearly,
@@ -112,7 +112,7 @@ SELECT
 FROM membership_plans 
 ORDER BY sort_order;
 
--- 重要提醒：
--- 1. 将 price_xxx_test 替换为真实的Stripe价格ID
--- 2. 在Stripe控制台创建对应的订阅价格
--- 3. 价格ID格式应该是 price_1234567890abcdef 
+-- Important reminder:
+-- 1. Replace price_xxx_test with the real Stripe price ID
+-- 2. Create the corresponding subscription prices in the Stripe dashboard
+-- 3. The price ID format should be price_1234567890abcdef

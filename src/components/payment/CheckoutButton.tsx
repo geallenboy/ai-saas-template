@@ -9,7 +9,7 @@ interface CheckoutButtonProps {
   planName: string
   monthlyPrice: number
   yearlyPrice: number
-  currency: 'USD' | 'CNY'
+  currency: 'USD' | 'EUR'
   variant?: 'default' | 'outline' | 'secondary'
   className?: string
 }
@@ -30,15 +30,15 @@ export function CheckoutButton({
     trpc.payments.createCheckoutSession.useMutation({
       onSuccess: data => {
         if (data.url) {
-          // 跳转到Stripe结账页面
+          // Jump to the Stripe checkout page
           window.location.href = data.url
         }
         setIsLoading(false)
       },
       onError: error => {
-        console.error('创建结账会话失败:', error)
+        console.error('Failed to create checkout session:', error)
         setIsLoading(false)
-        // 这里可以添加错误提示
+        // Here you can add error prompts
       },
     })
 
@@ -48,10 +48,10 @@ export function CheckoutButton({
     const durationType = isYearly ? 'yearly' : 'monthly'
 
     createCheckoutMutation.mutate({
-      priceId: planId, // 假设planId就是priceId
+      priceId: planId, // Assume planId is priceId
       planName,
       paymentMethod: 'card',
-      locale: 'zh',
+      locale: 'de',
       durationType,
     })
   }
@@ -61,7 +61,7 @@ export function CheckoutButton({
 
   return (
     <div className={className}>
-      {/* 计费周期切换 */}
+      {/* Billing cycle switching */}
       <div className="mb-4 flex items-center justify-center space-x-4">
         <button
           type="button"
@@ -96,7 +96,7 @@ export function CheckoutButton({
         </button>
       </div>
 
-      {/* 价格显示 */}
+      {/* Price display */}
       <div className="mb-4 text-center">
         <div className="text-3xl font-bold">
           {currencySymbol}
@@ -113,7 +113,7 @@ export function CheckoutButton({
         )}
       </div>
 
-      {/* 购买按钮 */}
+      {/* buy button */}
       <Button
         variant={variant}
         className="w-full"

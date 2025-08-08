@@ -1,8 +1,8 @@
 /**
- * 认证组件统一导出
+ * Unified export of authentication components
  */
 
-// 客户端组件
+// Client components
 export { AdminGuardClient, AuthGuardClient } from './AuthGuardClient'
 export { ProfileForm } from './ProfileForm'
 export { SignInButton } from './SignInButton'

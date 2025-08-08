@@ -55,7 +55,7 @@ export default function SignUpPage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  // 检查用户是否已登录，如果已登录则重定向
+  // Check if the user is logged in, redirect if so
   useEffect(() => {
     if (isSignedIn) {
       router.push('/')
@@ -73,7 +73,7 @@ export default function SignUpPage() {
       return
     }
 
-    // 验证密码强度
+    // Verify password strength
     if (formData.password.length < 8) {
       setError(formT('passwordMin'))
       setLoading(false)
@@ -81,42 +81,42 @@ export default function SignUpPage() {
     }
 
     try {
-      // 只使用邮箱和密码进行注册，避免参数错误
+      // Only use email and password for registration to avoid parameter errors
       const signUpParams = {
         emailAddress: formData.email.trim(),
         password: formData.password,
       }
 
-      logger.info('注册参数', { signUpParams })
+      logger.info('Registration parameters', { signUpParams })
 
-      // 使用 Clerk 进行注册
+      // Registering with Clerk
       const result = await signUp.create(signUpParams)
 
       if (result.status === 'missing_requirements') {
-        // 需要邮箱验证
+        // Email verification required
         await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
         setVerificationStep(true)
         setSuccess(verifyT('checkEmail'))
       } else if (result.status === 'complete') {
-        // 注册完成，直接登录
+        // Registration complete, log in directly
         await setActive({ session: result.createdSessionId })
 
-        // 用户信息会通过webhook自动同步到数据库
-        logger.info('用户注册成功')
+        // User information will be automatically synced to the database via webhook
+        logger.info('User registration successful')
 
         router.push('/')
       }
     } catch (err: any) {
-      logger.error('注册错误', err as Error)
+      logger.error('Registration error', err as Error)
 
-      // 处理常见的错误情况
+      // Handle common error cases
       if (err.errors && err.errors.length > 0) {
         const errorCode = err.errors[0].code
         const errorMessage = err.errors[0].message || errorT('signupFailed')
 
-        // 只在开发环境打印详细错误信息
+        // Only print detailed error information in development
         if (process.env.NODE_ENV === 'development') {
-          logger.error('错误详情', err)
+          logger.error('Error details', err)
         }
 
         switch (errorCode) {
@@ -137,7 +137,7 @@ export default function SignUpPage() {
             setError(errorMessage)
         }
       } else {
-        logger.error('网络或未知错误', err as Error)
+        logger.error('Network or unknown error', err as Error)
         setError(errorT('networkError'))
       }
     } finally {
@@ -163,16 +163,16 @@ export default function SignUpPage() {
       if (result.status === 'complete') {
         await setActive({ session: result.createdSessionId })
 
-        // 用户信息会通过webhook自动同步到数据库
-        logger.info('用户验证成功')
+        // User information will be automatically synced to the database via webhook
+        logger.info('User verification successful')
 
-        setSuccess(`${verifyT('success')} 正在跳转...`)
+        setSuccess(`${verifyT('success')} Redirecting...`)
         setTimeout(() => {
           router.push('/')
         }, 1500)
       }
     } catch (err: any) {
-      logger.error('验证错误', err as Error)
+      logger.error('Verification error', err as Error)
       if (
         err &&
         typeof err === 'object' &&
@@ -183,9 +183,9 @@ export default function SignUpPage() {
         const errorMessage =
           err.errors[0].message || errorT('verificationFailed')
 
-        // 只在开发环境打印详细错误信息
+        // Only print detailed error information in development
         if (process.env.NODE_ENV === 'development') {
-          logger.error('验证错误详情', err)
+          logger.error('Verification error details', err)
         }
 
         setError(errorMessage)
@@ -206,14 +206,14 @@ export default function SignUpPage() {
     setError('')
 
     try {
-      const locale = window.location.pathname.split('/')[1] || 'zh'
+      const locale = window.location.pathname.split('/')[1] || 'de'
       await signUp.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: `/${locale}/auth/sso-callback`,
         redirectUrlComplete: `/${locale}`,
       })
     } catch (err: unknown) {
-      logger.error(`${provider} OAuth 错误`, err as Error)
+      logger.error(`${provider} OAuth error`, err as Error)
       setError(
         `${provider === 'oauth_google' ? 'Google' : 'GitHub'} ${errorT('oauthError')}`
       )
@@ -269,7 +269,7 @@ export default function SignUpPage() {
                   />
                 </div>
 
-                {/* Clerk CAPTCHA 容器 */}
+                {/* Clerk CAPTCHA container */}
                 <div id="clerk-captcha" />
 
                 <Button
@@ -389,11 +389,11 @@ export default function SignUpPage() {
                         {formT('btn4')}
                       </Link>{' '}
                       {formT('btn5')}
-                      {/* <Link href="/privacy" className="text-primary hover:underline">隐私政策</Link> */}
+                      {/* <Link href="/privacy" className="text-primary hover:underline">privacy policy</Link> */}
                     </Label>
                   </div>
 
-                  {/* Clerk CAPTCHA 容器 */}
+                  {/* Clerk CAPTCHA container */}
                   <div id="clerk-captcha" />
 
                   <Button

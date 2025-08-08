@@ -50,7 +50,7 @@ export function MembershipStatusClient() {
 
   return (
     <div className="space-y-6">
-      {/* 会员信息卡片 */}
+      {/* Member information card */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -59,7 +59,7 @@ export function MembershipStatusClient() {
               会员状态
             </div>
             <Badge className={statusConfig?.color}>
-              {statusConfig?.labelZh}
+              {statusConfig?.labelDe}
             </Badge>
           </CardTitle>
         </CardHeader>
@@ -68,7 +68,7 @@ export function MembershipStatusClient() {
             <div>
               <p className="text-sm text-muted-foreground">当前计划</p>
               <p className="font-medium">
-                {currentPlan?.nameZh || currentPlan?.name}
+                {currentPlan?.nameDe || currentPlan?.name}
               </p>
             </div>
             <div>
@@ -100,7 +100,7 @@ export function MembershipStatusClient() {
               <p className="font-medium">
                 {formatPrice(
                   Number(membership.purchaseAmount),
-                  membership.currency as 'USD' | 'CNY'
+                  membership.currency as 'USD' | 'EUR'
                 )}
               </p>
             </div>

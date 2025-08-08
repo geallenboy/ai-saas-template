@@ -63,7 +63,7 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({})
 
-  // 创建新配置的表单状态
+  // Form state for creating a new configuration
   const [newConfig, setNewConfig] = useState({
     key: '',
     value: '',
@@ -120,13 +120,17 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
   }
 
   const handleDeleteConfig = (configKey: string) => {
-    if (confirm('确定要删除这个配置项吗？')) {
+    if (confirm('Are you sure you want to delete this configuration item?')) {
       deleteConfig.mutate({ key: configKey })
     }
   }
 
   const handleResetConfig = (configKey: string) => {
-    if (confirm('确定要重置这个配置项到默认值吗？')) {
+    if (
+      confirm(
+        'Are you sure you want to reset this configuration item to the default value?'
+      )
+    ) {
       resetConfigToDefault.mutate({ key: configKey })
     }
   }

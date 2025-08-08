@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
     const { priceId, planName, isYearly = false } = await req.json()
 
-    console.log('🔍 API接收到的支付请求参数:', {
+    console.log('🔍 Payment request parameters received by the API:', {
       priceId,
       planName,
       isYearly,
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (!(priceId && planName)) {
-      console.error('❌ 缺少必要参数:', { priceId, planName })
+      console.error('❌ Missing required parameters:', { priceId, planName })
       return NextResponse.json(
         {
           error:
@@ -33,13 +33,13 @@ export async function POST(req: NextRequest) {
 
     const stripe = getServerStripe()
 
-    // 详细验证price ID
-    console.log('🔍 开始验证Stripe价格ID:', priceId)
+    // Validate price ID in detail
+    console.log('🔍 Starting validation for Stripe price ID:', priceId)
 
     try {
       const price = await stripe.prices.retrieve(priceId)
 
-      console.log('📋 Stripe价格详情:', {
+      console.log('📋 Stripe price details:', {
         id: price.id,
         type: price.type,
         recurring: price.recurring,
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       })
 
       if (!price.active) {
-        console.error('❌ 价格已被禁用:', price.id)
+        console.error('❌ Price is disabled:', price.id)
         return NextResponse.json(
           { error: `Price ${priceId} is not active` },
           { status: 400 }
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       }
 
       if (price.type !== 'recurring') {
-        console.error('❌ 价格类型不是订阅:', {
+        console.error('❌ Price type is not subscription:', {
           priceId: price.id,
           actualType: price.type,
           expected: 'recurring',
@@ -72,20 +72,20 @@ export async function POST(req: NextRequest) {
       }
 
       if (!price.recurring) {
-        console.error('❌ 缺少订阅配置:', price.id)
+        console.error('❌ Missing subscription configuration:', price.id)
         return NextResponse.json(
           { error: `Price ${priceId} missing recurring configuration` },
           { status: 400 }
         )
       }
 
-      console.log('✅ 价格验证通过:', {
+      console.log('✅ Price validation passed:', {
         id: price.id,
         interval: price.recurring.interval,
         intervalCount: price.recurring.interval_count,
       })
     } catch (priceError: any) {
-      console.error('❌ 获取Stripe价格失败:', {
+      console.error('❌ Failed to retrieve Stripe price:', {
         priceId,
         error: priceError.message,
         type: priceError.type,
@@ -97,8 +97,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // 创建或获取Stripe客户
-    console.log('🔍 查找或创建Stripe客户...')
+    // Create or retrieve Stripe customer
+    console.log('🔍 Looking up or creating Stripe customer...')
     const customers = await stripe.customers.search({
       query: `metadata["userId"]:"${userId}"`,
     })
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
 
     if (customers.data.length > 0) {
       customerId = customers.data[0]!.id
-      console.log('✅ 找到现有Stripe客户:', customerId)
+      console.log('✅ Found existing Stripe customer:', customerId)
     } else {
       const customer = await stripe.customers.create({
         metadata: {
@@ -115,11 +115,11 @@ export async function POST(req: NextRequest) {
         },
       })
       customerId = customer.id
-      console.log('✅ 创建新Stripe客户:', customerId)
+      console.log('✅ Created new Stripe customer:', customerId)
     }
 
-    // 创建checkout session
-    console.log('🚀 创建Stripe checkout session...')
+    // Create checkout session
+    console.log('🚀 Creating Stripe checkout session...')
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    console.log('✅ Stripe session创建成功:', {
+    console.log('✅ Stripe session created successfully:', {
       sessionId: session.id,
       url: `${session.url?.substring(0, 50)}...`,
       customer: session.customer,
@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
       },
     })
   } catch (error: any) {
-    console.error('❌ 创建checkout session错误:', {
+    console.error('❌ Failed to create checkout session:', {
       message: error.message,
       type: error.type,
       code: error.code,

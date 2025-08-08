@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mx-auto max-w-4xl">
-        {/* 返回按钮 */}
+        {/* back button */}
         <div className="mb-8">
           <Button variant="ghost" asChild>
             <Link href={`/${locale}/blog`} className="flex items-center gap-2">
@@ -81,7 +81,7 @@ export default async function BlogPostPage({ params }: Props) {
           </Button>
         </div>
 
-        {/* 文章头部 */}
+        {/* Article header */}
         <header className="mb-8">
           <h1 className="mb-4 font-bold text-4xl">{frontmatter.title}</h1>
 
@@ -125,12 +125,12 @@ export default async function BlogPostPage({ params }: Props) {
           <Separator />
         </header>
 
-        {/* 文章内容 */}
+        {/* Article Content */}
         <article className="prose prose-gray dark:prose-invert max-w-none">
           <MDXContent components={getMDXComponents()} />
         </article>
 
-        {/* 文章底部 */}
+        {/* Article Footer */}
         <footer className="mt-12 border-t pt-8">
           <div className="flex items-center justify-between">
             <div>

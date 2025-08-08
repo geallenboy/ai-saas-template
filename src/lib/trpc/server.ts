@@ -6,8 +6,8 @@ import superjson from 'superjson'
 import { ZodError } from 'zod'
 
 /**
- * tRPC上下文创建函数
- * 包含认证用户信息和数据库连接
+ * tRPC context creation function
+ * Contains authentication user information and database connection
  */
 export async function createTRPCContext() {
   const { userId } = await auth()
@@ -22,7 +22,7 @@ export async function createTRPCContext() {
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>
 
 /**
- * 初始化tRPC实例
+ * Initialize tRPC instance
  */
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
@@ -39,14 +39,14 @@ const t = initTRPC.context<Context>().create({
 })
 
 /**
- * 导出tRPC路由器和过程创建器
+ * Export tRPC router and procedure creators
  */
 export const createTRPCRouter = t.router
 export const publicProcedure = t.procedure
 
 /**
- * 认证中间件
- * 确保用户已登录
+ * Authentication middleware
+ * Ensures the user is logged in
  */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.userId) {
@@ -61,21 +61,24 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 })
 
 /**
- * 管理员中间件
- * 确保用户是管理员
+ * Admin middleware
+ * Ensure the user is an administrator
  */
 const enforceUserIsAdmin = t.middleware(async ({ ctx, next }) => {
   if (!ctx.userId) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 
-  // 检查用户是否是管理员
+  // Check if the user is an administrator
   const user = await ctx.db.query.users.findFirst({
     where: (users, { eq }) => eq(users.id, ctx.userId!),
   })
 
   if (!user?.isAdmin) {
-    throw new TRPCError({ code: 'FORBIDDEN', message: '需要管理员权限' })
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Requires administrator rights',
+    })
   }
 
   return next({
@@ -88,11 +91,11 @@ const enforceUserIsAdmin = t.middleware(async ({ ctx, next }) => {
 })
 
 /**
- * 保护的过程（需要认证）
+ * Protected procedure (requires authentication)
  */
 export const protectedProcedure = publicProcedure.use(enforceUserIsAuthed)
 
 /**
- * 管理员过程（需要管理员权限）
+ * Admin procedure (requires administrator rights)
  */
 export const adminProcedure = publicProcedure.use(enforceUserIsAdmin)

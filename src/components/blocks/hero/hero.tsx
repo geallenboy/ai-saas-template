@@ -22,7 +22,7 @@ interface HeroProps {
 const Hero = ({ heading, description, button, reviews }: HeroProps) => {
   const t = useTranslations('hero')
 
-  // 使用i18n翻译或传入的props
+  // Use i18n translations or passed props
   const finalHeading = heading || t('heading')
   const finalDescription = description || t('description')
   const finalButton = button || {

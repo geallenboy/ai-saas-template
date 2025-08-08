@@ -28,14 +28,14 @@ export function AuthGuardClient({
 
     const needsAuth = requireAuth || requireAdminAccess
 
-    // 检查认证要求
+    // Check certification requirements
     if (needsAuth) {
       if (!isSignedIn) {
         router.push(redirectTo)
         return
       }
 
-      // 检查管理员权限
+      // Check admin permissions
       if (requireAdminAccess) {
         const isAdmin = user?.publicMetadata?.isAdmin
         if (!isAdmin) {
@@ -56,7 +56,7 @@ export function AuthGuardClient({
     router,
   ])
 
-  // 显示加载状态直到认证检查完成
+  // Show loading state until authentication check is complete
   const isLoading = !(isLoaded && isInitialized)
   if (isLoading) {
     return (
@@ -68,12 +68,12 @@ export function AuthGuardClient({
 
   const needsAuth = requireAuth || requireAdminAccess
 
-  // 如果需要认证但未登录，不渲染内容（即将重定向）
+  // If authentication is required but not signed in, do not render content (will redirect)
   if (needsAuth && !isSignedIn) {
     return null
   }
 
-  // 如果需要管理员权限但不是管理员，不渲染内容（即将重定向）
+  // If admin access is required but not an admin, do not render content (will redirect)
   const isAdmin = user?.publicMetadata?.isAdmin
   if (requireAdminAccess && !isAdmin) {
     return null
@@ -82,7 +82,7 @@ export function AuthGuardClient({
   return <>{children}</>
 }
 
-// 专门的管理员守卫组件
+// Dedicated administrator guard component
 export function AdminGuardClient({ children }: { children: React.ReactNode }) {
   return (
     <AuthGuardClient requireAuth requireAdminAccess>

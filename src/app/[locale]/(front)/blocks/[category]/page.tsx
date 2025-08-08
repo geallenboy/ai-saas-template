@@ -45,7 +45,9 @@ export default async function BlocksCategoryPage({
                 className="gap-2 hover:gap-3 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {locale === 'zh' ? '返回组件库' : 'Back to Components'}
+                {locale === 'de'
+                  ? 'Zurück zu Komponenten'
+                  : 'Back to Components'}
               </Link>
             </Button>
           </div>
@@ -59,13 +61,15 @@ export default async function BlocksCategoryPage({
                 {category.name}
               </h1>
               <p className="text-muted-foreground text-lg mb-8">
-                {locale === 'zh'
-                  ? '该分类下暂无组件，敬请期待。'
+                {locale === 'de'
+                  ? 'In dieser Kategorie sind noch keine Komponenten vorhanden. Bleiben Sie dran!'
                   : 'No components in this category yet. Stay tuned!'}
               </p>
               <Button asChild className="btn-modern-primary">
                 <Link href={`/${locale}/blocks`}>
-                  {locale === 'zh' ? '浏览其他分类' : 'Browse Other Categories'}
+                  {locale === 'de'
+                    ? 'Durchsuchen Sie andere Kategorien'
+                    : 'Browse Other Categories'}
                 </Link>
               </Button>
             </div>
@@ -89,7 +93,9 @@ export default async function BlocksCategoryPage({
                 className="gap-2 hover:gap-3 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {locale === 'zh' ? '返回组件库' : 'Back to Components'}
+                {locale === 'de'
+                  ? 'Zurück zu Komponenten'
+                  : 'Back to Components'}
               </Link>
             </Button>
           </div>
@@ -109,22 +115,24 @@ export default async function BlocksCategoryPage({
                 <div className="flex items-center gap-3">
                   <Badge variant="secondary" className="text-sm px-3 py-1">
                     {components.length}{' '}
-                    {locale === 'zh' ? '个组件' : 'components'}
+                    {locale === 'de' ? 'Komponenten' : 'components'}
                   </Badge>
                   <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-sm px-3 py-1">
                     <StarIcon className="h-3 w-3 mr-1" />
-                    {locale === 'zh' ? '精选' : 'Featured'}
+                    {locale === 'de' ? 'Ausgewählt' : 'Featured'}
                   </Badge>
                 </div>
               </div>
             </div>
 
-            {/* 搜索和操作 */}
+            {/* Search and operate */}
             <div className="flex flex-col gap-4 sm:flex-row lg:w-auto">
               <div className="relative">
                 <Input
                   placeholder={
-                    locale === 'zh' ? '搜索组件...' : 'Search components...'
+                    locale === 'de'
+                      ? 'Suche Komponenten...'
+                      : 'Search components...'
                   }
                   className="w-full sm:w-64 pl-10 glass-card-improved"
                 />
@@ -132,7 +140,7 @@ export default async function BlocksCategoryPage({
               </div>
               <Button variant="outline" className="gap-2 glass-card-improved">
                 <DownloadIcon className="h-4 w-4" />
-                {locale === 'zh' ? '批量下载' : 'Download All'}
+                {locale === 'de' ? 'Alle herunterladen' : 'Download All'}
               </Button>
             </div>
           </div>
@@ -140,7 +148,7 @@ export default async function BlocksCategoryPage({
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* 组件展示 */}
+        {/* Component Display */}
         <div className="space-y-12">
           {components.map((component, index) => (
             <Card
@@ -169,7 +177,7 @@ export default async function BlocksCategoryPage({
                       className="gap-2 glass-card-improved"
                     >
                       <CopyIcon className="h-4 w-4" />
-                      {locale === 'zh' ? '复制代码' : 'Copy Code'}
+                      {locale === 'de' ? 'Code kopieren' : 'Copy Code'}
                     </Button>
                     {component.preview && (
                       <Button
@@ -185,7 +193,7 @@ export default async function BlocksCategoryPage({
                           className="gap-2"
                         >
                           <ExternalLink className="h-4 w-4" />
-                          {locale === 'zh' ? '在线预览' : 'Live Preview'}
+                          {locale === 'de' ? 'Live-Vorschau' : 'Live Preview'}
                         </Link>
                       </Button>
                     )}
@@ -204,25 +212,27 @@ export default async function BlocksCategoryPage({
           ))}
         </div>
 
-        {/* 相关推荐 */}
+        {/* Related recommendations */}
         <section className="mt-20">
           <Card className="feature-card-enhanced">
             <CardContent className="p-8 md:p-12 text-center">
               <div className="mx-auto max-w-2xl">
                 <ComponentIcon className="mx-auto mb-6 h-12 w-12 text-blue-600" />
                 <h3 className="mb-4 text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                  {locale === 'zh' ? '需要更多组件？' : 'Need More Components?'}
+                  {locale === 'de'
+                    ? 'Brauchen Sie mehr Komponenten?'
+                    : 'Need More Components?'}
                 </h3>
                 <p className="mb-8 text-lg text-muted-foreground">
-                  {locale === 'zh'
-                    ? '浏览其他分类，发现更多精美的组件'
+                  {locale === 'de'
+                    ? 'Durchsuchen Sie andere Kategorien, um weitere schöne Komponenten zu entdecken'
                     : 'Explore other categories to discover more beautiful components'}
                 </p>
                 <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                   <Button size="lg" className="btn-modern-primary" asChild>
                     <Link href={`/${locale}/blocks`}>
-                      {locale === 'zh'
-                        ? '浏览所有分类'
+                      {locale === 'de'
+                        ? 'Alle Kategorien durchsuchen'
                         : 'Browse All Categories'}
                     </Link>
                   </Button>
@@ -233,7 +243,9 @@ export default async function BlocksCategoryPage({
                     asChild
                   >
                     <Link href={`/${locale}/docs`}>
-                      {locale === 'zh' ? '查看文档' : 'View Documentation'}
+                      {locale === 'de'
+                        ? 'Dokumentation anzeigen'
+                        : 'View Documentation'}
                     </Link>
                   </Button>
                 </div>

@@ -12,7 +12,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import type Stripe from 'stripe'
 
 /**
- * 激活用户会员
+ * Activate user membership
  */
 async function activateMembership(
   userId: string,
@@ -26,7 +26,7 @@ async function activateMembership(
   const now = new Date()
   const endDate = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000)
 
-  // 检查是否已有会员记录
+  // Check if there is already a member record
   const existingMembership = await db
     .select()
     .from(userMemberships)
@@ -34,7 +34,7 @@ async function activateMembership(
     .limit(1)
 
   if (existingMembership.length > 0) {
-    // 更新现有会员记录
+    // Update existing membership
     await db
       .update(userMemberships)
       .set({
@@ -52,7 +52,7 @@ async function activateMembership(
       })
       .where(eq(userMemberships.userId, userId))
   } else {
-    // 创建新会员记录
+    // Create new membership record
     await db.insert(userMemberships).values({
       userId,
       planId,
@@ -70,10 +70,10 @@ async function activateMembership(
     })
   }
 
-  // 更新用户使用限额
+  // Update user usage limits
   await updateUserUsageLimits(userId, planId)
 
-  logger.info('会员激活成功:', {
+  logger.info('Membership activated successfully:', {
     userId,
     planId,
     endDate: endDate.toISOString(),
@@ -81,26 +81,26 @@ async function activateMembership(
 }
 
 /**
- * 更新用户使用限额
+ * Update user usage limits
  */
 async function updateUserUsageLimits(userId: string, planId: string) {
-  // 获取计划信息
+  // Get plan information
   const plan = await db.query.membershipPlans.findFirst({
     where: eq(membershipPlans.id, planId),
   })
 
   if (!plan) {
     logger.error(
-      '计划不存在，无法更新使用限额',
+      'Plan not found, unable to update usage limits',
       new Error(`Plan not found: ${planId}`)
     )
     return
   }
 
   const now = new Date()
-  const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // 30天后重置
+  const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // 30 days later reset
 
-  // 检查是否已存在使用限额记录
+  // Check if there are existing usage limits records
   const existingLimits = await db
     .select()
     .from(userUsageLimits)
@@ -119,13 +119,13 @@ async function updateUserUsageLimits(userId: string, planId: string) {
   }
 
   if (existingLimits.length > 0) {
-    // 更新现有记录，保留当前使用量
+    // Update existing records, keeping current usage
     await db
       .update(userUsageLimits)
       .set(usageLimitsData)
       .where(eq(userUsageLimits.userId, userId))
   } else {
-    // 创建新记录
+    // Create new record
     await db.insert(userUsageLimits).values({
       ...usageLimitsData,
       usedUseCases: 0,
@@ -136,7 +136,7 @@ async function updateUserUsageLimits(userId: string, planId: string) {
     })
   }
 
-  logger.info('用户使用限额已更新', { userId })
+  logger.info('User usage limits updated successfully', { userId })
 }
 
 export async function POST(req: NextRequest) {
@@ -144,7 +144,7 @@ export async function POST(req: NextRequest) {
   const signature = req.headers.get('stripe-signature') as string
 
   if (!signature) {
-    logger.error('缺少Stripe签名')
+    logger.error('Missing Stripe signature')
     return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
   }
 
@@ -224,7 +224,7 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * 处理支付完成事件
+ * Handle checkout.session.completed event
  */
 async function handleCheckoutSessionCompleted(
   session: Stripe.Checkout.Session
@@ -232,13 +232,13 @@ async function handleCheckoutSessionCompleted(
   try {
     logger.info('Processing checkout session completed:', session)
 
-    // 验证session模式为payment（一次性付款）
+    // Verify session mode is payment (one-time payment)
     if (session.mode !== 'payment') {
       logger.info('Skipping non-payment session:', session)
       return
     }
 
-    // 获取必要的元数据
+    // Get necessary metadata
     const {
       userId,
       planName,
@@ -257,7 +257,7 @@ async function handleCheckoutSessionCompleted(
       return
     }
 
-    // 查找对应的计划
+    // Find the corresponding plan
     const [plan] = await db
       .select()
       .from(membershipPlans)
@@ -269,9 +269,9 @@ async function handleCheckoutSessionCompleted(
       return
     }
 
-    // 获取支付信息
+    // Get payment information
     const paymentIntentId = session.payment_intent as string
-    const amount = session.amount_total ? session.amount_total / 100 : 0 // Stripe以分为单位
+    const amount = session.amount_total ? session.amount_total / 100 : 0 // Stripe is in cents
     const sessionCurrency = currency?.toLowerCase() || session.currency || 'usd'
     const durationDays = membershipDurationDays
       ? Number.parseInt(membershipDurationDays, 10)
@@ -288,7 +288,7 @@ async function handleCheckoutSessionCompleted(
       durationDays,
     })
 
-    // 创建支付记录
+    // Create payment record
     await db.insert(paymentRecords).values({
       userId,
       stripePaymentIntentId: paymentIntentId,
@@ -305,7 +305,7 @@ async function handleCheckoutSessionCompleted(
       updatedAt: new Date(),
     })
 
-    // 激活会员
+    // Activate membership
     await activateMembership(
       userId,
       plan.id,
@@ -324,13 +324,13 @@ async function handleCheckoutSessionCompleted(
 }
 
 /**
- * 处理支付失败
+ * Handle payment failed event
  */
 async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
   try {
     logger.info('Processing payment failed:', paymentIntent)
 
-    // 获取相关的支付记录并更新状态
+    // Get related payment record and update status
     await db
       .update(paymentRecords)
       .set({
@@ -348,7 +348,7 @@ async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
 }
 
 /**
- * 处理订阅更新
+ * Handle subscription updated event
  */
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   try {
@@ -356,7 +356,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
     const customerId = subscription.customer as string
 
-    // 根据Stripe customer ID查找用户会员
+    // Find user membership by Stripe customer ID
     const membership = await db
       .select()
       .from(userMemberships)
@@ -368,10 +368,10 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       return
     }
 
-    // 更新会员状态
+    // Update membership status
     const statusMap: Record<string, string> = {
       active: 'active',
-      past_due: 'active', // 保持激活状态，但标记为逾期
+      past_due: 'active', // Keep active but mark as past due
       canceled: 'cancelled',
       unpaid: 'cancelled',
       incomplete: 'active',
@@ -403,7 +403,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 }
 
 /**
- * 处理订阅删除
+ * Handle subscription deleted event
  */
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   try {
@@ -429,7 +429,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 }
 
 /**
- * 处理发票支付成功
+ * Handle invoice payment succeeded event
  */
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   try {
@@ -437,7 +437,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 
     const customerId = invoice.customer as string
 
-    // 获取用户会员信息
+    // Get user membership information
     const membership = await db
       .select()
       .from(userMemberships)
@@ -449,7 +449,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
       return
     }
 
-    // 创建支付记录
+    // Create payment record
     if (membership[0]) {
       await db.insert(paymentRecords).values({
         userId: membership[0].userId,
@@ -461,7 +461,8 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
         paymentMethod: 'stripe',
         stripePaymentIntentId: (invoice as any).payment_intent as string,
         stripeInvoiceId: invoice.id,
-        planName: invoice.lines?.data?.[0]?.description || '订阅续费',
+        planName:
+          invoice.lines?.data?.[0]?.description || 'Subscription renewal',
         durationType: 'monthly',
         membershipDurationDays: 30,
         paidAt: new Date(),
@@ -478,7 +479,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 }
 
 /**
- * 处理发票支付失败
+ * Handle invoice payment failed event
  */
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   try {
@@ -486,7 +487,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 
     const customerId = invoice.customer as string
 
-    // 获取用户会员信息
+    // Get user membership information
     const membership = await db
       .select()
       .from(userMemberships)
@@ -498,7 +499,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
       return
     }
 
-    // 创建失败的支付记录
+    // Create failed payment record
     if (membership[0]) {
       await db.insert(paymentRecords).values({
         userId: membership[0].userId,
@@ -509,7 +510,8 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
         status: 'failed',
         paymentMethod: 'stripe',
         stripeInvoiceId: invoice.id,
-        planName: invoice.lines?.data?.[0]?.description || '订阅续费',
+        planName:
+          invoice.lines?.data?.[0]?.description || 'Subscription renewal',
         durationType: 'monthly',
         membershipDurationDays: 30,
         failedAt: new Date(),
@@ -517,7 +519,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
         updatedAt: new Date(),
       })
 
-      // 如果连续失败多次，暂停会员
+      // If you fail multiple times in a row, your membership will be suspended.
       if (invoice.attempt_count && invoice.attempt_count >= 3) {
         await db
           .update(userMemberships)

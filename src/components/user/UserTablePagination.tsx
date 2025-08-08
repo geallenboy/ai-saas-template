@@ -41,7 +41,7 @@ export function UserTablePagination({
   const updateLimit = (newLimit: string) => {
     const params = new URLSearchParams(searchParams.toString())
     params.set('limit', newLimit)
-    params.set('page', '1') // 重置到第一页
+    params.set('page', '1') // Reset to first page
     router.push(`/admin/users?${params.toString()}`)
   }
 

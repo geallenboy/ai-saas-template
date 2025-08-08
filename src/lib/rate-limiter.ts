@@ -1,25 +1,25 @@
 import { cacheService } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 
-// 限流配置接口
+// Current limiting configuration interface
 interface RateLimitConfig {
-  windowMs: number // 时间窗口（毫秒）
-  maxRequests: number // 最大请求数
-  message?: string // 超限消息
-  skipSuccessfulRequests?: boolean // 是否跳过成功请求
-  skipFailedRequests?: boolean // 是否跳过失败请求
-  keyGenerator?: (identifier: string) => string // 自定义键生成器
+  windowMs: number // Time window (milliseconds)
+  maxRequests: number // Maximum number of requests
+  message?: string // Exceeded limit message
+  skipSuccessfulRequests?: boolean // Whether to skip successful requests
+  skipFailedRequests?: boolean // Whether to skip failed requests
+  keyGenerator?: (identifier: string) => string // Custom key generator
 }
 
-// 限流结果接口
+// Rate limit result interface
 interface RateLimitResult {
-  allowed: boolean // 是否允许
-  totalHits: number // 总请求数
-  timeToReset: number // 重置时间（毫秒）
-  remaining: number // 剩余请求数
+  allowed: boolean // Whether allowed
+  totalHits: number // Total number of requests
+  timeToReset: number // Time to reset (milliseconds)
+  remaining: number // Remaining number of requests
 }
 
-// 限流器类
+// Rate limiter class
 class RateLimiter {
   private config: RateLimitConfig
 
@@ -33,32 +33,32 @@ class RateLimiter {
     }
   }
 
-  // 检查并记录请求
+  // Check and record request
   async checkLimit(identifier: string): Promise<RateLimitResult> {
     const key = this.config.keyGenerator!(identifier)
     const now = Date.now()
     const windowStart = now - this.config.windowMs
 
     try {
-      // 获取当前窗口内的请求记录
+      // Get requests in current window
       const requests = await this.getRequestsInWindow(key, windowStart)
 
-      // 计算当前请求数
+      // Calculate current request count
       const currentRequests = requests.length
 
-      // 检查是否超限
+      // Check if exceeded
       const allowed = currentRequests < this.config.maxRequests
       const remaining = Math.max(
         0,
         this.config.maxRequests - currentRequests - 1
       )
 
-      // 如果允许，记录这次请求
+      // If allowed, record this request
       if (allowed) {
         await this.recordRequest(key, now)
       }
 
-      // 计算重置时间
+      // Calculate reset time
       const oldestRequest = requests[0]
       const timeToReset = oldestRequest
         ? Math.max(0, oldestRequest + this.config.windowMs - now)
@@ -71,8 +71,8 @@ class RateLimiter {
         remaining: allowed ? remaining : 0,
       }
     } catch (error) {
-      logger.error(`限流检查失败 ${identifier}:`, error as Error)
-      // 出错时默认允许请求
+      logger.error(`Rate limit check failed ${identifier}:`, error as Error)
+      // Default to allowing the request when an error occurs
       return {
         allowed: true,
         totalHits: 1,
@@ -82,7 +82,7 @@ class RateLimiter {
     }
   }
 
-  // 获取窗口内的请求记录
+  // Get requests in current window
   private async getRequestsInWindow(
     key: string,
     windowStart: number
@@ -90,11 +90,11 @@ class RateLimiter {
     const cached = await cacheService.get<number[]>(key)
     if (!cached) return []
 
-    // 过滤掉窗口外的请求
+    // Filter out requests outside the window
     return cached.filter(timestamp => timestamp > windowStart)
   }
 
-  // 记录请求
+  // Record request
   private async recordRequest(key: string, timestamp: number): Promise<void> {
     const requests = await this.getRequestsInWindow(
       key,
@@ -102,22 +102,22 @@ class RateLimiter {
     )
     requests.push(timestamp)
 
-    // 只保留最近的请求记录，避免数组过大
+    // Only keep the most recent requests to avoid large arrays
     const maxRecords = Math.max(this.config.maxRequests * 2, 100)
     const trimmedRequests = requests.slice(-maxRecords)
 
-    // 设置过期时间为窗口时间的2倍，确保数据不会过早清除
+    // Set expiration time to twice the window time to ensure data is not cleared too early
     const ttl = Math.ceil((this.config.windowMs / 1000) * 2)
     await cacheService.set(key, trimmedRequests, ttl)
   }
 
-  // 重置限流器
+  // Reset rate limiter
   async reset(identifier: string): Promise<void> {
     const key = this.config.keyGenerator!(identifier)
     await cacheService.del(key)
   }
 
-  // 获取限流状态
+  // Get rate limit status
   async getStatus(identifier: string): Promise<{
     requests: number
     remaining: number
@@ -144,56 +144,56 @@ class RateLimiter {
   }
 }
 
-// 预定义的限流配置
+// Predefined rate limit configurations
 export const RateLimitConfigs = {
-  // 严格限制（如登录）
+  // Strict limit (e.g. login)
   strict: {
-    windowMs: 15 * 60 * 1000, // 15分钟
+    windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 5,
-    message: '请求过于频繁，请稍后再试',
+    message: 'The request is too frequent, please try again later',
   },
 
-  // 一般API限制
+  // General API limit
   api: {
-    windowMs: 60 * 1000, // 1分钟
+    windowMs: 60 * 1000, // 1 minute
     maxRequests: 100,
-    message: 'API请求频率过高',
+    message: 'API request frequency is too high',
   },
 
-  // 宽松限制（如获取数据）
+  // Loose limit (e.g. data fetching)
   loose: {
-    windowMs: 60 * 1000, // 1分钟
+    windowMs: 60 * 1000, // 1 minute
     maxRequests: 1000,
-    message: '请求频率过高',
+    message: 'Request frequency is too high',
   },
 
-  // 免费用户限制
+  // Free user limit
   freeUser: {
-    windowMs: 60 * 60 * 1000, // 1小时
+    windowMs: 60 * 60 * 1000, // 1 hour
     maxRequests: 100,
-    message: '免费用户请求限制，请升级到付费计划',
+    message: 'Free user request limit exceeded, please upgrade to a paid plan',
   },
 
-  // 付费用户限制
+  // Paid user limit
   paidUser: {
-    windowMs: 60 * 60 * 1000, // 1小时
+    windowMs: 60 * 60 * 1000, // 1 hour
     maxRequests: 1000,
-    message: '请求频率过高，请稍后再试',
+    message: 'Request frequency is too high, please try again later',
   },
 
-  // 上传限制
+  // Upload limit
   upload: {
-    windowMs: 60 * 60 * 1000, // 1小时
+    windowMs: 60 * 60 * 1000, // 1 hour
     maxRequests: 50,
-    message: '上传频率过高，请稍后再试',
+    message: 'Upload frequency is too high, please try again later',
   },
 } as const
 
-// 创建限流器实例
+// Create a rate limiter instance
 export const createRateLimiter = (config: RateLimitConfig) =>
   new RateLimiter(config)
 
-// 预定义的限流器
+// Predefined rate limiters
 export const rateLimiters = {
   strict: createRateLimiter(RateLimitConfigs.strict),
   api: createRateLimiter(RateLimitConfigs.api),
@@ -203,13 +203,13 @@ export const rateLimiters = {
   upload: createRateLimiter(RateLimitConfigs.upload),
 }
 
-// 限流中间件类型
+// Rate limit middleware type
 export type RateLimitMiddleware = (
   identifier: string,
   config?: Partial<RateLimitConfig>
 ) => Promise<RateLimitResult>
 
-// 通用限流中间件
+// General rate limiting middleware
 export const rateLimit: RateLimitMiddleware = async (
   identifier: string,
   config = {}
@@ -222,11 +222,11 @@ export const rateLimit: RateLimitMiddleware = async (
   return limiter.checkLimit(identifier)
 }
 
-// IP限流
+// IP rate limiting
 export const rateLimitByIP = (ip: string, config?: Partial<RateLimitConfig>) =>
   rateLimit(`ip:${ip}`, config)
 
-// 用户限流
+// User rate limiting
 export const rateLimitByUser = (
   userId: string,
   config?: Partial<RateLimitConfig>
@@ -239,11 +239,11 @@ export const rateLimitByPath = (
   config?: Partial<RateLimitConfig>
 ) => rateLimit(`path:${ip}:${path}`, config)
 
-// 全局API限流
+// Global API rate limiting
 export const rateLimitGlobal = (config?: Partial<RateLimitConfig>) =>
   rateLimit('global', config)
 
-// 根据用户类型限流
+// User type rate limiting
 export const rateLimitByUserType = async (
   userId: string,
   isPaidUser: boolean,
@@ -255,7 +255,7 @@ export const rateLimitByUserType = async (
   return rateLimitByUser(userId, { ...baseConfig, ...config })
 }
 
-// 多级限流（同时检查多个限制）
+// Multi-level rate limiting (check multiple limits simultaneously)
 export const multiLevelRateLimit = async (
   checks: Array<{
     identifier: string
@@ -288,7 +288,7 @@ export const multiLevelRateLimit = async (
   }
 }
 
-// 限流装饰器
+// Rate limiting decorator
 export function RateLimit(config: RateLimitConfig) {
   return (
     target: any,
@@ -299,7 +299,7 @@ export function RateLimit(config: RateLimitConfig) {
     const limiter = createRateLimiter(config)
 
     descriptor.value = async function (...args: any[]) {
-      // 尝试从参数中提取标识符
+      // Try to extract identifier from arguments
       const identifier = args[0]?.userId || args[0]?.ip || 'anonymous'
 
       const result = await limiter.checkLimit(identifier)
@@ -313,7 +313,7 @@ export function RateLimit(config: RateLimitConfig) {
   }
 }
 
-// 滑动窗口限流器（更精确的限流算法）
+// Sliding window rate limiter (more precise rate limiting algorithm)
 export class SlidingWindowRateLimiter {
   private windowMs: number
   private maxRequests: number
@@ -330,7 +330,7 @@ export class SlidingWindowRateLimiter {
     const subWindowMs = this.windowMs / this.subWindowCount
     const currentWindow = Math.floor(now / subWindowMs)
 
-    // 获取所有子窗口的计数
+    // Get the count of all child windows
     const promises = []
     for (let i = 0; i < this.subWindowCount; i++) {
       const windowKey = `sliding:${identifier}:${currentWindow - i}`
@@ -344,7 +344,7 @@ export class SlidingWindowRateLimiter {
     const allowed = totalRequests < this.maxRequests
 
     if (allowed) {
-      // 记录当前请求
+      // Log current request
       const currentWindowKey = `sliding:${identifier}:${currentWindow}`
       const currentCount =
         (await cacheService.get<number>(currentWindowKey)) || 0
@@ -367,16 +367,16 @@ export class SlidingWindowRateLimiter {
   }
 }
 
-// 令牌桶限流器
+// Token bucket rate limiter
 export class TokenBucketRateLimiter {
   private capacity: number
-  private refillRate: number // 每秒补充的令牌数
-  private refillPeriod: number // 补充周期（毫秒）
+  private refillRate: number // Tokens added per second
+  private refillPeriod: number // Refill period (milliseconds)
 
   constructor(capacity: number, refillRate: number) {
     this.capacity = capacity
     this.refillRate = refillRate
-    this.refillPeriod = 1000 / refillRate // 每个令牌的补充间隔
+    this.refillPeriod = 1000 / refillRate // Refill interval for each token
   }
 
   async checkLimit(
@@ -386,7 +386,7 @@ export class TokenBucketRateLimiter {
     const key = `bucket:${identifier}`
     const now = Date.now()
 
-    // 获取当前桶状态
+    // Get the current bucket status
     const bucketData = (await cacheService.get<{
       tokens: number
       lastRefill: number
@@ -395,11 +395,11 @@ export class TokenBucketRateLimiter {
       lastRefill: now,
     }
 
-    // 计算需要补充的令牌数
+    // Calculate tokens to refill
     const timePassed = now - bucketData.lastRefill
     const tokensToAdd = Math.floor(timePassed / this.refillPeriod)
 
-    // 更新令牌数（不超过容量）
+    // Update the number of tokens (not exceeding capacity)
     const currentTokens = Math.min(
       this.capacity,
       bucketData.tokens + tokensToAdd
@@ -408,7 +408,7 @@ export class TokenBucketRateLimiter {
     const allowed = currentTokens >= tokensRequested
     const newTokens = allowed ? currentTokens - tokensRequested : currentTokens
 
-    // 保存新状态
+    // Save new state
     await cacheService.set(
       key,
       {
@@ -416,7 +416,7 @@ export class TokenBucketRateLimiter {
         lastRefill: now,
       },
       3600
-    ) // 1小时过期
+    ) // 1 hour expiration
 
     const timeToNextToken = allowed ? 0 : this.refillPeriod
 
@@ -429,7 +429,7 @@ export class TokenBucketRateLimiter {
   }
 }
 
-// 分布式限流器（支持多实例部署）
+// Distributed rate limiter (supports multi-instance deployment)
 export class DistributedRateLimiter {
   private windowMs: number
   private maxRequests: number
@@ -445,12 +445,12 @@ export class DistributedRateLimiter {
     const windowStart = now - this.windowMs
 
     try {
-      // 使用Redis的原子操作保证分布式一致性
-      // 这里简化实现，实际生产环境可能需要Lua脚本
+      // Use Redis atomic operations to ensure distributed consistency
+      // This is a simplified implementation, actual production environments may require Lua scripts
       const requestsKey = `${key}:requests`
       const requests = (await cacheService.get<number[]>(requestsKey)) || []
 
-      // 清理过期请求
+      // Clean up expired requests
       const validRequests = (requests || []).filter(
         timestamp => timestamp > windowStart
       )
@@ -478,8 +478,11 @@ export class DistributedRateLimiter {
         remaining: Math.max(0, this.maxRequests - validRequests.length),
       }
     } catch (error) {
-      logger.error(`分布式限流检查失败 ${identifier}:`, error as Error)
-      // 出错时默认允许
+      logger.error(
+        `Distributed rate limit check failed ${identifier}:`,
+        error as Error
+      )
+      // Default to allowed on error
       return {
         allowed: true,
         totalHits: 1,
@@ -490,7 +493,7 @@ export class DistributedRateLimiter {
   }
 }
 
-// 自适应限流器（根据系统负载调整限制）
+// Adaptive rate limiter (adjusts limits based on system load)
 export class AdaptiveRateLimiter {
   private baseLimit: number
   private windowMs: number
@@ -504,9 +507,9 @@ export class AdaptiveRateLimiter {
 
   async checkLimit(
     identifier: string,
-    systemLoad = 0.5 // 0-1之间，表示系统负载
+    systemLoad = 0.5 // Between 0 and 1, indicating system load
   ): Promise<RateLimitResult> {
-    // 根据系统负载调整限制
+    // Adjust limit based on system load
     const adjustedLimit = Math.floor(
       this.baseLimit * (1 - systemLoad * this.adaptiveFactor)
     )
@@ -521,9 +524,9 @@ export class AdaptiveRateLimiter {
   }
 }
 
-// 限流工具函数
+// Rate limiting utility functions
 export const RateLimitUtils = {
-  // 获取客户端IP
+  // Get client IP
   getClientIP: (request: Request): string => {
     const forwarded = request.headers.get('x-forwarded-for')
     const realIP = request.headers.get('x-real-ip')
@@ -532,7 +535,7 @@ export const RateLimitUtils = {
     return forwarded?.split(',')[0] || realIP || remoteAddr || 'unknown'
   },
 
-  // 生成限流响应头
+  // Generate rate limit response headers
   generateHeaders: (result: RateLimitResult, config: RateLimitConfig) => ({
     'X-RateLimit-Limit': config.maxRequests.toString(),
     'X-RateLimit-Remaining': result.remaining.toString(),
@@ -542,7 +545,7 @@ export const RateLimitUtils = {
     'Retry-After': Math.ceil(result.timeToReset / 1000).toString(),
   }),
 
-  // 格式化限流错误消息
+  // Format rate limit error messages
   formatError: (result: RateLimitResult, config: RateLimitConfig) => ({
     error: config.message || 'Too many requests',
     limit: config.maxRequests,

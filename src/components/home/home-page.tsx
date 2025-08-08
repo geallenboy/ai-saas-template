@@ -10,7 +10,7 @@ export function HomePage() {
       <HeroSection />
       <FeaturesSection />
 
-      {/* 定价部分 */}
+      {/* Pricing section */}
       <section className="py-10 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <PricingPlans />

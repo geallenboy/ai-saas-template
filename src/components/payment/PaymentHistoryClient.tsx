@@ -16,8 +16,8 @@ export function PaymentHistoryClient() {
     { limit: 5 },
     {
       enabled: isSignedIn,
-      staleTime: 5 * 60 * 1000, // 5分钟缓存
-      gcTime: 10 * 60 * 1000, // 10分钟垃圾回收
+      staleTime: 5 * 60 * 1000, // 5 minutes cache
+      gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
     }
   )
 
@@ -108,7 +108,7 @@ export function PaymentHistoryClient() {
                           statusConfig?.color || 'bg-gray-100 text-gray-800'
                         }
                       >
-                        {statusConfig?.labelZh || payment.status}
+                        {statusConfig?.labelDe || payment.status}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -133,7 +133,7 @@ export function PaymentHistoryClient() {
                     <p className="font-medium text-lg">
                       {formatPrice(
                         Number(payment.amount),
-                        payment.currency as 'USD' | 'CNY'
+                        payment.currency as 'USD' | 'EUR'
                       )}
                     </p>
                     {payment.discountAmount &&
@@ -142,7 +142,7 @@ export function PaymentHistoryClient() {
                           节省{' '}
                           {formatPrice(
                             Number(payment.discountAmount),
-                            payment.currency as 'USD' | 'CNY'
+                            payment.currency as 'USD' | 'EUR'
                           )}
                         </p>
                       )}

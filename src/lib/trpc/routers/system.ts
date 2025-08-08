@@ -4,7 +4,7 @@ import { eq, inArray } from 'drizzle-orm'
 import { z } from 'zod'
 import { adminProcedure, createTRPCRouter } from '../server'
 
-// 系统配置数据类型枚举
+// System configuration data type enumeration
 export const ConfigDataType = z.enum([
   'string',
   'number',
@@ -13,7 +13,7 @@ export const ConfigDataType = z.enum([
   'array',
 ])
 
-// 系统配置分类枚举
+// System configuration category enumeration
 export const ConfigCategory = z.enum([
   'general',
   'payment',
@@ -25,7 +25,7 @@ export const ConfigCategory = z.enum([
 
 export const systemRouter = createTRPCRouter({
   /**
-   * 获取所有系统配置
+   * Get all system configurations
    */
   getConfigs: adminProcedure
     .input(
@@ -47,7 +47,7 @@ export const systemRouter = createTRPCRouter({
         .where(conditions.length > 0 ? conditions[0] : undefined)
         .orderBy(systemConfigs.category, systemConfigs.key)
 
-      // 过滤敏感配置
+      // Filter sensitive configurations
       return configs.map(config => ({
         ...config,
         value: config.isSecret && !input.includeSecret ? '***' : config.value,
@@ -55,7 +55,7 @@ export const systemRouter = createTRPCRouter({
     }),
 
   /**
-   * 根据key获取配置
+   * Get configuration based on key
    */
   getConfigByKey: adminProcedure
     .input(z.object({ key: z.string() }))
@@ -67,7 +67,7 @@ export const systemRouter = createTRPCRouter({
       if (!config) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '配置项不存在',
+          message: 'Configuration item does not exist',
         })
       }
 
@@ -75,7 +75,7 @@ export const systemRouter = createTRPCRouter({
     }),
 
   /**
-   * 更新配置
+   * Update configuration
    */
   updateConfig: adminProcedure
     .input(
@@ -92,14 +92,14 @@ export const systemRouter = createTRPCRouter({
       if (!config) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '配置项不存在',
+          message: 'Configuration item does not exist',
         })
       }
 
       if (!config.isEditable) {
         throw new TRPCError({
           code: 'FORBIDDEN',
-          message: '该配置项不可编辑',
+          message: 'This configuration item is not editable',
         })
       }
 
@@ -113,7 +113,7 @@ export const systemRouter = createTRPCRouter({
         .where(eq(systemConfigs.key, input.key))
         .returning()
 
-      ctx.logger.info(`管理员更新系统配置: ${input.key}`, {
+      ctx.logger.info(`Admin updated system configuration: ${input.key}`, {
         adminId: ctx.userId,
         configKey: input.key,
         oldValue: config.value,
@@ -124,7 +124,7 @@ export const systemRouter = createTRPCRouter({
     }),
 
   /**
-   * 创建新配置
+   * Create new configuration
    */
   createConfig: adminProcedure
     .input(
@@ -146,7 +146,7 @@ export const systemRouter = createTRPCRouter({
       if (existingConfig) {
         throw new TRPCError({
           code: 'CONFLICT',
-          message: '配置项已存在',
+          message: 'Configuration item already exists',
         })
       }
 
@@ -158,7 +158,7 @@ export const systemRouter = createTRPCRouter({
         })
         .returning()
 
-      ctx.logger.info(`管理员创建系统配置: ${input.key}`, {
+      ctx.logger.info(`Admin created system configuration: ${input.key}`, {
         adminId: ctx.userId,
         configKey: input.key,
         category: input.category,
@@ -168,7 +168,7 @@ export const systemRouter = createTRPCRouter({
     }),
 
   /**
-   * 删除配置
+   * Delete configuration
    */
   deleteConfig: adminProcedure
     .input(z.object({ key: z.string() }))
@@ -180,29 +180,32 @@ export const systemRouter = createTRPCRouter({
       if (!config) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '配置项不存在',
+          message: 'Configuration item does not exist',
         })
       }
 
       if (!config.isEditable) {
         throw new TRPCError({
           code: 'FORBIDDEN',
-          message: '该配置项不可删除',
+          message: 'This configuration item is not deletable',
         })
       }
 
       await ctx.db.delete(systemConfigs).where(eq(systemConfigs.key, input.key))
 
-      ctx.logger.info(`管理员删除系统配置: ${input.key}`, {
-        adminId: ctx.userId,
-        configKey: input.key,
-      })
+      ctx.logger.info(
+        `Administrator deletes system configuration: ${input.key}`,
+        {
+          adminId: ctx.userId,
+          configKey: input.key,
+        }
+      )
 
-      return { message: '配置删除成功' }
+      return { message: 'Configuration deleted successfully' }
     }),
 
   /**
-   * 批量更新配置
+   * Batch update configurations
    */
   batchUpdateConfigs: adminProcedure
     .input(
@@ -218,7 +221,7 @@ export const systemRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const keys = input.configs.map(c => c.key)
 
-      // 检查所有配置是否存在且可编辑
+      // Check if all configurations exist and are editable
       const existingConfigs = await ctx.db
         .select()
         .from(systemConfigs)
@@ -229,11 +232,11 @@ export const systemRouter = createTRPCRouter({
       if (editableConfigs.length !== input.configs.length) {
         throw new TRPCError({
           code: 'FORBIDDEN',
-          message: '部分配置项不存在或不可编辑',
+          message: 'Some configuration items do not exist or cannot be edited',
         })
       }
 
-      // 逐个更新配置
+      // Update configurations one by one
       const results = []
       for (const configUpdate of input.configs) {
         const [updated] = await ctx.db
@@ -249,24 +252,27 @@ export const systemRouter = createTRPCRouter({
         results.push(updated)
       }
 
-      ctx.logger.info(`管理员批量更新系统配置: ${keys.join(', ')}`, {
-        adminId: ctx.userId,
-        configKeys: keys,
-      })
+      ctx.logger.info(
+        `Admin bulk updated system configurations: ${keys.join(', ')}`,
+        {
+          adminId: ctx.userId,
+          configKeys: keys,
+        }
+      )
 
       return results
     }),
 
   /**
-   * 重置配置到默认值
+   * Reset configuration to default value
    */
   resetConfigToDefault: adminProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // 这里需要根据业务需求定义默认值
+      // Default values should be defined based on business requirements
       const defaultValues: Record<string, any> = {
         'site.name': 'AI SaaS Template',
-        'site.description': '下一代AI SaaS平台',
+        'site.description': 'Next-generation AI SaaS platform',
         'payment.enabled': true,
         'ai.max_tokens': 4000,
         'notification.email_enabled': true,
@@ -276,7 +282,7 @@ export const systemRouter = createTRPCRouter({
       if (defaultValue === undefined) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '该配置项没有默认值',
+          message: 'This configuration item does not have a default value',
         })
       }
 
@@ -290,17 +296,20 @@ export const systemRouter = createTRPCRouter({
         .where(eq(systemConfigs.key, input.key))
         .returning()
 
-      ctx.logger.info(`管理员重置配置到默认值: ${input.key}`, {
-        adminId: ctx.userId,
-        configKey: input.key,
-        defaultValue,
-      })
+      ctx.logger.info(
+        `Administrator resets configuration to default values: ${input.key}`,
+        {
+          adminId: ctx.userId,
+          configKey: input.key,
+          defaultValue,
+        }
+      )
 
       return updated
     }),
 
   /**
-   * 获取配置分类列表
+   * Get configuration categories
    */
   getConfigCategories: adminProcedure.query(async ({ ctx }) => {
     const categories = await ctx.db

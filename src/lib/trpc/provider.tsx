@@ -11,23 +11,23 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            // 缓存时间配置
-            staleTime: 5 * 60 * 1000, // 5分钟
-            gcTime: 10 * 60 * 1000, // 10分钟
-            // 错误重试配置
+            // Cache time configuration
+            staleTime: 5 * 60 * 1000, // 5 minutes
+            gcTime: 10 * 60 * 1000, // 10 minutes
+            // Error retry configuration
             retry: (failureCount, error) => {
-              // 对于认证错误不重试
+              // Do not retry for authentication errors
               if (error.message?.includes('UNAUTHORIZED')) {
                 return false
               }
-              // 最多重试2次
+              // Retry up to 2 times
               return failureCount < 2
             },
-            // 重新聚焦时不自动刷新
+            // Do not automatically refetch on window focus
             refetchOnWindowFocus: false,
           },
           mutations: {
-            // 变更错误重试配置
+            // Change error retry configuration
             retry: false,
           },
         },

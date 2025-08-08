@@ -10,100 +10,106 @@ import {
 } from 'lucide-react'
 
 export const metadata = {
-  title: '隐私政策 - AI SaaS Template',
+  title: 'Privacy Policy - AI SaaS Template',
   description:
-    '了解AI SaaS Template如何收集、使用和保护您的个人信息。我们致力于保护您的隐私权。',
+    'Learn how AI SaaS Template collects, uses, and protects your personal information. We are committed to safeguarding your privacy rights.',
 }
 
 const privacySections = [
   {
     icon: Database,
-    title: '信息收集',
+    title: 'Information Collection',
     content: [
-      '我们收集您主动提供的信息，如注册账户时的姓名、邮箱地址等',
-      '自动收集的技术信息，包括IP地址、浏览器类型、设备信息等',
-      '使用分析数据，帮助我们改进服务质量',
-      'Cookie和类似技术收集的信息',
+      'We collect information you actively provide, such as your name and email address when registering an account.',
+      'We automatically collect technical information, including IP address, browser type, device information, etc.',
+      'We use analytics data to help us improve service quality.',
+      'We collect information through cookies and similar technologies.',
     ],
   },
   {
     icon: Eye,
-    title: '信息使用',
+    title: 'Information Use',
     content: [
-      '提供、维护和改进我们的服务',
-      '处理交易和发送相关通知',
-      '回应您的询问和提供客户支持',
-      '发送重要更新和营销信息（您可以选择退订）',
-      '防止欺诈和确保服务安全',
+      'We use your information to provide, maintain, and improve our services.',
+      'We process transactions and send related notifications.',
+      'We respond to your inquiries and provide customer support.',
+      'We send important updates and marketing information (you can opt-out).',
+      'We prevent fraud and ensure the security of our services.',
     ],
   },
   {
     icon: Users,
-    title: '信息共享',
+    title: 'Information Sharing',
     content: [
-      '我们不会出售您的个人信息给第三方',
-      '可能与服务提供商共享必要信息以提供服务',
-      '在法律要求或保护权利时可能披露信息',
-      '业务转让时信息可能作为资产的一部分转移',
+      'We do not sell your personal information to third parties.',
+      'We may share necessary information with service providers to deliver our services.',
+      'We may disclose information when required by law or to protect rights.',
+      'In the event of a business transfer, information may be transferred as part of the assets.',
     ],
   },
   {
     icon: Lock,
-    title: '数据安全',
+    title: 'Data Security',
     content: [
-      '使用行业标准的加密技术保护数据传输',
-      '实施严格的访问控制和身份验证措施',
-      '定期进行安全审计和漏洞评估',
-      '员工接受隐私和安全培训',
-      '数据备份和灾难恢复计划',
+      'We use industry-standard encryption technologies to protect data transmission.',
+      'We implement strict access controls and authentication measures.',
+      'We conduct regular security audits and vulnerability assessments.',
+      'Employees receive training on privacy and security.',
+      'Data backup and disaster recovery plans are in place.',
     ],
   },
   {
     icon: Globe,
-    title: '国际传输',
+    title: 'International Transfers',
     content: [
-      '您的信息可能在您所在国家/地区以外处理',
-      '我们确保跨境数据传输符合适用的法律法规',
-      '采用适当的保护措施确保数据安全',
-      '遵守GDPR、CCPA等相关隐私法规',
+      'Your information may be processed outside of your country/region.',
+      'We ensure that cross-border data transfers comply with applicable laws and regulations.',
+      'Appropriate safeguards are in place to ensure data security.',
+      'We comply with relevant privacy regulations such as GDPR and CCPA.',
     ],
   },
   {
     icon: Calendar,
-    title: '数据保留',
+    title: 'Data Retention',
     content: [
-      '我们仅在必要期间保留您的个人信息',
-      '账户删除后，我们会在合理时间内删除相关数据',
-      '某些信息可能因法律要求需要保留更长时间',
-      '您可以随时请求删除您的个人信息',
+      'We retain your personal information only for as long as necessary.',
+      'After account deletion, we will delete relevant data within a reasonable timeframe.',
+      'Certain information may need to be retained for a longer period due to legal requirements.',
+      'You can request the deletion of your personal information at any time.',
     ],
   },
 ]
 
 const userRights = [
   {
-    title: '访问权',
-    description: '您有权了解我们收集了您的哪些个人信息',
+    title: 'Access Rights',
+    description:
+      'You have the right to know what personal information we have collected about you.',
   },
   {
-    title: '更正权',
-    description: '您可以要求更正不准确或不完整的个人信息',
+    title: 'Correction Rights',
+    description:
+      'You can request the correction of inaccurate or incomplete personal information.',
   },
   {
-    title: '删除权',
-    description: '在某些情况下，您可以要求删除您的个人信息',
+    title: 'Deletion Rights',
+    description:
+      'In certain circumstances, you can request the deletion of your personal information.',
   },
   {
-    title: '限制处理权',
-    description: '您可以要求限制对您个人信息的处理',
+    title: 'Restriction Rights',
+    description:
+      'You can request the restriction of processing your personal information.',
   },
   {
-    title: '数据可携权',
-    description: '您有权以结构化、常用格式获取您的数据',
+    title: 'Data Portability Rights',
+    description:
+      'You have the right to obtain your data in a structured, commonly used format.',
   },
   {
-    title: '反对权',
-    description: '您可以反对基于合法利益的数据处理',
+    title: 'Objection Rights',
+    description:
+      'You can object to the processing of your personal information based on legitimate interests.',
   },
 ]
 

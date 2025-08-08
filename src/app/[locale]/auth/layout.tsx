@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '认证 - AI SaaS 模板',
-  description: '登录或注册AI SaaS 模板账户',
+  title: 'Certified - AI SaaS Template',
+  description: 'Login or register for an AI SaaS Template account',
 }
 
 export default function AuthLayout({

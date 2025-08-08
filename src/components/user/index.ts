@@ -1,8 +1,8 @@
 /**
- * 用户管理组件统一导出
+ * Unified export of user management components
  */
 
-// 客户端组件
+// Client components
 export { BulkActions } from './BulkActions'
 export { CreateUserDialog } from './CreateUserDialog'
 export { UserActions } from './UserActions'
@@ -13,7 +13,7 @@ export { UserStatsClient } from './UserStatsClient'
 export { UserTable } from './UserTable'
 export { UserTablePagination } from './UserTablePagination'
 
-// 服务端组件 (已迁移到客户端组件，保留注释以备参考)
+// Server-side components (migrated to client-side components, retain comments for reference)
 // export { UserDetail } from './server/UserDetail'
 // export { UserList } from './server/UserList'
 // export { UserStats } from './server/UserStats'

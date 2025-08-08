@@ -14,7 +14,7 @@ export default function ContactPage() {
     <>
       <main className="min-h-screen bg-gradient-to-br from-white via-gray-50/90 to-blue-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          {/* 页面标题 */}
+          {/* Page title */}
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
               {t('title')}
@@ -25,7 +25,7 @@ export default function ContactPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* 联系信息 */}
+            {/* contact information */}
             <div className="space-y-8">
               <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
@@ -65,7 +65,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* 工作时间 */}
+              {/* working hours */}
               <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   {t('workingHours')}
@@ -99,7 +99,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* 联系表单 */}
+            {/* contact form */}
             <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/50 dark:border-gray-700/50">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                 {t('sendMessage')}

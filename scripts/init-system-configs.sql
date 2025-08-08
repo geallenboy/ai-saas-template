@@ -1,10 +1,10 @@
--- 初始化系统配置数据
--- 这些是基本的系统配置，管理员可以通过后台管理界面修改
+-- Initialize system configuration data
+-- These are basic system configurations that can be modified by administrators through the backend management interface.
 
--- 清空现有数据（可选，谨慎使用）
+-- Clear existing data (optional, use with caution)
 -- DELETE FROM system_configs;
 
--- 基础配置 (general)
+-- Basic configuration (general)
 INSERT INTO system_configs (key, value, description, category, data_type, is_editable, is_secret) VALUES
 ('site.name', '"AI SaaS Template"', '网站名称', 'general', 'string', true, false),
 ('site.description', '"下一代AI SaaS平台模板"', '网站描述', 'general', 'string', true, false),
@@ -13,7 +13,7 @@ INSERT INTO system_configs (key, value, description, category, data_type, is_edi
 ('site.timezone', '"Asia/Shanghai"', '默认时区', 'general', 'string', true, false),
 ('site.language', '"zh"', '默认语言', 'general', 'string', true, false);
 
--- 支付配置 (payment)
+-- Payment configuration (payment)
 INSERT INTO system_configs (key, value, description, category, data_type, is_editable, is_secret) VALUES
 ('payment.enabled', 'true', '是否启用支付功能', 'payment', 'boolean', true, false),
 ('payment.currency', '"USD"', '默认货币', 'payment', 'string', true, false),
@@ -22,7 +22,7 @@ INSERT INTO system_configs (key, value, description, category, data_type, is_edi
 ('stripe.webhook_secret', '""', 'Stripe Webhook密钥', 'payment', 'string', true, true),
 ('stripe.public_key', '""', 'Stripe公钥', 'payment', 'string', true, false);
 
--- AI配置 (ai)
+-- AI configuration (ai)
 INSERT INTO system_configs (key, value, description, category, data_type, is_editable, is_secret) VALUES
 ('ai.enabled', 'true', '是否启用AI功能', 'ai', 'boolean', true, false),
 ('ai.default_model', '"gpt-3.5-turbo"', '默认AI模型', 'ai', 'string', true, false),
@@ -31,7 +31,7 @@ INSERT INTO system_configs (key, value, description, category, data_type, is_edi
 ('ai.api_key', '""', 'OpenAI API密钥', 'ai', 'string', true, true),
 ('ai.rate_limit', '100', '每小时请求限制', 'ai', 'number', true, false);
 
--- 通知配置 (notification)
+-- Notification configuration (notification)
 INSERT INTO system_configs (key, value, description, category, data_type, is_editable, is_secret) VALUES
 ('notification.email_enabled', 'true', '是否启用邮件通知', 'notification', 'boolean', true, false),
 ('notification.sms_enabled', 'false', '是否启用短信通知', 'notification', 'boolean', true, false),
@@ -41,7 +41,7 @@ INSERT INTO system_configs (key, value, description, category, data_type, is_edi
 ('email.smtp_user', '""', 'SMTP用户名', 'notification', 'string', true, false),
 ('email.smtp_password', '""', 'SMTP密码', 'notification', 'string', true, true);
 
--- 安全配置 (security)
+-- Security configuration (security)
 INSERT INTO system_configs (key, value, description, category, data_type, is_editable, is_secret) VALUES
 ('security.enable_2fa', 'false', '是否启用双因子认证', 'security', 'boolean', true, false),
 ('security.session_timeout', '3600', '会话超时时间(秒)', 'security', 'number', true, false),
@@ -50,7 +50,7 @@ INSERT INTO system_configs (key, value, description, category, data_type, is_edi
 ('security.enable_captcha', 'false', '是否启用验证码', 'security', 'boolean', true, false),
 ('security.jwt_secret', '""', 'JWT密钥', 'security', 'string', true, true);
 
--- 功能开关 (feature)
+-- Function switch (feature)
 INSERT INTO system_configs (key, value, description, category, data_type, is_editable, is_secret) VALUES
 ('feature.registration_enabled', 'true', '是否允许用户注册', 'feature', 'boolean', true, false),
 ('feature.social_login', 'true', '是否启用社交登录', 'feature', 'boolean', true, false),
@@ -59,7 +59,7 @@ INSERT INTO system_configs (key, value, description, category, data_type, is_edi
 ('feature.analytics', 'true', '是否启用数据分析', 'feature', 'boolean', true, false),
 ('feature.maintenance_mode', 'false', '维护模式', 'feature', 'boolean', true, false);
 
--- 查询验证数据
+-- Query verification data
 SELECT 
     category,
     key,

@@ -2,9 +2,9 @@ import { env } from '@/env'
 import { logger } from '@/lib/logger'
 import Stripe from 'stripe'
 
-// 初始化Stripe客户端
+// Initialize the Stripe client
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: '2025-07-30.basil',
   typescript: true,
   appInfo: {
     name: 'AI SaaS Template',
@@ -12,12 +12,12 @@ export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   },
 })
 
-// 服务端Stripe实例
+// Server-side Stripe instance
 export function getServerStripe(): Stripe {
   return stripe
 }
 
-// Stripe webhook签名验证
+// Stripe webhook signature verification
 export function verifyStripeWebhook(
   body: string,
   signature: string
@@ -32,12 +32,15 @@ export function verifyStripeWebhook(
     )
     return event
   } catch (error) {
-    logger.error('Stripe webhook签名验证失败:', error as Error)
+    logger.error(
+      'Stripe webhook signature verification failed:',
+      error as Error
+    )
     throw new Error('Invalid signature')
   }
 }
 
-// 创建客户
+// Create customer
 export async function createStripeCustomer(params: {
   email: string
   name?: string
@@ -54,15 +57,15 @@ export async function createStripeCustomer(params: {
       },
     })
 
-    logger.info(`Stripe客户创建成功: ${customer.id}`)
+    logger.info(`Stripe customer created successfully: ${customer.id}`)
     return customer
   } catch (error) {
-    logger.error('创建Stripe客户失败:', error as Error)
+    logger.error('Failed to create Stripe customer:', error as Error)
     throw error
   }
 }
 
-// 创建订阅
+// Create subscription
 export async function createStripeSubscription(params: {
   customerId: string
   priceId: string
@@ -80,15 +83,15 @@ export async function createStripeSubscription(params: {
       expand: ['latest_invoice.payment_intent'],
     })
 
-    logger.info(`Stripe订阅创建成功: ${subscription.id}`)
+    logger.info(`Stripe subscription created successfully: ${subscription.id}`)
     return subscription
   } catch (error) {
-    logger.error('创建Stripe订阅失败:', error as Error)
+    logger.error('Failed to create Stripe subscription:', error as Error)
     throw error
   }
 }
 
-// 创建结账会话
+// Create checkout session
 export async function createStripeCheckoutSession(params: {
   priceId: string
   customerId?: string
@@ -133,15 +136,15 @@ export async function createStripeCheckoutSession(params: {
 
     const session = await stripe.checkout.sessions.create(sessionParams)
 
-    logger.info(`Stripe结账会话创建成功: ${session.id}`)
+    logger.info(`Stripe checkout session created successfully: ${session.id}`)
     return session
   } catch (error) {
-    logger.error('创建Stripe结账会话失败:', error as Error)
+    logger.error('Failed to create Stripe checkout session:', error as Error)
     throw error
   }
 }
 
-// 创建客户门户会话
+// Create customer portal session
 export async function createStripePortalSession(params: {
   customerId: string
   returnUrl: string
@@ -152,15 +155,20 @@ export async function createStripePortalSession(params: {
       return_url: params.returnUrl,
     })
 
-    logger.info(`Stripe客户门户会话创建成功: ${session.id}`)
+    logger.info(
+      `Stripe customer portal session created successfully: ${session.id}`
+    )
     return session
   } catch (error) {
-    logger.error('创建Stripe客户门户会话失败:', error as Error)
+    logger.error(
+      'Failed to create Stripe customer portal session:',
+      error as Error
+    )
     throw error
   }
 }
 
-// 取消订阅
+// Cancel subscription
 export async function cancelStripeSubscription(
   subscriptionId: string,
   options?: {
@@ -174,15 +182,15 @@ export async function cancelStripeSubscription(
       proration_behavior: options?.prorate ? 'create_prorations' : 'none',
     })
 
-    logger.info(`Stripe订阅取消成功: ${subscription.id}`)
+    logger.info(`Stripe subscription canceled successfully: ${subscription.id}`)
     return subscription
   } catch (error) {
-    logger.error('取消Stripe订阅失败:', error as Error)
+    logger.error('Failed to cancel Stripe subscription:', error as Error)
     throw error
   }
 }
 
-// 获取客户订阅
+// Get customer subscription
 export async function getStripeCustomerSubscriptions(
   customerId: string
 ): Promise<Stripe.Subscription[]> {
@@ -195,12 +203,12 @@ export async function getStripeCustomerSubscriptions(
 
     return subscriptions.data
   } catch (error) {
-    logger.error('获取Stripe客户订阅失败:', error as Error)
+    logger.error('Failed to get Stripe customer subscriptions:', error as Error)
     throw error
   }
 }
 
-// 获取客户支付记录
+// Get customer payment records
 export async function getStripeCustomerPayments(
   customerId: string,
   limit = 10
@@ -213,12 +221,15 @@ export async function getStripeCustomerPayments(
 
     return payments.data
   } catch (error) {
-    logger.error('获取Stripe客户支付记录失败:', error as Error)
+    logger.error(
+      'Failed to get Stripe customer payment records:',
+      error as Error
+    )
     throw error
   }
 }
 
-// 创建优惠券
+// Create coupon
 export async function createStripeCoupon(params: {
   id?: string
   percentOff?: number
@@ -243,15 +254,15 @@ export async function createStripeCoupon(params: {
       metadata: params.metadata,
     })
 
-    logger.info(`Stripe优惠券创建成功: ${coupon.id}`)
+    logger.info(`Stripe coupon created successfully: ${coupon.id}`)
     return coupon
   } catch (error) {
-    logger.error('创建Stripe优惠券失败:', error as Error)
+    logger.error('Failed to create Stripe coupon:', error as Error)
     throw error
   }
 }
 
-// 获取产品和价格
+// Get products and prices
 export async function getStripeProducts(): Promise<{
   products: Stripe.Product[]
   prices: Stripe.Price[]
@@ -267,12 +278,12 @@ export async function getStripeProducts(): Promise<{
       prices: pricesResponse.data,
     }
   } catch (error) {
-    logger.error('获取Stripe产品和价格失败:', error as Error)
+    logger.error('Failed to get Stripe products and prices:', error as Error)
     throw error
   }
 }
 
-// 格式化Stripe金额（从分转换为元）
+// Format Stripe amount (convert from cents to dollars)
 export function formatStripeAmount(amount: number, currency = 'usd'): number {
   const zeroDecimalCurrencies = ['jpy', 'krw', 'vnd']
   return zeroDecimalCurrencies.includes(currency.toLowerCase())
@@ -280,7 +291,7 @@ export function formatStripeAmount(amount: number, currency = 'usd'): number {
     : amount / 100
 }
 
-// 转换金额为Stripe格式（从元转换为分）
+// Convert amount to Stripe format (convert from dollars to cents)
 export function toStripeAmount(amount: number, currency = 'usd'): number {
   const zeroDecimalCurrencies = ['jpy', 'krw', 'vnd']
   return zeroDecimalCurrencies.includes(currency.toLowerCase())
@@ -288,12 +299,12 @@ export function toStripeAmount(amount: number, currency = 'usd'): number {
     : Math.round(amount * 100)
 }
 
-// Stripe事件类型守卫
+// Stripe event type guard
 export const isStripeEvent = (event: unknown): event is Stripe.Event => {
   return typeof event === 'object' && event !== null && 'type' in event
 }
 
-// 获取Stripe错误信息
+// Get Stripe error message
 export function getStripeErrorMessage(error: unknown): string {
   if (error instanceof Stripe.errors.StripeError) {
     return error.message
@@ -301,5 +312,5 @@ export function getStripeErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message
   }
-  return '未知的Stripe错误'
+  return 'Unknown Stripe error'
 }

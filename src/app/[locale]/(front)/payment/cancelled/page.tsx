@@ -8,14 +8,14 @@ export default function PaymentCancelledPage() {
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full space-y-8">
         <div className="text-center space-y-8">
-          {/* 取消图标 */}
+          {/* cancel icon */}
           <div className="flex justify-center">
             <div className="w-20 h-20 bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center">
               <XCircle className="w-12 h-12 text-yellow-600 dark:text-yellow-400" />
             </div>
           </div>
 
-          {/* 取消消息 */}
+          {/* Cancel message */}
           <div className="space-y-4">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               支付已取消
@@ -25,7 +25,7 @@ export default function PaymentCancelledPage() {
             </p>
           </div>
 
-          {/* 信息卡片 */}
+          {/* information card */}
           <Card className="text-left">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function PaymentCancelledPage() {
             </CardContent>
           </Card>
 
-          {/* 操作按钮 */}
+          {/* Action button */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg">
               <Link href="/pricing">
@@ -73,7 +73,7 @@ export default function PaymentCancelledPage() {
             </Button>
           </div>
 
-          {/* 联系支持 */}
+          {/* Contact support */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild variant="ghost" size="sm">
               <Link href="/contact">
@@ -87,7 +87,7 @@ export default function PaymentCancelledPage() {
             </Button>
           </div>
 
-          {/* 常见问题 */}
+          {/* FAQ */}
           <Card className="text-left">
             <CardHeader>
               <CardTitle className="text-lg">常见问题</CardTitle>

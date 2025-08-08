@@ -17,6 +17,7 @@ export default async function MembershipPage() {
 }
 
 export const metadata = {
-  title: '会员中心 - AI SaaS Template',
-  description: '管理您的会员权益、查看使用统计和账单信息',
+  title: 'Member Center - AI SaaS Template',
+  description:
+    'Manage your membership benefits, view usage statistics, and billing information',
 }

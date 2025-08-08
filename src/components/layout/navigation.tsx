@@ -39,7 +39,7 @@ export default function Navigation() {
   const { user, isLoaded } = useUser()
   const { signOut } = useClerk()
 
-  // 使用tRPC查询会员状态，带性能优化
+  // Use tRPC to query member status with performance optimization
   const { hasActiveMembership, currentPlan } = useUserMembership(user?.id)
 
   const loading = !isLoaded
@@ -52,17 +52,17 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
-  // 确保组件在客户端挂载后才显示用户相关内容
+  // Ensure that the component displays user-related content only after it is mounted on the client
   useEffect(() => {
     setIsMounted(true)
     const timer = setTimeout(() => {
-      // 延迟设置初始化状态，确保Clerk完全加载
+      // Delay setting the initial state to ensure Clerk is fully loaded
     }, 100)
 
     return () => clearTimeout(timer)
   }, [])
 
-  // 检查用户是否是管理员
+  // Check if the user is an admin
   const isUserAdmin =
     user?.publicMetadata?.isAdmin === true ||
     (typeof user?.publicMetadata?.adminLevel === 'number' &&
@@ -70,7 +70,7 @@ export default function Navigation() {
 
   const handleSignOut = async () => {
     try {
-      // 使用 Clerk 的登出功能
+      // Use Clerk's sign out functionality
       await signOut({ redirectUrl: `/${locale}` })
       logger.info('User signed out successfully', {
         category: 'auth',
@@ -87,16 +87,16 @@ export default function Navigation() {
     }
   }
 
-  // 更新语言切换逻辑，使用路由跳转
-  const handleLanguageChange = (newLocale: 'zh' | 'en') => {
+  // Update language switch logic to use route navigation
+  const handleLanguageChange = (newLocale: 'de' | 'en') => {
     const currentPath = pathname
-    // 移除当前语言前缀
+    // Remove current language prefix
     const pathWithoutLocale = currentPath.replace(`/${locale}`, '') || '/'
-    // 跳转到新语言的路径
+    // Redirect to the new language path
     router.push(`/${newLocale}${pathWithoutLocale}`)
   }
 
-  // 构建带语言前缀的路径
+  // Build path with locale prefix
   const localePath = (path: string) => `/${locale}${path}`
 
   const getUserInitials = (user: any) => {
@@ -117,7 +117,7 @@ export default function Navigation() {
     return user?.fullName || user?.primaryEmailAddress?.emailAddress || 'User'
   }
 
-  // 更新导航项使用语言路由
+  // Update navigation items to use locale routing
   const navItems = [
     {
       href: localePath('/'),
@@ -161,7 +161,7 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* 桌面端导航菜单 */}
+          {/* Desktop navigation menu */}
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map(item => (
               <Link
@@ -181,28 +181,28 @@ export default function Navigation() {
                 {item.active && (
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
                 )}
-                {/* 3D悬浮效果背景 */}
+                {/* 3D floating effect background */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
               </Link>
             ))}
           </div>
 
-          {/* 右侧操作区域 */}
+          {/* Right action area */}
           <div className="flex items-center space-x-2">
-            {/* 桌面端语言切换器 */}
+            {/* Desktop language switcher */}
             <div className="hidden md:block">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() =>
-                  handleLanguageChange(locale === 'zh' ? 'en' : 'zh')
+                  handleLanguageChange(locale === 'de' ? 'en' : 'de')
                 }
               >
-                {locale === 'zh' ? 'EN' : '中文'}
+                {locale === 'de' ? 'EN' : 'Deutsch'}
               </Button>
             </div>
 
-            {/* 桌面端主题切换器 */}
+            {/* Desktop theme switcher */}
             <div className="hidden md:block">
               <Button
                 variant="outline"
@@ -217,7 +217,7 @@ export default function Navigation() {
               </Button>
             </div>
 
-            {/* 移动端菜单按钮 */}
+            {/* Mobile menu button */}
             <Button
               variant="ghost"
               size="icon"
@@ -231,21 +231,21 @@ export default function Navigation() {
               )}
             </Button>
 
-            {/* 用户菜单区域 - 优化渲染 */}
+            {/* User menu area - Optimize rendering */}
             {!isMounted ? (
-              // 服务器端和初始客户端渲染显示简单的占位符
+              // Server-side and initial client rendering shows a simple placeholder
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-muted/30 rounded-full" />
               </div>
             ) : loading ? (
-              // 加载中状态
+              // Loading state
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
               </div>
             ) : user ? (
-              // 已登录用户菜单
+              // Logged-in user menu
               <div className="flex items-center space-x-2">
-                {/* 会员标识 */}
+                {/* Member ID */}
                 {hasActiveMembership && currentPlan && (
                   <div className="hidden md:flex items-center">
                     {currentPlan.name === 'Professional' && (
@@ -279,10 +279,10 @@ export default function Navigation() {
                             {getUserInitials(user)}
                           </AvatarFallback>
                         </Avatar>
-                        {/* 发光环效果 */}
+                        {/* Glowing ring effect */}
                         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-sm animate-pulse" />
                       </div>
-                      {/* 会员状态小标识 - 增强版 */}
+                      {/* Membership status indicator - Enhanced version */}
                       {hasActiveMembership && (
                         <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.6)] animate-pulse">
                           <Crown className="h-3 w-3 text-white" />
@@ -297,7 +297,7 @@ export default function Navigation() {
                           <p className="text-sm font-medium leading-none">
                             {getUserDisplayName(user)}
                           </p>
-                          {/* 菜单中的会员标识 */}
+                          {/* Menu membership indicator */}
                           {hasActiveMembership && currentPlan && (
                             <div className="flex items-center gap-1">
                               {currentPlan.name === 'Professional' && (
@@ -332,7 +332,7 @@ export default function Navigation() {
                       </Link>
                     </DropdownMenuItem>
 
-                    {/* 会员用户显示会员中心入口 */}
+                    {/* Membership center entry for members */}
                     {hasActiveMembership && (
                       <DropdownMenuItem asChild>
                         <Link
@@ -341,7 +341,9 @@ export default function Navigation() {
                         >
                           <Crown className="mr-2 h-4 w-4" />
                           <span>
-                            {locale === 'zh' ? '会员中心' : 'Membership Center'}
+                            {locale === 'de'
+                              ? 'Mitgliederbereich'
+                              : 'Membership Center'}
                           </span>
                         </Link>
                       </DropdownMenuItem>
@@ -357,7 +359,7 @@ export default function Navigation() {
                       </Link>
                     </DropdownMenuItem>
 
-                    {/* 管理员入口 */}
+                    {/* Administrator entrance */}
                     {isUserAdmin && (
                       <>
                         <DropdownMenuSeparator />
@@ -382,7 +384,7 @@ export default function Navigation() {
                 </DropdownMenu>
               </div>
             ) : (
-              // 未登录状态
+              // Not logged in
               <div className="flex items-center space-x-2">
                 <SignInButton />
               </div>
@@ -391,11 +393,11 @@ export default function Navigation() {
         </div>
       </div>
 
-      {/* 移动端菜单 - 3D科技风格 */}
+      {/* Mobile menu - 3D technology style */}
       {isMenuOpen && (
         <div className="md:hidden relative">
           <div className="relative z-10 px-4 py-6 space-y-4">
-            {/* 导航链接 */}
+            {/* Navigation links */}
             <div className="space-y-2">
               {navItems.map(item => (
                 <Link
@@ -414,13 +416,13 @@ export default function Navigation() {
                   {item.active && (
                     <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
                   )}
-                  {/* 3D悬浮背景 */}
+                  {/* 3D floating background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg opacity-0 hover:opacity-100 transition-all duration-300 -z-10 transform hover:scale-105" />
                 </Link>
               ))}
             </div>
 
-            {/* 移动端工具 */}
+            {/* Mobile tools */}
             <div className="pt-4 border-t border-border/40">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-muted-foreground">
@@ -428,10 +430,10 @@ export default function Navigation() {
                 </span>
                 <div className="flex space-x-2">
                   <Button
-                    variant={locale === 'zh' ? 'default' : 'outline'}
+                    variant={locale === 'de' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => {
-                      handleLanguageChange('zh')
+                      handleLanguageChange('de')
                       setIsMenuOpen(false)
                     }}
                   >

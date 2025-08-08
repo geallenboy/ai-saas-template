@@ -47,7 +47,7 @@ export function getBlogPost(
 export function formatDate(date: string | Date, locale = 'en'): string {
   const d = new Date(date)
   const localeMap = {
-    zh: 'zh-CN',
+    zh: 'de-DE',
     en: 'en-US',
   }
 

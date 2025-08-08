@@ -17,26 +17,26 @@ interface SEOHeadProps {
 }
 
 export default function SEOHead({
-  title = 'AI SaaS Template - AI SaaS应用开发模板',
-  description = 'AI SaaS Template是专业的AI SaaS应用开发模板，提供完整的用户认证、支付集成、多语言支持和现代化UI组件。快速构建您的AI SaaS产品，从创意到上线全流程覆盖。',
+  title = 'AI SaaS Template - AI SaaS application development template',
+  description = 'AI SaaS Template is a professional AI SaaS application development template that provides complete user authentication, payment integration, multi-language support, and modern UI components. Quickly build your AI SaaS product, covering the entire process from idea to launch.',
   keywords = [
     'AI SaaS',
-    'SaaS模板',
-    'AI应用',
-    'SaaS开发',
-    '人工智能',
+    'SaaS template',
+    'AI application',
+    'SaaS development',
+    'AI',
     'AI platform',
     'SaaS template',
-    'AI工具',
-    'SaaS平台',
-    'AI服务',
-    '智能应用',
-    '数据集成',
-    '自动化脚本',
+    'AI tools',
+    'SaaS platform',
+    'AI service',
+    'Smart application',
+    'data integration',
+    'automation scripts',
     'nocode',
     'lowcode',
     'RPA',
-    '流程自动化',
+    'process automation',
   ],
   image = '/images/og-default.jpeg',
   url,
@@ -53,7 +53,7 @@ export default function SEOHead({
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl
   const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`
 
-  // 默认结构化数据
+  // Default structured data
   const defaultStructuredData = {
     '@context': 'https://aiautomatehub.org',
     '@type': 'WebSite',
@@ -71,14 +71,15 @@ export default function SEOHead({
     ],
   }
 
-  // 组织结构化数据
+  // Organization structured data
   const organizationData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteName,
     url: siteUrl,
     logo: `${siteUrl}/images/logo.png`,
-    description: '专业的AI SaaS应用开发模板平台',
+    description:
+      'Professional AI SaaS application development template platform',
     foundingDate: '2025',
     founders: [
       {
@@ -94,7 +95,7 @@ export default function SEOHead({
     },
   }
 
-  // 面包屑导航数据（如果提供了URL路径）
+  // Breadcrumb navigation data (if a URL path is provided)
   const breadcrumbData = url
     ? {
         '@context': 'https://schema.org',
@@ -113,7 +114,7 @@ export default function SEOHead({
 
   return (
     <Head>
-      {/* 基础Meta标签 */}
+      {/* Basic Meta Tags */}
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords.join(', ')} />
@@ -123,14 +124,14 @@ export default function SEOHead({
       <meta name="revisit-after" content="7 days" />
       <meta name="rating" content="general" />
 
-      {/* 视口和字符集 */}
+      {/* Viewport and Character Set */}
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta charSet="utf-8" />
 
       {/* Canonical URL */}
       <link rel="canonical" href={fullUrl} />
 
-      {/* 语言和地区 */}
+      {/* Language and Region */}
       <meta httpEquiv="Content-Language" content="zh-cn" />
       <meta name="geo.region" content="CN" />
       <meta name="geo.placename" content="China" />
@@ -178,7 +179,7 @@ export default function SEOHead({
       />
       <meta name="theme-color" content="#2563eb" />
 
-      {/* 网站图标 */}
+      {/* Website icon */}
       <link rel="icon" type="image/x-icon" href="/favicon.ico" />
       <link
         rel="icon"
@@ -198,7 +199,7 @@ export default function SEOHead({
         href="/icons/apple-touch-icon.png"
       />
 
-      {/* RSS订阅 */}
+      {/* RSS subscription */}
       <link
         rel="alternate"
         type="application/rss+xml"
@@ -206,11 +207,11 @@ export default function SEOHead({
         href="/rss.xml"
       />
 
-      {/* DNS预解析 */}
+      {/* DNS pre-resolution */}
       <link rel="dns-prefetch" href="//fonts.googleapis.com" />
       <link rel="dns-prefetch" href="//www.google-analytics.com" />
 
-      {/* 结构化数据 */}
+      {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -234,14 +235,14 @@ export default function SEOHead({
         />
       )}
 
-      {/* 专门针对AI SaaS相关的技术关键词 */}
+      {/* Keywords related to AI SaaS */}
       <meta
         name="topic"
         content="AI SaaS, SaaS development, AI application development"
       />
       <meta
         name="summary"
-        content="学习AI SaaS开发，掌握现代化应用构建和AI集成技术"
+        content="Learn AI SaaS development and master modern application construction and AI integration technologies"
       />
       <meta
         name="Classification"
@@ -260,7 +261,7 @@ export default function SEOHead({
       <meta name="rating" content="General" />
       <meta name="revisit-after" content="7 days" />
 
-      {/* 针对中文搜索引擎的特殊标签 */}
+      {/* Special tags for Chinese search engines */}
       <meta name="baidu-site-verification" content="" />
       <meta name="sogou_site_verification" content="" />
       <meta name="360-site-verification" content="" />

@@ -11,8 +11,8 @@ export function UserStatsClient() {
     isLoading,
     error,
   } = trpc.users.getUserStats.useQuery(undefined, {
-    staleTime: 5 * 60 * 1000, // 5分钟缓存
-    gcTime: 10 * 60 * 1000, // 10分钟垃圾回收
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   })
 
   if (isLoading) {
@@ -29,31 +29,31 @@ export function UserStatsClient() {
 
   const statItems = [
     {
-      title: '总用户数',
+      title: 'Total Users',
       value: stats.totalUsers || 0,
       icon: Users,
-      description: '平台注册用户总数',
+      description: 'Total registered users',
       color: 'text-blue-600',
     },
     {
-      title: '活跃用户',
+      title: 'Active Users',
       value: stats.activeUsers || 0,
       icon: UserCheck,
-      description: '当前活跃用户数',
+      description: 'Current active users',
       color: 'text-green-600',
     },
     {
-      title: '管理员',
+      title: 'Admin Users',
       value: stats.adminUsers || 0,
       icon: Shield,
-      description: '管理员账户数量',
+      description: 'Number of admin accounts',
       color: 'text-purple-600',
     },
     {
-      title: '本月新增',
+      title: 'New This Month',
       value: stats.newUsersThisMonth || 0,
       icon: TrendingUp,
-      description: '本月新注册用户',
+      description: 'Newly registered users this month',
       color: 'text-orange-600',
     },
   ]

@@ -31,7 +31,7 @@ export function AdminGuard({
   //   isAdmin
   // })
 
-  // // 如果是管理员，立即显示内容
+  // // If you are an administrator, display the content immediately
   // if (isAdmin && !isLoading) {
   //   logger.debug('AdminGuard: Admin user authenticated, showing content', {
   //     category: 'auth',
@@ -41,7 +41,7 @@ export function AdminGuard({
   //   return <>{children}</>
   // }
 
-  // // 如果不是管理员且不在加载中，显示拒绝访问
+  // // If not an administrator and not loading, show access denied
   // if (!isAdmin && !isLoading) {
   //   logger.warn('AdminGuard: User lacks admin permissions, access denied', {
   //     category: 'auth',
@@ -63,7 +63,7 @@ export function AdminGuard({
   //   )
   // }
 
-  // 显示加载状态
+  // Show loading state
   return loadingComponent || <DefaultLoadingComponent />
 }
 

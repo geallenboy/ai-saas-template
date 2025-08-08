@@ -28,8 +28,8 @@ interface State {
 }
 
 /**
- * 错误边界组件
- * 捕获子组件中的JavaScript错误，显示友好的错误界面
+ * Error Boundary Component
+ * Captures JavaScript errors in child components and displays a friendly error interface
  */
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
@@ -43,7 +43,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
-    // 更新state以显示错误UI
+    // Update state to display error UI
     return {
       hasError: true,
       error,
@@ -52,28 +52,28 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // 记录错误信息
+    // Log error information
     this.setState({
       error,
       errorInfo,
     })
 
-    // 调用外部错误处理器
+    // Call external error handler
     this.props.onError?.(error, errorInfo)
 
-    // 发送错误到监控服务
+    // Send error to monitoring service
     this.logErrorToService(error, errorInfo)
 
-    // 显示错误提示
-    toast.error('页面出现错误，请刷新重试')
+    // Show error toast
+    toast.error('An error occurred, please refresh and try again')
   }
 
   /**
-   * 发送错误到监控服务
+   * Send error to monitoring service
    */
   private logErrorToService(error: Error, errorInfo: ErrorInfo) {
     try {
-      // 这里可以集成Sentry、LogRocket等监控服务
+      // Here you can integrate monitoring services like Sentry, LogRocket, etc.
       logger.error('ErrorBoundary caught an error', error, {
         category: 'error_boundary',
         errorId: this.state.errorId,
@@ -83,7 +83,7 @@ export class ErrorBoundary extends Component<Props, State> {
         url: window.location.href,
       })
 
-      // 示例：发送到监控API
+      // Example: Send to monitoring API
       if (process.env.NODE_ENV === 'production') {
         fetch('/api/error-reporting', {
           method: 'POST',
@@ -115,7 +115,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   /**
-   * 重置错误状态
+   * Reset error state
    */
   private handleReset = () => {
     this.setState({
@@ -127,48 +127,48 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   /**
-   * 刷新页面
+   * Refresh page
    */
   private handleRefresh = () => {
     window.location.reload()
   }
 
   /**
-   * 返回首页
+   * Return to home page
    */
   private handleGoHome = () => {
     window.location.href = '/'
   }
 
   /**
-   * 复制错误信息
+   * Copy error information
    */
   private handleCopyError = async () => {
     try {
       const errorText = `
-错误ID: ${this.state.errorId}
-错误信息: ${this.state.error?.message}
-错误堆栈: ${this.state.error?.stack}
-组件堆栈: ${this.state.errorInfo?.componentStack}
-时间: ${new Date().toISOString()}
-页面: ${window.location.href}
+Error ID: ${this.state.errorId}
+Error Message: ${this.state.error?.message}
+Error Stack: ${this.state.error?.stack}
+Component Stack: ${this.state.errorInfo?.componentStack}
+Time: ${new Date().toISOString()}
+Page: ${window.location.href}
       `.trim()
 
       await navigator.clipboard.writeText(errorText)
-      toast.success('错误信息已复制到剪贴板')
+      toast.success('Error information copied to clipboard')
     } catch (_err) {
-      toast.error('复制失败')
+      toast.error('Copy failed')
     }
   }
 
   render() {
     if (this.state.hasError) {
-      // 如果提供了自定义fallback，使用它
+      // If a custom fallback is provided, use it
       if (this.props.fallback) {
         return this.props.fallback
       }
 
-      // 默认错误UI
+      // Default error UI
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-background">
           <Card className="w-full max-w-lg">
@@ -182,7 +182,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* 错误ID */}
+              {/* Error ID */}
               <div className="text-center">
                 <p className="text-sm text-muted-foreground">
                   错误ID:{' '}
@@ -192,7 +192,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </p>
               </div>
 
-              {/* 错误详情（开发环境或显式启用时） */}
+              {/* Error details (in development or explicitly enabled) */}
               {(process.env.NODE_ENV === 'development' ||
                 this.props.showDetails) &&
                 this.state.error && (
@@ -221,7 +221,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   </div>
                 )}
 
-              {/* 操作按钮 */}
+              {/* Action buttons */}
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button onClick={this.handleReset} className="flex-1">
                   <RefreshCw className="mr-2 h-4 w-4" />
@@ -255,7 +255,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </Button>
               </div>
 
-              {/* 帮助信息 */}
+              {/* Help information */}
               <div className="text-center text-xs text-muted-foreground">
                 如果问题持续存在，请联系技术支持并提供错误ID
               </div>
@@ -270,13 +270,13 @@ export class ErrorBoundary extends Component<Props, State> {
 }
 
 /**
- * 工作流模块专用错误边界
+ * Workflow module-specific error boundaries
  */
 export function WorkflowErrorBoundary({ children }: { children: ReactNode }) {
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {
-        // 工作流模块特定的错误处理
+        // Workflow module-specific error handling
         logger.error('Workflow module error', error, {
           category: 'error_boundary',
           module: 'workflow',
@@ -312,7 +312,7 @@ export function WorkflowErrorBoundary({ children }: { children: ReactNode }) {
 }
 
 /**
- * 简单的错误边界Hook（用于函数组件）
+ * Simple error boundary hook (for function components)
  */
 export function useErrorBoundary() {
   const [error, setError] = React.useState<Error | null>(null)

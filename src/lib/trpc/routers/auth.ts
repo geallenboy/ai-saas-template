@@ -11,7 +11,7 @@ import {
 
 export const authRouter = createTRPCRouter({
   /**
-   * 获取当前用户信息
+   * Get current user information
    */
   getCurrentUser: protectedProcedure.query(async ({ ctx }) => {
     const user = await ctx.db.query.users.findFirst({
@@ -21,7 +21,7 @@ export const authRouter = createTRPCRouter({
     if (!user) {
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: '用户不存在',
+        message: 'User does not exist',
       })
     }
 
@@ -29,7 +29,7 @@ export const authRouter = createTRPCRouter({
   }),
 
   /**
-   * 检查认证状态
+   * Check certification status
    */
   checkAuthStatus: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.userId) {
@@ -48,7 +48,7 @@ export const authRouter = createTRPCRouter({
   }),
 
   /**
-   * 更新用户资料
+   * Update user profile
    */
   updateProfile: protectedProcedure
     .input(
@@ -57,8 +57,8 @@ export const authRouter = createTRPCRouter({
         preferences: z
           .object({
             theme: z.enum(['light', 'dark']).optional(),
-            language: z.enum(['en', 'zh']).optional(),
-            currency: z.enum(['USD', 'CNY']).optional(),
+            language: z.enum(['en', 'de']).optional(),
+            currency: z.enum(['USD', 'EUR']).optional(),
             timezone: z.string().optional(),
           })
           .optional(),
@@ -74,7 +74,7 @@ export const authRouter = createTRPCRouter({
       }
 
       if (input.preferences) {
-        // 获取当前偏好设置
+        // Get current preferences
         const currentUser = await ctx.db.query.users.findFirst({
           where: eq(users.id, ctx.userId),
         })
@@ -102,7 +102,7 @@ export const authRouter = createTRPCRouter({
         .where(eq(users.id, ctx.userId))
         .returning()
 
-      ctx.logger.info('用户资料更新成功', {
+      ctx.logger.info('User profile updated successfully', {
         userId: ctx.userId,
         changes: input,
       })
@@ -111,7 +111,7 @@ export const authRouter = createTRPCRouter({
     }),
 
   /**
-   * 同步Clerk用户数据
+   * Sync user data from Clerk
    */
   syncUserFromClerk: protectedProcedure.mutation(async ({ ctx }) => {
     try {
@@ -129,7 +129,7 @@ export const authRouter = createTRPCRouter({
         updatedAt: new Date(),
       }
 
-      // 使用 upsert 逻辑
+      // Using upsert logic
       const existingUser = await ctx.db.query.users.findFirst({
         where: eq(users.id, ctx.userId),
       })
@@ -165,13 +165,13 @@ export const authRouter = createTRPCRouter({
         user = newUsers[0]
       }
 
-      ctx.logger.info(`用户同步成功: ${user?.email}`)
+      ctx.logger.info(`User synced successfully: ${user?.email}`)
       return user
     } catch (error) {
-      ctx.logger.error('同步用户失败:', error as Error)
+      ctx.logger.error('Failed to sync user:', error as Error)
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
-        message: '用户同步失败',
+        message: 'Failed to sync user',
       })
     }
   }),

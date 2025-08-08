@@ -3,10 +3,11 @@ import type { Metadata } from 'next'
 export const SEO_CONFIG = {
   siteName: 'AI SaaS Template',
   siteUrl: 'http://localhost:3000',
-  zh: {
-    defaultTitle: 'AI SaaS 模板',
-    defaultDescription: '现代化的 AI SaaS 应用模板',
-    orgDescription: '提供现代化的 AI SaaS 应用开发解决方案',
+  de: {
+    defaultTitle: 'AI SaaS Vorlage',
+    defaultDescription: 'Moderne AI SaaS-Anwendungsvorlage',
+    orgDescription:
+      'Bereitstellung moderner AI SaaS-Anwendungsentwicklungslösungen',
   },
   en: {
     defaultTitle: 'AI SaaS Template',
@@ -17,7 +18,7 @@ export const SEO_CONFIG = {
 }
 
 interface GeneratePageMetadataProps {
-  locale: 'zh' | 'en'
+  locale: 'de' | 'en'
   type: 'website' | 'article'
   url: string
   title?: string

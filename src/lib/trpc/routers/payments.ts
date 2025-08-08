@@ -16,30 +16,30 @@ import {
 } from '../server'
 
 /**
- * 更新用户使用限额的辅助函数
+ * Auxiliary function for updating user usage limits
  */
 async function updateUserUsageLimitsHelper(
   userId: string,
   planId: string,
   ctx: Context
 ): Promise<void> {
-  // 获取计划信息
+  // Get program information
   const plan = await ctx.db.query.membershipPlans.findFirst({
     where: eq(membershipPlans.id, planId),
   })
 
   if (!plan) {
     ctx.logger.error(
-      '计划不存在，无法更新使用限额',
+      'The plan does not exist and the usage limit cannot be updated.',
       new Error(`Plan not found: ${planId}`)
     )
     return
   }
 
   const now = new Date()
-  const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // 30天后重置
+  const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // 30 days later reset
 
-  // 检查是否已存在使用限额记录
+  // Check if there are existing usage limit records
   const existingLimits = await ctx.db
     .select()
     .from(userUsageLimits)
@@ -58,13 +58,13 @@ async function updateUserUsageLimitsHelper(
   }
 
   if (existingLimits.length > 0) {
-    // 更新现有记录，保留当前使用量
+    // Update existing records, keeping current usage
     await ctx.db
       .update(userUsageLimits)
       .set(usageLimitsData)
       .where(eq(userUsageLimits.userId, userId))
   } else {
-    // 创建新记录
+    // Create new records
     await ctx.db.insert(userUsageLimits).values({
       ...usageLimitsData,
       usedUseCases: 0,
@@ -75,12 +75,12 @@ async function updateUserUsageLimitsHelper(
     })
   }
 
-  ctx.logger.info('用户使用限额已更新', { userId })
+  ctx.logger.info('User quotas updated', { userId })
 }
 
 export const paymentsRouter = createTRPCRouter({
   /**
-   * 获取所有活跃的会员计划
+   * Get all active membership plans
    */
   getMembershipPlans: publicProcedure
     .input(
@@ -104,19 +104,19 @@ export const paymentsRouter = createTRPCRouter({
 
       return plans.map((plan: any) => ({
         ...plan,
-        // 确保所有价格字段都是字符串
+        // Ensure all price fields are strings
         priceUSDMonthly: plan.priceUSDMonthly?.toString() || '0',
-        priceCNYMonthly: plan.priceCNYMonthly?.toString() || null,
+        priceEURMonthly: plan.priceEURMonthly?.toString() || null,
         priceUSDYearly: plan.priceUSDYearly?.toString() || null,
-        priceCNYYearly: plan.priceCNYYearly?.toString() || null,
-        // 确保功能列表是数组
+        priceEURYearly: plan.priceEURYearly?.toString() || null,
+        // Ensure feature lists are arrays
         features: Array.isArray(plan.features) ? plan.features : [],
         featuresZh: Array.isArray(plan.featuresZh) ? plan.featuresZh : [],
       }))
     }),
 
   /**
-   * 根据ID获取会员计划详情
+   * Get membership plan details by ID
    */
   getMembershipPlanById: publicProcedure
     .input(z.object({ planId: z.string() }))
@@ -128,7 +128,7 @@ export const paymentsRouter = createTRPCRouter({
       if (!plan) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '计划不存在',
+          message: 'The plan does not exist',
         })
       }
 
@@ -136,14 +136,14 @@ export const paymentsRouter = createTRPCRouter({
     }),
 
   /**
-   * 获取用户当前会员状态
+   * Get user membership status
    */
   getUserMembershipStatus: protectedProcedure
     .input(z.object({ userId: z.string().optional() }).optional())
     .query(async ({ ctx, input }) => {
       const targetUserId = input?.userId || ctx.userId
 
-      // 获取用户当前有效的会员记录
+      // Get user's current valid membership records
       const membershipQuery = await ctx.db
         .select({
           membership: userMemberships,
@@ -158,7 +158,7 @@ export const paymentsRouter = createTRPCRouter({
           and(
             eq(userMemberships.userId, targetUserId),
             eq(userMemberships.status, 'active'),
-            gt(userMemberships.endDate, new Date()) // 未过期
+            gt(userMemberships.endDate, new Date()) // Not expired
           )
         )
         .orderBy(desc(userMemberships.endDate))
@@ -166,7 +166,7 @@ export const paymentsRouter = createTRPCRouter({
 
       const membership = membershipQuery[0] || null
 
-      // 获取使用限额
+      // Get user's usage limits
       const usageQuery = await ctx.db
         .select()
         .from(userUsageLimits)
@@ -182,7 +182,7 @@ export const paymentsRouter = createTRPCRouter({
         userMembership?.endDate && new Date() < new Date(userMembership.endDate)
       )
 
-      // 计算剩余天数
+      // Calculate remaining days
       let remainingDays = 0
       let nextExpiryDate: Date | null = null
 
@@ -209,7 +209,7 @@ export const paymentsRouter = createTRPCRouter({
     }),
 
   /**
-   * 获取用户支付历史记录
+   * Get user payment history
    */
   getPaymentHistory: protectedProcedure
     .input(
@@ -232,7 +232,7 @@ export const paymentsRouter = createTRPCRouter({
         .limit(limit)
         .offset(offset)
 
-      // 获取总数
+      // Get total count
       const totalQuery = await ctx.db
         .select({ count: paymentRecords.id })
         .from(paymentRecords)
@@ -253,7 +253,7 @@ export const paymentsRouter = createTRPCRouter({
     }),
 
   /**
-   * 创建Stripe结账会话
+   * Create Stripe checkout session
    */
   createCheckoutSession: protectedProcedure
     .input(
@@ -261,7 +261,7 @@ export const paymentsRouter = createTRPCRouter({
         priceId: z.string(),
         planName: z.string(),
         paymentMethod: z.enum(['card', 'alipay']).default('card'),
-        locale: z.enum(['en', 'zh']).default('en'),
+        locale: z.enum(['en', 'de']).default('en'),
         durationType: z.enum(['monthly', 'yearly']).default('monthly'),
       })
     )
@@ -270,12 +270,12 @@ export const paymentsRouter = createTRPCRouter({
 
       const stripe = getServerStripe()
 
-      // 获取价格信息以确定货币和金额
+      // Get price information to determine currency and amount
       const price = await stripe.prices.retrieve(priceId)
-      const currency = price.currency.toUpperCase() as 'USD' | 'CNY'
+      const currency = price.currency.toUpperCase() as 'USD' | 'EUR'
       const amount = price.unit_amount || 0
 
-      // 根据货币创建或获取对应的 Stripe 客户
+      // Create or retrieve the corresponding Stripe customer based on currency
       const customerSearchQuery = `metadata["userId"]:"${ctx.userId}"`
       const customers = await stripe.customers.search({
         query: customerSearchQuery,
@@ -286,7 +286,7 @@ export const paymentsRouter = createTRPCRouter({
       if (customers.data.length > 0 && customers.data[0]) {
         customerId = customers.data[0].id
       } else {
-        // 创建新客户
+        // Create a new customer
         const customer = await stripe.customers.create({
           metadata: {
             userId: ctx.userId,
@@ -296,23 +296,23 @@ export const paymentsRouter = createTRPCRouter({
         customerId = customer.id
       }
 
-      // 确定支付方式
+      // Determine payment methods
       let paymentMethods: ('card' | 'alipay')[] = ['card']
 
-      // 支付宝支持的货币配置
-      const alipaySupported = ['CNY', 'USD'].includes(currency)
+      // Alipay supported currencies
+      const alipaySupported = ['EUR', 'USD'].includes(currency)
 
       if (paymentMethod === 'alipay' && alipaySupported) {
-        // 用户明确选择支付宝，优先显示支付宝
+        // User explicitly chose Alipay, prioritize Alipay
         paymentMethods = ['alipay', 'card']
       } else {
-        // 默认只显示信用卡，但如果货币支持支付宝，也可以添加
+        // Default to showing only credit card, but add Alipay if currency supports it
         if (alipaySupported) {
           paymentMethods = ['card', 'alipay']
         }
       }
 
-      // 创建一次性付款的checkout session
+      // Create a one-time payment checkout session
       const sessionConfig: any = {
         customer: customerId,
         payment_method_types: paymentMethods,
@@ -322,7 +322,7 @@ export const paymentsRouter = createTRPCRouter({
             quantity: 1,
           },
         ],
-        mode: 'payment', // 使用payment模式而不是subscription
+        mode: 'payment', // Use payment mode instead of subscription
         success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/payment/cancelled`,
         metadata: {
@@ -332,9 +332,9 @@ export const paymentsRouter = createTRPCRouter({
           paymentMethod: paymentMethod || 'card',
           membershipDurationDays: durationType === 'yearly' ? '365' : '30',
         },
-        // 添加允许促销代码选项
+        // Added Allow Promo Codes option
         allow_promotion_codes: true,
-        // 添加客户信息收集
+        // Added customer information collection
         billing_address_collection: 'auto',
         customer_update: {
           address: 'auto',
@@ -342,7 +342,7 @@ export const paymentsRouter = createTRPCRouter({
         },
       }
 
-      // 如果包含支付宝，设置支付宝的特定配置
+      // If Alipay is included, set Alipay specific configuration
       if (paymentMethods.includes('alipay')) {
         sessionConfig.payment_method_options = {
           alipay: {
@@ -350,9 +350,9 @@ export const paymentsRouter = createTRPCRouter({
           },
         }
 
-        // 设置locale以支持中文支付宝界面
-        if (locale === 'zh') {
-          sessionConfig.locale = 'zh'
+        // Set locale to support Chinese Alipay interface
+        if (locale === 'de') {
+          sessionConfig.locale = 'de'
         }
       }
 
@@ -361,11 +361,11 @@ export const paymentsRouter = createTRPCRouter({
       if (!session.id || !session.url) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Stripe会话创建失败',
+          message: 'Stripe session creation failed',
         })
       }
 
-      ctx.logger.info('支付会话创建成功:', {
+      ctx.logger.info('Payment session created successfully:', {
         sessionId: session.id,
         userId: ctx.userId,
         planName,
@@ -376,14 +376,14 @@ export const paymentsRouter = createTRPCRouter({
       return {
         sessionId: session.id,
         url: session.url,
-        amount: amount / 100, // 转换为实际金额
+        amount: amount / 100, // Convert to actual amount
         currency,
         planName,
       }
     }),
 
   /**
-   * 激活会员（用于webhook处理）
+   * Activate membership (for webhook processing)
    */
   activateMembership: protectedProcedure
     .input(
@@ -411,7 +411,7 @@ export const paymentsRouter = createTRPCRouter({
         now.getTime() + durationDays * 24 * 60 * 60 * 1000
       )
 
-      // 检查是否已有会员记录
+      // Check if there is already a member record
       const existingMembership = await ctx.db
         .select()
         .from(userMemberships)
@@ -419,7 +419,7 @@ export const paymentsRouter = createTRPCRouter({
         .limit(1)
 
       if (existingMembership.length > 0) {
-        // 更新现有会员记录
+        // Update existing member records
         await ctx.db
           .update(userMemberships)
           .set({
@@ -437,7 +437,7 @@ export const paymentsRouter = createTRPCRouter({
           })
           .where(eq(userMemberships.userId, ctx.userId))
       } else {
-        // 创建新会员记录
+        // Create new member record
         await ctx.db.insert(userMemberships).values({
           userId: ctx.userId,
           planId,
@@ -455,20 +455,20 @@ export const paymentsRouter = createTRPCRouter({
         })
       }
 
-      // 更新用户使用限额
+      // Update user usage limits
       await updateUserUsageLimitsHelper(ctx.userId, planId, ctx)
 
-      ctx.logger.info('会员激活成功:', {
+      ctx.logger.info('Membership activated successfully:', {
         userId: ctx.userId,
         planId,
         endDate: endDate.toISOString(),
       })
 
-      return { message: '会员激活成功' }
+      return { message: 'Member activation successful' }
     }),
 
   /**
-   * 更新用户使用限额的辅助函数
+   * Auxiliary function for updating user usage limits
    */
   updateUserUsageLimits: protectedProcedure
     .input(
@@ -480,7 +480,7 @@ export const paymentsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { userId, planId } = input
 
-      // 获取计划信息
+      // Get plan information
       const plan = await ctx.db.query.membershipPlans.findFirst({
         where: eq(membershipPlans.id, planId),
       })
@@ -488,14 +488,15 @@ export const paymentsRouter = createTRPCRouter({
       if (!plan) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: '计划不存在，无法更新使用限额',
+          message:
+            'The plan does not exist and the usage limit cannot be updated.',
         })
       }
 
       const now = new Date()
-      const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // 30天后重置
+      const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) // Reset after 30 days
 
-      // 检查是否已存在使用限额记录
+      // Check if there is already a usage limit record
       const existingLimits = await ctx.db
         .select()
         .from(userUsageLimits)
@@ -514,13 +515,13 @@ export const paymentsRouter = createTRPCRouter({
       }
 
       if (existingLimits.length > 0) {
-        // 更新现有记录，保留当前使用量
+        // Update existing records, keeping current usage
         await ctx.db
           .update(userUsageLimits)
           .set(usageLimitsData)
           .where(eq(userUsageLimits.userId, userId))
       } else {
-        // 创建新记录
+        // Create new usage limit record
         await ctx.db.insert(userUsageLimits).values({
           ...usageLimitsData,
           usedUseCases: 0,
@@ -531,12 +532,12 @@ export const paymentsRouter = createTRPCRouter({
         })
       }
 
-      ctx.logger.info('用户使用限额已更新', { userId })
-      return { message: '使用限额更新成功' }
+      ctx.logger.info('User usage limits updated', { userId })
+      return { message: 'Usage limits updated successfully' }
     }),
 
   /**
-   * 获取用户使用统计数据
+   * Get user usage statistics
    */
   getUserUsageStats: protectedProcedure
     .input(
@@ -549,7 +550,7 @@ export const paymentsRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const targetUserId = input?.userId || ctx.userId
 
-      // 获取用户使用限额记录
+      // Get user usage limits record
       const usageQuery = await ctx.db
         .select()
         .from(userUsageLimits)
@@ -559,7 +560,7 @@ export const paymentsRouter = createTRPCRouter({
       const usage = usageQuery[0]
 
       if (!usage) {
-        // 如果没有使用记录，返回默认值
+        // If there is no usage record, return default values
         return {
           usedUseCases: 0,
           usedTutorials: 0,

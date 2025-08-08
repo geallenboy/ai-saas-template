@@ -19,7 +19,7 @@ function PaymentSuccessContent() {
     isLoading,
     error,
   } = trpc.payments.getUserMembershipStatus.useQuery(undefined, {
-    staleTime: 0, // 支付成功后不缓存，确保获取最新状态
+    staleTime: 0, // Do not cache after successful payment to ensure the latest status
     gcTime: 0,
   })
 
@@ -36,14 +36,14 @@ function PaymentSuccessContent() {
 
   return (
     <div className="text-center space-y-8">
-      {/* 成功图标 */}
+      {/* Success Icon */}
       <div className="flex justify-center">
         <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
           <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400" />
         </div>
       </div>
 
-      {/* 成功消息 */}
+      {/* Success Message */}
       <div className="space-y-4">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           支付成功！
@@ -53,7 +53,7 @@ function PaymentSuccessContent() {
         </p>
       </div>
 
-      {/* 会员信息卡片 */}
+      {/* Member information card */}
       {hasActiveMembership && currentPlan && membership && (
         <Card className="text-left">
           <CardHeader>
@@ -67,7 +67,7 @@ function PaymentSuccessContent() {
               <div>
                 <p className="text-sm text-muted-foreground">会员计划</p>
                 <p className="font-medium text-lg">
-                  {currentPlan.nameZh || currentPlan.name}
+                  {currentPlan.nameDe || currentPlan.name}
                 </p>
               </div>
               <div>
@@ -81,7 +81,7 @@ function PaymentSuccessContent() {
                 <p className="font-medium text-lg">
                   {formatPrice(
                     Number(membership.purchaseAmount),
-                    membership.currency as 'USD' | 'CNY'
+                    membership.currency as 'USD' | 'EUR'
                   )}
                 </p>
               </div>
@@ -98,7 +98,7 @@ function PaymentSuccessContent() {
               <div className="pt-4 border-t">
                 <p className="text-sm text-muted-foreground">到期时间</p>
                 <p className="font-medium">
-                  {new Date(membership.endDate).toLocaleDateString('zh-CN', {
+                  {new Date(membership.endDate).toLocaleDateString('de-DE', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -110,7 +110,7 @@ function PaymentSuccessContent() {
         </Card>
       )}
 
-      {/* 功能特性 */}
+      {/* Features */}
       {currentPlan && (
         <Card className="text-left">
           <CardHeader>
@@ -118,8 +118,8 @@ function PaymentSuccessContent() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {currentPlan.featuresZh && currentPlan.featuresZh.length > 0
-                ? currentPlan.featuresZh.map((feature, index) => (
+              {currentPlan.featuresDe && currentPlan.featuresDe.length > 0
+                ? currentPlan.featuresDe.map((feature, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />
                       <span className="text-sm">{feature}</span>
@@ -136,7 +136,7 @@ function PaymentSuccessContent() {
         </Card>
       )}
 
-      {/* 操作按钮 */}
+      {/* Action button */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button asChild size="lg">
           <Link href="/dashboard">
@@ -150,7 +150,7 @@ function PaymentSuccessContent() {
         </Button>
       </div>
 
-      {/* 支持信息 */}
+      {/* Support information */}
       <div className="text-center text-sm text-muted-foreground">
         <p>
           如有任何问题，请{' '}
@@ -160,7 +160,7 @@ function PaymentSuccessContent() {
         </p>
       </div>
 
-      {/* 调试信息（仅开发环境） */}
+      {/* Debug information (only in development) */}
       {process.env.NODE_ENV === 'development' && sessionId && (
         <Card className="text-left">
           <CardHeader>

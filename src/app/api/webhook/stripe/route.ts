@@ -20,15 +20,15 @@ export async function POST(req: NextRequest) {
     const signature = headersList.get('stripe-signature')
 
     if (!signature) {
-      logger.error('缺少Stripe签名')
+      logger.error('Missing Stripe signature')
       return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
     }
 
-    // 使用真实的Stripe webhook签名验证
+    // Use real Stripe webhook signature verification
     const event = verifyStripeWebhook(body, signature)
-    logger.info(`收到Stripe webhook: ${event.type}`)
+    logger.info(`Received Stripe webhook: ${event.type}`)
 
-    // 处理不同类型的事件
+    // Handle different types of events
     switch (event.type) {
       case 'checkout.session.completed':
         await handleCheckoutSessionCompleted(
@@ -66,17 +66,20 @@ export async function POST(req: NextRequest) {
         break
 
       default:
-        logger.info(`未处理的Stripe事件类型: ${event.type}`)
+        logger.info(`Unhandled Stripe event type: ${event.type}`)
     }
 
     return NextResponse.json({ received: true })
   } catch (error) {
-    logger.error('处理Stripe webhook失败:', error as Error)
-    return NextResponse.json({ error: 'Webhook处理失败' }, { status: 500 })
+    logger.error('Failed to process Stripe webhook:', error as Error)
+    return NextResponse.json(
+      { error: 'Failed to process webhook' },
+      { status: 500 }
+    )
   }
 }
 
-// 处理支付完成
+// Handle payment succeeded
 async function handleCheckoutSessionCompleted(
   session: Stripe.Checkout.Session
 ) {
@@ -86,21 +89,23 @@ async function handleCheckoutSessionCompleted(
     const durationType = session.metadata?.durationType || 'monthly'
 
     if (!userId || !planId) {
-      logger.error('Checkout session缺少必要信息: ' + session.id)
+      logger.error(
+        'Checkout session is missing necessary information: ' + session.id
+      )
       return
     }
 
-    // 获取计划信息
+    // Get plan information
     const plan = await db.query.membershipPlans.findFirst({
       where: eq(membershipPlans.id, planId),
     })
 
     if (!plan) {
-      logger.error(`计划不存在: ${planId}`)
+      logger.error(`Plan does not exist: ${planId}`)
       return
     }
 
-    // 创建支付记录
+    // Create payment record
     await db.insert(paymentRecords).values({
       userId,
       amount: session.amount_total
@@ -122,18 +127,18 @@ async function handleCheckoutSessionCompleted(
       updatedAt: new Date(),
     })
 
-    // 计算会员期限
+    // Calculate membership duration
     const now = new Date()
     const durationDays = durationType === 'yearly' ? 365 : 30
     const endDate = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000)
 
-    // 创建或更新会员记录
+    // Create or update membership record
     const existingMembership = await db.query.userMemberships.findFirst({
       where: eq(userMemberships.userId, userId),
     })
 
     if (existingMembership) {
-      // 更新现有会员
+      // Update existing membership
       await db
         .update(userMemberships)
         .set({
@@ -153,7 +158,7 @@ async function handleCheckoutSessionCompleted(
         })
         .where(eq(userMemberships.id, existingMembership.id))
     } else {
-      // 创建新会员记录
+      // Create new member record
       await db.insert(userMemberships).values({
         userId,
         planId,
@@ -173,7 +178,7 @@ async function handleCheckoutSessionCompleted(
       })
     }
 
-    // 更新用户使用限额
+    // Update user usage limits
     const planType = plan.name.toLowerCase().includes('pro')
       ? 'pro'
       : plan.name.toLowerCase().includes('enterprise')
@@ -183,29 +188,32 @@ async function handleCheckoutSessionCompleted(
           : 'free'
     await updateUserUsageLimits(userId, planType)
 
-    logger.info(`支付完成处理成功: 用户${userId}, 计划${planId}`)
+    logger.info(`Payment succeeded: User ${userId}, Plan ${planId}`)
   } catch (error) {
-    logger.error('处理checkout.session.completed失败:', error as Error)
+    logger.error(
+      'Failed to process checkout.session.completed:',
+      error as Error
+    )
     throw error
   }
 }
 
-// 处理订阅更新
+// Handle subscription updated
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   try {
     const customerId = subscription.customer as string
 
-    // 根据Stripe customer ID查找用户会员
+    // Find user membership by Stripe customer ID
     const membership = await db.query.userMemberships.findFirst({
       where: eq(userMemberships.stripeCustomerId, customerId),
     })
 
     if (!membership) {
-      logger.error(`找不到订阅对应的会员: ${customerId}`)
+      logger.error(`Cannot find membership for subscription: ${customerId}`)
       return
     }
 
-    // 更新会员状态
+    // Update membership status
     const statusMap: Record<string, string> = {
       active: 'active',
       past_due: 'past_due',
@@ -230,14 +238,14 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       })
       .where(eq(userMemberships.id, membership.id))
 
-    logger.info(`订阅更新成功: ${subscription.id}`)
+    logger.info(`Subscription updated successfully: ${subscription.id}`)
   } catch (error) {
-    logger.error('处理subscription.updated失败:', error as Error)
+    logger.error('Failed to process subscription.updated:', error as Error)
     throw error
   }
 }
 
-// 处理订阅取消
+// Handle subscription deleted
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   try {
     const customerId = subscription.customer as string
@@ -252,30 +260,30 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       })
       .where(eq(userMemberships.stripeCustomerId, customerId))
 
-    logger.info(`订阅取消成功: ${subscription.id}`)
+    logger.info(`Subscription deleted successfully: ${subscription.id}`)
   } catch (error) {
-    logger.error('处理subscription.deleted失败:', error as Error)
+    logger.error('Failed to process subscription.deleted:', error as Error)
     throw error
   }
 }
 
-// 处理支付成功
+// Handle payment succeeded
 async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
   try {
     const customerId = invoice.customer as string
     const subscriptionId = (invoice as any).subscription as string
 
-    // 获取用户ID
+    // Get user ID
     const membership = await db.query.userMemberships.findFirst({
       where: eq(userMemberships.stripeCustomerId, customerId),
     })
 
     if (!membership) {
-      logger.warn(`找不到customer对应的会员: ${customerId}`)
+      logger.warn(`Cannot find membership for payment: ${customerId}`)
       return
     }
 
-    // 创建支付记录
+    // Create payment record
     await db.insert(paymentRecords).values({
       userId: membership.userId,
       amount: invoice.amount_paid
@@ -285,7 +293,7 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
       status: 'completed',
       paymentMethod: 'stripe',
       stripePaymentIntentId: (invoice as any).payment_intent as string,
-      planName: invoice.lines?.data?.[0]?.description || '订阅续费',
+      planName: invoice.lines?.data?.[0]?.description || 'Subscription Renewal',
       durationType: 'monthly',
       membershipDurationDays: 30,
       metadata: {
@@ -297,37 +305,37 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice) {
       updatedAt: new Date(),
     })
 
-    logger.info(`支付记录创建成功: ${invoice.id}`)
+    logger.info(`Payment record created successfully: ${invoice.id}`)
   } catch (error) {
-    logger.error('处理payment_succeeded失败:', error as Error)
+    logger.error('Failed to process payment_succeeded:', error as Error)
     throw error
   }
 }
 
-// 处理支付失败
+// Handle payment failed
 async function handlePaymentFailed(invoice: Stripe.Invoice) {
   try {
     const customerId = invoice.customer as string
     const subscriptionId = (invoice as any).subscription as string
 
-    // 获取用户ID
+    // Get user ID
     const membership = await db.query.userMemberships.findFirst({
       where: eq(userMemberships.stripeCustomerId, customerId),
     })
 
     if (!membership) {
-      logger.warn(`找不到customer对应的会员: ${customerId}`)
+      logger.warn(`Cannot find membership for payment: ${customerId}`)
       return
     }
 
-    // 创建失败的支付记录
+    // Create failed payment record
     await db.insert(paymentRecords).values({
       userId: membership.userId,
       amount: invoice.amount_due ? (invoice.amount_due / 100).toString() : '0',
       currency: invoice.currency?.toUpperCase() || 'USD',
       status: 'failed',
       paymentMethod: 'stripe',
-      planName: invoice.lines?.data?.[0]?.description || '订阅续费',
+      planName: invoice.lines?.data?.[0]?.description || 'Subscription Renewal',
       durationType: 'monthly',
       membershipDurationDays: 30,
       metadata: {
@@ -341,7 +349,7 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
       updatedAt: new Date(),
     })
 
-    // 如果连续失败多次，暂停会员
+    // If failed multiple times, suspend membership
     if ((invoice as any).attempt_count && (invoice as any).attempt_count >= 3) {
       await db
         .update(userMemberships)
@@ -352,14 +360,14 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
         .where(eq(userMemberships.id, membership.id))
     }
 
-    logger.info(`支付失败记录创建: ${invoice.id}`)
+    logger.info(`Failed payment record created: ${invoice.id}`)
   } catch (error) {
-    logger.error('处理payment_failed失败:', error as Error)
+    logger.error('Failed to process payment_failed:', error as Error)
     throw error
   }
 }
 
-// 处理试用期即将结束
+// Handle trial will end
 async function handleTrialWillEnd(subscription: Stripe.Subscription) {
   try {
     const customerId = subscription.customer as string
@@ -370,21 +378,21 @@ async function handleTrialWillEnd(subscription: Stripe.Subscription) {
     })
 
     if (!membership) {
-      logger.warn(`找不到订阅对应的会员: ${customerId}`)
+      logger.warn(`Cannot find membership for trial will end: ${customerId}`)
       return
     }
 
-    // TODO: 发送试用期即将结束的邮件通知
+    // TODO: Send an email notification when the trial period is about to end
     logger.info(
-      `试用期即将结束: 用户${membership.userId}, 订阅${subscription.id}`
+      `Trial will end soon: User ${membership.userId}, Subscription ${subscription.id}`
     )
   } catch (error) {
-    logger.error('处理trial_will_end失败:', error as Error)
+    logger.error('Failed to process trial_will_end:', error as Error)
     throw error
   }
 }
 
-// 处理即将到期的账单
+// Handle upcoming invoice
 async function handleUpcomingInvoice(invoice: Stripe.Invoice) {
   try {
     const customerId = invoice.customer as string
@@ -395,19 +403,21 @@ async function handleUpcomingInvoice(invoice: Stripe.Invoice) {
     })
 
     if (!membership) {
-      logger.warn(`找不到customer对应的会员: ${customerId}`)
+      logger.warn(`Cannot find membership for upcoming invoice: ${customerId}`)
       return
     }
 
-    // TODO: 发送即将扣费的邮件通知
-    logger.info(`即将扣费: 用户${membership.userId}, 金额${invoice.amount_due}`)
+    // TODO: Send email notifications of upcoming deductions
+    logger.info(
+      `Upcoming invoice: User ${membership.userId}, Amount ${invoice.amount_due}`
+    )
   } catch (error) {
-    logger.error('处理upcoming_invoice失败:', error as Error)
+    logger.error('Failed to process upcoming_invoice:', error as Error)
     throw error
   }
 }
 
-// 更新用户使用限额
+// Update user usage limits
 async function updateUserUsageLimits(userId: string, planType: string) {
   try {
     const limits =
@@ -417,13 +427,13 @@ async function updateUserUsageLimits(userId: string, planType: string) {
     const now = new Date()
     const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
 
-    // 检查是否已存在使用限额记录
+    // Check if usage limits record already exists
     const existingLimits = await db.query.userUsageLimits.findFirst({
       where: eq(userUsageLimits.userId, userId),
     })
 
     if (existingLimits) {
-      // 更新现有记录
+      // Update existing record
       await db
         .update(userUsageLimits)
         .set({
@@ -433,7 +443,7 @@ async function updateUserUsageLimits(userId: string, planType: string) {
           monthlyApiCalls: limits.monthlyApiCalls,
           currentPeriodStart: now,
           currentPeriodEnd: periodEnd,
-          // 重置使用量（新订阅）
+          // Reset usage (new subscription)
           usedUseCases: 0,
           usedTutorials: 0,
           usedBlogs: 0,
@@ -442,7 +452,7 @@ async function updateUserUsageLimits(userId: string, planType: string) {
         })
         .where(eq(userUsageLimits.userId, userId))
     } else {
-      // 创建新记录
+      // Create new record
       await db.insert(userUsageLimits).values({
         userId,
         monthlyUseCases: limits.monthlyUseCases,
@@ -460,9 +470,9 @@ async function updateUserUsageLimits(userId: string, planType: string) {
       })
     }
 
-    logger.info(`用户使用限额更新成功: ${userId}`)
+    logger.info(`User usage limits updated successfully: ${userId}`)
   } catch (error) {
-    logger.error('更新用户使用限额失败:', error as Error)
+    logger.error('Failed to update user usage limits:', error as Error)
     throw error
   }
 }

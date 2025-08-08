@@ -17,9 +17,9 @@ export const LanguageSwitcher = () => {
   const pathname = usePathname()
 
   const switchLanguage = (newLocale: string) => {
-    // 移除当前语言前缀
+    // Remove the current language prefix
     const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/'
-    // 跳转到新语言的路径
+    // Navigate to the new language path
     router.push(`/${newLocale}${pathWithoutLocale}`)
   }
 
@@ -33,12 +33,12 @@ export const LanguageSwitcher = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="dropdown-enhanced">
         <DropdownMenuItem
-          onClick={() => switchLanguage('zh')}
+          onClick={() => switchLanguage('de')}
           className="dropdown-item-enhanced"
         >
           <span className="text-xl">🇨🇳</span>
-          <span className="flex-1 font-medium">{t('zh')}</span>
-          {locale === 'zh' && <div className="status-indicator" />}
+          <span className="flex-1 font-medium">{t('de')}</span>
+          {locale === 'de' && <div className="status-indicator" />}
         </DropdownMenuItem>
         <div className="dropdown-separator" />
         <DropdownMenuItem

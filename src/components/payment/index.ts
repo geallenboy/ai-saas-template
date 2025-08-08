@@ -1,8 +1,8 @@
 /**
- * Payment 组件统一导出
+ * Payment Unified export of components
  */
 
-// 客户端组件
+// Client components
 export { CheckoutButton } from './CheckoutButton'
 export { CouponForm } from './CouponForm'
 export { MembershipCenter } from './MembershipCenter'

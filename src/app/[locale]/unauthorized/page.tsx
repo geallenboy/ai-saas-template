@@ -39,6 +39,6 @@ export default function UnauthorizedPage() {
 }
 
 export const metadata = {
-  title: '访问被拒绝',
-  description: '您没有权限访问此页面',
+  title: 'access denied',
+  description: 'You do not have permission to access this page',
 }

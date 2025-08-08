@@ -29,7 +29,7 @@ export default async function BlocksPage({ params }: Props) {
   const { locale } = await params
   const t = await getTranslations('blocks')
 
-  // 统计总组件数
+  // Count the total number of components
   const totalComponents = categories.reduce(
     (sum, category) => sum + category.count,
     0
@@ -37,9 +37,9 @@ export default async function BlocksPage({ params }: Props) {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - 使用项目标准风格 */}
+      {/* Hero Section - Use project standard style */}
       <header className="hero-enhanced relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        {/* 动态背景元素 - 与主页保持一致 */}
+        {/* Dynamic background element - consistent with the homepage */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-96 h-96 bg-blue-400/20 dark:bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl animate-float" />
           <div
@@ -53,38 +53,42 @@ export default async function BlocksPage({ params }: Props) {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-emerald-400/10 rounded-full filter blur-3xl animate-pulse" />
         </div>
 
-        {/* 网格背景 */}
+        {/* grid background */}
         <div className="absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10" />
 
-        {/* 渐变覆盖层 */}
+        {/* gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-white/20 dark:from-gray-900/30 dark:via-transparent dark:to-gray-900/20" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            {/* 标签 */}
+            {/* Tags */}
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 dark:bg-black/20 backdrop-blur-sm border border-white/20 dark:border-white/10 mb-8">
               <ComponentIcon className="w-4 h-4 mr-2 text-emerald-400" />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {locale === 'zh' ? '精美组件库' : 'Beautiful Components'}
+                {locale === 'de'
+                  ? 'Schöne Komponenten'
+                  : 'Beautiful Components'}
               </span>
             </div>
 
-            {/* 主标题 */}
+            {/* Main Title */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
               <span className="text-gradient-improved">{t('title')}</span>
             </h1>
 
-            {/* 副标题 */}
+            {/* Subtitle */}
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
               {t('description')}
             </p>
 
-            {/* 搜索区域 */}
+            {/* Search Area */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 max-w-2xl mx-auto">
               <div className="relative flex-1 w-full">
                 <Input
                   placeholder={
-                    locale === 'zh' ? '搜索组件...' : 'Search components...'
+                    locale === 'de'
+                      ? 'Suche Komponenten...'
+                      : 'Search components...'
                   }
                   className="pl-12 pr-4 py-4 text-lg glass-card-improved w-full"
                 />
@@ -94,11 +98,11 @@ export default async function BlocksPage({ params }: Props) {
                 size="lg"
                 className="btn-modern-primary px-8 py-4 w-full sm:w-auto"
               >
-                {locale === 'zh' ? '搜索' : 'Search'}
+                {locale === 'de' ? 'Suche' : 'Search'}
               </Button>
             </div>
 
-            {/* 统计信息 */}
+            {/* Statistics */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
@@ -109,7 +113,9 @@ export default async function BlocksPage({ params }: Props) {
                 </div>
                 <span>
                   {totalComponents}{' '}
-                  {locale === 'zh' ? '个精美组件' : 'Beautiful Components'}
+                  {locale === 'de'
+                    ? 'Schöne Komponenten'
+                    : 'Beautiful Components'}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -119,7 +125,7 @@ export default async function BlocksPage({ params }: Props) {
                   ))}
                 </div>
                 <span>
-                  {locale === 'zh' ? '100% 响应式' : '100% Responsive'}
+                  {locale === 'de' ? '100% Responsive' : '100% Responsive'}
                 </span>
               </div>
             </div>
@@ -127,28 +133,30 @@ export default async function BlocksPage({ params }: Props) {
         </div>
       </header>
 
-      {/* 主要内容区域 */}
+      {/* Main Content Area */}
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 分类标题 */}
+          {/* Category Title */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              {locale === 'zh' ? '组件分类' : 'Component Categories'}
+              {locale === 'de'
+                ? 'Komponenten Kategorien'
+                : 'Component Categories'}
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              {locale === 'zh'
-                ? '按类别浏览我们精心设计的组件库，快速找到你需要的组件'
+              {locale === 'de'
+                ? 'Durchsuchen Sie unsere sorgfältig gestaltete Komponentenbibliothek nach Kategorien und finden Sie schnell, was Sie benötigen'
                 : 'Browse our carefully designed component library by category and quickly find what you need'}
             </p>
           </div>
 
-          {/* 组件分类网格 - 使用项目标准的卡片样式 */}
+          {/* Component Classification Grid - Using project standard card styles */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((category, index) => {
               const IconComponent = category.icon
-              const isPopular = index === 0 // 第一个作为热门
+              const isPopular = index === 0 // The first one is popular
 
-              // 为每个分类定义渐变色
+              // Define gradient colors for each category
               const gradients = [
                 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -161,24 +169,24 @@ export default async function BlocksPage({ params }: Props) {
 
               return (
                 <div key={category.id} className="feature-card-enhanced group">
-                  {/* 悬停背景效果 */}
+                  {/* Hover Background Effect */}
                   <div
                     className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-2xl"
                     style={{ background: gradient }}
                   />
 
                   <div className="relative">
-                    {/* 热门标签 */}
+                    {/* Popular tags */}
                     {isPopular && (
                       <div className="absolute -top-2 -right-2 z-10">
                         <Badge className="bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs px-2 py-1">
                           <Sparkles className="w-3 h-3 mr-1" />
-                          {locale === 'zh' ? '热门' : 'Popular'}
+                          {locale === 'de' ? 'Beliebt' : 'Popular'}
                         </Badge>
                       </div>
                     )}
 
-                    {/* 图标 */}
+                    {/* icon */}
                     <div
                       className="w-14 h-14 rounded-2xl mb-6 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300"
                       style={{ background: gradient }}
@@ -186,7 +194,7 @@ export default async function BlocksPage({ params }: Props) {
                       <IconComponent className="w-7 h-7 text-white" />
                     </div>
 
-                    {/* 分类信息 */}
+                    {/* Classified information */}
                     <div className="mb-4">
                       <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                         {category.name}
@@ -196,11 +204,11 @@ export default async function BlocksPage({ params }: Props) {
                       </p>
                       <Badge variant="secondary" className="text-xs">
                         {category.count}{' '}
-                        {locale === 'zh' ? '个组件' : 'components'}
+                        {locale === 'de' ? 'Komponenten' : 'components'}
                       </Badge>
                     </div>
 
-                    {/* 查看按钮 */}
+                    {/* View button */}
                     <Button
                       asChild
                       className="w-full gap-2 transition-all group-hover:gap-3 mt-4"
@@ -211,7 +219,7 @@ export default async function BlocksPage({ params }: Props) {
                       </Link>
                     </Button>
 
-                    {/* 装饰性元素 */}
+                    {/* decorative elements */}
                     <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                 </div>
@@ -228,17 +236,21 @@ export default async function BlocksPage({ params }: Props) {
             <div className="mx-auto max-w-2xl">
               <ComponentIcon className="mx-auto mb-6 h-12 w-12 text-blue-600" />
               <h3 className="mb-4 text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                {locale === 'zh' ? '开始使用组件' : 'Start Using Components'}
+                {locale === 'de'
+                  ? 'Beginnen Sie mit der Verwendung von Komponenten'
+                  : 'Start Using Components'}
               </h3>
               <p className="mb-8 text-lg text-gray-600 dark:text-gray-300">
-                {locale === 'zh'
-                  ? '所有组件都支持 TypeScript，并且完全响应式。只需复制代码即可使用。'
+                {locale === 'de'
+                  ? 'Alle Komponenten unterstützen TypeScript und sind vollständig responsiv. Kopieren Sie einfach den Code und verwenden Sie ihn.'
                   : 'All components support TypeScript and are fully responsive. Just copy the code and start using.'}
               </p>
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <Button size="lg" className="btn-modern-primary" asChild>
                   <Link href={`/${locale}/docs`}>
-                    {locale === 'zh' ? '查看文档' : 'View Documentation'}
+                    {locale === 'de'
+                      ? 'Dokumentation anzeigen'
+                      : 'View Documentation'}
                   </Link>
                 </Button>
                 <Button
@@ -248,7 +260,9 @@ export default async function BlocksPage({ params }: Props) {
                   asChild
                 >
                   <Link href="https://github.com" target="_blank">
-                    {locale === 'zh' ? 'GitHub 仓库' : 'GitHub Repository'}
+                    {locale === 'de'
+                      ? 'GitHub Repository'
+                      : 'GitHub Repository'}
                   </Link>
                 </Button>
               </div>

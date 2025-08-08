@@ -55,7 +55,7 @@ export function SEOReport() {
 
   useEffect(() => {
     const analyzePage = () => {
-      // 分析当前页面的SEO指标
+      // Analyze the SEO metrics of the current page
       const title = document.title
       const metaDescription =
         document
@@ -67,7 +67,7 @@ export function SEOReport() {
         'script[type="application/ld+json"]'
       )
 
-      // 分析标题
+      // Analyze the title
       const titleAnalysis = {
         length: title.length,
         score:
@@ -78,13 +78,13 @@ export function SEOReport() {
               : ('error' as const),
         recommendations:
           title.length < 30
-            ? ['标题过短，建议30-60字符']
+            ? ['The title is too short, 30-60 characters is recommended']
             : title.length > 60
-              ? ['标题过长，建议30-60字符']
-              : ['标题长度合适'],
+              ? ['The title is too long, 30-60 characters is recommended']
+              : ['The title length is appropriate'],
       }
 
-      // 分析描述
+      // Analyze the description
       const descriptionAnalysis = {
         length: metaDescription.length,
         score:
@@ -95,13 +95,17 @@ export function SEOReport() {
               : ('error' as const),
         recommendations:
           metaDescription.length < 120
-            ? ['描述过短，建议120-160字符']
+            ? [
+                'The description is too short, 120-160 characters is recommended',
+              ]
             : metaDescription.length > 160
-              ? ['描述过长，建议120-160字符']
-              : ['描述长度合适'],
+              ? [
+                  'The description is too long, 120-160 characters is recommended',
+                ]
+              : ['The description length is appropriate'],
       }
 
-      // 分析标题结构
+      // Analyze the headings structure
       const headingsAnalysis = {
         h1Count: h1Elements.length,
         structure: h1Elements.length === 1,
@@ -109,13 +113,15 @@ export function SEOReport() {
           h1Elements.length === 1 ? ('good' as const) : ('warning' as const),
         recommendations:
           h1Elements.length === 0
-            ? ['缺少H1标题']
+            ? ['Missing H1 title']
             : h1Elements.length > 1
-              ? ['页面有多个H1标题，建议只保留一个']
-              : ['H1标题结构良好'],
+              ? [
+                  'There are multiple H1 titles on the page, it is recommended to keep only one',
+                ]
+              : ['H1 title structure is good'],
       }
 
-      // 分析图片
+      // Analyze the images
       const imagesWithAlt = Array.from(images).filter(img =>
         img.getAttribute('alt')
       )
@@ -132,13 +138,15 @@ export function SEOReport() {
                 : ('error' as const),
         recommendations:
           images.length === 0
-            ? ['页面无图片']
+            ? ['No images on the page']
             : imagesWithAlt.length === images.length
-              ? ['所有图片都有Alt标签']
-              : [`${images.length - imagesWithAlt.length}张图片缺少Alt标签`],
+              ? ['All images have alt tags']
+              : [
+                  `${images.length - imagesWithAlt.length} images are missing alt tags`,
+                ],
       }
 
-      // 分析结构化数据
+      // Analyze structured data
       const structuredTypes = Array.from(structuredDataScripts).map(script => {
         try {
           const data = JSON.parse(script.textContent || '{}')
@@ -157,9 +165,9 @@ export function SEOReport() {
             : ('warning' as const),
         recommendations:
           structuredDataScripts.length === 0
-            ? ['建议添加结构化数据']
+            ? ['Recommend adding structured data']
             : [
-                `发现${structuredTypes.length}个结构化数据: ${structuredTypes.join(', ')}`,
+                `Found ${structuredTypes.length} structured data: ${structuredTypes.join(', ')}`,
               ],
       }
 
@@ -169,8 +177,12 @@ export function SEOReport() {
         headings: headingsAnalysis,
         images: imageAnalysis,
         performance: {
-          score: 85, // 模拟性能分数
-          recommendations: ['启用压缩', '优化图片', '减少JavaScript包大小'],
+          score: 85, // Simulated performance score
+          recommendations: [
+            'Enable compression',
+            'Optimize images',
+            'Reduce JavaScript bundle size',
+          ],
         },
         structuredData: structuredDataAnalysis,
       })
@@ -178,7 +190,7 @@ export function SEOReport() {
       setLoading(false)
     }
 
-    // 延迟分析确保页面完全加载
+    // Latency analysis ensures pages are fully loaded
     setTimeout(analyzePage, 1000)
   }, [])
 
@@ -233,7 +245,7 @@ export function SEOReport() {
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
-      {/* 总体评分 */}
+      {/* Overall Score */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -273,9 +285,9 @@ export function SEOReport() {
         </CardContent>
       </Card>
 
-      {/* 详细分析 */}
+      {/* Detailed analysis */}
       <div className="grid md:grid-cols-2 gap-6">
-        {/* 页面标题 */}
+        {/* Page title */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -297,12 +309,12 @@ export function SEOReport() {
           </CardContent>
         </Card>
 
-        {/* Meta描述 */}
+        {/* Meta description */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               {getScoreIcon(metrics.description.score)}
-              Meta描述
+              Meta description
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -319,17 +331,17 @@ export function SEOReport() {
           </CardContent>
         </Card>
 
-        {/* 标题结构 */}
+        {/* title structure */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               {getScoreIcon(metrics.headings.score)}
-              标题结构
+              Title Structure
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="text-sm">H1标题数量: {metrics.headings.h1Count}</p>
+              <p className="text-sm">H1 Count: {metrics.headings.h1Count}</p>
               <div className="space-y-1">
                 {metrics.headings.recommendations.map((rec, index) => (
                   <p key={index} className="text-xs text-gray-600">
@@ -346,13 +358,14 @@ export function SEOReport() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               {getScoreIcon(metrics.images.score)}
-              图片优化
+              Image Optimization
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <p className="text-sm">
-                Alt标签覆盖率: {metrics.images.withAlt}/{metrics.images.total}
+                Alt tag coverage: {metrics.images.withAlt}/
+                {metrics.images.total}
                 {metrics.images.total > 0 &&
                   ` (${Math.round((metrics.images.withAlt / metrics.images.total) * 100)}%)`}
               </p>
@@ -367,12 +380,12 @@ export function SEOReport() {
           </CardContent>
         </Card>
 
-        {/* 结构化数据 */}
+        {/* structured data */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               {getScoreIcon(metrics.structuredData.score)}
-              结构化数据
+              Structured Data
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -394,12 +407,12 @@ export function SEOReport() {
           </CardContent>
         </Card>
 
-        {/* 性能指标 */}
+        {/* Performance indicators */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Zap className="h-5 w-5" />
-              页面性能
+              Performance Indicators
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -419,12 +432,12 @@ export function SEOReport() {
         </Card>
       </div>
 
-      {/* 操作按钮 */}
+      {/* Action button */}
       <Card>
         <CardContent className="pt-6">
           <div className="flex gap-4 justify-center">
             <Button variant="outline" onClick={() => window.location.reload()}>
-              重新分析
+              Reanalyze
             </Button>
             <Button
               onClick={() =>
