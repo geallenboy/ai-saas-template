@@ -1,7 +1,6 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Star } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 
 interface HeroProps {
   heading?: string
@@ -20,37 +19,35 @@ interface HeroProps {
 }
 
 const Hero = ({ heading, description, button, reviews }: HeroProps) => {
-  const t = useTranslations('hero')
-
   // Use i18n translations or passed props
-  const finalHeading = heading || t('heading')
-  const finalDescription = description || t('description')
+  const finalHeading = heading || 'Heading'
+  const finalDescription = description || 'Description'
   const finalButton = button || {
-    text: t('buttonText'),
-    url: t('buttonUrl'),
+    text: 'Button Text',
+    url: 'Button URL',
   }
   const finalReviews = reviews || {
     count: 200,
     avatars: [
       {
         src: '/avatar/1.png',
-        alt: t('avatarAlt', { index: 1 }),
+        alt: 'Avatar 1',
       },
       {
         src: '/avatar/2.png',
-        alt: t('avatarAlt', { index: 2 }),
+        alt: 'Avatar 2',
       },
       {
         src: '/avatar/3.png',
-        alt: t('avatarAlt', { index: 3 }),
+        alt: 'Avatar 3',
       },
       {
         src: '/avatar/4.png',
-        alt: t('avatarAlt', { index: 4 }),
+        alt: 'Avatar 4',
       },
       {
         src: '/avatar/5.png',
-        alt: t('avatarAlt', { index: 5 }),
+        alt: 'Avatar 5',
       },
     ],
   }
@@ -87,7 +84,7 @@ const Hero = ({ heading, description, button, reviews }: HeroProps) => {
               ))}
             </div>
             <p className="text-left font-medium text-muted-foreground">
-              {t('reviewsText', { count: finalReviews.count })}
+              Reviews Text
             </p>
           </div>
         </div>

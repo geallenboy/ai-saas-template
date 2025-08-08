@@ -12,11 +12,18 @@ export const categories: CategoryInfo[] = [
     count: 1,
   },
   {
-    id: '/',
+    id: 'features',
     name: 'Feature Sections',
     description: 'Product feature display component',
     icon: Zap,
-    count: 2,
+    count: 1,
+  },
+  {
+    id: 'tech-stack',
+    name: 'Tech Stack',
+    description: 'Technology stack display component',
+    icon: Zap,
+    count: 1,
   },
 
   {
@@ -98,19 +105,19 @@ const Hero7 = ({
 export { Hero7 };`,
   },
   {
+    id: 'features',
+    name: 'Feature Sections',
+    description: 'Product feature display component',
+    category: 'features',
+    code: '// Feature component code here',
+  },
+  {
     id: 'tech-stack',
     name: 'Tech Stack',
     description:
       'Technology stack display component, showing the technology used in the project',
-    category: '/',
+    category: 'tech-stack',
     code: '// Tech Stack component code here',
-  },
-  {
-    id: '/',
-    name: '/ Grid',
-    description: 'Feature grid display component',
-    category: '/',
-    code: '// / component code here',
   },
 
   {

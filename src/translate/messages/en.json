@@ -635,6 +635,17 @@
     "needMore": "Need More Components?",
     "exploreMore": "Explore other categories to discover more beautiful components",
     "browseAllCategories": "Browse All Categories",
-    "viewDocumentation": "View Documentation"
+    "viewDocumentation": "View Documentation",
+    "componentNotFound": "Component not found"
+  },
+  "componentPreviewToolbar": {
+    "desktop": "Desktop",
+    "tablet": "Tablet",
+    "mobile": "Mobile",
+    "toggleTheme": "Toggle theme",
+    "showPreview": "Show preview",
+    "showCode": "Show code",
+    "switchToPreview": "Switch to preview mode",
+    "viewComponentCode": "View component code"
   }
 }

@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/tooltip'
 import { Code, Eye, Monitor, Moon, Smartphone, Sun, Tablet } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import { useTranslations } from 'next-intl'
 
 import type { ViewportSize } from '@/types/blocks'
 
@@ -20,24 +21,6 @@ interface ComponentPreviewToolbarProps {
   onShowCodeChange: (show: boolean) => void
 }
 
-const viewportConfig = {
-  desktop: {
-    icon: Monitor,
-    label: 'Desktop',
-    width: '100%',
-  },
-  tablet: {
-    icon: Tablet,
-    label: 'Tablet',
-    width: '768px',
-  },
-  mobile: {
-    icon: Smartphone,
-    label: 'Mobile',
-    width: '375px',
-  },
-}
-
 export function ComponentPreviewToolbar({
   viewport,
   onViewportChange,
@@ -45,6 +28,25 @@ export function ComponentPreviewToolbar({
   onShowCodeChange,
 }: ComponentPreviewToolbarProps) {
   const { theme, setTheme } = useTheme()
+  const t = useTranslations('componentPreviewToolbar')
+
+  const viewportConfig = {
+    desktop: {
+      icon: Monitor,
+      label: t('desktop'),
+      width: '100%',
+    },
+    tablet: {
+      icon: Tablet,
+      label: t('tablet'),
+      width: '768px',
+    },
+    mobile: {
+      icon: Smartphone,
+      label: t('mobile'),
+      width: '375px',
+    },
+  }
 
   return (
     <div className="flex items-center justify-between border-b bg-background p-3">
@@ -95,7 +97,7 @@ export function ComponentPreviewToolbar({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>切换主题</p>
+              <p>{t('toggleTheme')}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -114,18 +116,18 @@ export function ComponentPreviewToolbar({
               {showCode ? (
                 <>
                   <Eye className="h-4 w-4" />
-                  显示预览
+                  {t('showPreview')}
                 </>
               ) : (
                 <>
                   <Code className="h-4 w-4" />
-                  显示代码
+                  {t('showCode')}
                 </>
               )}
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{showCode ? '切换到预览模式' : '查看组件代码'}</p>
+            <p>{showCode ? t('switchToPreview') : t('viewComponentCode')}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

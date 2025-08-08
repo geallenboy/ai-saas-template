@@ -3,20 +3,27 @@ import { Features } from '@/components/blocks/features/features'
 import { Footer } from '@/components/blocks/footer/footer'
 import { Hero } from '@/components/blocks/hero/hero'
 
-import { TechStack } from '@/components/blocks/tech-stack'
+import { TechStack } from '@/components/blocks/tech-stack/tech-stack'
+import { getTranslations } from 'next-intl/server'
 import { ComponentPreviewWrapper } from './component-preview-wrapper'
 
 interface ServerComponentPreviewProps {
   componentId: string
   name: string
   code: string
+  locale: string
 }
 
-export function ServerComponentPreview({
+export async function ServerComponentPreview({
   componentId,
   name,
   code,
+  locale,
 }: ServerComponentPreviewProps) {
+  const t = await getTranslations({
+    locale,
+    namespace: 'blocksCategoryPage',
+  })
   const renderComponent = () => {
     switch (componentId) {
       case 'modern-hero':
@@ -33,7 +40,7 @@ export function ServerComponentPreview({
       default:
         return (
           <div className="p-8 text-center text-muted-foreground">
-            组件未找到
+            {t('componentNotFound')}
           </div>
         )
     }

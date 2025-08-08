@@ -13,6 +13,7 @@ import {
   StarIcon,
   ComponentIcon,
 } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -27,6 +28,7 @@ export default async function BlocksCategoryPage({
   params,
 }: BlocksCategoryPageProps) {
   const { locale, category: categoryId } = await params
+  const t = await getTranslations({ locale, namespace: 'blocksCategoryPage' })
   const category = getCategoryById(categoryId)
   const components = getComponentsByCategory(categoryId)
 
@@ -45,9 +47,7 @@ export default async function BlocksCategoryPage({
                 className="gap-2 hover:gap-3 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {locale === 'de'
-                  ? 'Zurück zu Komponenten'
-                  : 'Back to Components'}
+                {t('backToComponents')}
               </Link>
             </Button>
           </div>
@@ -61,15 +61,11 @@ export default async function BlocksCategoryPage({
                 {category.name}
               </h1>
               <p className="text-muted-foreground text-lg mb-8">
-                {locale === 'de'
-                  ? 'In dieser Kategorie sind noch keine Komponenten vorhanden. Bleiben Sie dran!'
-                  : 'No components in this category yet. Stay tuned!'}
+                {t('noComponents')}
               </p>
               <Button asChild className="btn-modern-primary">
                 <Link href={`/${locale}/blocks`}>
-                  {locale === 'de'
-                    ? 'Durchsuchen Sie andere Kategorien'
-                    : 'Browse Other Categories'}
+                  {t('browseOtherCategories')}
                 </Link>
               </Button>
             </div>
@@ -93,9 +89,7 @@ export default async function BlocksCategoryPage({
                 className="gap-2 hover:gap-3 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {locale === 'de'
-                  ? 'Zurück zu Komponenten'
-                  : 'Back to Components'}
+                {t('backToComponents')}
               </Link>
             </Button>
           </div>
@@ -114,12 +108,11 @@ export default async function BlocksCategoryPage({
                 </p>
                 <div className="flex items-center gap-3">
                   <Badge variant="secondary" className="text-sm px-3 py-1">
-                    {components.length}{' '}
-                    {locale === 'de' ? 'Komponenten' : 'components'}
+                    {components.length} {t('components')}
                   </Badge>
                   <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-sm px-3 py-1">
                     <StarIcon className="h-3 w-3 mr-1" />
-                    {locale === 'de' ? 'Ausgewählt' : 'Featured'}
+                    {t('featured')}
                   </Badge>
                 </div>
               </div>
@@ -129,18 +122,14 @@ export default async function BlocksCategoryPage({
             <div className="flex flex-col gap-4 sm:flex-row lg:w-auto">
               <div className="relative">
                 <Input
-                  placeholder={
-                    locale === 'de'
-                      ? 'Suche Komponenten...'
-                      : 'Search components...'
-                  }
+                  placeholder={t('searchPlaceholder')}
                   className="w-full sm:w-64 pl-10 glass-card-improved"
                 />
                 <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               </div>
               <Button variant="outline" className="gap-2 glass-card-improved">
                 <DownloadIcon className="h-4 w-4" />
-                {locale === 'de' ? 'Alle herunterladen' : 'Download All'}
+                {t('downloadAll')}
               </Button>
             </div>
           </div>
@@ -177,7 +166,7 @@ export default async function BlocksCategoryPage({
                       className="gap-2 glass-card-improved"
                     >
                       <CopyIcon className="h-4 w-4" />
-                      {locale === 'de' ? 'Code kopieren' : 'Copy Code'}
+                      {t('copyCode')}
                     </Button>
                     {component.preview && (
                       <Button
@@ -193,7 +182,7 @@ export default async function BlocksCategoryPage({
                           className="gap-2"
                         >
                           <ExternalLink className="h-4 w-4" />
-                          {locale === 'de' ? 'Live-Vorschau' : 'Live Preview'}
+                          {t('livePreview')}
                         </Link>
                       </Button>
                     )}
@@ -206,6 +195,7 @@ export default async function BlocksCategoryPage({
                   componentId={component.id}
                   code={component.code}
                   name={component.name}
+                  locale={locale}
                 />
               </CardContent>
             </Card>
@@ -219,21 +209,15 @@ export default async function BlocksCategoryPage({
               <div className="mx-auto max-w-2xl">
                 <ComponentIcon className="mx-auto mb-6 h-12 w-12 text-blue-600" />
                 <h3 className="mb-4 text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                  {locale === 'de'
-                    ? 'Brauchen Sie mehr Komponenten?'
-                    : 'Need More Components?'}
+                  {t('needMore')}
                 </h3>
                 <p className="mb-8 text-lg text-muted-foreground">
-                  {locale === 'de'
-                    ? 'Durchsuchen Sie andere Kategorien, um weitere schöne Komponenten zu entdecken'
-                    : 'Explore other categories to discover more beautiful components'}
+                  {t('exploreMore')}
                 </p>
                 <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                   <Button size="lg" className="btn-modern-primary" asChild>
                     <Link href={`/${locale}/blocks`}>
-                      {locale === 'de'
-                        ? 'Alle Kategorien durchsuchen'
-                        : 'Browse All Categories'}
+                      {t('browseAllCategories')}
                     </Link>
                   </Button>
                   <Button
@@ -243,9 +227,7 @@ export default async function BlocksCategoryPage({
                     asChild
                   >
                     <Link href={`/${locale}/docs`}>
-                      {locale === 'de'
-                        ? 'Dokumentation anzeigen'
-                        : 'View Documentation'}
+                      {t('viewDocumentation')}
                     </Link>
                   </Button>
                 </div>

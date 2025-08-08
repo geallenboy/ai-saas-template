@@ -620,6 +620,17 @@
     "needMore": "Brauchen Sie mehr Komponenten?",
     "exploreMore": "Durchsuchen Sie andere Kategorien, um weitere schöne Komponenten zu entdecken",
     "browseAllCategories": "Alle Kategorien durchsuchen",
-    "viewDocumentation": "Dokumentation anzeigen"
+    "viewDocumentation": "Dokumentation anzeigen",
+    "componentNotFound": "Komponente nicht gefunden"
+  },
+  "componentPreviewToolbar": {
+    "desktop": "Desktop",
+    "tablet": "Tablet",
+    "mobile": "Mobil",
+    "toggleTheme": "Theme wechseln",
+    "showPreview": "Vorschau anzeigen",
+    "showCode": "Code anzeigen",
+    "switchToPreview": "In den Vorschaumodus wechseln",
+    "viewComponentCode": "Komponentencode anzeigen"
   }
 }

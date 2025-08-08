@@ -6,12 +6,6 @@ import {
 } from '@/components/ui/accordion'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { useMessages, useTranslations } from 'next-intl'
-
-interface TranslationFaqItem {
-  question: string
-  answer: string
-}
 
 interface FaqItem {
   id: string
@@ -19,26 +13,49 @@ interface FaqItem {
   answer: string
 }
 
+const items: FaqItem[] = [
+  {
+    id: 'faq-1',
+    question: 'What is included in the free plan?',
+    answer:
+      'Our free plan includes access to a limited set of features, perfect for individuals and small teams to get started. You can upgrade at any time to unlock more powerful tools and capabilities.',
+  },
+  {
+    id: 'faq-2',
+    question: 'How do you handle data security?',
+    answer:
+      'Data security is our top priority. We use industry-standard encryption and best practices to protect your information. Our systems are regularly audited to ensure compliance with security standards.',
+  },
+  {
+    id: 'faq-3',
+    question: 'Can I customize the templates?',
+    answer:
+      'Yes, all our templates are fully customizable. You can change colors, fonts, and layouts to match your brand identity. Our documentation provides detailed guides on how to make these changes.',
+  },
+  {
+    id: 'faq-4',
+    question: 'What is your refund policy?',
+    answer:
+      "We offer a 30-day money-back guarantee on all our paid plans. If you're not satisfied with our service, you can request a full refund within the first 30 days of your subscription.",
+  },
+  {
+    id: 'faq-5',
+    question: 'Do you offer support for enterprise clients?',
+    answer:
+      'Absolutely. We have dedicated support plans for enterprise clients, including priority support, dedicated account managers, and custom onboarding. Please contact our sales team for more information.',
+  },
+]
+
 const Faq = () => {
-  const faqData = useTranslations('faq')
-  const messages = useMessages()
+  const heading = 'Frequently Asked Questions'
+  const description =
+    'Find answers to common questions about our services, features, and policies.'
+  const supportHeading = "Still have questions? We're here to help."
+  const supportDescription =
+    "Can't find the answer you're looking for? Our support team is available to assist you with any inquiries. Get in touch with us today."
+  const supportButtonText = 'Contact Support'
+  const supportButtonUrl = '#'
 
-  // Get data from i18n
-  const heading = faqData('heading')
-  const description = faqData('description')
-  const supportHeading = faqData('supportHeading')
-  const supportDescription = faqData('supportDescription')
-  const supportButtonText = faqData('supportButtonText')
-  const supportButtonUrl = 'https://www.shadcnblocks.com'
-
-  // Get FAQ items from i18n
-  const faqMessages = messages as { faq?: { items?: TranslationFaqItem[] } }
-  const items: FaqItem[] = (faqMessages?.faq?.items || []).map(
-    (item: TranslationFaqItem, index: number) => ({
-      ...item,
-      id: `faq-${index + 1}`,
-    })
-  )
   return (
     <section className="py-16">
       <div className="container space-y-16">
