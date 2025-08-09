@@ -68,7 +68,7 @@ export function getDocsPages(locale = 'en'): DocsPage[] {
     // Create a map for quick lookup
     const pageMap = new Map<string, DocsPage>()
     for (const page of filteredPages) {
-      // For index pages, the slug array is ['en'] or ['zh'], we need to map this to 'index'
+      // For index pages, the slug array is ['en'] or ['de'], we need to map this to 'index'
       if (page.slugs.length === 1 && page.file.name === 'index') {
         pageMap.set('index', page)
       } else {

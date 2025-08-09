@@ -15,9 +15,9 @@ import { useState } from 'react'
 interface CategoryItem {
   id: string
   name: string
-  nameZh?: string | null
+  nameDe?: string | null
   description?: string | null
-  descriptionZh?: string | null
+  descriptionDe?: string | null
   count?: number
   icon?: LucideIcon
 }
@@ -196,13 +196,13 @@ export function CategorySidebar({
                         )}
                       >
                         {locale === 'de'
-                          ? category.nameZh || category.name
+                          ? category.nameDe || category.name
                           : category.name}
                       </div>
-                      {(category.description || category.descriptionZh) && (
+                      {(category.description || category.descriptionDe) && (
                         <div className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-tight">
                           {locale === 'de'
-                            ? category.descriptionZh || category.description
+                            ? category.descriptionDe || category.description
                             : category.description}
                         </div>
                       )}

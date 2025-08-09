@@ -200,7 +200,7 @@ function MembershipStatusCard({
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Crown className="h-5 w-5 text-yellow-500" />
-            {currentPlan?.nameZh || currentPlan?.name}
+            {currentPlan?.nameDe || currentPlan?.name}
           </div>
           <Badge className={statusConfig?.color}>{statusConfig?.labelDe}</Badge>
         </CardTitle>

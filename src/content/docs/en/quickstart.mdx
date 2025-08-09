@@ -36,11 +36,11 @@ Before you begin, ensure you have the following installed on your system:
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd AI SaaSr-saas
+cd ai-saas-template
 
 # Or use GitHub CLI
 gh repo clone <repository-url>
-cd AI SaaSr-saas
+cd ai-saas-template
 ```
 
 ### Step 2: Install Dependencies
@@ -62,35 +62,34 @@ pnpm install
 
 ```bash
 # Copy the environment template
-cp env.example .env
+cp env.example .env.local
 
 # Open the .env file in your editor
-code .env  # VS Code
+code .env.local  # VS Code
 # or
-nano .env  # Terminal editor
+nano .env.local  # Terminal editor
 ```
 
 **Configure the essential environment variables:**
 
 ```bash
 # App Configuration
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NODE_ENV=development
+NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
 # Database (Required)
-DATABASE_URL="postgresql://username:password@localhost:5432/AI SaaSr_saas"
-
-# Authentication (Required)
-AI SaaSR_AUTH_SECRET="your-super-secret-key-here"
-
-# Admin Configuration
-ADMIN_EMAILS="admin@example.com"
+DATABASE_URL="postgresql://username:password@localhost:5432/ai-saas-template"
 ```
 
 ### Step 4: Database Setup
 
 ```bash
 # Create the database (if using PostgreSQL locally)
-createdb AI SaaSr_saas
+psql -U postgres
+
+# Inside psql, run:
+CREATE ROLE ai_user WITH LOGIN PASSWORD 'YourPassword';
+CREATE DATABASE ai_saas_template OWNER ai_user;
 
 # Push the database schema
 pnpm db:push
@@ -121,14 +120,13 @@ For full functionality, configure these additional services:
 
 1. **Create a Stripe account** at [stripe.com](https://stripe.com/)
 2. **Get your API keys** from the Stripe dashboard
-3. **Add to your `.env` file:**
+3. **Add to your `.env.local` file:**
 
 ```bash
 # Stripe Configuration
-STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key"
-STRIPE_WEBHOOK_SECRET="whsec_your_webhook_secret"
-NEXT_PUBLIC_STRIPE_PRICE_PRO_MONTHLY="price_monthly_id"
-NEXT_PUBLIC_STRIPE_PRICE_PRO_YEARLY="price_yearly_id"
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_stripe_webhook_secret
 ```
 
 4. **Create products and prices** in your Stripe dashboard
@@ -151,43 +149,23 @@ R2_PUBLIC_URL="https://your-domain.com"
 
 ### Social Authentication
 
-#### GitHub OAuth
+#### Clerk
 
-1. **Create a GitHub OAuth App:**
-   - Go to GitHub Settings → Developer settings → OAuth Apps
-   - Create a new OAuth App
-   - Set Authorization callback URL to: `http://localhost:3000/api/auth/callback/github`
-
-2. **Add to your `.env` file:**
+1. **Create a Clerk App**
+2. **Set up a public url using ngrok**
+3. **Add to your `.env.local` file:**
 
 ```bash
-# GitHub OAuth
-GITHUB_CLIENT_ID="your-github-client-id"
-GITHUB_CLIENT_SECRET="your-github-client-secret"
-```
-
-#### Google OAuth
-
-1. **Create a Google OAuth App:**
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project or select existing
-   - Enable Google+ API
-   - Create OAuth 2.0 credentials
-   - Set redirect URI to: `http://localhost:3000/api/auth/callback/google`
-
-2. **Add to your `.env` file:**
-
-```bash
-# Google OAuth
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
+CLERK_SECRET_KEY=sk_test_your_clerk_secret_key_here
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key_here
+CLERK_WEBHOOK_SECRET=whsec_your_clerk_webhook_secret
 ```
 
 ## 🎯 Explore Your Application
 
 ### 1. Authentication System
 
-Visit `http://localhost:3000/login` to test:
+Visit `http://localhost:3000/en/sign-up` to test:
 - ✅ **Email/Password Login** - Create an account and sign in
 - ✅ **Social Login** - Try GitHub or Google authentication
 - ✅ **Password Reset** - Test the password reset flow
@@ -195,7 +173,7 @@ Visit `http://localhost:3000/login` to test:
 
 ### 2. Dashboard Features
 
-Access the dashboard at `http://localhost:3000/dashboard`:
+Access the dashboard at `http://localhost:3000/en/dashboard`:
 - ✅ **User Dashboard** - Personal user interface
 - ✅ **Admin Dashboard** - Administrative controls (for admin users)
 - ✅ **File Management** - Upload and manage files
@@ -203,7 +181,7 @@ Access the dashboard at `http://localhost:3000/dashboard`:
 
 ### 3. Payment System
 
-Test the payment flow at `http://localhost:3000/pricing`:
+Test the payment flow at `http://localhost:3000/en/pricing`:
 - ✅ **Subscription Plans** - View available pricing plans
 - ✅ **Payment Processing** - Test with Stripe test cards
 - ✅ **Billing Management** - Manage subscriptions and invoices
@@ -211,7 +189,7 @@ Test the payment flow at `http://localhost:3000/pricing`:
 
 ### 4. File Management
 
-Try file operations at `http://localhost:3000/dashboard/files`:
+Try file operations at `http://localhost:3000/en/dashboard/files`:
 - ✅ **File Upload** - Drag and drop file uploads
 - ✅ **Image Processing** - Automatic thumbnail generation
 - ✅ **File Organization** - Organize and manage files
@@ -407,13 +385,3 @@ Now that your application is running, here's what to do next:
 - Configure production environment variables
 - Set up monitoring and analytics
 
-## 🎉 You're Ready!
-
-Congratulations! You now have a fully functional SaaS application running locally. The foundation is set for building your next great product.
-
-**Need help?** 
-
-Scan the code to add the author's WeChat, you will be invited to the exclusive Q&A WeChat group to get the video tutorials and practical project codes that come with it.
-<div className="flex justify-center">
-  <img src="/images/wechat.png" alt="WeChat" className="w-1/2 h-auto" />
-</div>

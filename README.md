@@ -33,7 +33,7 @@ Built with Next.js 15, featuring user authentication, payment systems, AI integr
 - **Flexible Membership Plans**: Monthly, yearly, enterprise plans with various options
 - **Coupon System**: Percentage discounts and fixed amount discounts
 - **Payment History**: Complete transaction records and invoice management
-- **Multi-Currency Support**: USD, CNY, and other currencies
+- **Multi-Currency Support**: USD, EUR, and other currencies
 
 ### 🤖 AI Feature Integration
 - **Multi-AI Provider Support**: OpenAI, Anthropic, Google AI, xAI
@@ -96,8 +96,8 @@ Built with Next.js 15, featuring user authentication, payment systems, AI integr
 - **Email**: Resend / SMTP
 
 ### AI Integration
-- **OpenAI**: GPT-4, GPT-3.5 Turbo
-- **Anthropic**: Claude 3.5 Sonnet
+- **OpenAI**: GPT-4, GPT-5
+- **Anthropic**: Claude 4 Sonnet
 - **Google AI**: Gemini Pro
 - **xAI**: Grok
 
@@ -162,7 +162,7 @@ ai-saas-template/
 ### 1. Clone the Project
 
 ```bash
-git clone https://github.com/geallenboy/ai-saas-template.git
+git clone https://github.com/alexzanco/ai-saas-template.git
 cd ai-saas-template
 ```
 
@@ -518,9 +518,9 @@ Thanks to the following open-source projects and services:
 
 If you encounter any issues while using this project, you can get help through:
 
-- 📧 Email: [gejialun88@gmail.com](mailto:gejialun88@gmail.com)
-- 🐛 Bug Reports: [GitHub Issues](https://github.com/geallenboy/ai-saas-template/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/geallenboy/ai-saas-template/discussions)
+- 📧 Email: [alex.zanco@icloud.com](mailto:alex.zanco@icloud.com)
+- 🐛 Bug Reports: [GitHub Issues](https://github.com/alexzanco/ai-saas-template.git/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/alexzanco/ai-saas-template.git/discussions)
 
 ---
 
