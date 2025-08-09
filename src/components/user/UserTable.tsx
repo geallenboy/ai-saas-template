@@ -80,13 +80,13 @@ export function UserTable({
                 onCheckedChange={handleSelectAll}
               />
             </TableHead>
-            <TableHead>用户</TableHead>
-            <TableHead>邮箱</TableHead>
-            <TableHead>角色</TableHead>
-            <TableHead>状态</TableHead>
-            <TableHead>注册时间</TableHead>
-            <TableHead>最后登录</TableHead>
-            <TableHead className="text-right">操作</TableHead>
+            <TableHead>User</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Role</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Registered</TableHead>
+            <TableHead>Last Login</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -118,7 +118,9 @@ export function UserTable({
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">{user.fullName || '未设置'}</p>
+                      <p className="font-medium">
+                        {user.fullName || 'Not set'}
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         ID: {user.id.slice(0, 8)}...
                       </p>
@@ -136,9 +138,7 @@ export function UserTable({
                       ] || ADMIN_LEVEL_LABELS[0]}
                     </Badge>
                   ) : (
-                    <span className="text-sm text-muted-foreground">
-                      普通用户
-                    </span>
+                    <span className="text-sm text-muted-foreground">User</span>
                   )}
                 </TableCell>
 
@@ -155,11 +155,11 @@ export function UserTable({
                 </TableCell>
 
                 <TableCell className="text-sm text-muted-foreground">
-                  {user.createdAt?.toLocaleDateString('zh-CN')}
+                  {user.createdAt?.toLocaleDateString('en-US')}
                 </TableCell>
 
                 <TableCell className="text-sm text-muted-foreground">
-                  {user.lastLoginAt?.toLocaleDateString('zh-CN') || '从未'}
+                  {user.lastLoginAt?.toLocaleDateString('en-US') || 'Never'}
                 </TableCell>
 
                 <TableCell className="text-right">

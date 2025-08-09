@@ -114,19 +114,19 @@ export function UserActions({ user }: UserActionsProps) {
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
             <Edit className="mr-2 h-4 w-4" />
-            编辑用户
+            Edit User
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={() => setShowToggleDialog(true)}>
             {user.isActive ? (
               <>
                 <UserX className="mr-2 h-4 w-4" />
-                禁用用户
+                Disable User
               </>
             ) : (
               <>
                 <UserCheck className="mr-2 h-4 w-4" />
-                激活用户
+                Activate User
               </>
             )}
           </DropdownMenuItem>
@@ -135,12 +135,12 @@ export function UserActions({ user }: UserActionsProps) {
             {user.isAdmin ? (
               <>
                 <ShieldOff className="mr-2 h-4 w-4" />
-                取消管理员
+                Revoke Admin Role
               </>
             ) : (
               <>
                 <Shield className="mr-2 h-4 w-4" />
-                设为管理员
+                Grant Admin Role
               </>
             )}
           </DropdownMenuItem>
@@ -152,7 +152,7 @@ export function UserActions({ user }: UserActionsProps) {
             className="text-red-600"
           >
             <Trash2 className="mr-2 h-4 w-4" />
-            删除用户
+            Delete User
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -161,19 +161,20 @@ export function UserActions({ user }: UserActionsProps) {
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>确认删除用户</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription>
-              您确定要删除用户 {user.email} 吗？此操作不可恢复。
+              Are you sure you want to delete user {user.email}? This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>取消</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isPending}
               className="bg-red-600 hover:bg-red-700"
             >
-              {deleteUserMutation.isPending ? 'Deleting...' : 'Confirm Delete'}
+              {deleteUserMutation.isPending ? 'Deleting...' : 'Delete'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

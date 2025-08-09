@@ -80,7 +80,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
         {children || (
           <Button>
             <UserPlus className="w-4 h-4 mr-2" />
-            创建用户
+            Create User
           </Button>
         )}
       </DialogTrigger>
@@ -89,17 +89,17 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <UserPlus className="w-5 h-5" />
-            创建新用户
+            Create New User
           </DialogTitle>
           <DialogDescription>
-            创建一个新的用户账户。用户将收到邮件通知。
+            Create a new user account. The user will be notified by email.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">
-              邮箱地址 <span className="text-destructive">*</span>
+              Email Address <span className="text-destructive">*</span>
             </Label>
             <Input
               id="email"
@@ -115,7 +115,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
 
           <div className="space-y-2">
             <Label htmlFor="fullName">
-              姓名 <span className="text-destructive">*</span>
+              Full Name <span className="text-destructive">*</span>
             </Label>
             <Input
               id="fullName"
@@ -123,7 +123,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
               onChange={e =>
                 setFormData({ ...formData, fullName: e.target.value })
               }
-              placeholder="Please enter user name"
+              placeholder="Enter user's full name"
               required
             />
           </div>
@@ -131,9 +131,9 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>账户状态</Label>
+                <Label>Account Status</Label>
                 <p className="text-xs text-muted-foreground">
-                  控制用户是否可以登录
+                  Control whether the user can log in
                 </p>
               </div>
               <Switch
@@ -146,9 +146,9 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>管理员权限</Label>
+                <Label>Administrator Privileges</Label>
                 <p className="text-xs text-muted-foreground">
-                  授予用户管理员权限
+                  Grant administrator privileges to the user
                 </p>
               </div>
               <Switch
@@ -165,7 +165,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
 
             {formData.isAdmin && (
               <div className="space-y-2">
-                <Label htmlFor="adminLevel">管理员级别</Label>
+                <Label htmlFor="adminLevel">Admin Level</Label>
                 <Input
                   id="adminLevel"
                   type="number"
@@ -181,7 +181,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
                   placeholder="0-2 (0=normal user, 1=administrator, 2=super administrator)"
                 />
                 <p className="text-xs text-muted-foreground">
-                  0: 普通用户 | 1: 管理员 | 2: 超级管理员
+                  0: Regular User | 1: Administrator | 2: Super Administrator
                 </p>
               </div>
             )}
@@ -195,7 +195,7 @@ export function CreateUserDialog({ children }: CreateUserDialogProps) {
             onClick={handleClose}
             disabled={createUser.isPending}
           >
-            取消
+            Cancel
           </Button>
           <Button
             type="submit"

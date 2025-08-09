@@ -107,7 +107,7 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
       <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
         <div className="flex items-center space-x-4">
           <p className="text-sm font-medium">
-            已选择 {selectedUserIds.length} 个用户
+            {selectedUserIds.length} users selected
           </p>
 
           <div className="flex items-center space-x-2">
@@ -136,20 +136,21 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
       <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>确认批量操作</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Bulk Action</AlertDialogTitle>
             <AlertDialogDescription>
-              您确定要对选中的 {selectedUserIds.length} 个用户执行 「
-              {selectedActionConfig?.label}」操作吗？
+              Are you sure you want to perform the "
+              {selectedActionConfig?.label}" action on the selected{' '}
+              {selectedUserIds.length} users?
               {selectedAction === 'delete' && (
                 <span className="block mt-2 text-red-600 font-medium">
-                  注意：删除操作不可恢复！
+                  Note: This action cannot be undone!
                 </span>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={bulkUpdateMutation.isPending}>
-              取消
+              Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => executeAction(selectedAction)}

@@ -22,7 +22,7 @@ export function UserStatsClient() {
   if (error || !stats) {
     return (
       <div className="text-center py-8">
-        <p className="text-destructive">加载统计数据失败</p>
+        <p className="text-destructive">Failed to load statistics</p>
       </div>
     )
   }

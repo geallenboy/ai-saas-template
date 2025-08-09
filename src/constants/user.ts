@@ -80,7 +80,7 @@ export const USER_PERMISSIONS = {
   EXPORT_USERS: 'export_users',
 } as const
 
-// ============== 批量操作选项 ==============
+// ============== Bulk action options ==============
 
 export const BULK_ACTIONS = [
   { value: 'activate', label: 'Activate user', requiresConfirm: false },

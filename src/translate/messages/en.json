@@ -508,6 +508,24 @@
         "back": "Go Back"
       },
       "adminContact": "To obtain administrator permissions, please contact the system administrator"
+    },
+    "errorBoundary": {
+      "title": "Page Error",
+      "description": "Sorry, the page encountered an unexpected error. We have logged this issue.",
+      "errorIdLabel": "Error ID:",
+      "viewDetails": "View Error Details",
+      "errorMessageLabel": "Error Message:",
+      "errorStackLabel": "Error Stack:",
+      "retryButton": "Retry",
+      "refreshButton": "Refresh Page",
+      "goHomeButton": "Back to Home",
+      "copyErrorButton": "Copy Error Info",
+      "supportMessage": "If the problem persists, please contact technical support and provide the Error ID.",
+      "workflow": {
+        "title": "Workflow Load Failed",
+        "description": "The workflow module encountered an error, please refresh the page to try again.",
+        "refreshButton": "Refresh Page"
+      }
     }
   },
   "user": {

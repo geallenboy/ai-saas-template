@@ -48,14 +48,14 @@ export function UserListHeader() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="搜索用户..."
+              placeholder="Search users..."
               value={searchValue}
               onChange={e => setSearchValue(e.target.value)}
               className="pl-10 w-64"
             />
           </div>
           <Button type="submit" variant="outline" size="sm">
-            搜索
+            Search
           </Button>
         </form>
 
@@ -95,18 +95,18 @@ export function UserListHeader() {
       <div className="flex items-center space-x-2">
         <Button variant="outline" size="sm">
           <Filter className="h-4 w-4 mr-2" />
-          筛选
+          Filter
         </Button>
 
         <Button variant="outline" size="sm">
           <Download className="h-4 w-4 mr-2" />
-          导出
+          Export
         </Button>
 
         <CreateUserDialog>
           <Button size="sm">
             <Plus className="h-4 w-4 mr-2" />
-            添加用户
+            Add User
           </Button>
         </CreateUserDialog>
       </div>

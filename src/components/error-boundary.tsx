@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card'
 import { logger } from '@/lib/logger'
 import { AlertTriangle, Bug, Home, RefreshCw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import React, { Component, type ErrorInfo, type ReactNode } from 'react'
 import { toast } from 'sonner'
 
@@ -163,105 +164,20 @@ Page: ${window.location.href}
 
   render() {
     if (this.state.hasError) {
-      // If a custom fallback is provided, use it
       if (this.props.fallback) {
         return this.props.fallback
       }
 
-      // Default error UI
       return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-          <Card className="w-full max-w-lg">
-            <CardHeader className="text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
-                <AlertTriangle className="h-6 w-6 text-destructive" />
-              </div>
-              <CardTitle className="text-xl">页面出现错误</CardTitle>
-              <CardDescription>
-                抱歉，页面遇到了一个意外错误。我们已经记录了这个问题。
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Error ID */}
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground">
-                  错误ID:{' '}
-                  <code className="font-mono text-xs">
-                    {this.state.errorId}
-                  </code>
-                </p>
-              </div>
-
-              {/* Error details (in development or explicitly enabled) */}
-              {(process.env.NODE_ENV === 'development' ||
-                this.props.showDetails) &&
-                this.state.error && (
-                  <div className="space-y-2">
-                    <details className="group">
-                      <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">
-                        查看错误详情
-                      </summary>
-                      <div className="mt-2 space-y-2 text-xs">
-                        <div>
-                          <strong>错误信息:</strong>
-                          <pre className="mt-1 overflow-auto rounded bg-muted p-2 text-xs">
-                            {this.state.error.message}
-                          </pre>
-                        </div>
-                        {this.state.error.stack && (
-                          <div>
-                            <strong>错误堆栈:</strong>
-                            <pre className="mt-1 max-h-32 overflow-auto rounded bg-muted p-2 text-xs">
-                              {this.state.error.stack}
-                            </pre>
-                          </div>
-                        )}
-                      </div>
-                    </details>
-                  </div>
-                )}
-
-              {/* Action buttons */}
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <Button onClick={this.handleReset} className="flex-1">
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  重试
-                </Button>
-                <Button
-                  onClick={this.handleRefresh}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  刷新页面
-                </Button>
-              </div>
-
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <Button
-                  onClick={this.handleGoHome}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  <Home className="mr-2 h-4 w-4" />
-                  返回首页
-                </Button>
-                <Button
-                  onClick={this.handleCopyError}
-                  variant="ghost"
-                  className="flex-1"
-                >
-                  <Bug className="mr-2 h-4 w-4" />
-                  复制错误信息
-                </Button>
-              </div>
-
-              {/* Help information */}
-              <div className="text-center text-xs text-muted-foreground">
-                如果问题持续存在，请联系技术支持并提供错误ID
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <ErrorBoundaryView
+          error={this.state.error}
+          errorId={this.state.errorId}
+          showDetails={this.props.showDetails}
+          handleReset={this.handleReset}
+          handleRefresh={this.handleRefresh}
+          handleGoHome={this.handleGoHome}
+          handleCopyError={this.handleCopyError}
+        />
       )
     }
 
@@ -269,10 +185,114 @@ Page: ${window.location.href}
   }
 }
 
+// Separating the view to use hooks
+function ErrorBoundaryView({
+  error,
+  errorId,
+  showDetails,
+  handleReset,
+  handleRefresh,
+  handleGoHome,
+  handleCopyError,
+}: {
+  error: Error | null
+  errorId: string
+  showDetails?: boolean
+  handleReset: () => void
+  handleRefresh: () => void
+  handleGoHome: () => void
+  handleCopyError: () => void
+}) {
+  const t = useTranslations('errorPages.errorBoundary')
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-lg">
+        <CardHeader className="text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+            <AlertTriangle className="h-6 w-6 text-destructive" />
+          </div>
+          <CardTitle className="text-xl">{t('title')}</CardTitle>
+          <CardDescription>{t('description')}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground">
+              {t('errorIdLabel')}{' '}
+              <code className="font-mono text-xs">{errorId}</code>
+            </p>
+          </div>
+
+          {(process.env.NODE_ENV === 'development' || showDetails) && error && (
+            <div className="space-y-2">
+              <details className="group">
+                <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">
+                  {t('viewDetails')}
+                </summary>
+                <div className="mt-2 space-y-2 text-xs">
+                  <div>
+                    <strong>{t('errorMessageLabel')}</strong>
+                    <pre className="mt-1 overflow-auto rounded bg-muted p-2 text-xs">
+                      {error.message}
+                    </pre>
+                  </div>
+                  {error.stack && (
+                    <div>
+                      <strong>{t('errorStackLabel')}</strong>
+                      <pre className="mt-1 max-h-32 overflow-auto rounded bg-muted p-2 text-xs">
+                        {error.stack}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </details>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button onClick={handleReset} className="flex-1">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              {t('retryButton')}
+            </Button>
+            <Button
+              onClick={handleRefresh}
+              variant="outline"
+              className="flex-1"
+            >
+              {t('refreshButton')}
+            </Button>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button onClick={handleGoHome} variant="outline" className="flex-1">
+              <Home className="mr-2 h-4 w-4" />
+              {t('goHomeButton')}
+            </Button>
+            <Button
+              onClick={handleCopyError}
+              variant="ghost"
+              className="flex-1"
+            >
+              <Bug className="mr-2 h-4 w-4" />
+              {t('copyErrorButton')}
+            </Button>
+          </div>
+
+          <div className="text-center text-xs text-muted-foreground">
+            {t('supportMessage')}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
 /**
  * Workflow module-specific error boundaries
  */
 export function WorkflowErrorBoundary({ children }: { children: ReactNode }) {
+  const t = useTranslations('errorPages.errorBoundary.workflow')
+
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {
@@ -288,10 +308,8 @@ export function WorkflowErrorBoundary({ children }: { children: ReactNode }) {
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
               <AlertTriangle className="mx-auto h-8 w-8 text-destructive mb-2" />
-              <CardTitle>工作流加载失败</CardTitle>
-              <CardDescription>
-                工作流模块遇到错误，请刷新页面重试
-              </CardDescription>
+              <CardTitle>{t('title')}</CardTitle>
+              <CardDescription>{t('description')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Button
@@ -299,7 +317,7 @@ export function WorkflowErrorBoundary({ children }: { children: ReactNode }) {
                 className="w-full"
               >
                 <RefreshCw className="mr-2 h-4 w-4" />
-                刷新页面
+                {t('refreshButton')}
               </Button>
             </CardContent>
           </Card>

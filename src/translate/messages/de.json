@@ -493,6 +493,24 @@
         "back": "Zurück zur vorherigen Seite"
       },
       "adminContact": "Für Administrator-Berechtigungen kontaktieren Sie bitte den Systemadministrator"
+    },
+    "errorBoundary": {
+      "title": "Seitenfehler",
+      "description": "Entschuldigung, auf der Seite ist ein unerwarteter Fehler aufgetreten. Wir haben dieses Problem protokolliert.",
+      "errorIdLabel": "Fehler-ID:",
+      "viewDetails": "Fehlerdetails anzeigen",
+      "errorMessageLabel": "Fehlermeldung:",
+      "errorStackLabel": "Fehler-Stack:",
+      "retryButton": "Erneut versuchen",
+      "refreshButton": "Seite aktualisieren",
+      "goHomeButton": "Zurück zur Startseite",
+      "copyErrorButton": "Fehlerinfo kopieren",
+      "supportMessage": "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den technischen Support und geben Sie die Fehler-ID an.",
+      "workflow": {
+        "title": "Laden des Workflows fehlgeschlagen",
+        "description": "Das Workflow-Modul ist auf einen Fehler gestoßen. Bitte aktualisieren Sie die Seite, um es erneut zu versuchen.",
+        "refreshButton": "Seite aktualisieren"
+      }
     }
   },
 

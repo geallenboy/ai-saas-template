@@ -52,11 +52,11 @@ export function UserTablePagination({
     <div className="flex items-center justify-between px-2">
       <div className="flex items-center space-x-2">
         <p className="text-sm text-muted-foreground">
-          显示 {startItem} - {endItem} 条，共 {total} 条记录
+          Showing {startItem}-{endItem} of {total} records
         </p>
 
         <div className="flex items-center space-x-2">
-          <p className="text-sm text-muted-foreground">每页显示</p>
+          <p className="text-sm text-muted-foreground">Rows per page</p>
           <Select value={limit.toString()} onValueChange={updateLimit}>
             <SelectTrigger className="h-8 w-16">
               <SelectValue />
@@ -68,13 +68,12 @@ export function UserTablePagination({
               <SelectItem value="100">100</SelectItem>
             </SelectContent>
           </Select>
-          <p className="text-sm text-muted-foreground">条</p>
         </div>
       </div>
 
       <div className="flex items-center space-x-2">
         <p className="text-sm text-muted-foreground">
-          第 {page} 页，共 {totalPages} 页
+          Page {page} of {totalPages}
         </p>
 
         <div className="flex items-center space-x-1">

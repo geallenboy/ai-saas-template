@@ -45,7 +45,9 @@ export function UserListClient() {
         <UserListHeader />
         <Card>
           <CardContent className="p-8">
-            <div className="text-center text-destructive">加载用户列表失败</div>
+            <div className="text-center text-destructive">
+              Failed to load user list
+            </div>
           </CardContent>
         </Card>
       </div>
