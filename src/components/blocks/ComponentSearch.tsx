@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SearchIcon, XIcon, FilterIcon } from 'lucide-react'
-import { useState, useCallback, useMemo } from 'react'
+import { useTranslations } from 'next-intl'
+import { useState } from 'react'
 import { categories } from '@/lib/blocks-registry'
 
 interface ComponentSearchProps {
@@ -18,6 +19,7 @@ export function ComponentSearch({
   onCategoryFilter,
   className,
 }: ComponentSearchProps) {
+  const t = useTranslations('blocks.searchField')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
@@ -40,11 +42,7 @@ export function ComponentSearch({
       {/* search box */}
       <div className="relative">
         <Input
-          placeholder={
-            locale === 'de'
-              ? 'Suche nach Komponentenname oder -beschreibung...'
-              : 'Search components by name or description...'
-          }
+          placeholder={t('placeholder')}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           className="pl-10 pr-10"
@@ -67,7 +65,7 @@ export function ComponentSearch({
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 text-sm font-medium">
             <FilterIcon className="h-4 w-4" />
-            {locale === 'de' ? 'Nach Kategorie filtern' : 'Filter by category'}
+            {t('filterByCategory')}
           </label>
           {hasFilters && (
             <Button
@@ -76,7 +74,7 @@ export function ComponentSearch({
               onClick={clearAllFilters}
               className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
             >
-              {locale === 'de' ? 'Filter zurücksetzen' : 'Clear filters'}
+              {t('clearFilters')}
             </Button>
           )}
         </div>
@@ -111,7 +109,7 @@ export function ComponentSearch({
           onClick={() => handleCategoryToggle('')}
           className="text-xs"
         >
-          {locale === 'de' ? '全部' : 'All'}
+          {t('all')}
         </Button>
         <Button
           variant="outline"
@@ -121,7 +119,7 @@ export function ComponentSearch({
             // Here you can add the logic for the latest components
           }}
         >
-          {locale === 'de' ? 'Neueste' : 'Latest'}
+          {t('latest')}
         </Button>
         <Button
           variant="outline"
@@ -131,7 +129,7 @@ export function ComponentSearch({
             // Here you can add the logic for the popular components
           }}
         >
-          {locale === 'de' ? 'Beliebt' : 'Popular'}
+          {t('popular')}
         </Button>
       </div>
 
@@ -139,7 +137,7 @@ export function ComponentSearch({
       {hasFilters && (
         <div className="text-sm text-muted-foreground">
           <span className="flex items-center gap-2">
-            {locale === 'de' ? 'Angewendete Filter' : 'Filters applied'}
+            {t('filtersApplied')}
             {selectedCategory && (
               <Badge variant="secondary" className="text-xs">
                 {categories.find(c => c.id === selectedCategory)?.name}

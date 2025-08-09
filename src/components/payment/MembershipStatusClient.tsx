@@ -6,9 +6,11 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { MEMBERSHIP_STATUS, formatPrice } from '@/constants/payment'
 import { useUserMembership } from '@/hooks/use-membership'
 import { useUser } from '@clerk/nextjs'
+import { useTranslations } from 'next-intl'
 import { Calendar, Shield } from 'lucide-react'
 
 export function MembershipStatusClient() {
+  const t = useTranslations('membershipStatus')
   const { user } = useUser()
   const { membershipStatus, isLoading } = useUserMembership(user?.id)
 
@@ -22,15 +24,15 @@ export function MembershipStatusClient() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            会员状态
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
             <div className="text-muted-foreground mb-4">
-              您当前没有有效的会员计划
+              {t('noActivePlan')}
             </div>
-            <Badge variant="secondary">免费用户</Badge>
+            <Badge variant="secondary">{t('freeUser')}</Badge>
           </div>
         </CardContent>
       </Card>
@@ -56,7 +58,7 @@ export function MembershipStatusClient() {
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              会员状态
+              {t('title')}
             </div>
             <Badge className={statusConfig?.color}>
               {statusConfig?.labelDe}
@@ -66,15 +68,21 @@ export function MembershipStatusClient() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-muted-foreground">当前计划</p>
+              <p className="text-sm text-muted-foreground">
+                {t('currentPlan')}
+              </p>
               <p className="font-medium">
                 {currentPlan?.nameDe || currentPlan?.name}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">计费周期</p>
+              <p className="text-sm text-muted-foreground">
+                {t('billingCycle')}
+              </p>
               <p className="font-medium">
-                {membership?.durationType === 'yearly' ? '年付' : '月付'}
+                {membership?.durationType === 'yearly'
+                  ? t('yearly')
+                  : t('monthly')}
               </p>
             </div>
           </div>
@@ -82,10 +90,12 @@ export function MembershipStatusClient() {
           {endDate && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-muted-foreground">到期时间</p>
+                <p className="text-sm text-muted-foreground">
+                  {t('expirationDate')}
+                </p>
                 <div className="flex items-center gap-1 text-sm">
                   <Calendar className="h-4 w-4" />
-                  剩余 {daysRemaining} 天
+                  {t('daysRemaining', { count: daysRemaining })}
                 </div>
               </div>
               <p className="font-medium">
@@ -96,7 +106,9 @@ export function MembershipStatusClient() {
 
           {membership?.purchaseAmount && (
             <div>
-              <p className="text-sm text-muted-foreground">支付金额</p>
+              <p className="text-sm text-muted-foreground">
+                {t('paymentAmount')}
+              </p>
               <p className="font-medium">
                 {formatPrice(
                   Number(membership.purchaseAmount),
@@ -112,28 +124,35 @@ export function MembershipStatusClient() {
 }
 
 function MembershipStatusSkeleton() {
+  const t = useTranslations('membershipStatus')
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            会员状态
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-muted-foreground">当前计划</p>
+              <p className="text-sm text-muted-foreground">
+                {t('currentPlan')}
+              </p>
               <Skeleton className="h-6 w-20" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">计费周期</p>
+              <p className="text-sm text-muted-foreground">
+                {t('billingCycle')}
+              </p>
               <Skeleton className="h-6 w-16" />
             </div>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">到期时间</p>
+            <p className="text-sm text-muted-foreground">
+              {t('expirationDate')}
+            </p>
             <Skeleton className="h-6 w-32" />
           </div>
         </CardContent>

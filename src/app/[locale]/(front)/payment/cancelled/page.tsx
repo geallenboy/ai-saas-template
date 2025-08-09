@@ -15,8 +15,12 @@ export async function generateMetadata({
   }
 }
 
-export default function PaymentCancelledPage() {
-  const t = useTranslations('paymentCancelled')
+export default async function PaymentCancelledPage({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
+  const t = await getTranslations({ locale, namespace: 'paymentCancelled' })
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">

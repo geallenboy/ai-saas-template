@@ -82,7 +82,9 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
       <div className="flex items-center justify-center py-8">
         <div className="text-center space-y-2">
           <AlertCircle className="mx-auto h-8 w-8 text-destructive" />
-          <p className="text-sm text-muted-foreground">加载配置失败</p>
+          <p className="text-sm text-muted-foreground">
+            Failed to load configuration
+          </p>
         </div>
       </div>
     )
@@ -161,39 +163,39 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-medium">
-          {category} 配置 ({configs?.length || 0} 项)
+          {category} Configuration ({configs?.length || 0} items)
         </h3>
 
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="w-4 h-4 mr-2" />
-              新增配置
+              New Config
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>创建新配置</DialogTitle>
+              <DialogTitle>Create New Configuration</DialogTitle>
               <DialogDescription>
-                为 {category} 分类添加新的配置项
+                Add a new configuration item for the {category} category
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4">
               <div>
-                <Label htmlFor="key">配置键</Label>
+                <Label htmlFor="key">Configuration Key</Label>
                 <Input
                   id="key"
                   value={newConfig.key}
                   onChange={e =>
                     setNewConfig({ ...newConfig, key: e.target.value })
                   }
-                  placeholder="例如: site.name"
+                  placeholder="e.g., site.name"
                 />
               </div>
 
               <div>
-                <Label htmlFor="dataType">数据类型</Label>
+                <Label htmlFor="dataType">Data Type</Label>
                 <Select
                   value={newConfig.dataType}
                   onValueChange={value =>
@@ -204,17 +206,17 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="string">字符串</SelectItem>
-                    <SelectItem value="number">数字</SelectItem>
-                    <SelectItem value="boolean">布尔值</SelectItem>
+                    <SelectItem value="string">String</SelectItem>
+                    <SelectItem value="number">Number</SelectItem>
+                    <SelectItem value="boolean">Boolean</SelectItem>
                     <SelectItem value="json">JSON</SelectItem>
-                    <SelectItem value="array">数组</SelectItem>
+                    <SelectItem value="array">Array</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <Label htmlFor="value">配置值</Label>
+                <Label htmlFor="value">Configuration Value</Label>
                 {newConfig.dataType === 'boolean' ? (
                   <Select
                     value={newConfig.value}
@@ -226,8 +228,8 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="true">是</SelectItem>
-                      <SelectItem value="false">否</SelectItem>
+                      <SelectItem value="true">True</SelectItem>
+                      <SelectItem value="false">False</SelectItem>
                     </SelectContent>
                   </Select>
                 ) : (
@@ -237,20 +239,20 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
                     onChange={e =>
                       setNewConfig({ ...newConfig, value: e.target.value })
                     }
-                    placeholder="配置值"
+                    placeholder="Configuration value"
                   />
                 )}
               </div>
 
               <div>
-                <Label htmlFor="description">描述</Label>
+                <Label htmlFor="description">Description</Label>
                 <Input
                   id="description"
                   value={newConfig.description}
                   onChange={e =>
                     setNewConfig({ ...newConfig, description: e.target.value })
                   }
-                  placeholder="配置项描述"
+                  placeholder="Configuration item description"
                 />
               </div>
 
@@ -261,7 +263,7 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
                     setNewConfig({ ...newConfig, isSecret: checked })
                   }
                 />
-                <Label>敏感配置</Label>
+                <Label>Secret</Label>
               </div>
             </div>
 
@@ -273,7 +275,7 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
                 {createConfig.isPending && (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 )}
-                创建
+                Create
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -285,10 +287,10 @@ export function SystemConfigManager({ category }: SystemConfigManagerProps) {
           <CardContent className="flex items-center justify-center py-8">
             <div className="text-center space-y-2">
               <p className="text-sm text-muted-foreground">
-                暂无 {category} 配置
+                No {category} configuration yet
               </p>
               <p className="text-xs text-muted-foreground">
-                点击上方按钮创建新配置
+                Click the button above to create a new configuration
               </p>
             </div>
           </CardContent>
@@ -384,8 +386,10 @@ function ConfigItem({
             <div className="flex items-center gap-2">
               <h4 className="font-medium">{config.key}</h4>
               <Badge variant="outline">{config.dataType}</Badge>
-              {config.isSecret && <Badge variant="destructive">敏感</Badge>}
-              {!config.isEditable && <Badge variant="secondary">只读</Badge>}
+              {config.isSecret && <Badge variant="destructive">Secret</Badge>}
+              {!config.isEditable && (
+                <Badge variant="secondary">Read-only</Badge>
+              )}
             </div>
 
             {config.description && (
@@ -403,8 +407,8 @@ function ConfigItem({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="true">是</SelectItem>
-                        <SelectItem value="false">否</SelectItem>
+                        <SelectItem value="true">True</SelectItem>
+                        <SelectItem value="false">False</SelectItem>
                       </SelectContent>
                     </Select>
                   ) : (
@@ -426,10 +430,10 @@ function ConfigItem({
                         <Loader2 className="w-3 h-3 mr-1 animate-spin" />
                       )}
                       <Save className="w-3 h-3 mr-1" />
-                      保存
+                      Save
                     </Button>
                     <Button size="sm" variant="outline" onClick={cancelEdit}>
-                      取消
+                      Cancel
                     </Button>
                   </div>
                 </div>

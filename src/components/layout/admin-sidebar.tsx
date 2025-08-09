@@ -38,14 +38,14 @@ const adminNavItems: NavItem[] = [
     badge: null,
   },
   {
-    title: 'User management',
+    title: 'Users',
     href: '/admin/users',
     icon: Users,
     badge: null,
   },
   {
-    title: 'System settings',
-    href: '/admin/system',
+    title: 'Settings',
+    href: '/admin/settings',
     icon: Settings,
     badge: null,
   },
@@ -105,7 +105,7 @@ export function AdminSidebar() {
             <Sparkles className="absolute -top-1 -right-4 h-4 w-4 text-yellow-500 animate-pulse" />
           </div>
         </div>
-        <p className="text-sm text-sidebar-foreground/70">管理后台</p>
+        <p className="text-sm text-sidebar-foreground/70">Admin Panel</p>
         <Badge variant="secondary" className="mt-2 text-xs">
           v2.0.0
         </Badge>
@@ -253,7 +253,7 @@ export function AdminSidebar() {
           className="flex items-center w-full px-3 py-2.5 text-sm font-medium text-sidebar-foreground rounded-lg hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-all duration-200 group"
         >
           <Home className="h-4 w-4 mr-3 text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground transition-colors" />
-          返回首页
+          Back to Home
         </Link>
 
         {/* Log out */}
@@ -267,7 +267,7 @@ export function AdminSidebar() {
           <LogOut
             className={cn('h-4 w-4 mr-3', isSigningOut && 'animate-spin')}
           />
-          {isSigningOut ? '退出中...' : '退出登录'}
+          {isSigningOut ? 'Signing out...' : 'Sign Out'}
         </Button>
       </div>
     </div>

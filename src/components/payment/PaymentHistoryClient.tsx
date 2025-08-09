@@ -7,10 +7,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { PAYMENT_STATUS, formatPrice } from '@/constants/payment'
 import { trpc } from '@/lib/trpc/client'
 import { useUser } from '@clerk/nextjs'
+import { useTranslations } from 'next-intl'
 import { CreditCard, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 
 export function PaymentHistoryClient() {
+  const t = useTranslations('paymentHistoryDashboard')
   const { isSignedIn } = useUser()
   const { data, isLoading, error } = trpc.payments.getPaymentHistory.useQuery(
     { limit: 5 },
@@ -27,12 +29,12 @@ export function PaymentHistoryClient() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            支付历史
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-center py-8">
-            请先登录查看支付记录
+            {t('loginToView')}
           </p>
         </CardContent>
       </Card>
@@ -49,12 +51,12 @@ export function PaymentHistoryClient() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            支付历史
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center text-destructive py-8">
-            加载支付历史失败
+            {t('loadError')}
           </div>
         </CardContent>
       </Card>
@@ -68,12 +70,12 @@ export function PaymentHistoryClient() {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2">
           <CreditCard className="h-5 w-5" />
-          支付历史
+          {t('title')}
         </CardTitle>
         {payments.length > 0 && (
           <Button asChild variant="outline" size="sm">
             <Link href="/payment/history">
-              查看全部
+              {t('viewAll')}
               <ExternalLink className="ml-1 h-3 w-3" />
             </Link>
           </Button>
@@ -83,9 +85,9 @@ export function PaymentHistoryClient() {
         {payments.length === 0 ? (
           <div className="text-center py-8">
             <CreditCard className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground mb-4">暂无支付记录</p>
+            <p className="text-muted-foreground mb-4">{t('noRecords')}</p>
             <Button asChild variant="outline">
-              <Link href="/pricing">选择计划</Link>
+              <Link href="/pricing">{t('selectPlan')}</Link>
             </Button>
           </div>
         ) : (
@@ -120,7 +122,9 @@ export function PaymentHistoryClient() {
                         })}
                       </span>
                       <span>
-                        {payment.durationType === 'yearly' ? '年付' : '月付'}
+                        {payment.durationType === 'yearly'
+                          ? t('yearly')
+                          : t('monthly')}
                       </span>
                       {payment.paymentMethod && (
                         <span className="capitalize">
@@ -139,7 +143,7 @@ export function PaymentHistoryClient() {
                     {payment.discountAmount &&
                       Number(payment.discountAmount) > 0 && (
                         <p className="text-sm text-green-600">
-                          节省{' '}
+                          {t('save')}{' '}
                           {formatPrice(
                             Number(payment.discountAmount),
                             payment.currency as 'USD' | 'EUR'
@@ -155,7 +159,7 @@ export function PaymentHistoryClient() {
               <div className="text-center pt-4 border-t">
                 <Button asChild variant="ghost" size="sm">
                   <Link href="/payment/history">
-                    查看更多支付记录
+                    {t('viewMore')}
                     <ExternalLink className="ml-1 h-3 w-3" />
                   </Link>
                 </Button>
@@ -169,12 +173,13 @@ export function PaymentHistoryClient() {
 }
 
 function PaymentHistorySkeleton() {
+  const t = useTranslations('paymentHistoryDashboard')
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CreditCard className="h-5 w-5" />
-          支付历史
+          {t('title')}
         </CardTitle>
       </CardHeader>
       <CardContent>

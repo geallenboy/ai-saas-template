@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl'
 import { Suspense } from 'react'
 
 function SettingsContent() {
-  const t = useTranslations('front.settings')
+  const t = useTranslations('admin.front.settings')
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -31,7 +31,7 @@ function SettingsContent() {
         </Suspense>
       </div>
 
-      {/* 账户安全 */}
+      {/* Account security */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

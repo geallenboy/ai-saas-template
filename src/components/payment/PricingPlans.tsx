@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { useAuth, useUser } from '@clerk/nextjs'
 import { motion, useMotionValue } from 'framer-motion'
 import { Check, Crown, Loader2, Sparkles, Star, Zap } from 'lucide-react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -32,6 +32,7 @@ export default function PricingSection({
   const { isSignedIn } = useAuth()
   const { user } = useUser()
   const locale = useLocale()
+  const t = useTranslations('pricing')
 
   // Status management
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
@@ -61,22 +62,13 @@ export default function PricingSection({
         if (data.url) {
           window.location.href = data.url
         } else {
-          toast.error(
-            locale === 'de'
-              ? 'Die Generierung des Zahlungslinks ist fehlgeschlagen. Bitte versuchen Sie es erneut'
-              : 'Payment link generation failed, please try again'
-          )
+          toast.error(t('paymentLinkError'))
         }
         setCheckoutLoading(null)
       },
       onError: error => {
         console.error('Checkout error:', error)
-        toast.error(
-          error.message ||
-            (locale === 'de'
-              ? 'Die Erstellung der Checkout-Sitzung ist fehlgeschlagen. Bitte versuchen Sie es erneut'
-              : 'Failed to create checkout session, please try again')
-        )
+        toast.error(error.message || t('checkoutSessionError'))
         setCheckoutLoading(null)
       },
     })
@@ -129,9 +121,9 @@ export default function PricingSection({
   // get duration text
   const getDurationText = () => {
     if (durationType === 'yearly') {
-      return locale === 'de' ? 'Jahr' : 'year'
+      return t('year')
     }
-    return locale === 'de' ? 'Monat' : 'month'
+    return t('month')
   }
 
   // Calculate annual savings
@@ -197,16 +189,12 @@ export default function PricingSection({
     }
 
     if (isFreePlan(plan)) {
-      toast.info(
-        locale === 'de'
-          ? 'Das kostenlose Paket muss nicht gekauft werden, registrieren Sie sich, um es zu nutzen'
-          : 'Free plan does not need to be purchased, register to use'
-      )
+      toast.info(t('freePlanToast'))
       return
     }
 
     if (isCurrentPlan(plan)) {
-      toast.info(`You are already a member of ${plan.name}`)
+      toast.info(t('alreadyMemberToast', { planName: plan.name }))
       return
     }
 
@@ -240,11 +228,7 @@ export default function PricingSection({
         durationType,
         paymentMethod,
       })
-      toast.error(
-        locale === 'de'
-          ? 'Preis-Konfigurationsfehler, bitte kontaktieren Sie den Kundenservice'
-          : 'Price configuration error, please contact customer service'
-      )
+      toast.error(t('priceConfigError'))
       return
     }
 
@@ -275,24 +259,22 @@ export default function PricingSection({
   // Get button text
   const getButtonText = (plan: any) => {
     if (isFreePlan(plan)) {
-      return locale === 'de' ? 'Kostenlos nutzen' : 'Free to use'
+      return t('freeToUse')
     }
 
     if (isCurrentPlan(plan)) {
-      return locale === 'de'
-        ? `Aktueller Plan (noch ${remainingDays} Tage)`
-        : `Current plan (remaining ${remainingDays} days)`
+      return t('currentPlanButton', { days: remainingDays })
     }
 
     if (hasActiveMembership) {
-      return locale === 'de'
-        ? `Aktivieren Sie ${durationType === 'yearly' ? 'jährliche' : 'monatliche'} Mitgliedschaft`
-        : `Renew ${durationType === 'yearly' ? 'year' : 'month'} membership`
+      return t('renewMembership', {
+        duration: durationType === 'yearly' ? t('year') : t('month'),
+      })
     }
 
-    return locale === 'de'
-      ? `Kaufen Sie ${durationType === 'yearly' ? 'jährliche' : 'monatliche'} Mitgliedschaft`
-      : `Buy ${durationType === 'yearly' ? 'year' : 'month'} membership`
+    return t('buyMembership', {
+      duration: durationType === 'yearly' ? t('year') : t('month'),
+    })
   }
 
   // Get button status
@@ -366,7 +348,7 @@ export default function PricingSection({
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              {locale === 'de' ? 'Wählen Sie Ihren Plan' : 'Choose Your Plan'}
+              {t('title')}
             </h2>
             {showDescription && (
               <>
@@ -383,7 +365,7 @@ export default function PricingSection({
                               : 'text-gray-500'
                           )}
                         >
-                          {locale === 'de' ? 'Monatlich' : 'Monthly'}
+                          {t('monthly')}
                         </span>
                         <Switch
                           checked={isYearly}
@@ -398,15 +380,13 @@ export default function PricingSection({
                               : 'text-gray-500'
                           )}
                         >
-                          {locale === 'de' ? 'Jährlich' : 'Yearly'}
+                          {t('yearly')}
                         </span>
                       </div>
                       {isYearly && (
                         <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
                           <Sparkles className="w-3 h-3 mr-1" />
-                          {locale === 'de'
-                            ? 'Sparen Sie bis zu 20%'
-                            : 'Save up to 20%'}
+                          {t('save20')}
                         </Badge>
                       )}
                     </div>
@@ -447,7 +427,7 @@ export default function PricingSection({
                     <div className="absolute top-0 right-4 transform -translate-y-1/2 z-10">
                       <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 shadow-lg">
                         <Star className="w-3 h-3 mr-1" />
-                        {locale === 'de' ? 'Beliebt' : 'Popular'}
+                        {t('mostPopular')}
                       </Badge>
                     </div>
                   )}
@@ -460,9 +440,7 @@ export default function PricingSection({
                       <div className="absolute top-0 left-4 transform -translate-y-1/2 z-10">
                         <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 shadow-lg">
                           <Sparkles className="w-3 h-3 mr-1" />
-                          {locale === 'de'
-                            ? `Sparen Sie ${savings.percent}%`
-                            : `Save ${savings.percent}%`}
+                          {t('savePercent', { percent: savings.percent })}
                         </Badge>
                       </div>
                     )}
@@ -472,7 +450,7 @@ export default function PricingSection({
                     <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                       <Badge className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-1 shadow-lg">
                         <Check className="w-3 h-3 mr-1" />
-                        {locale === 'de' ? 'Aktueller Plan' : 'Current plan'}
+                        {t('currentPlan')}
                       </Badge>
                     </div>
                   )}
@@ -514,17 +492,17 @@ export default function PricingSection({
                       </div>
                       {!isFreePlan(plan) && (
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          {durationType === 'yearly' ? '365 Tage' : '30 Tage'}{' '}
-                          {locale === 'de'
-                            ? 'Mitgliedschaftsrechte'
-                            : 'membership rights'}
+                          {t('membershipDays', {
+                            days: durationType === 'yearly' ? 365 : 30,
+                          })}
                         </p>
                       )}
                       {isYearly && savings && savings.percent > 0 && (
                         <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                          {locale === 'de' ? 'Sparen Sie' : 'Save'}{' '}
-                          {locale === 'de' ? '€' : '$'}
-                          {savings.amount.toFixed(2)}
+                          {t('saveAmount', {
+                            currency: locale === 'de' ? '€' : '$',
+                            amount: savings.amount.toFixed(2),
+                          })}
                         </p>
                       )}
                     </div>
@@ -563,9 +541,7 @@ export default function PricingSection({
                       {checkoutLoading === plan.name ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          {locale === 'de'
-                            ? 'Zahlungssitzung erstellen...'
-                            : 'Creating payment session...'}
+                          {t('creatingSession')}
                         </>
                       ) : (
                         getButtonText(plan)
@@ -576,9 +552,7 @@ export default function PricingSection({
                     {!isFreePlan(plan) && (
                       <div className="mt-4 text-center">
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {locale === 'de'
-                            ? 'Unterstützung für Zahlungen in Euro, Kreditkarten und PayPal'
-                            : 'Secure payment with Stripe'}
+                          {t('paymentNote')}
                         </p>
                       </div>
                     )}

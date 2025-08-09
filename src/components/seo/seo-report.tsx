@@ -78,10 +78,10 @@ export function SEOReport() {
               : ('error' as const),
         recommendations:
           title.length < 30
-            ? ['The title is too short, 30-60 characters is recommended']
+            ? ['Title is too short, recommend 30-60 characters.']
             : title.length > 60
-              ? ['The title is too long, 30-60 characters is recommended']
-              : ['The title length is appropriate'],
+              ? ['Title is too long, recommend 30-60 characters.']
+              : ['Title length is appropriate.'],
       }
 
       // Analyze the description
@@ -95,14 +95,10 @@ export function SEOReport() {
               : ('error' as const),
         recommendations:
           metaDescription.length < 120
-            ? [
-                'The description is too short, 120-160 characters is recommended',
-              ]
+            ? ['Description is too short, recommend 120-160 characters.']
             : metaDescription.length > 160
-              ? [
-                  'The description is too long, 120-160 characters is recommended',
-                ]
-              : ['The description length is appropriate'],
+              ? ['Description is too long, recommend 120-160 characters.']
+              : ['Description length is appropriate.'],
       }
 
       // Analyze the headings structure
@@ -113,12 +109,10 @@ export function SEOReport() {
           h1Elements.length === 1 ? ('good' as const) : ('warning' as const),
         recommendations:
           h1Elements.length === 0
-            ? ['Missing H1 title']
+            ? ['H1 heading is missing.']
             : h1Elements.length > 1
-              ? [
-                  'There are multiple H1 titles on the page, it is recommended to keep only one',
-                ]
-              : ['H1 title structure is good'],
+              ? ['Multiple H1 headings found, recommend using only one.']
+              : ['H1 heading structure is good.'],
       }
 
       // Analyze the images
@@ -138,11 +132,11 @@ export function SEOReport() {
                 : ('error' as const),
         recommendations:
           images.length === 0
-            ? ['No images on the page']
+            ? ['No images found on the page.']
             : imagesWithAlt.length === images.length
-              ? ['All images have alt tags']
+              ? ['All images have alt attributes.']
               : [
-                  `${images.length - imagesWithAlt.length} images are missing alt tags`,
+                  `${images.length - imagesWithAlt.length} images are missing alt attributes.`,
                 ],
       }
 
@@ -165,9 +159,11 @@ export function SEOReport() {
             : ('warning' as const),
         recommendations:
           structuredDataScripts.length === 0
-            ? ['Recommend adding structured data']
+            ? ['Recommend adding structured data.']
             : [
-                `Found ${structuredTypes.length} structured data: ${structuredTypes.join(', ')}`,
+                `Found ${
+                  structuredTypes.length
+                } structured data items: ${structuredTypes.join(', ')}`,
               ],
       }
 
@@ -222,13 +218,13 @@ export function SEOReport() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Search className="h-5 w-5" />
-            SEO 分析报告
+            SEO Analysis Report
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
-            <span className="ml-2">分析页面SEO状况...</span>
+            <span className="ml-2">Analyzing page SEO status...</span>
           </div>
         </CardContent>
       </Card>
@@ -250,17 +246,17 @@ export function SEOReport() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
-            SEO 总体评分
+            Overall SEO Score
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
               <div className="text-3xl font-bold text-blue-600">
-                {Math.round((overallScore / 5) * 100)}分
+                {Math.round((overallScore / 5) * 100)} Points
               </div>
               <div className="text-sm text-gray-600">
-                {overallScore}/5 项指标通过
+                {overallScore}/5 metrics passed
               </div>
             </div>
             <div className="text-right">
@@ -275,10 +271,10 @@ export function SEOReport() {
                 )}
               >
                 {overallScore >= 4
-                  ? '优秀'
+                  ? 'Excellent'
                   : overallScore >= 2
-                    ? '良好'
-                    : '需要改进'}
+                    ? 'Good'
+                    : 'Needs Improvement'}
               </Badge>
             </div>
           </div>
@@ -292,12 +288,14 @@ export function SEOReport() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               {getScoreIcon(metrics.title.score)}
-              页面标题
+              Page Title
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="text-sm">长度: {metrics.title.length} 字符</p>
+              <p className="text-sm">
+                Length: {metrics.title.length} characters
+              </p>
               <div className="space-y-1">
                 {metrics.title.recommendations.map((rec, index) => (
                   <p key={index} className="text-xs text-gray-600">
@@ -319,7 +317,9 @@ export function SEOReport() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p className="text-sm">长度: {metrics.description.length} 字符</p>
+              <p className="text-sm">
+                Length: {metrics.description.length} characters
+              </p>
               <div className="space-y-1">
                 {metrics.description.recommendations.map((rec, index) => (
                   <p key={index} className="text-xs text-gray-600">
@@ -353,7 +353,7 @@ export function SEOReport() {
           </CardContent>
         </Card>
 
-        {/* 图片优化 */}
+        {/* Image Optimization */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -391,10 +391,10 @@ export function SEOReport() {
           <CardContent>
             <div className="space-y-2">
               <p className="text-sm">
-                数据类型:{' '}
+                Data Types:{' '}
                 {metrics.structuredData.types.length > 0
                   ? metrics.structuredData.types.join(', ')
-                  : '无'}
+                  : 'None'}
               </p>
               <div className="space-y-1">
                 {metrics.structuredData.recommendations.map((rec, index) => (
@@ -418,7 +418,7 @@ export function SEOReport() {
           <CardContent>
             <div className="space-y-2">
               <p className="text-sm">
-                性能评分: {metrics.performance.score}/100
+                Performance Score: {metrics.performance.score}/100
               </p>
               <div className="space-y-1">
                 {metrics.performance.recommendations.map((rec, index) => (
@@ -448,7 +448,7 @@ export function SEOReport() {
               }
             >
               <Globe className="h-4 w-4 mr-2" />
-              Google PageSpeed 测试
+              Google PageSpeed Test
             </Button>
           </div>
         </CardContent>

@@ -9,7 +9,7 @@ type Props = {
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params
 
-  const t = await getTranslations('blog')
+  const t = await getTranslations({ locale, namespace: 'blog' })
 
   return {
     title: {

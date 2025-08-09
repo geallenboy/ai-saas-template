@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ADMIN_LEVEL_NAMES } from '@/constants/auth'
 import { trpc } from '@/lib/trpc/client'
+import { useTranslations } from 'next-intl'
 
 interface UserProfileClientProps {
   showAdminBadge?: boolean
@@ -14,6 +15,7 @@ interface UserProfileClientProps {
 export function UserProfileClient({
   showAdminBadge = true,
 }: UserProfileClientProps) {
+  const t = useTranslations('auth.userProfile')
   const {
     data: user,
     isLoading,
@@ -32,7 +34,7 @@ export function UserProfileClient({
       <Card>
         <CardContent className="p-6">
           <p className="text-destructive">
-            {error ? '用户信息加载失败' : '用户信息不存在'}
+            {error ? t('loadError') : t('userNotFound')}
           </p>
         </CardContent>
       </Card>
@@ -51,7 +53,7 @@ export function UserProfileClient({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>用户资料</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center space-x-4">
@@ -65,7 +67,7 @@ export function UserProfileClient({
 
           <div className="space-y-1">
             <h3 className="text-lg font-semibold">
-              {user.fullName || '未设置姓名'}
+              {user.fullName || t('nameNotSet')}
             </h3>
             <p className="text-sm text-muted-foreground">{user.email}</p>
 
@@ -81,30 +83,31 @@ export function UserProfileClient({
 
         <div className="grid grid-cols-2 gap-4 pt-4">
           <div>
-            <p className="text-sm font-medium">注册时间</p>
+            <p className="text-sm font-medium">{t('joinDate')}</p>
             <p className="text-sm text-muted-foreground">
               {user.createdAt?.toLocaleDateString('de-DE')}
             </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium">最后登录</p>
+            <p className="text-sm font-medium">{t('lastLogin')}</p>
             <p className="text-sm text-muted-foreground">
-              {user.lastLoginAt?.toLocaleDateString('de-DE') || '从未登录'}
+              {user.lastLoginAt?.toLocaleDateString('de-DE') ||
+                t('neverLoggedIn')}
             </p>
           </div>
 
           <div>
-            <p className="text-sm font-medium">账户状态</p>
+            <p className="text-sm font-medium">{t('accountStatus')}</p>
             <Badge variant={user.isActive ? 'default' : 'destructive'}>
-              {user.isActive ? '活跃' : '已禁用'}
+              {user.isActive ? t('active') : t('disabled')}
             </Badge>
           </div>
 
           <div>
-            <p className="text-sm font-medium">语言偏好</p>
+            <p className="text-sm font-medium">{t('languagePreference')}</p>
             <p className="text-sm text-muted-foreground">
-              {user.preferences?.language === 'de' ? 'Deutsch' : 'English'}
+              {user.preferences?.language === 'de' ? t('german') : t('english')}
             </p>
           </div>
         </div>

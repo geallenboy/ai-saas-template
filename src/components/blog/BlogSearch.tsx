@@ -3,8 +3,9 @@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { useTranslations } from 'next-intl'
 import { SearchIcon, XIcon } from 'lucide-react'
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 // Simplified blog post interface
 interface SimpleBlogPost {
@@ -29,6 +30,7 @@ export function BlogSearch({
   locale,
   onFilteredPosts,
 }: BlogSearchProps) {
+  const t = useTranslations('blog.search')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 
@@ -81,11 +83,7 @@ export function BlogSearch({
       {/* Search box */}
       <div className="relative">
         <Input
-          placeholder={
-            locale === 'de'
-              ? '搜索文章标题、描述或作者...'
-              : 'Search articles by title, description or author...'
-          }
+          placeholder={t('placeholder')}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           className="pl-10 pr-10"
@@ -106,9 +104,7 @@ export function BlogSearch({
       {/* Tag filtering */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium">
-            {locale === 'de' ? '按标签筛选' : 'Filter by tags'}
-          </label>
+          <label className="text-sm font-medium">{t('filterByTags')}</label>
           {hasFilters && (
             <Button
               variant="ghost"
@@ -116,7 +112,7 @@ export function BlogSearch({
               onClick={clearAllFilters}
               className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
             >
-              {locale === 'de' ? '清除筛选' : 'Clear filters'}
+              {t('clearFilters')}
             </Button>
           )}
         </div>
@@ -136,17 +132,13 @@ export function BlogSearch({
 
       {/* Search results statistics */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>
-          {locale === 'de'
-            ? `找到 ${filteredPosts.length} 篇文章`
-            : `Found ${filteredPosts.length} article${filteredPosts.length === 1 ? '' : 's'}`}
-        </span>
+        <span>{t('foundArticles', { count: filteredPosts.length })}</span>
         {hasFilters && (
           <span className="flex items-center gap-2">
-            {locale === 'de' ? '已应用筛选条件' : 'Filters applied'}
+            {t('filtersApplied')}
             {selectedTags.length > 0 && (
               <Badge variant="secondary" className="text-xs">
-                {selectedTags.length} {locale === 'de' ? '个标签' : 'tags'}
+                {t('tags', { count: selectedTags.length })}
               </Badge>
             )}
           </span>

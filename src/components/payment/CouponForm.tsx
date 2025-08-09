@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 interface CouponFormProps {
@@ -11,6 +12,7 @@ interface CouponFormProps {
 }
 
 export function CouponForm({ onCouponApplied }: CouponFormProps) {
+  const t = useTranslations('payment.coupon')
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
@@ -38,7 +40,7 @@ export function CouponForm({ onCouponApplied }: CouponFormProps) {
       setAppliedCoupon(mockCoupon)
       onCouponApplied?.(mockCoupon)
     } catch (_error) {
-      setError('Coupon is invalid or expired')
+      setError(t('invalidCoupon'))
     } finally {
       setLoading(false)
     }
@@ -53,7 +55,7 @@ export function CouponForm({ onCouponApplied }: CouponFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>优惠券</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         {appliedCoupon ? (
@@ -65,20 +67,20 @@ export function CouponForm({ onCouponApplied }: CouponFormProps) {
               </p>
             </div>
             <Button variant="outline" size="sm" onClick={handleRemove}>
-              移除
+              {t('remove')}
             </Button>
           </div>
         ) : (
           <div className="space-y-2">
             <div className="flex gap-2">
               <Input
-                placeholder="输入优惠券代码"
+                placeholder={t('placeholder')}
                 value={code}
                 onChange={e => setCode(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleApply()}
               />
               <Button onClick={handleApply} disabled={loading || !code.trim()}>
-                {loading ? '验证中...' : '应用'}
+                {loading ? t('applying') : t('apply')}
               </Button>
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}

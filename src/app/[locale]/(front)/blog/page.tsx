@@ -47,7 +47,7 @@ type Props = {
 
 export default async function BlogPage({ params }: Props) {
   const { locale } = await params
-  const t = await getTranslations('blog')
+  const t = await getTranslations({ locale, namespace: 'blog' })
   const posts = getBlogPosts(locale)
 
   // Convert to a simplified data structure with only necessary serializable fields
@@ -96,9 +96,7 @@ export default async function BlogPage({ params }: Props) {
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <div className="relative w-full max-w-md">
                 <Input
-                  placeholder={
-                    locale === 'de' ? 'Suche Beiträge...' : 'Search articles...'
-                  }
+                  placeholder={t('page.searchPlaceholder')}
                   className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/70"
                 />
                 <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
@@ -107,7 +105,7 @@ export default async function BlogPage({ params }: Props) {
                 size="lg"
                 className="bg-white text-purple-600 hover:bg-white/90"
               >
-                {locale === 'de' ? 'Suche' : 'Search'}
+                {t('page.search')}
               </Button>
             </div>
           </div>
@@ -123,9 +121,7 @@ export default async function BlogPage({ params }: Props) {
                 <div className="text-3xl font-bold text-primary">
                   {simplePosts.length}
                 </div>
-                <p className="text-muted-foreground">
-                  {locale === 'de' ? 'Beiträge' : 'Articles'}
-                </p>
+                <p className="text-muted-foreground">{t('page.articles')}</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -133,9 +129,7 @@ export default async function BlogPage({ params }: Props) {
                 <div className="text-3xl font-bold text-primary">
                   {allTags.length}
                 </div>
-                <p className="text-muted-foreground">
-                  {locale === 'de' ? 'Tags' : 'Tags'}
-                </p>
+                <p className="text-muted-foreground">{t('page.tags')}</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -144,9 +138,7 @@ export default async function BlogPage({ params }: Props) {
                   <TrendingUpIcon className="h-6 w-6 text-primary" />
                   <div className="text-3xl font-bold text-primary">24k</div>
                 </div>
-                <p className="text-muted-foreground">
-                  {locale === 'de' ? 'Lesen' : 'Views'}
-                </p>
+                <p className="text-muted-foreground">{t('page.views')}</p>
               </CardContent>
             </Card>
           </div>
@@ -164,9 +156,7 @@ export default async function BlogPage({ params }: Props) {
             <div className="mx-auto max-w-md">
               <div className="mb-4 text-6xl">📝</div>
               <h3 className="mb-2 text-xl font-semibold">
-                {locale === 'de'
-                  ? 'Keine Beiträge vorhanden'
-                  : 'No Articles Yet'}
+                {t('noArticlesYet')}
               </h3>
               <p className="text-muted-foreground">{translations.noArticles}</p>
             </div>

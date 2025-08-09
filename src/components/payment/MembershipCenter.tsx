@@ -11,6 +11,7 @@ import { MEMBERSHIP_STATUS } from '@/constants/payment'
 import { useUserMembership } from '@/hooks/use-membership'
 import { trpc } from '@/lib/trpc/client'
 import { useUser } from '@clerk/nextjs'
+import { useTranslations } from 'next-intl'
 import {
   CreditCard,
   Crown,
@@ -29,6 +30,7 @@ import { PricingPlans } from './PricingPlans'
 
 export function MembershipCenter() {
   const { user } = useUser()
+  const t = useTranslations('membershipCenter')
   const { membershipStatus, isLoading } = useUserMembership(user?.id)
 
   const { data: usageData, isLoading: usageLoading } =
@@ -45,9 +47,9 @@ export function MembershipCenter() {
       <div className="container mx-auto py-8">
         <Card>
           <CardContent className="text-center py-12">
-            <p className="text-muted-foreground">请登录查看会员中心</p>
+            <p className="text-muted-foreground">{t('loginToView')}</p>
             <Button asChild className="mt-4">
-              <Link href="/auth/sign-in">登录</Link>
+              <Link href="/auth/sign-in">{t('login')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -60,25 +62,23 @@ export function MembershipCenter() {
       {/* Page title */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">会员中心</h1>
-          <p className="text-muted-foreground mt-2">
-            管理您的会员权益和账单信息
-          </p>
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
+          <p className="text-muted-foreground mt-2">{t('description')}</p>
         </div>
         <Button asChild variant="outline">
           <Link href="/pricing">
             <Crown className="mr-2 h-4 w-4" />
-            升级计划
+            {t('upgradePlan')}
           </Link>
         </Button>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">概览</TabsTrigger>
-          <TabsTrigger value="usage">使用统计</TabsTrigger>
-          <TabsTrigger value="billing">账单管理</TabsTrigger>
-          <TabsTrigger value="settings">设置</TabsTrigger>
+          <TabsTrigger value="overview">{t('overview')}</TabsTrigger>
+          <TabsTrigger value="usage">{t('usageStatsTitle')}</TabsTrigger>
+          <TabsTrigger value="billing">{t('billingManagement')}</TabsTrigger>
+          <TabsTrigger value="settings">{t('settings')}</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -122,7 +122,9 @@ export function MembershipCenter() {
         <TabsContent value="settings" className="space-y-6">
           <MembershipSettingsCard membershipStatus={membershipStatus} />
           <div className="pt-8">
-            <h3 className="text-lg font-semibold mb-4">升级或更换计划</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t('upgradeOrChangePlan')}
+            </h3>
             <PricingPlans showCurrentPlan />
           </div>
         </TabsContent>
@@ -139,13 +141,15 @@ function MembershipStatusCard({
   membershipStatus: any
   isLoading: boolean
 }) {
+  const t = useTranslations('membershipCenter.statusCard')
+
   if (isLoading) {
     return (
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            会员状态
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -163,15 +167,15 @@ function MembershipStatusCard({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            会员状态
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-6">
-            <div className="text-muted-foreground mb-4">您当前是免费用户</div>
-            <Badge variant="secondary">免费计划</Badge>
+            <div className="text-muted-foreground mb-4">{t('freeUser')}</div>
+            <Badge variant="secondary">{t('freePlan')}</Badge>
             <Button asChild className="mt-4 w-full">
-              <Link href="/pricing">升级会员</Link>
+              <Link href="/pricing">{t('upgrade')}</Link>
             </Button>
           </div>
         </CardContent>
@@ -204,29 +208,40 @@ function MembershipStatusCard({
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">计费周期</p>
+            <p className="text-sm text-muted-foreground">{t('billingCycle')}</p>
             <p className="font-medium">
-              {membership?.durationType === 'yearly' ? '年付' : '月付'}
+              {membership?.durationType === 'yearly'
+                ? t('yearly')
+                : t('monthly')}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">剩余天数</p>
-            <p className="font-medium text-green-600">{daysRemaining} 天</p>
+            <p className="text-sm text-muted-foreground">
+              {t('daysRemaining')}
+            </p>
+            <p className="font-medium text-green-600">
+              {t('days', { count: daysRemaining })}
+            </p>
           </div>
         </div>
 
         {endDate && (
           <div>
-            <p className="text-sm text-muted-foreground">到期时间</p>
+            <p className="text-sm text-muted-foreground">
+              {t('expirationDate')}
+            </p>
             <p className="font-medium">{endDate.toLocaleDateString('zh-CN')}</p>
           </div>
         )}
 
         <div className="pt-4">
           <div className="flex justify-between text-sm mb-2">
-            <span>会员时长</span>
+            <span>{t('membershipDuration')}</span>
             <span>
-              {daysRemaining} / {membership?.durationDays || 30} 天
+              {t('daysCount', {
+                daysRemaining,
+                durationDays: membership?.durationDays || 30,
+              })}
             </span>
           </div>
           <Progress
@@ -241,31 +256,32 @@ function MembershipStatusCard({
 
 // Quick action card
 function QuickActionsCard() {
+  const t = useTranslations('membershipCenter.quickActions')
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Zap className="h-5 w-5" />
-          快捷操作
+          {t('title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <Button asChild variant="outline" className="w-full justify-start">
           <Link href="/pricing">
             <Crown className="mr-2 h-4 w-4" />
-            升级计划
+            {t('upgradePlan')}
           </Link>
         </Button>
         <Button asChild variant="outline" className="w-full justify-start">
           <Link href="/payment/history">
             <CreditCard className="mr-2 h-4 w-4" />
-            查看账单
+            {t('viewBilling')}
           </Link>
         </Button>
         <Button asChild variant="outline" className="w-full justify-start">
           <Link href="/settings">
             <Settings className="mr-2 h-4 w-4" />
-            账户设置
+            {t('accountSettings')}
           </Link>
         </Button>
       </CardContent>
@@ -283,13 +299,14 @@ function UsageOverviewCard({
   membershipStatus: any
   isLoading: boolean
 }) {
+  const t = useTranslations('membershipCenter.usageOverview')
   if (isLoading) {
     return (
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5" />
-            使用概览
+            {t('title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -314,32 +331,32 @@ function UsageOverviewCard({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5" />
-          使用概览
+          {t('title')}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <UsageItem
             icon={<FileText className="h-5 w-5" />}
-            label="用例"
+            label={t('useCases')}
             used={usage.usedUseCases || 0}
             limit={currentPlan?.maxUseCases || 0}
           />
           <UsageItem
             icon={<Globe className="h-5 w-5" />}
-            label="教程"
+            label={t('tutorials')}
             used={usage.usedTutorials || 0}
             limit={currentPlan?.maxTutorials || 0}
           />
           <UsageItem
             icon={<Users className="h-5 w-5" />}
-            label="博客"
+            label={t('blogs')}
             used={usage.usedBlogs || 0}
             limit={currentPlan?.maxBlogs || 0}
           />
           <UsageItem
             icon={<Zap className="h-5 w-5" />}
-            label="API调用"
+            label={t('apiCalls')}
             used={usage.usedApiCalls || 0}
             limit={currentPlan?.maxApiCalls || 0}
           />
@@ -360,6 +377,7 @@ function UsageItem({
   used: number
   limit: number
 }) {
+  const t = useTranslations('membershipCenter.usageOverview')
   const isUnlimited = limit === -1
   const percentage = isUnlimited ? 0 : (used / limit) * 100
 
@@ -370,7 +388,7 @@ function UsageItem({
       </div>
       <div className="text-2xl font-bold">{used.toLocaleString()}</div>
       <div className="text-sm text-muted-foreground">
-        {isUnlimited ? '无限制' : `/ ${limit.toLocaleString()}`}
+        {isUnlimited ? t('unlimited') : `/ ${limit.toLocaleString()}`}
       </div>
       <div className="text-xs text-muted-foreground">{label}</div>
       {!isUnlimited && <Progress value={percentage} className="h-1 mt-2" />}
@@ -388,11 +406,12 @@ function UsageStatsCard({
   membershipStatus: any
   isLoading: boolean
 }) {
+  const t = useTranslations('membershipCenter.usageStats')
   if (isLoading) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>详细使用统计</CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -412,29 +431,29 @@ function UsageStatsCard({
     <div className="grid gap-6 md:grid-cols-2">
       <Card>
         <CardHeader>
-          <CardTitle>本月使用统计</CardTitle>
+          <CardTitle>{t('monthly.title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <DetailedUsageItem
-            label="用例生成"
+            label={t('monthly.useCases')}
             used={usage.monthlyUseCases || 0}
             limit={currentPlan?.maxUseCases || 0}
             icon={<FileText className="h-4 w-4" />}
           />
           <DetailedUsageItem
-            label="教程创建"
+            label={t('monthly.tutorials')}
             used={usage.monthlyTutorials || 0}
             limit={currentPlan?.maxTutorials || 0}
             icon={<Globe className="h-4 w-4" />}
           />
           <DetailedUsageItem
-            label="博客发布"
+            label={t('monthly.blogs')}
             used={usage.monthlyBlogs || 0}
             limit={currentPlan?.maxBlogs || 0}
             icon={<Users className="h-4 w-4" />}
           />
           <DetailedUsageItem
-            label="API调用"
+            label={t('monthly.apiCalls')}
             used={usage.monthlyApiCalls || 0}
             limit={currentPlan?.maxApiCalls || 0}
             icon={<Zap className="h-4 w-4" />}
@@ -444,13 +463,13 @@ function UsageStatsCard({
 
       <Card>
         <CardHeader>
-          <CardTitle>累计使用统计</CardTitle>
+          <CardTitle>{t('total.title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center p-4 border rounded-lg">
             <div className="flex items-center gap-3">
               <FileText className="h-4 w-4 text-muted-foreground" />
-              <span>总用例数</span>
+              <span>{t('total.useCases')}</span>
             </div>
             <span className="font-semibold">
               {(usage.usedUseCases || 0).toLocaleString()}
@@ -459,7 +478,7 @@ function UsageStatsCard({
           <div className="flex justify-between items-center p-4 border rounded-lg">
             <div className="flex items-center gap-3">
               <Globe className="h-4 w-4 text-muted-foreground" />
-              <span>总教程数</span>
+              <span>{t('total.tutorials')}</span>
             </div>
             <span className="font-semibold">
               {(usage.usedTutorials || 0).toLocaleString()}
@@ -468,7 +487,7 @@ function UsageStatsCard({
           <div className="flex justify-between items-center p-4 border rounded-lg">
             <div className="flex items-center gap-3">
               <Users className="h-4 w-4 text-muted-foreground" />
-              <span>总博客数</span>
+              <span>{t('total.blogs')}</span>
             </div>
             <span className="font-semibold">
               {(usage.usedBlogs || 0).toLocaleString()}
@@ -477,7 +496,7 @@ function UsageStatsCard({
           <div className="flex justify-between items-center p-4 border rounded-lg">
             <div className="flex items-center gap-3">
               <Zap className="h-4 w-4 text-muted-foreground" />
-              <span>总API调用</span>
+              <span>{t('total.apiCalls')}</span>
             </div>
             <span className="font-semibold">
               {(usage.usedApiCalls || 0).toLocaleString()}
@@ -524,6 +543,7 @@ function DetailedUsageItem({
 function MembershipBenefitsCard({
   membershipStatus,
 }: { membershipStatus: any }) {
+  const t = useTranslations('membershipCenter.benefits')
   const currentPlan = membershipStatus?.currentPlan
   const permissions = currentPlan?.permissions || {}
 
@@ -532,30 +552,40 @@ function MembershipBenefitsCard({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Crown className="h-5 w-5" />
-          会员权益
+          {t('title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <BenefitItem label="API访问权限" enabled={permissions.apiAccess} />
-        <BenefitItem label="自定义模型" enabled={permissions.customModels} />
+        <BenefitItem label={t('apiAccess')} enabled={permissions.apiAccess} />
         <BenefitItem
-          label="优先客服支持"
+          label={t('customModels')}
+          enabled={permissions.customModels}
+        />
+        <BenefitItem
+          label={t('prioritySupport')}
           enabled={permissions.prioritySupport}
         />
-        <BenefitItem label="数据导出" enabled={permissions.exportData} />
-        <BenefitItem label="批量操作" enabled={permissions.bulkOperations} />
-        <BenefitItem label="高级分析" enabled={permissions.advancedAnalytics} />
+        <BenefitItem label={t('exportData')} enabled={permissions.exportData} />
+        <BenefitItem
+          label={t('bulkOperations')}
+          enabled={permissions.bulkOperations}
+        />
+        <BenefitItem
+          label={t('advancedAnalytics')}
+          enabled={permissions.advancedAnalytics}
+        />
       </CardContent>
     </Card>
   )
 }
 
 function BenefitItem({ label, enabled }: { label: string; enabled: boolean }) {
+  const t = useTranslations('membershipCenter.benefits')
   return (
     <div className="flex justify-between items-center">
       <span className="text-sm">{label}</span>
       <Badge variant={enabled ? 'default' : 'secondary'}>
-        {enabled ? '已开启' : '未开启'}
+        {enabled ? t('enabled') : t('disabled')}
       </Badge>
     </div>
   )
@@ -565,6 +595,7 @@ function BenefitItem({ label, enabled }: { label: string; enabled: boolean }) {
 function BillingManagementCard({
   membershipStatus,
 }: { membershipStatus: any }) {
+  const t = useTranslations('membershipCenter.billing')
   const membership = membershipStatus?.membership
 
   return (
@@ -572,28 +603,34 @@ function BillingManagementCard({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CreditCard className="h-5 w-5" />
-          账单管理
+          {t('title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">当前计费周期</p>
+            <p className="text-sm text-muted-foreground">
+              {t('currentBillingCycle')}
+            </p>
             <p className="font-medium">
-              {membership?.durationType === 'yearly' ? '年付' : '月付'}
+              {membership?.durationType === 'yearly'
+                ? t('yearly')
+                : t('monthly')}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">自动续费</p>
+            <p className="text-sm text-muted-foreground">{t('autoRenewal')}</p>
             <Badge variant={membership?.autoRenew ? 'default' : 'secondary'}>
-              {membership?.autoRenew ? '已开启' : '已关闭'}
+              {membership?.autoRenew ? t('renewalOn') : t('renewalOff')}
             </Badge>
           </div>
         </div>
 
         {membership?.nextRenewalDate && (
           <div>
-            <p className="text-sm text-muted-foreground">下次续费时间</p>
+            <p className="text-sm text-muted-foreground">
+              {t('nextRenewalDate')}
+            </p>
             <p className="font-medium">
               {new Date(membership.nextRenewalDate).toLocaleDateString('zh-CN')}
             </p>
@@ -605,11 +642,11 @@ function BillingManagementCard({
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="flex-1">
             <RefreshCw className="mr-2 h-4 w-4" />
-            管理续费
+            {t('manageRenewal')}
           </Button>
           <Button variant="outline" size="sm" className="flex-1">
             <FileText className="mr-2 h-4 w-4" />
-            下载发票
+            {t('downloadInvoice')}
           </Button>
         </div>
       </CardContent>
@@ -621,22 +658,25 @@ function BillingManagementCard({
 function MembershipSettingsCard({
   membershipStatus,
 }: { membershipStatus: any }) {
+  const t = useTranslations('membershipCenter.settingsCard')
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Settings className="h-5 w-5" />
-          会员设置
+          {t('title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between items-center">
           <div>
-            <p className="font-medium">自动续费</p>
-            <p className="text-sm text-muted-foreground">到期时自动续费会员</p>
+            <p className="font-medium">{t('autoRenewal')}</p>
+            <p className="text-sm text-muted-foreground">
+              {t('autoRenewalDescription')}
+            </p>
           </div>
           <Button variant="outline" size="sm">
-            管理
+            {t('manage')}
           </Button>
         </div>
 
@@ -644,11 +684,13 @@ function MembershipSettingsCard({
 
         <div className="flex justify-between items-center">
           <div>
-            <p className="font-medium">支付方式</p>
-            <p className="text-sm text-muted-foreground">管理您的支付方式</p>
+            <p className="font-medium">{t('paymentMethod')}</p>
+            <p className="text-sm text-muted-foreground">
+              {t('paymentMethodDescription')}
+            </p>
           </div>
           <Button variant="outline" size="sm">
-            设置
+            {t('setup')}
           </Button>
         </div>
 
@@ -656,11 +698,13 @@ function MembershipSettingsCard({
 
         <div className="flex justify-between items-center">
           <div>
-            <p className="font-medium">取消会员</p>
-            <p className="text-sm text-muted-foreground">取消当前会员计划</p>
+            <p className="font-medium">{t('cancelMembership')}</p>
+            <p className="text-sm text-muted-foreground">
+              {t('cancelMembershipDescription')}
+            </p>
           </div>
           <Button variant="destructive" size="sm">
-            取消
+            {t('cancel')}
           </Button>
         </div>
       </CardContent>

@@ -1,6 +1,5 @@
 {
   "locale": {
-    "zh": "中文",
     "en": "English",
     "de": "Deutsch",
     "label": "Sprache",
@@ -72,7 +71,41 @@
     "backToList": "Zurück zur Blog-Liste",
     "shareArticle": "Artikel teilen",
     "backToBlog": "Zurück zum Blog",
-    "noArticles": "Keine Artikel vorhanden"
+    "noArticles": "Keine Artikel vorhanden",
+    "search": {
+      "placeholder": "Suche Artikel nach Titel, Beschreibung oder Autor...",
+      "filterByTags": "Nach Tags filtern",
+      "clearFilters": "Filter löschen",
+      "foundArticles": "{count} Artikel gefunden",
+      "filtersApplied": "Filter angewendet",
+      "tags": "{count} Tag | {count} Tags"
+    },
+    "client": {
+      "featuredArticles": "Beliebte Beiträge",
+      "featuredDescription": "Ausgewählte Beiträge für Sie",
+      "latestArticles": "Neueste Beiträge",
+      "searchResults": "Suchergebnisse",
+      "articlesFound": "{count} Beitrag gefunden",
+      "noArticlesFound": "Keine passenden Beiträge gefunden",
+      "noArticlesDescription": "Versuchen Sie, die Suchkriterien anzupassen oder alle Beiträge zu durchsuchen",
+      "popularTags": "Beliebte Tags",
+      "archives": "Archiv",
+      "january": "Januar 2024",
+      "december": "Dezember 2023",
+      "november": "November 2023",
+      "subscribeTitle": "Abonnieren Sie unseren Blog",
+      "subscribeDescription": "Erhalten Sie die neuesten Artikel und Updates",
+      "subscribePlaceholder": "deine@email.com",
+      "subscribe": "Abonnieren"
+    },
+    "page": {
+      "searchPlaceholder": "Suche Beiträge...",
+      "search": "Suche",
+      "articles": "Beiträge",
+      "tags": "Tags",
+      "views": "Views",
+      "noArticlesYet": "Keine Beiträge vorhanden"
+    }
   },
 
   "app": {
@@ -352,6 +385,7 @@
       }
     },
     "errors": {
+      "syncFailed": "Benutzerinformations-Synchronisation fehlgeschlagen",
       "needVerification": "Anmeldung erfordert zusätzliche Verifizierungsschritte",
       "emailNotFound": "Diese E-Mail ist nicht registriert, bitte registrieren Sie sich zuerst",
       "incorrectPassword": "Falsches Passwort, bitte erneut eingeben",
@@ -363,9 +397,7 @@
       "passwordTooWeak": "Passwort ist zu einfach, bitte verwenden Sie ein komplexeres Passwort",
       "invalidParams": "Registrierungsparameter-Fehler, bitte kontaktieren Sie den Administrator",
       "signupFailed": "Registrierung fehlgeschlagen, bitte erneut versuchen",
-      "verificationFailed": "Verifizierungscode falsch, bitte erneut versuchen",
-      "syncFailed": "Benutzerinformations-Synchronisation fehlgeschlagen",
-      "unknownError": "Unbekannter Fehler"
+      "verificationFailed": "Verifizierungscode falsch, bitte erneut versuchen"
     },
     "ssoCallback": {
       "title": "Anmeldung wird abgeschlossen...",
@@ -383,6 +415,37 @@
       "errorTitle": "Die Anmeldung dauert länger als gewöhnlich",
       "errorDescription": "Bitte warten Sie oder versuchen Sie, die Seite zu aktualisieren.",
       "errorButton": "Zurück zur Anmeldung"
+    },
+    "profileForm": {
+      "loading": "Wird geladen...",
+      "title": "Profil bearbeiten",
+      "fullName": "Vollständiger Name",
+      "fullNamePlaceholder": "Geben Sie Ihren vollständigen Namen ein",
+      "theme": "Thema",
+      "themePlaceholder": "Wählen Sie ein Thema",
+      "language": "Sprache",
+      "languagePlaceholder": "Wählen Sie eine Sprache",
+      "currency": "Währung",
+      "currencyPlaceholder": "Wählen Sie eine Währung",
+      "updateSuccess": "Profil erfolgreich aktualisiert!",
+      "updateError": "Profil konnte nicht aktualisiert werden, bitte versuchen Sie es erneut",
+      "saving": "Speichern...",
+      "saveChanges": "Änderungen speichern"
+    },
+    "userProfile": {
+      "loadError": "Benutzerinformationen konnten nicht geladen werden",
+      "userNotFound": "Benutzerinformationen nicht gefunden",
+      "title": "Benutzerprofil",
+      "nameNotSet": "Name nicht festgelegt",
+      "joinDate": "Beitrittsdatum",
+      "lastLogin": "Letzte Anmeldung",
+      "neverLoggedIn": "Nie angemeldet",
+      "accountStatus": "Kontostatus",
+      "active": "Aktiv",
+      "disabled": "Deaktiviert",
+      "languagePreference": "Spracheinstellung",
+      "english": "Englisch",
+      "german": "Deutsch"
     }
   },
 
@@ -394,7 +457,7 @@
     "year": "Jahr",
     "month": "Monat",
     "save20": "Sparen Sie bis zu 20%",
-    "saveAmount": "Sparen Sie {amount}",
+    "saveAmount": "Sparen Sie {currency}{amount}",
     "mostPopular": "Am beliebtesten",
     "currentPlan": "Aktueller Plan",
     "getStarted": "Loslegen",
@@ -417,6 +480,19 @@
     "freeTrial": "Sofort wirksam",
     "securePayment": "Sichere Zahlung",
     "instantAccess": "Sofortiger Zugriff",
+    "paymentLinkError": "Die Generierung des Zahlungslinks ist fehlgeschlagen. Bitte versuchen Sie es erneut",
+    "checkoutSessionError": "Die Erstellung der Checkout-Sitzung ist fehlgeschlagen. Bitte versuchen Sie es erneut",
+    "freePlanToast": "Das kostenlose Paket muss nicht gekauft werden, registrieren Sie sich, um es zu nutzen",
+    "alreadyMemberToast": "Sie sind bereits Mitglied von {planName}",
+    "priceConfigError": "Preis-Konfigurationsfehler, bitte kontaktieren Sie den Kundenservice",
+    "freeToUse": "Kostenlos nutzen",
+    "currentPlanButton": "Aktueller Plan (noch {days} Tage)",
+    "renewMembership": "Mitgliedschaft für {duration} erneuern",
+    "buyMembership": "Mitgliedschaft für {duration} kaufen",
+    "savePercent": "Sparen Sie {percent}%",
+    "membershipDays": "{days} Tage Mitgliedschaftsrechte",
+    "creatingSession": "Zahlungssitzung erstellen...",
+    "paymentNote": "Unterstützung für Zahlungen in Euro, Kreditkarten und PayPal",
     "page": {
       "badge": "Abonnement-Pläne",
       "title": "Wählen Sie den passenden Abonnement-Plan",
@@ -513,7 +589,6 @@
       }
     }
   },
-
   "user": {
     "profile": "Profil",
     "settings": "Einstellungen",
@@ -601,7 +676,16 @@
     "startUsing": "Beginnen Sie mit der Verwendung von Komponenten",
     "startUsingDescription": "Alle Komponenten unterstützen TypeScript und sind vollständig responsiv. Kopieren Sie einfach den Code und verwenden Sie ihn.",
     "viewDocumentation": "Dokumentation anzeigen",
-    "githubRepository": "GitHub Repository"
+    "githubRepository": "GitHub Repository",
+    "searchField": {
+      "placeholder": "Suche nach Komponentenname oder -beschreibung...",
+      "filterByCategory": "Nach Kategorie filtern",
+      "clearFilters": "Filter zurücksetzen",
+      "all": "Alle",
+      "latest": "Neueste",
+      "popular": "Beliebt",
+      "filtersApplied": "Angewendete Filter"
+    }
   },
   "pricingPage": {
     "title": "Wählen Sie Ihren Plan",
@@ -928,5 +1012,140 @@
     "accountSettings": "Kontoeinstellungen",
     "paymentHistory": "Zahlungsverlauf",
     "viewDocs": "Dokumentation anzeigen"
+  },
+  "payment": {
+    "monthly": "Monatlich",
+    "yearly": "Jährlich",
+    "save": "Sparen",
+    "perMonth": "pro Monat",
+    "perYear": "pro Jahr",
+    "equivalentTo": "entspricht ",
+    "processing": "Wird bearbeitet...",
+    "upgradeTo": "Upgrade auf {planName}",
+    "securePayment": "Sichere Zahlung, jederzeit kündbar",
+    "coupon": {
+      "title": "Gutschein",
+      "remove": "Entfernen",
+      "placeholder": "Gutscheincode eingeben",
+      "applying": "Wird angewendet...",
+      "apply": "Anwenden",
+      "invalidCoupon": "Gutschein ist ungültig oder abgelaufen"
+    }
+  },
+  "membershipCenter": {
+    "loginToView": "Bitte melden Sie sich an, um das Mitgliederzentrum anzuzeigen",
+    "login": "Anmelden",
+    "title": "Mitgliederzentrum",
+    "description": "Verwalten Sie Ihre Mitgliedervorteile und Rechnungsinformationen",
+    "upgradePlan": "Plan aktualisieren",
+    "overview": "Übersicht",
+    "usageStatsTitle": "Nutzungsstatistiken",
+    "billingManagement": "Rechnungsverwaltung",
+    "settings": "Einstellungen",
+    "upgradeOrChangePlan": "Plan aktualisieren oder ändern",
+    "statusCard": {
+      "title": "Mitgliedsstatus",
+      "freeUser": "Sie sind derzeit ein kostenloser Benutzer",
+      "freePlan": "Kostenloser Plan",
+      "upgrade": "Mitgliedschaft aktualisieren",
+      "billingCycle": "Abrechnungszeitraum",
+      "yearly": "Jährlich",
+      "monthly": "Monatlich",
+      "daysRemaining": "Verbleibende Tage",
+      "days": "{count} Tag | {count} Tage",
+      "expirationDate": "Ablaufdatum",
+      "membershipDuration": "Mitgliedschaftsdauer",
+      "daysCount": "{daysRemaining} / {durationDays} Tage"
+    },
+    "quickActions": {
+      "title": "Schnellaktionen",
+      "upgradePlan": "Plan aktualisieren",
+      "viewBilling": "Rechnung anzeigen",
+      "accountSettings": "Kontoeinstellungen"
+    },
+    "usageOverview": {
+      "title": "Nutzungsübersicht",
+      "useCases": "Anwendungsfälle",
+      "tutorials": "Tutorials",
+      "blogs": "Blogs",
+      "apiCalls": "API-Aufrufe",
+      "unlimited": "Unbegrenzt"
+    },
+    "usageStats": {
+      "title": "Detaillierte Nutzungsstatistiken",
+      "monthly": {
+        "title": "Nutzung in diesem Monat",
+        "useCases": "Anwendungsfall-Generierung",
+        "tutorials": "Tutorial-Erstellung",
+        "blogs": "Blog-Veröffentlichung",
+        "apiCalls": "API-Aufrufe"
+      },
+      "total": {
+        "title": "Gesamtnutzung",
+        "useCases": "Gesamte Anwendungsfälle",
+        "tutorials": "Gesamte Tutorials",
+        "blogs": "Gesamte Blogs",
+        "apiCalls": "Gesamte API-Aufrufe"
+      }
+    },
+    "benefits": {
+      "title": "Mitgliedervorteile",
+      "apiAccess": "API-Zugriff",
+      "customModels": "Benutzerdefinierte Modelle",
+      "prioritySupport": "Bevorzugter Support",
+      "exportData": "Daten exportieren",
+      "bulkOperations": "Massenoperationen",
+      "advancedAnalytics": "Erweiterte Analytik",
+      "enabled": "Aktiviert",
+      "disabled": "Deaktiviert"
+    },
+    "billing": {
+      "title": "Rechnungsverwaltung",
+      "currentBillingCycle": "Aktueller Abrechnungszeitraum",
+      "yearly": "Jährlich",
+      "monthly": "Monatlich",
+      "autoRenewal": "Automatische Verlängerung",
+      "renewalOn": "Ein",
+      "renewalOff": "Aus",
+      "nextRenewalDate": "Nächstes Verlängerungsdatum",
+      "manageRenewal": "Verlängerung verwalten",
+      "downloadInvoice": "Rechnung herunterladen"
+    },
+    "settingsCard": {
+      "title": "Mitgliedschaftseinstellungen",
+      "autoRenewal": "Automatische Verlängerung",
+      "autoRenewalDescription": "Mitgliedschaft bei Ablauf automatisch verlängern",
+      "manage": "Verwalten",
+      "paymentMethod": "Zahlungsmethode",
+      "paymentMethodDescription": "Verwalten Sie Ihre Zahlungsmethoden",
+      "setup": "Einrichten",
+      "cancelMembership": "Mitgliedschaft kündigen",
+      "cancelMembershipDescription": "Ihren aktuellen Mitgliedsplan kündigen",
+      "cancel": "Kündigen"
+    }
+  },
+  "membershipStatus": {
+    "title": "Mitgliedsstatus",
+    "noActivePlan": "Sie haben keinen aktiven Mitgliedsplan",
+    "freeUser": "Kostenloser Benutzer",
+    "currentPlan": "Aktueller Plan",
+    "billingCycle": "Abrechnungszeitraum",
+    "yearly": "Jährlich",
+    "monthly": "Monatlich",
+    "expirationDate": "Ablaufdatum",
+    "daysRemaining": "Verbleibende {count} Tag | Verbleibende {count} Tage",
+    "paymentAmount": "Zahlungsbetrag"
+  },
+  "paymentHistoryDashboard": {
+    "title": "Zahlungsverlauf",
+    "loginToView": "Bitte melden Sie sich an, um den Zahlungsverlauf anzuzeigen",
+    "loadError": "Fehler beim Laden des Zahlungsverlaufs",
+    "viewAll": "Alle anzeigen",
+    "noRecords": "Keine Zahlungsaufzeichnungen",
+    "selectPlan": "Plan auswählen",
+    "yearly": "Jährlich",
+    "monthly": "Monatlich",
+    "save": "Sparen",
+    "viewMore": "Weitere Zahlungsaufzeichnungen anzeigen"
   }
 }

@@ -1,13 +1,7 @@
 {
-  "LocaleSwitcher": {
-    "zh": "Chinese",
-    "en": "English",
-    "label": "Language"
-  },
-
   "locale": {
-    "zh": "Chinese",
     "en": "English",
+    "de": "German",
     "label": "Language",
     "professional": "Professional",
     "pro": "Pro",
@@ -77,14 +71,43 @@
     "backToList": "Back to Blog",
     "shareArticle": "Share this article",
     "backToBlog": "Back to Blog",
-    "noArticles": "No articles found"
+    "noArticles": "No articles found",
+    "search": {
+      "placeholder": "Search articles by title, description or author...",
+      "filterByTags": "Filter by tags",
+      "clearFilters": "Clear filters",
+      "foundArticles": "Found {count} article",
+      "filtersApplied": "Filters applied",
+      "tags": "{count} tag | {count} tags"
+    },
+    "client": {
+      "featuredArticles": "Featured Articles",
+      "featuredDescription": "Handpicked articles for you",
+      "latestArticles": "Latest Articles",
+      "searchResults": "Search Results",
+      "articlesFound": "{count} article found",
+      "noArticlesFound": "No Articles Found",
+      "noArticlesDescription": "Try adjusting your search terms or browse all articles",
+      "popularTags": "Popular Tags",
+      "archives": "Archives",
+      "january": "January 2024",
+      "december": "December 2023",
+      "november": "November 2023",
+      "subscribeTitle": "Subscribe to Our Blog",
+      "subscribeDescription": "Get the latest articles and updates",
+      "subscribePlaceholder": "your@email.com",
+      "subscribe": "Subscribe"
+    },
+    "page": {
+      "searchPlaceholder": "Search articles...",
+      "search": "Search",
+      "articles": "Articles",
+      "tags": "Tags",
+      "views": "Views",
+      "noArticlesYet": "No Articles Yet"
+    }
   },
 
-  "themeConfig": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
-  },
   "app": {
     "name": "AI Saas",
     "textPro": "Pro"
@@ -239,6 +262,7 @@
       "passwordMismatch": "Passwords do not match"
     }
   },
+
   "billing": {
     "title": "Plan & Billing",
     "desc": "Manage your subscription and billing information.",
@@ -272,18 +296,11 @@
       "yearly": "Yearly",
       "selected": "Selected",
       "mostPopular": "Most Popular"
-    },
-    "processing": "Processing...",
-    "upgrading": "Upgrading...",
-    "billingNote": "All plans include SSL and 24/7 professional support.",
-    "notAvailable": "Not Available",
-    "upgradeOnly": "Upgrade Only"
+    }
   },
-
   "search": {
     "noResults": "No relevant content found."
   },
-
   "auth": {
     "signIn": {
       "title": "Welcome Back",
@@ -398,6 +415,37 @@
       "errorTitle": "Login is taking longer than usual",
       "errorDescription": "Please wait or try refreshing the page.",
       "errorButton": "Back to Login"
+    },
+    "profileForm": {
+      "loading": "Loading...",
+      "title": "Edit Profile",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "theme": "Theme",
+      "themePlaceholder": "Select a theme",
+      "language": "Language",
+      "languagePlaceholder": "Select a language",
+      "currency": "Currency",
+      "currencyPlaceholder": "Select a currency",
+      "updateSuccess": "Profile updated successfully!",
+      "updateError": "Failed to update profile, please try again",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes"
+    },
+    "userProfile": {
+      "loadError": "Failed to load user information",
+      "userNotFound": "User information not found",
+      "title": "User Profile",
+      "nameNotSet": "Name not set",
+      "joinDate": "Join Date",
+      "lastLogin": "Last Login",
+      "neverLoggedIn": "Never logged in",
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "disabled": "Disabled",
+      "languagePreference": "Language Preference",
+      "english": "English",
+      "german": "German"
     }
   },
 
@@ -409,7 +457,7 @@
     "year": "year",
     "month": "month",
     "save20": "Save up to 20%",
-    "saveAmount": "Save {amount}",
+    "saveAmount": "Save {currency}{amount}",
     "mostPopular": "Most Popular",
     "currentPlan": "Current Plan",
     "getStarted": "Get Started",
@@ -432,6 +480,19 @@
     "freeTrial": "Instant access",
     "securePayment": "Secure Payment",
     "instantAccess": "Instant Access",
+    "paymentLinkError": "Payment link generation failed, please try again",
+    "checkoutSessionError": "Failed to create checkout session, please try again",
+    "freePlanToast": "Free plan does not need to be purchased, register to use",
+    "alreadyMemberToast": "You are already a member of {planName}",
+    "priceConfigError": "Price configuration error, please contact customer service",
+    "freeToUse": "Free to use",
+    "currentPlanButton": "Current plan (remaining {days} days)",
+    "renewMembership": "Renew {duration} membership",
+    "buyMembership": "Buy {duration} membership",
+    "savePercent": "Save {percent}%",
+    "membershipDays": "{days} days membership rights",
+    "creatingSession": "Creating payment session...",
+    "paymentNote": "Secure payment with Stripe",
     "page": {
       "badge": "Subscription Plans",
       "title": "Choose the Right Plan for You",
@@ -615,7 +676,16 @@
     "startUsing": "Start Using Components",
     "startUsingDescription": "All components support TypeScript and are fully responsive. Just copy the code and start using.",
     "viewDocumentation": "View Documentation",
-    "githubRepository": "GitHub Repository"
+    "githubRepository": "GitHub Repository",
+    "searchField": {
+      "placeholder": "Search components by name or description...",
+      "filterByCategory": "Filter by category",
+      "clearFilters": "Clear filters",
+      "all": "All",
+      "latest": "Latest",
+      "popular": "Popular",
+      "filtersApplied": "Filters applied"
+    }
   },
   "pricingPage": {
     "title": "Choose Your Plan",
@@ -942,5 +1012,140 @@
     "accountSettings": "Account Settings",
     "paymentHistory": "Payment History",
     "viewDocs": "View Docs"
+  },
+  "payment": {
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save",
+    "perMonth": "per month",
+    "perYear": "per year",
+    "equivalentTo": "equivalent to ",
+    "processing": "Processing...",
+    "upgradeTo": "Upgrade to {planName}",
+    "securePayment": "Secure payment, cancel anytime",
+    "coupon": {
+      "title": "Coupon",
+      "remove": "Remove",
+      "placeholder": "Enter coupon code",
+      "applying": "Applying...",
+      "apply": "Apply",
+      "invalidCoupon": "Coupon is invalid or expired"
+    }
+  },
+  "membershipCenter": {
+    "loginToView": "Please log in to view the membership center",
+    "login": "Login",
+    "title": "Membership Center",
+    "description": "Manage your membership benefits and billing information",
+    "upgradePlan": "Upgrade Plan",
+    "overview": "Overview",
+    "usageStatsTitle": "Usage Stats",
+    "billingManagement": "Billing Management",
+    "settings": "Settings",
+    "upgradeOrChangePlan": "Upgrade or Change Plan",
+    "statusCard": {
+      "title": "Membership Status",
+      "freeUser": "You are currently a free user",
+      "freePlan": "Free Plan",
+      "upgrade": "Upgrade Membership",
+      "billingCycle": "Billing Cycle",
+      "yearly": "Yearly",
+      "monthly": "Monthly",
+      "daysRemaining": "Days Remaining",
+      "days": "{count} day | {count} days",
+      "expirationDate": "Expiration Date",
+      "membershipDuration": "Membership Duration",
+      "daysCount": "{daysRemaining} / {durationDays} days"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "upgradePlan": "Upgrade Plan",
+      "viewBilling": "View Billing",
+      "accountSettings": "Account Settings"
+    },
+    "usageOverview": {
+      "title": "Usage Overview",
+      "useCases": "Use Cases",
+      "tutorials": "Tutorials",
+      "blogs": "Blogs",
+      "apiCalls": "API Calls",
+      "unlimited": "Unlimited"
+    },
+    "usageStats": {
+      "title": "Detailed Usage Statistics",
+      "monthly": {
+        "title": "This Month's Usage",
+        "useCases": "Use Case Generation",
+        "tutorials": "Tutorial Creation",
+        "blogs": "Blog Publishing",
+        "apiCalls": "API Calls"
+      },
+      "total": {
+        "title": "Total Usage",
+        "useCases": "Total Use Cases",
+        "tutorials": "Total Tutorials",
+        "blogs": "Total Blogs",
+        "apiCalls": "Total API Calls"
+      }
+    },
+    "benefits": {
+      "title": "Membership Benefits",
+      "apiAccess": "API Access",
+      "customModels": "Custom Models",
+      "prioritySupport": "Priority Support",
+      "exportData": "Export Data",
+      "bulkOperations": "Bulk Operations",
+      "advancedAnalytics": "Advanced Analytics",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "billing": {
+      "title": "Billing Management",
+      "currentBillingCycle": "Current Billing Cycle",
+      "yearly": "Yearly",
+      "monthly": "Monthly",
+      "autoRenewal": "Auto-renewal",
+      "renewalOn": "On",
+      "renewalOff": "Off",
+      "nextRenewalDate": "Next Renewal Date",
+      "manageRenewal": "Manage Renewal",
+      "downloadInvoice": "Download Invoice"
+    },
+    "settingsCard": {
+      "title": "Membership Settings",
+      "autoRenewal": "Auto-renewal",
+      "autoRenewalDescription": "Automatically renew membership upon expiration",
+      "manage": "Manage",
+      "paymentMethod": "Payment Method",
+      "paymentMethodDescription": "Manage your payment methods",
+      "setup": "Setup",
+      "cancelMembership": "Cancel Membership",
+      "cancelMembershipDescription": "Cancel your current membership plan",
+      "cancel": "Cancel"
+    }
+  },
+  "membershipStatus": {
+    "title": "Membership Status",
+    "noActivePlan": "You do not have an active membership plan",
+    "freeUser": "Free User",
+    "currentPlan": "Current Plan",
+    "billingCycle": "Billing Cycle",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "expirationDate": "Expiration Date",
+    "daysRemaining": "Remaining {count} day | Remaining {count} days",
+    "paymentAmount": "Payment Amount"
+  },
+  "paymentHistoryDashboard": {
+    "title": "Payment History",
+    "loginToView": "Please log in to view payment history",
+    "loadError": "Failed to load payment history",
+    "viewAll": "View All",
+    "noRecords": "No payment records",
+    "selectPlan": "Select Plan",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "save": "Save",
+    "viewMore": "View more payment records"
   }
 }

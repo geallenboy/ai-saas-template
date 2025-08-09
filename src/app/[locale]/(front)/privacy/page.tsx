@@ -9,14 +9,16 @@ import {
   Users,
 } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import { useTranslations } from 'next-intl'
 
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
   params: { locale: string }
 }) {
-  const t = await getTranslations({ locale, namespace: 'privacy.metadata' })
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: 'privacy.metadata',
+  })
 
   return {
     title: t('title'),
@@ -91,8 +93,12 @@ function PrivacySection({
   )
 }
 
-export default function PrivacyPage() {
-  const t = useTranslations('privacy')
+export default async function PrivacyPage({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
+  const t = await getTranslations({ locale, namespace: 'privacy' })
 
   const privacySections = Object.entries(privacySectionsData).map(
     ([key, { icon, contentCount }]) => ({

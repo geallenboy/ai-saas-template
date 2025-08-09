@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogPostPage({ params }: Props) {
   const { locale, slug } = await params
-  const t = await getTranslations('blog')
+  const t = await getTranslations({ locale, namespace: 'blog' })
   const post = getBlogPost([slug], locale)
 
   if (!post) {

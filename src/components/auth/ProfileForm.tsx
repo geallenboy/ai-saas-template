@@ -17,9 +17,11 @@ import {
   THEME_OPTIONS,
 } from '@/constants/auth'
 import { trpc } from '@/lib/trpc/client'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 export function ProfileForm() {
+  const t = useTranslations('auth.profileForm')
   const [state, setState] = useState<{
     success?: boolean
     error?: string
@@ -40,7 +42,7 @@ export function ProfileForm() {
       }, 3000)
     },
     onError: error => {
-      setState({ success: false, error: error.message || '更新失败，请重试' })
+      setState({ success: false, error: error.message || t('updateError') })
     },
   })
 
@@ -66,7 +68,7 @@ export function ProfileForm() {
     return (
       <Card>
         <CardContent className="p-6">
-          <p className="text-muted-foreground">加载中...</p>
+          <p className="text-muted-foreground">{t('loading')}</p>
         </CardContent>
       </Card>
     )
@@ -75,29 +77,29 @@ export function ProfileForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>编辑资料</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fullName">姓名</Label>
+            <Label htmlFor="fullName">{t('fullName')}</Label>
             <Input
               id="fullName"
               name="fullName"
               defaultValue={user.fullName || ''}
-              placeholder="请输入您的姓名"
+              placeholder={t('fullNamePlaceholder')}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="theme">主题</Label>
+              <Label htmlFor="theme">{t('theme')}</Label>
               <Select
                 name="theme"
                 defaultValue={user.preferences?.theme || 'light'}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="选择主题" />
+                  <SelectValue placeholder={t('themePlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
                   {THEME_OPTIONS.map(theme => (
@@ -110,13 +112,13 @@ export function ProfileForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="language">语言</Label>
+              <Label htmlFor="language">{t('language')}</Label>
               <Select
                 name="language"
                 defaultValue={user.preferences?.language || 'en'}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="选择语言" />
+                  <SelectValue placeholder={t('languagePlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
                   {SUPPORTED_LANGUAGES.map(lang => (
@@ -130,13 +132,13 @@ export function ProfileForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="currency">货币</Label>
+            <Label htmlFor="currency">{t('currency')}</Label>
             <Select
               name="currency"
               defaultValue={user.preferences?.currency || 'USD'}
             >
               <SelectTrigger>
-                <SelectValue placeholder="选择货币" />
+                <SelectValue placeholder={t('currencyPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
                 {SUPPORTED_CURRENCIES.map(currency => (
@@ -156,7 +158,7 @@ export function ProfileForm() {
 
           {state?.success && (
             <div className="text-sm text-green-600 bg-green-50 p-3 rounded">
-              资料更新成功！
+              {t('updateSuccess')}
             </div>
           )}
 
@@ -165,7 +167,7 @@ export function ProfileForm() {
             disabled={updateProfileMutation.isPending}
             className="w-full"
           >
-            {updateProfileMutation.isPending ? '保存中...' : '保存更改'}
+            {updateProfileMutation.isPending ? t('saving') : t('saveChanges')}
           </Button>
         </form>
       </CardContent>

@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card'
 import { BlogSearch } from '@/components/blog/BlogSearch'
 import { CalendarIcon, ClockIcon, UserIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 // Simplified blog post interface
@@ -40,6 +41,7 @@ interface BlogClientProps {
 }
 
 export function BlogClient({ posts, locale, translations }: BlogClientProps) {
+  const t = useTranslations('blog.client')
   const [filteredPosts, setFilteredPosts] = useState(posts)
 
   // Get all tags
@@ -66,12 +68,10 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
           <section className="mb-12">
             <div className="mb-6">
               <h2 className="text-2xl font-bold mb-2">
-                {locale === 'de' ? 'Beliebte Beiträge' : 'Featured Articles'}
+                {t('featuredArticles')}
               </h2>
               <p className="text-muted-foreground">
-                {locale === 'de'
-                  ? 'Ausgewählte Beiträge für Sie'
-                  : 'Handpicked articles for you'}
+                {t('featuredDescription')}
               </p>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -92,17 +92,11 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
           <div className="mb-6">
             <h2 className="text-2xl font-bold mb-2">
               {filteredPosts.length === posts.length
-                ? locale === 'de'
-                  ? 'Neueste Beiträge'
-                  : 'Latest Articles'
-                : locale === 'de'
-                  ? 'Suchergebnisse'
-                  : 'Search Results'}
+                ? t('latestArticles')
+                : t('searchResults')}
             </h2>
             <p className="text-muted-foreground">
-              {locale === 'de'
-                ? `Insgesamt ${filteredPosts.length} Beiträge gefunden`
-                : `${filteredPosts.length} article${filteredPosts.length === 1 ? '' : 's'} found`}
+              {t('articlesFound', { count: filteredPosts.length })}
             </p>
           </div>
 
@@ -122,14 +116,10 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
               <div className="mx-auto max-w-md">
                 <div className="mb-4 text-6xl">🔍</div>
                 <h3 className="mb-2 text-xl font-semibold">
-                  {locale === 'de'
-                    ? 'Keine passenden Beiträge gefunden'
-                    : 'No Articles Found'}
+                  {t('noArticlesFound')}
                 </h3>
                 <p className="text-muted-foreground">
-                  {locale === 'de'
-                    ? 'Versuchen Sie, die Suchkriterien anzupassen oder alle Beiträge zu durchsuchen'
-                    : 'Try adjusting your search terms or browse all articles'}
+                  {t('noArticlesDescription')}
                 </p>
               </div>
             </div>
@@ -142,9 +132,7 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
         {/* Popular Tags */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">
-              {locale === 'de' ? 'Beliebte Tags' : 'Popular Tags'}
-            </CardTitle>
+            <CardTitle className="text-lg">{t('popularTags')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
@@ -164,20 +152,18 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
         {/* Article archive */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">
-              {locale === 'de' ? 'Archiv' : 'Archives'}
-            </CardTitle>
+            <CardTitle className="text-lg">{t('archives')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <Button variant="ghost" className="w-full justify-start text-sm">
-                {locale === 'de' ? 'Januar 2024' : 'January 2024'} (3)
+                {t('january')} (3)
               </Button>
               <Button variant="ghost" className="w-full justify-start text-sm">
-                {locale === 'de' ? 'Dezember 2023' : 'December 2023'} (2)
+                {t('december')} (2)
               </Button>
               <Button variant="ghost" className="w-full justify-start text-sm">
-                {locale === 'de' ? 'November 2023' : 'November 2023'} (1)
+                {t('november')} (1)
               </Button>
             </div>
           </CardContent>
@@ -187,25 +173,17 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
         <Card className="bg-gradient-to-br from-primary/10 to-purple-600/10">
           <CardContent className="pt-6">
             <div className="text-center">
-              <h3 className="mb-2 font-semibold">
-                {locale === 'de'
-                  ? 'Abonnieren Sie unseren Blog'
-                  : 'Subscribe to Our Blog'}
-              </h3>
+              <h3 className="mb-2 font-semibold">{t('subscribeTitle')}</h3>
               <p className="mb-4 text-sm text-muted-foreground">
-                {locale === 'de'
-                  ? 'Erhalten Sie die neuesten Artikel und Updates'
-                  : 'Get the latest articles and updates'}
+                {t('subscribeDescription')}
               </p>
               <div className="space-y-2">
                 <input
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={t('subscribePlaceholder')}
                   className="w-full px-3 py-2 text-sm border rounded-md text-center"
                 />
-                <Button className="w-full">
-                  {locale === 'de' ? 'Abonnieren' : 'Subscribe'}
-                </Button>
+                <Button className="w-full">{t('subscribe')}</Button>
               </div>
             </div>
           </CardContent>
