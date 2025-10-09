@@ -1,0 +1,143 @@
+/* React PDF Viewer Styles */
+
+.react-pdf__Document {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.react-pdf__Page {
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 2rem);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.react-pdf__Page__canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.react-pdf__Page__textContent {
+  z-index: 1;
+}
+
+.react-pdf__Page__textContent .textLayer {
+  color: transparent;
+}
+
+.react-pdf__Page__annotations {
+  z-index: 2;
+}
+
+/* Loading states */
+.react-pdf__message {
+  padding: 20px;
+  color: #666;
+  text-align: center;
+}
+
+.react-pdf__message--loading {
+  color: #999;
+}
+
+.react-pdf__message--error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.react-pdf__message--no-data {
+  color: #6c757d;
+}
+
+/* Dark mode support */
+.dark .react-pdf__Page {
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  background: #1f2937;
+}
+
+.dark .react-pdf__message--error {
+  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .react-pdf__Page {
+    max-width: calc(100vw - 1rem);
+    margin: 0.5rem 0;
+  }
+}
+
+/* PDF Toolbar styles */
+.pdf-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.dark .pdf-toolbar {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pdf-navigation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pdf-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Smooth transitions */
+.react-pdf__Page canvas {
+  transition: transform 0.2s ease-out;
+}
+
+/* Custom scrollbar for PDF viewer */
+.pdf-viewer-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+.pdf-viewer-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pdf-viewer-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pdf-viewer-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.pdf-viewer-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dark .pdf-viewer-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dark .pdf-viewer-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}

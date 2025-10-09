@@ -1,0 +1,12 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "quickstart",
+    "architecture",
+    "deployment",
+    "development",
+    "features",
+    "customization"
+  ]
+}

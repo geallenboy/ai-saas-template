@@ -1,0 +1,54 @@
+---
+title: 前端界面与交互
+---
+
+本节记录阶段 3 交付的基础界面，实现了在 App Router 下的受保护聊天入口、会话列表、流式消息区与 Prompt 输入区。界面尽量参考 AI SDK Elements 的信息架构，方便后续扩展多模态与工具栏等能力。
+
+## 路由结构
+
+- 路径：`src/app/[locale]/(app)/aichat/page.tsx`
+- 页面组件：`ChatApp → ChatShell`
+  - `ChatApp` 使用 `ProtectedRoute` 保护路由，确保仅认证用户访问。
+  - `ChatShell` 负责 React Query + tRPC 状态管理、事件订阅和 UI 排版。
+- 新增路由组 `(app)` 便于后续扩展其他受保护应用页面。
+
+## 组件一览 (`src/components/chat`)
+
+| 组件 | 作用 |
+| --- | --- |
+| `chat-app.tsx` | 注入 `ProtectedRoute`，承载 ChatShell。 |
+| `chat-shell.tsx` | 页面主体：会话列表、消息区、输入框，集中管理状态与事件。 |
+| `SessionList` (内嵌) | 左侧/移动端会话抽屉，支持新建对话与相对时间展示。 |
+| `ConversationHeader` | 当前会话标题、模型信息与流式状态提示。 |
+| `MessageList` | 渲染消息流，复用 `ai-elements/message` 与 `Loader` 组件。 |
+| `ChatInput` | Prompt 输入框，支持 Enter 发送、Shift+Enter 换行，禁用状态同步流式事件。 |
+
+> 后续阶段可将内嵌组件拆分成独立文件，或引入 Zustand 等状态库以支持多 pane 布局。
+
+## 交互流程
+
+1. **会话数据加载**：
+   - `trpc.aichat.listSessions.useQuery()` 拉取当前用户会话，默认选中最近会话。
+   - `trpc.aichat.getSessionMessages.useQuery({ sessionId })` 懒加载消息记录。
+2. **发送消息**：
+   - `ChatInput` 提交后触发 `trpc.aichat.sendMessage.useMutation().mutateAsync`。
+   - 返回的 Observable 事件 (`session`/`user-message`/`assistant-delta`/`assistant-end`) 逐步更新本地 `messages` state。
+   - 完成后通过 `utils.aichat.listSessions.invalidate()` & `utils.aichat.getSessionMessages.invalidate()` 同步服务端数据。
+3. **移动端支持**：
+   - 使用 `Sheet` 组件复用会话列表，在小屏中通过按钮弹出。
+   - 新建对话按钮始终可用，关闭流式状态后自动滚动到底部。
+
+## AI Elements 集成
+
+- `Message`、`MessageContent`、`MessageAvatar` 提供统一的气泡样式。
+- `Loader` 组件用于流式状态指示。
+- 页面结构预留了右下角输入条、左侧会话栏与中间主对话区，后续可无缝接入 `ai-elements/inline-citation`、`sources` 等增强组件。
+
+## 待办 / 下一步
+
+- **组件拆分测试**：编写 React Testing Library 用例覆盖消息渲染、输入提交与流式事件。
+- **Prompt 快捷操作**：集成 `ai-elements/prompt-input` 引入附件/模板等操作。
+- **多会话视图**：扩展会话列表支持搜索、重命名与固定。
+- **多模态入口**：预留文件/图片/语音入口，配合阶段 5 的上传与 RAG 管线。
+
+> 设计提示：保持与 Elements 的排版一致（气泡宽度、间距、Skeleton 动画等），便于后续直接嵌入官方组件或升级到 Figma 规范。

@@ -4,14 +4,21 @@
 /node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
 
 # testing
 /coverage
+/playwright-report
+/test-results
+
+# database
+/prisma/db.sqlite
+/prisma/db.sqlite-journal
+db.sqlite
 
 # next.js
 /.next/
 /out/
+next-env.d.ts
 
 # production
 /build
@@ -24,10 +31,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.npmrc
-.env
-.claude
+.pnpm-debug.log*
+
 # local env files
+# do not commit any .env files to git, except for the .env.example file. https://create.t3.gg/en/usage/env-variables#using-environment-variables
+.env
+.env.test
 .env*.local
 
 # vercel
@@ -35,4 +44,16 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# idea files
+.idea
+
+# specstory
+/.specstory
+
+# vscode
+/.vscode
+
+#/.source
+/.swc
+

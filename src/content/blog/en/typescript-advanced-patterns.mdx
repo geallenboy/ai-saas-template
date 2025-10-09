@@ -1,0 +1,436 @@
+---
+title: TypeScript Advanced Patterns and Techniques
+description: Deep dive into TypeScript's advanced features and practical patterns
+author: AI SaaS Template Team
+date: 2025-01-25
+tags: [TypeScript, JavaScript, Type System]
+---
+
+# TypeScript Advanced Patterns and Techniques
+
+TypeScript is more than just type annotations for JavaScript—it provides a powerful type system and advanced features. This article will explore some practical TypeScript advanced patterns.
+
+## 实用类型（Utility Types）
+
+### 1. Pick 和 Omit
+
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: Date;
+}
+
+// 只选择特定字段
+type PublicUser = Pick<User, 'id' | 'name' | 'email'>;
+
+// 排除特定字段
+type CreateUserInput = Omit<User, 'id' | 'createdAt'>;
+
+// 实际使用
+function getPublicUserInfo(user: User): PublicUser {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  };
+}
+```
+
+### 2. Partial 和 Required
+
+```typescript
+interface Config {
+  apiUrl: string;
+  timeout: number;
+  retries: number;
+}
+
+// 所有字段都是可选的
+type PartialConfig = Partial<Config>;
+
+// 所有字段都是必需的
+type RequiredConfig = Required<PartialConfig>;
+
+function updateConfig(config: PartialConfig): void {
+  // 只更新提供的字段
+}
+```
+
+## 条件类型（Conditional Types）
+
+### 基础条件类型
+
+```typescript
+type IsString<T> = T extends string ? true : false;
+
+type Test1 = IsString<string>; // true
+type Test2 = IsString<number>; // false
+
+// 实用的条件类型
+type NonNullable<T> = T extends null | undefined ? never : T;
+
+type ApiResponse<T> = T extends string
+  ? { message: T }
+  : T extends number
+  ? { code: T }
+  : { data: T };
+```
+
+### 分布式条件类型
+
+```typescript
+type ToArray<T> = T extends any ? T[] : never;
+
+type StringOrNumberArray = ToArray<string | number>;
+// 结果：string[] | number[]
+
+// 过滤类型
+type Filter<T, U> = T extends U ? T : never;
+
+type StringsOnly = Filter<string | number | boolean, string>;
+// 结果：string
+```
+
+## 映射类型（Mapped Types）
+
+### 基础映射类型
+
+```typescript
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+type Optional<T> = {
+  [P in keyof T]?: T[P];
+};
+
+// 添加前缀
+type Prefixed<T, P extends string> = {
+  [K in keyof T as `${P}${string & K}`]: T[K];
+};
+
+interface User {
+  name: string;
+  age: number;
+}
+
+type PrefixedUser = Prefixed<User, 'user_'>;
+// 结果：{ user_name: string; user_age: number; }
+```
+
+### 高级映射类型
+
+```typescript
+// 深度只读
+type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+};
+
+// 键值对转换
+type Record<K extends keyof any, T> = {
+  [P in K]: T;
+};
+
+// 创建事件处理器类型
+type EventHandlers<T> = {
+  [K in keyof T as `on${Capitalize<string & K>}`]: (value: T[K]) => void;
+};
+
+interface FormData {
+  name: string;
+  email: string;
+  age: number;
+}
+
+type FormHandlers = EventHandlers<FormData>;
+// 结果：{
+//   onName: (value: string) => void;
+//   onEmail: (value: string) => void;
+//   onAge: (value: number) => void;
+// }
+```
+
+## 模板字面量类型
+
+### 基础用法
+
+```typescript
+type Greeting = `Hello, ${string}!`;
+
+const greeting1: Greeting = "Hello, World!"; // ✅
+const greeting2: Greeting = "Hi there!"; // ❌
+
+// 组合类型
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type Endpoint = `/api/${string}`;
+type ApiCall = `${HttpMethod} ${Endpoint}`;
+
+const apiCall: ApiCall = "GET /api/users"; // ✅
+```
+
+### 高级模板类型
+
+```typescript
+// 路径参数提取
+type ExtractParams<T extends string> = T extends `${string}:${infer P}/${infer Rest}`
+  ? P | ExtractParams<Rest>
+  : T extends `${string}:${infer P}`
+  ? P
+  : never;
+
+type Params = ExtractParams<'/users/:id/posts/:postId'>;
+// 结果：'id' | 'postId'
+
+// SQL 查询构建器
+type SelectQuery<T, K extends keyof T> = `SELECT ${K extends string ? K : never} FROM ${string}`;
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+type UserQuery = SelectQuery<User, 'name' | 'email'>;
+// 结果：'SELECT name FROM string' | 'SELECT email FROM string'
+```
+
+## 高级函数类型
+
+### 函数重载
+
+```typescript
+interface ApiClient {
+  request(method: 'GET', url: string): Promise<any>;
+  request(method: 'POST', url: string, data: any): Promise<any>;
+  request(method: 'PUT', url: string, data: any): Promise<any>;
+  request(method: 'DELETE', url: string): Promise<any>;
+}
+
+class HttpClient implements ApiClient {
+  async request(method: string, url: string, data?: any): Promise<any> {
+    // 实现逻辑
+  }
+}
+```
+
+### 泛型约束
+
+```typescript
+interface Lengthwise {
+  length: number;
+}
+
+function logLength<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+
+logLength("hello"); // ✅
+logLength([1, 2, 3]); // ✅
+logLength(123); // ❌ 没有 length 属性
+
+// 键约束
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+const person = { name: "Alice", age: 30 };
+const name = getProperty(person, "name"); // string
+const age = getProperty(person, "age"); // number
+```
+
+## 装饰器模式
+
+### 类装饰器
+
+```typescript
+function Entity(tableName: string) {
+  return function <T extends { new (...args: any[]): {} }>(constructor: T) {
+    return class extends constructor {
+      tableName = tableName;
+    };
+  };
+}
+
+@Entity('users')
+class User {
+  constructor(public name: string) {}
+}
+
+// 方法装饰器
+function Log(target: any, propertyName: string, descriptor: PropertyDescriptor) {
+  const method = descriptor.value;
+  
+  descriptor.value = function (...args: any[]) {
+    console.log(`Calling ${propertyName} with args:`, args);
+    const result = method.apply(this, args);
+    console.log(`Result:`, result);
+    return result;
+  };
+}
+
+class Calculator {
+  @Log
+  add(a: number, b: number): number {
+    return a + b;
+  }
+}
+```
+
+## 类型守卫（Type Guards）
+
+### 自定义类型守卫
+
+```typescript
+interface Cat {
+  type: 'cat';
+  meow(): void;
+}
+
+interface Dog {
+  type: 'dog';
+  bark(): void;
+}
+
+type Animal = Cat | Dog;
+
+// 类型谓词
+function isCat(animal: Animal): animal is Cat {
+  return animal.type === 'cat';
+}
+
+function makeSound(animal: Animal) {
+  if (isCat(animal)) {
+    animal.meow(); // TypeScript 知道这是 Cat
+  } else {
+    animal.bark(); // TypeScript 知道这是 Dog
+  }
+}
+
+// 断言函数
+function assertIsNumber(value: unknown): asserts value is number {
+  if (typeof value !== 'number') {
+    throw new Error('Expected number');
+  }
+}
+
+function processValue(value: unknown) {
+  assertIsNumber(value);
+  // 这里 TypeScript 知道 value 是 number
+  console.log(value.toFixed(2));
+}
+```
+
+## 模块声明和命名空间
+
+### 环境声明
+
+```typescript
+// global.d.ts
+declare global {
+  interface Window {
+    gtag: (command: string, ...args: any[]) => void;
+  }
+  
+  var ENV: 'development' | 'production' | 'test';
+}
+
+// 模块声明
+declare module '*.svg' {
+  const content: string;
+  export default content;
+}
+
+declare module 'my-library' {
+  export function doSomething(value: string): number;
+}
+```
+
+### 命名空间
+
+```typescript
+namespace Utils {
+  export namespace String {
+    export function capitalize(str: string): string {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    
+    export function truncate(str: string, length: number): string {
+      return str.length > length ? str.slice(0, length) + '...' : str;
+    }
+  }
+  
+  export namespace Array {
+    export function unique<T>(arr: T[]): T[] {
+      return [...new Set(arr)];
+    }
+  }
+}
+
+// 使用
+const capitalized = Utils.String.capitalize('hello');
+const uniqueItems = Utils.Array.unique([1, 2, 2, 3]);
+```
+
+## 实际应用示例
+
+### API 客户端类型安全
+
+```typescript
+interface ApiEndpoints {
+  '/users': {
+    GET: { response: User[] };
+    POST: { body: CreateUserInput; response: User };
+  };
+  '/users/:id': {
+    GET: { response: User };
+    PUT: { body: UpdateUserInput; response: User };
+    DELETE: { response: void };
+  };
+}
+
+type ExtractPath<T extends string> = T extends `${infer Path}/:${string}`
+  ? Path
+  : T;
+
+class TypedApiClient {
+  async request<
+    Path extends keyof ApiEndpoints,
+    Method extends keyof ApiEndpoints[Path]
+  >(
+    method: Method,
+    path: Path,
+    options?: ApiEndpoints[Path][Method] extends { body: infer B }
+      ? { body: B }
+      : {}
+  ): Promise<
+    ApiEndpoints[Path][Method] extends { response: infer R } ? R : never
+  > {
+    // 实现逻辑
+    throw new Error('Not implemented');
+  }
+}
+
+// 使用时具有完整的类型安全
+const client = new TypedApiClient();
+const users = await client.request('GET', '/users'); // User[]
+const user = await client.request('POST', '/users', {
+  body: { name: 'Alice', email: 'alice@example.com' }
+}); // User
+```
+
+## 总结
+
+TypeScript 的高级特性为我们提供了强大的类型系统工具：
+
+1. **实用类型**：简化常见的类型操作
+2. **条件类型**：基于条件的类型选择
+3. **映射类型**：类型转换和操作
+4. **模板字面量**：字符串类型的精确控制
+5. **类型守卫**：运行时类型检查
+6. **装饰器**：元编程支持
+
+掌握这些高级模式可以让你编写更安全、更可维护的 TypeScript 代码，充分发挥类型系统的优势。 

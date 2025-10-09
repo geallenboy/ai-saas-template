@@ -1,0 +1,50 @@
+---
+title: 数据模型
+---
+
+本章节汇总阶段 1 交付的核心数据库结构，用于支撑 AI 会话上下文、消息持久化、附件上传与后续 RAG/Embedding 能力。所有表均位于 `src/drizzle/schemas/aichat.ts`，配套迁移脚本 `src/drizzle/migrations/0003_ai_chat_schema.sql`。
+
+## 表结构概览
+
+### `ai_chat_sessions`
+- 记录会话主体信息：`user_id`、标题、摘要、系统 Prompt、模式与可见性。
+- 默认模型为 `openai/gpt-4o`，与 `src/lib/ai-sdk/defaults.ts` 保持一致，未显式选择模型时由服务端自动回退。
+- `metadata` 使用 JSONB，预留扩展字段（自定义标签、计费信息等）。
+- `last_message_at`、`archived_at`、`deleted_at` 支持归档与软删除策略。
+
+### `ai_chat_messages`
+- 关联到会话 (`session_id`) 与可选作者 (`author_id`)，支持系统、用户、助手、工具多角色。
+- `content` 保存结构化消息片段（文本、工具调用、附件指针等），同构于 AI SDK `ModelMessage` 结构。
+- `status` 枚举：`pending` / `streaming` / `completed` / `failed`。默认 `completed`，便于追踪流式或重试场景。
+- `metadata` 承载 token 成本、响应延迟、回退信息。
+
+### `ai_chat_attachments`
+- 存放所有附件/图片/音频等资源的索引，`kind` 区分类型。
+- `storage_key` 对应 R2 对象键，实际文件通过 `.env` 中的凭据上传至 Cloudflare R2，并可直接使用公开前缀 [https://pub-f0115b1299964c9e9984f79207438731.r2.dev](https://pub-f0115b1299964c9e9984f79207438731.r2.dev) 访问。
+- `size_bytes`、`content_type`、`checksum` 便于校验与成本统计。
+
+### `ai_chat_file_chunks`
+- 针对可检索文件（PDF、TXT 等）拆分的内容片段，`chunk_index` 确保有序。
+- `token_count` 预留给分段 Token 统计，便于控制上下文窗口与召回策略。
+
+### `ai_chat_embeddings`
+- 记录 `file_chunks` 对应的向量信息：`model_id`、`dimensions`、`embedding`（JSON 数组）以及附加元数据。
+- 后续接入 pgvector 或外部向量数据库时，可替换 `embedding` 字段的存储方式或同步存储到外部服务。
+
+## Fixture / Seeder
+
+为方便测试与脚本初始化，`aichat.ts` 提供以下工厂函数：
+
+- `createSessionFixture`
+- `createMessageFixture`
+- `createAttachmentFixture`
+- `createFileChunkFixture`
+- `createEmbeddingFixture`
+
+这些函数返回 Drizzle 可直接插入的对象，可在 Vitest、Seeder 或开发脚本中快速构建数据。
+
+## 实施备注
+
+- 迁移文件未自动更新 `meta` 快照，首次在本地运行时请执行 `pnpm db:generate` 或 `pnpm db:push` 以同步 Drizzle 元数据。
+- 附件与 RAG 相关字段均预留 JSONB `metadata`，确保未来扩展（OCR 结果、语言标签、索引批次）无需重新迁移。
+- 默认模型设置与 `ai-sdk` 封装保持一致，后续阶段在模型/角色配置（阶段 4）中可直接复用 `model_id` 字段。

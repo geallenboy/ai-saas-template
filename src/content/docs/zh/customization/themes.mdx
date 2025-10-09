@@ -1,0 +1,740 @@
+---
+title: 自定义主题
+---
+本指南涵盖了 AI SaaS Template 中的主题自定义、色彩系统和样式模式。
+
+AI SaaS Template 使用基于 Tailwind CSS v4 和 shadcn/ui 的现代主题系统，支持明暗模式切换和完全自定义的配色方案。该系统采用 CSS 变量和 oklch 色彩空间，确保颜色一致性和无障碍性。
+
+### 主题架构
+
+```
+src/
+├── app/
+│   └── globals.css          # 全局样式和 CSS 变量定义
+├── components/
+│   ├── providers/
+│   │   └── theme-provider.tsx # Next.js 主题提供者
+│   ├── common/
+│   │   └── mode-toggle.tsx    # 主题切换组件
+│   └── ui/                    # shadcn/ui 主题化组件
+├── lib/
+│   └── utils.ts             # 工具函数和 className 合并
+└── components.json          # shadcn/ui 配置
+```
+
+## 主题配置
+
+### shadcn/ui 配置
+
+项目使用 shadcn/ui 组件库，配置文件位于 `components.json`：
+
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "src/app/globals.css",
+    "baseColor": "zinc",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui"
+  },
+  "iconLibrary": "lucide"
+}
+```
+
+### Tailwind CSS v4 主题配置
+
+项目使用 Tailwind CSS v4 的新语法，在 `src/app/globals.css` 中定义：
+
+```css
+@theme inline {
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, "SF Mono",
+    Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  /* 圆角系统 */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  /* 色彩映射 */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  /* ... 更多色彩变量 */
+  
+  /* 动画预设 */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+```
+
+### 主题提供者设置
+
+项目使用 `next-themes` 库实现主题切换功能：
+
+```typescript
+// src/components/providers/theme-provider.tsx
+'use client'
+
+import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import type * as React from 'react'
+
+export function ThemeProvider({
+  children,
+  ...props
+}: React.ComponentProps<typeof NextThemesProvider>) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
+```
+
+在应用根布局中使用：
+
+```typescript
+// src/app/layout.tsx
+import { ThemeProvider } from '@/components/providers/theme-provider'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="zh" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+## 色彩系统
+
+### OKLCH 色彩空间
+
+项目使用 OKLCH 色彩空间，它比传统的 HSL 和 RGB 提供更好的感知一致性和渐变效果：
+
+```css
+/* src/app/globals.css */
+:root {
+  --radius: 0.625rem;
+  
+  /* 浅色主题 */
+  --background: oklch(1 0 0);                    /* 纯白背景 */
+  --foreground: oklch(0.145 0 0);               /* 深灰文字 */
+  --card: oklch(1 0 0);                         /* 卡片背景 */
+  --card-foreground: oklch(0.145 0 0);          /* 卡片文字 */
+  --primary: oklch(0.205 0 0);                  /* 主色调 */
+  --primary-foreground: oklch(0.985 0 0);       /* 主色文字 */
+  --secondary: oklch(0.97 0 0);                 /* 辅助色 */
+  --secondary-foreground: oklch(0.205 0 0);     /* 辅助色文字 */
+  --muted: oklch(0.97 0 0);                     /* 静音色 */
+  --muted-foreground: oklch(0.556 0 0);         /* 静音色文字 */
+  --destructive: oklch(0.577 0.245 27.325);     /* 危险色 */
+  --border: oklch(0.922 0 0);                   /* 边框色 */
+  --input: oklch(0.922 0 0);                    /* 输入框边框 */
+  --ring: oklch(0.708 0 0);                     /* 焦点环 */
+}
+
+.dark {
+  /* 暗色主题 */
+  --background: oklch(0.145 0 0);               /* 深色背景 */
+  --foreground: oklch(0.985 0 0);               /* 浅色文字 */
+  --card: oklch(0.205 0 0);                     /* 卡片背景 */
+  --card-foreground: oklch(0.985 0 0);          /* 卡片文字 */
+  --primary: oklch(0.922 0 0);                  /* 主色调 */
+  --primary-foreground: oklch(0.205 0 0);       /* 主色文字 */
+  --secondary: oklch(0.269 0 0);                /* 辅助色 */
+  --secondary-foreground: oklch(0.985 0 0);     /* 辅助色文字 */
+  --muted: oklch(0.269 0 0);                    /* 静音色 */
+  --muted-foreground: oklch(0.708 0 0);         /* 静音色文字 */
+  --destructive: oklch(0.704 0.191 22.216);     /* 危险色 */
+  --border: oklch(1 0 0 / 10%);                 /* 边框色（透明度） */
+  --input: oklch(1 0 0 / 15%);                  /* 输入框（透明度） */
+  --ring: oklch(0.556 0 0);                     /* 焦点环 */
+}
+```
+
+### 自定义色彩变量
+
+如需添加自定义色彩，可以在 `:root` 和 `.dark` 选择器中定义新的 CSS 变量：
+
+```css
+/* src/app/globals.css */
+:root {
+  /* 现有变量... */
+  
+  /* 自定义色彩变量 */
+  --success: oklch(0.641 0.15 142.495);        /* 成功色 */
+  --success-foreground: oklch(0.09 0.016 142.495);
+  --warning: oklch(0.713 0.18 85.87);          /* 警告色 */
+  --warning-foreground: oklch(0.09 0.018 85.87);
+  --info: oklch(0.631 0.206 231.604);          /* 信息色 */
+  --info-foreground: oklch(0.985 0 0);
+  
+  /* 图表色彩 */
+  --chart-1: oklch(0.646 0.222 41.116);        /* 橙色 */
+  --chart-2: oklch(0.6 0.118 184.704);         /* 青色 */
+  --chart-3: oklch(0.398 0.07 227.392);        /* 蓝色 */
+  --chart-4: oklch(0.828 0.189 84.429);        /* 绿色 */
+  --chart-5: oklch(0.769 0.188 70.08);         /* 黄色 */
+}
+
+.dark {
+  /* 暗色模式覆盖 */
+  --success: oklch(0.641 0.15 142.495);
+  --warning: oklch(0.713 0.18 85.87);
+  --info: oklch(0.631 0.206 231.604);
+  
+  /* 图表色彩调整 */
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+}
+```
+
+### 在组件中使用色彩
+
+```typescript
+// 在组件中使用主题色彩
+import { cn } from '@/lib/utils'
+
+function CustomButton({ className, variant = 'default', ...props }) {
+  return (
+    <button
+      className={cn(
+        // 基础样式
+        'inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors',
+        // 根据变体应用不同样式
+        {
+          'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'default',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90': variant === 'destructive',
+          'border border-input bg-background hover:bg-accent': variant === 'outline',
+        },
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+// 使用自定义色彩
+function StatusBadge({ status, children }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium',
+        {
+          'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400': status === 'success',
+          'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400': status === 'warning',
+          'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400': status === 'error',
+        }
+      )}
+    >
+      {children}
+    </span>
+  )
+}
+```
+
+## 字体系统
+
+### Geist 字体配置
+
+项目使用 Vercel 的 Geist 字体作为默认字体，在 `src/app/globals.css` 中配置：
+
+```css
+@theme inline {
+  /* 无衬线字体 */
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* 等宽字体 */
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, "SF Mono",
+    Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* 中文字体优化 */
+:lang(zh) {
+  font-family: var(--font-geist-sans), "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+```
+
+### 字体加载策略
+
+项目使用 Next.js 的字体优化功能来加载 Geist 字体：
+
+```typescript
+// src/app/layout.tsx
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html 
+      lang="zh" 
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning // 防止主题切换时的水合警告
+    >
+      <body className="font-sans antialiased">
+        {children}
+      </body>
+    </html>
+  )
+}
+```
+
+### 字体显示优化
+
+```css
+/* src/app/globals.css */
+@layer base {
+  /* 确保跨平台的一致字体渲染 */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+### 自定义字体加载
+
+如果需要使用自定义字体，可以在 `public/fonts` 目录下放置字体文件：
+
+```css
+/* src/app/globals.css */
+@font-face {
+  font-family: 'Custom Font';
+  src: url('/fonts/custom-font.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* 优化字体加载体验 */
+}
+
+/* 在 Tailwind 中使用自定义字体 */
+.font-custom {
+  font-family: 'Custom Font', var(--font-sans);
+}
+```
+
+在组件中使用：
+
+```typescript
+<h1 className="font-custom text-2xl font-bold">
+  使用自定义字体
+</h1>
+```
+
+## 组件样式
+
+### UI 组件变体
+
+```typescript
+// src/components/ui/button.tsx
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md font-medium transition-colors",
+  {
+    variants: {
+      variant: {
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        link: 'text-primary underline-offset-4 hover:underline',
+      },
+      size: {
+        default: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        lg: 'h-11 rounded-md px-8',
+        icon: 'h-10 w-10',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+export function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
+  const Comp = asChild ? Slot : 'button';
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  );
+}
+```
+
+### 自定义组件变体
+
+```typescript
+// 添加自定义变体
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md font-medium transition-colors",
+  {
+    variants: {
+      variant: {
+        // ... 现有变体
+        gradient: 'bg-gradient-to-r from-primary to-secondary text-primary-foreground',
+        glass: 'bg-white/10 backdrop-blur-sm border border-white/20 text-white',
+        neon: 'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-[0_0_20px_rgba(59,130,246,0.5)]',
+      },
+      // ... 其余配置
+    },
+  }
+);
+```
+
+## 暗色模式自定义
+
+### 暗色模式样式
+
+```css
+/* src/styles/globals.css */
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+```
+
+### 暗色模式工具
+
+```typescript
+// src/hooks/use-theme.ts
+import { useTheme } from 'next-themes';
+
+export function useThemeUtils() {
+  const { theme, setTheme, systemTheme } = useTheme();
+  
+  const isDark = theme === 'dark' || (theme === 'system' && systemTheme === 'dark');
+  
+  const toggleTheme = () => {
+    setTheme(isDark ? 'light' : 'dark');
+  };
+  
+  return {
+    theme,
+    isDark,
+    setTheme,
+    toggleTheme,
+  };
+}
+```
+
+## 动画系统
+
+### 动画配置
+
+```typescript
+// src/config/theme.config.ts
+export const themeConfig: ThemeConfig = {
+  animations: {
+    duration: {
+      fast: '150ms',
+      normal: '300ms',
+      slow: '500ms',
+    },
+    easing: {
+      ease: 'ease',
+      easeIn: 'ease-in',
+      easeOut: 'ease-out',
+      easeInOut: 'ease-in-out',
+    },
+  },
+};
+```
+
+### 自定义动画
+
+```css
+/* src/styles/globals.css */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+```
+
+## 响应式设计
+
+### 断点系统
+
+```typescript
+// src/config/theme.config.ts
+export const themeConfig: ThemeConfig = {
+  breakpoints: {
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    '2xl': '1536px',
+  },
+};
+```
+
+### 响应式组件
+
+```typescript
+// 使用响应式工具
+function ResponsiveCard() {
+  return (
+    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4">
+      <div className="bg-card rounded-lg p-6 shadow-md">
+        <h3 className="text-lg md:text-xl font-semibold mb-2">
+          响应式卡片
+        </h3>
+        <p className="text-sm md:text-base text-muted-foreground">
+          这个卡片会适应不同的屏幕尺寸。
+        </p>
+      </div>
+    </div>
+  );
+}
+```
+
+## 主题切换
+
+### 主题切换组件
+
+```typescript
+// src/components/theme-toggle.tsx
+'use client';
+
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+export function ThemeToggle() {
+  const { setTheme } = useTheme();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">切换主题</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme('light')}>
+          浅色
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>
+          深色
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>
+          系统
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+```
+
+## 创建自定义主题
+
+### 添加新的主题变体
+
+如果需要添加完全自定义的主题（比如紫色主题），可以按以下步骤操作：
+
+1. **在 globals.css 中定义新主题**
+
+```css
+/* src/app/globals.css */
+
+/* 紫色主题 */
+.theme-purple {
+  --background: oklch(0.978 0.013 316.8);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(0.985 0.007 316.8);
+  --card-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.67 0.24 310);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.956 0.013 316.8);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.956 0.013 316.8);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.956 0.013 316.8);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0.013 316.8);
+  --input: oklch(0.922 0.013 316.8);
+  --ring: oklch(0.67 0.24 310);
+}
+
+/* 紫色主题的暗色模式 */
+.theme-purple.dark {
+  --background: oklch(0.145 0.02 316.8);
+  --foreground: oklch(0.985 0.007 316.8);
+  --card: oklch(0.205 0.02 316.8);
+  --card-foreground: oklch(0.985 0.007 316.8);
+  --primary: oklch(0.922 0.02 316.8);
+  --primary-foreground: oklch(0.205 0.02 316.8);
+  /* ... 其他变量 */
+}
+```
+
+2. **更新主题提供者**
+
+```typescript
+// src/components/providers/theme-provider.tsx
+export function ThemeProvider({
+  children,
+  ...props
+}: React.ComponentProps<typeof NextThemesProvider>) {
+  return (
+    <NextThemesProvider 
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      themes={['light', 'dark', 'system', 'purple']} // 添加紫色主题
+      {...props}
+    >
+      {children}
+    </NextThemesProvider>
+  )
+}
+```
+
+3. **在主题切换组件中添加选项**
+
+```typescript
+// 更新 mode-toggle.tsx
+<DropdownMenuContent align="end">
+  <DropdownMenuItem onClick={() => setTheme('light')}>
+    浅色模式
+  </DropdownMenuItem>
+  <DropdownMenuItem onClick={() => setTheme('dark')}>
+    深色模式
+  </DropdownMenuItem>
+  <DropdownMenuItem onClick={() => setTheme('purple')}>
+    紫色主题
+  </DropdownMenuItem>
+  <DropdownMenuItem onClick={() => setTheme('system')}>
+    系统设置
+  </DropdownMenuItem>
+</DropdownMenuContent>
+```
+
+## 最佳实践
+
+### 1. 色彩系统使用
+
+- **使用语义化命名**：始终使用 `primary`、`secondary`、`muted` 等语义化名称
+- **OKLCH 色彩空间**：使用 OKLCH 可以获得更好的色彩一致性和渐变效果
+- **对比度检查**：确保所有色彩组合都符合 WCAG 无障碍标准
+- **两种模式测试**：始终在浅色和深色模式下测试所有 UI 组件
+
+### 2. 性能优化
+
+- **CSS 变量**：使用 CSS 变量实现零重绘的主题切换
+- **字体优化**：使用 `font-display: swap` 和 Next.js 字体优化
+- **动画控制**：在移动设备上减少不必要的动画效果
+- **懒加载**：使用 `suppressHydrationWarning` 防止主题切换时的闪烁
+
+### 3. 开发体验
+
+- **TypeScript 支持**：使用 shadcn/ui 的完整 TypeScript 支持
+- **组件变体**：利用 `class-variance-authority` 实现类型安全的组件变体
+- **工具链集成**：与 Tailwind CSS v4、Biome、Next.js 完美集成
+- **热更新**：在开发模式下支持主题的实时预览
+
+### 4. 维护性和扩展性
+
+- **集中化配置**：所有主题相关配置集中在 `globals.css` 和 `components.json`
+- **模块化设计**：组件库采用模块化设计，便于独立维护和测试
+- **文档化**：为每个自定义主题和组件提供清晰的文档
+- **版本控制**：使用语义化版本号管理主题系统的更新
+
+### 5. 国际化支持
+
+- **中文字体优化**：为中文环境优化字体集和渲染效果
+- **RTL 支持**：使用 Tailwind CSS 的 RTL 修饰符支持双向文本
+- **数字字体**：为不同语言优化数字显示效果
+
+这个现代化的主题系统为 AI SaaS Template 提供了强大的灵活性和可维护性，同时保证了优异的用户体验和开发者体验。 

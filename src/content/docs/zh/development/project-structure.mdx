@@ -1,0 +1,613 @@
+---
+title: 项目结构
+---
+AI SaaS Template 采用基于 Next.js 15 App Router 的现代化项目架构，结合 tRPC、Better Auth 和 Drizzle ORM 等技术栈，实现清晰的关注点分离和高度的可扩展性。
+
+## 概述
+
+项目架构特点：
+- **App Router 架构**: 基于 Next.js 15 App Router 的文件系统路由
+- **类型安全**: 端到端的 TypeScript 类型安全
+- **模块化设计**: 清晰的功能模块分离
+- **现代工具链**: Biome、Vitest、Playwright 等现代开发工具
+- **国际化支持**: 基于 next-intl 的多语言架构
+
+## 根目录结构
+
+```
+ai-saas-template/
+├── .env.example                 # 环境变量模板
+├── .gitignore                   # Git 忽略规则
+├── biome.jsonc                  # 代码格式化和检查配置
+├── components.json              # shadcn/ui 组件配置
+├── drizzle.config.ts           # Drizzle ORM 配置
+├── env.ts                      # 环境变量验证
+├── middleware.ts               # Next.js 中间件
+├── next.config.ts              # Next.js 配置
+├── package.json                # 依赖和脚本
+├── playwright.config.ts        # 端到端测试配置
+├── postcss.config.js           # PostCSS 配置
+├── tailwind.config.ts          # Tailwind CSS 配置
+├── tsconfig.json               # TypeScript 配置
+├── vitest.config.ts            # 单元测试配置
+├── drizzle/                    # 数据库迁移文件
+├── public/                     # 静态资源
+├── src/                        # 源代码目录
+└── tests/                      # 测试文件
+```
+
+## 源代码结构 (`src/`)
+
+### 应用目录 (`src/app/`)
+
+基于 Next.js 15 App Router 的路由结构：
+
+```
+src/app/
+├── [locale]/                   # 国际化路由层
+│   ├── (dashboard)/           # 仪表板路由组
+│   │   ├── dashboard/         # 仪表板页面
+│   │   │   ├── page.tsx      # /[locale]/dashboard
+│   │   │   ├── settings/     # 设置页面
+│   │   │   └── billing/      # 账单页面
+│   │   └── layout.tsx        # 仪表板布局
+│   ├── (front)/              # 前台页面路由组
+│   │   ├── page.tsx          # 首页
+│   │   ├── pricing/          # 定价页面
+│   │   ├── about/            # 关于页面
+│   │   └── layout.tsx        # 前台布局
+│   ├── auth/                 # 认证页面
+│   │   ├── login/            # 登录页面
+│   │   ├── register/         # 注册页面
+│   │   └── layout.tsx        # 认证布局
+│   ├── docs/                 # 文档页面 (Fumadocs)
+│   │   ├── [[...slug]]/      # 动态文档路由
+│   │   ├── layout.tsx        # 文档布局
+│   │   └── page.tsx          # 文档首页
+│   ├── blog/                 # 博客页面
+│   │   ├── [slug]/           # 博客文章页面
+│   │   ├── page.tsx          # 博客列表
+│   │   └── layout.tsx        # 博客布局
+│   ├── layout.tsx            # 语言级别布局
+│   └── page.tsx              # 语言根页面重定向
+├── api/                      # API 路由
+│   ├── auth/                 # Better Auth API
+│   │   └── [...all]/route.ts
+│   ├── trpc/                 # tRPC API 路由
+│   │   └── [trpc]/route.ts
+│   ├── payments/             # 支付相关 API
+│   │   └── webhook/route.ts
+│   └── webhook/              # 第三方 Webhook
+│       └── stripe/route.ts
+├── globals.css               # 全局样式
+├── layout.tsx                # 根布局
+├── loading.tsx               # 全局加载组件
+├── not-found.tsx            # 404 页面
+└── error.tsx                # 错误页面
+```
+
+### 组件目录 (`src/components/`)
+
+模块化的组件架构：
+
+```
+src/components/
+├── ui/                       # 基础 UI 组件 (shadcn/ui)
+│   ├── button.tsx           # 按钮组件
+│   ├── card.tsx             # 卡片组件
+│   ├── dialog.tsx           # 对话框组件
+│   ├── form.tsx             # 表单组件
+│   ├── input.tsx            # 输入框组件
+│   ├── toast.tsx            # 提示组件
+│   └── ...                  # 其他基础组件
+├── layout/                  # 布局组件
+│   ├── header.tsx           # 页头组件
+│   ├── footer.tsx           # 页脚组件
+│   ├── sidebar.tsx          # 侧边栏组件
+│   ├── navigation.tsx       # 导航组件
+│   └── breadcrumb.tsx       # 面包屑导航
+├── dashboard/               # 仪表板组件
+│   ├── overview.tsx         # 概览组件
+│   ├── stats-card.tsx       # 统计卡片
+│   ├── recent-activity.tsx  # 最近活动
+│   └── charts/              # 图表组件
+│       ├── line-chart.tsx
+│       ├── bar-chart.tsx
+│       └── pie-chart.tsx
+├── auth/                    # 认证相关组件
+│   ├── sign-in-form.tsx     # 登录表单
+│   ├── sign-up-form.tsx     # 注册表单
+│   ├── user-button.tsx      # 用户按钮
+│   └── auth-guard.tsx       # 认证守卫
+├── payment/                 # 支付相关组件
+│   ├── pricing-card.tsx     # 定价卡片
+│   ├── checkout-form.tsx    # 结账表单
+│   ├── billing-info.tsx     # 账单信息
+│   └── subscription-status.tsx # 订阅状态
+├── ai/                      # AI 功能组件
+│   ├── chat-interface.tsx   # 聊天界面
+│   ├── message-bubble.tsx   # 消息气泡
+│   ├── model-selector.tsx   # 模型选择器
+│   └── usage-meter.tsx      # 使用量显示
+├── providers/               # Context 提供者
+│   ├── query-provider.tsx   # TanStack Query 提供者
+│   ├── theme-provider.tsx   # 主题提供者
+│   ├── toast-provider.tsx   # 提示提供者
+│   └── trpc-provider.tsx    # tRPC 提供者
+└── common/                  # 通用组件
+    ├── loading-spinner.tsx  # 加载动画
+    ├── error-boundary.tsx   # 错误边界
+    ├── seo-head.tsx         # SEO 头部
+    └── theme-switch.tsx     # 主题切换器
+```
+
+### 库目录 (`src/lib/`)
+
+核心业务逻辑和工具函数：
+
+```
+src/lib/
+├── trpc/                    # tRPC 配置
+│   ├── client.ts           # tRPC 客户端
+│   ├── server.ts           # tRPC 服务器
+│   ├── context.ts          # tRPC 上下文
+│   └── routers/            # tRPC 路由器
+│       ├── auth.ts         # 认证路由
+│       ├── user.ts         # 用户路由
+│       ├── payment.ts      # 支付路由
+│       ├── ai.ts           # AI 路由
+│       └── index.ts        # 根路由器
+├── db/                     # 数据库相关
+│   ├── index.ts           # 数据库连接
+│   ├── schema.ts          # Drizzle 模式
+│   ├── migrations/        # 数据库迁移
+│   └── queries/           # 数据库查询
+│       ├── users.ts
+│       ├── payments.ts
+│       └── index.ts
+├── auth/                   # 认证相关
+│   ├── better-auth/       # Better Auth 集成
+│   │   ├── client.ts     # 浏览器客户端与 Hook
+│   │   ├── server.ts     # betterAuth 服务端实例
+│   │   ├── state-manager.ts # 会话缓存/同步
+│   │   ├── permissions.ts  # 服务端权限工具
+│   │   ├── roles.ts        # 角色枚举
+│   │   └── index.ts
+│   └── permissions.ts     # 通用权限导出
+├── ai/                     # AI 服务
+│   ├── providers/         # AI 提供商
+│   │   ├── openai.ts     # OpenAI 集成
+│   │   ├── anthropic.ts  # Anthropic 集成
+│   │   ├── google.ts     # Google AI 集成
+│   │   └── xai.ts        # XAI 集成
+│   ├── config.ts          # AI 配置
+│   └── utils.ts           # AI 工具函数
+├── payments/               # 支付系统
+│   ├── stripe.ts          # Stripe 配置
+│   ├── webhooks.ts        # Webhook 处理
+│   └── plans.ts           # 订阅计划
+├── validations/            # 数据验证
+│   ├── auth.ts            # 认证验证
+│   ├── user.ts            # 用户数据验证
+│   ├── payment.ts         # 支付验证
+│   └── ai.ts              # AI 请求验证
+├── utils/                  # 工具函数
+│   ├── cn.ts              # 类名工具
+│   ├── format.ts          # 格式化工具
+│   ├── date.ts            # 日期工具
+│   └── api.ts             # API 工具
+└── hooks/                  # 自定义 Hooks
+    ├── use-auth.ts        # 认证 Hook
+    ├── use-payment.ts     # 支付 Hook
+    ├── use-ai.ts          # AI Hook
+    └── use-local-storage.ts # 本地存储 Hook
+```
+
+### 常量定义 (`src/constants/`)
+
+项目常量和配置：
+
+```
+src/constants/
+├── auth.ts                 # 认证相关常量
+├── payment.ts              # 支付相关常量
+└── user.ts                 # 用户相关常量
+```
+
+### 类型定义 (`src/types/`)
+
+TypeScript 类型定义：
+
+```
+src/types/
+├── index.d.ts              # 全局类型定义
+├── auth.ts                 # 认证类型
+├── user.ts                 # 用户类型
+├── payment.ts              # 支付类型
+├── blocks.ts               # 组件区块类型
+├── common.ts               # 通用类型
+└── login.ts                # 登录相关类型
+```
+
+### 国际化 (`src/translate/`)
+
+多语言支持结构：
+
+```
+src/translate/
+├── i18n/                   # 国际化配置
+│   ├── config.ts          # i18n 配置
+│   ├── request.ts         # 服务器端 i18n
+│   └── routing.ts         # 路由本地化
+└── messages/               # 翻译文件
+    ├── en.json            # 英文翻译
+    └── zh.json            # 中文翻译
+```
+
+### 内容管理 (`src/content/`)
+
+静态内容和文档：
+
+```
+src/content/
+├── docs/                   # 文档内容
+│   ├── en/                # 英文文档
+│   │   ├── index.mdx
+│   │   ├── quickstart.mdx
+│   │   └── development/
+│   └── zh/                # 中文文档
+│       ├── index.mdx
+│       ├── quickstart.mdx
+│       └── development/
+├── blog/                   # 博客内容
+│   ├── en/                # 英文博客
+│   └── zh/                # 中文博客
+└── legal/                  # 法律文档
+    ├── privacy.mdx
+    └── terms.mdx
+```
+
+### 自定义 Hooks (`src/hooks/`)
+
+自定义 React hooks：
+
+```
+src/hooks/
+├── use-I18n.tsx            # 国际化 Hook
+├── use-analytics.ts        # 分析统计 Hook
+├── use-debounce.ts         # 防抖 Hook
+├── use-membership.ts       # 会员状态 Hook
+├── use-mobile.tsx          # 移动设备检测 Hook
+├── use-system-config.ts    # 系统配置 Hook
+└── use-trpc.ts             # tRPC Hook
+```
+
+## 配置文件结构
+
+### 数据库配置
+
+```typescript
+// drizzle.config.ts
+import { defineConfig } from 'drizzle-kit'
+import { env } from './env'
+
+export default defineConfig({
+  schema: './src/lib/db/schema.ts',
+  out: './drizzle',
+  dialect: 'postgresql',
+  dbCredentials: {
+    url: env.DATABASE_URL,
+  },
+})
+```
+
+### TypeScript 配置
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "es6"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/styles/*": ["./src/styles/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}
+```
+
+### Tailwind CSS 配置
+
+```typescript
+// tailwind.config.ts
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  darkMode: ['class'],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        // ... 更多颜色配置
+      },
+    },
+  },
+  plugins: [require('tailwindcss-animate')],
+}
+
+export default config
+```
+
+## 文件命名约定
+
+### 组件文件
+
+```
+// React 组件
+UserProfile.tsx          ❌ 不推荐
+user-profile.tsx         ✅ 推荐 (kebab-case)
+
+// Hook 文件
+use-auth.ts              ✅ 推荐 (use- 前缀 + kebab-case)
+useAuth.ts               ❌ 不推荐
+
+// 工具函数
+format-date.ts           ✅ 推荐
+formatDate.ts            ❌ 不推荐
+```
+
+### API 和路由文件
+
+```
+// API 路由
+route.ts                 ✅ Next.js App Router 约定
+api.ts                   ❌ 不推荐
+
+// 页面文件
+page.tsx                 ✅ Next.js App Router 约定
+index.tsx                ❌ 在 App Router 中不推荐
+
+// 布局文件
+layout.tsx               ✅ Next.js App Router 约定
+```
+
+### 配置文件
+
+```
+// 配置文件使用 kebab-case + .config.ts 后缀
+next.config.ts           ✅ 推荐
+tailwind.config.ts       ✅ 推荐
+drizzle.config.ts        ✅ 推荐
+```
+
+## 导入/导出约定
+
+### 路径映射
+
+使用 TypeScript 路径映射简化导入：
+
+```typescript
+// ✅ 使用路径映射
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils/cn'
+import { env } from '@/env'
+
+// ❌ 避免相对路径
+import { Button } from '../../../components/ui/button'
+import { cn } from '../../lib/utils/cn'
+```
+
+### 导出约定
+
+```typescript
+// 命名导出 (推荐)
+export function calculateTotal() { ... }
+export const API_ROUTES = { ... }
+
+// 默认导出 (仅用于组件和页面)
+export default function HomePage() { ... }
+
+// 桶导出 (index.ts 文件)
+export { Button } from './button'
+export { Card } from './card'
+export type { ButtonProps } from './button'
+```
+
+### 导入顺序
+
+遵循标准的导入顺序：
+
+```typescript
+// 1. React 和 Next.js
+import React from 'react'
+import { NextRequest, NextResponse } from 'next/server'
+
+// 2. 第三方库
+import { z } from 'zod'
+import { clsx } from 'clsx'
+
+// 3. 内部导入 (按路径长度排序)
+import { env } from '@/env'
+import { cn } from '@/lib/utils/cn'
+import { Button } from '@/components/ui/button'
+
+// 4. 相对导入
+import './styles.css'
+```
+
+## 项目扩展指南
+
+### 添加新功能模块
+
+1. **创建功能目录结构**
+   ```
+   src/lib/[feature]/
+   ├── index.ts
+   ├── config.ts
+   ├── types.ts
+   ├── utils.ts
+   └── hooks.ts
+   ```
+
+2. **添加对应组件**
+   ```
+   src/components/[feature]/
+   ├── index.ts
+   ├── [feature]-form.tsx
+   ├── [feature]-list.tsx
+   └── [feature]-card.tsx
+   ```
+
+3. **创建 API 路由**
+   ```
+   src/lib/trpc/routers/[feature].ts
+   ```
+
+4. **添加类型定义**
+   ```
+   src/types/[feature].ts
+   ```
+
+### 添加新页面
+
+1. **创建页面文件**
+   ```
+   src/app/[locale]/[feature]/page.tsx
+   src/app/[locale]/[feature]/layout.tsx
+   ```
+
+2. **添加路由常量**
+   ```typescript
+   // src/constants/routes.ts (如果需要创建路由常量文件)
+   export const ROUTES = {
+     FEATURE: '/feature',
+   } as const
+   ```
+
+3. **更新导航**
+   ```typescript
+   // 在相应的导航组件中添加链接
+   ```
+
+## 性能优化
+
+### 代码分割
+
+```typescript
+// 动态导入大型组件
+const HeavyComponent = dynamic(() => import('./heavy-component'), {
+  loading: () => <LoadingSpinner />,
+})
+
+// 路由级别的代码分割
+const DashboardPage = dynamic(() => import('./dashboard/page'), {
+  ssr: false,
+})
+```
+
+### 图片优化
+
+```typescript
+// 使用 Next.js Image 组件
+import Image from 'next/image'
+
+export function ProfileImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={100}
+      height={100}
+      className="rounded-full"
+      priority={false}
+    />
+  )
+}
+```
+
+### 服务器组件优化
+
+```typescript
+// 服务器组件中进行数据获取
+export default async function ProductList() {
+  const products = await getProducts() // 在服务器端执行
+  
+  return (
+    <div>
+      {products.map(product => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  )
+}
+```
+
+## 最佳实践总结
+
+### 1. 代码组织
+- 按功能模块组织代码，而非技术层次
+- 使用一致的文件命名约定
+- 保持组件单一职责原则
+- 合理使用 TypeScript 类型系统
+
+### 2. 性能考虑
+- 使用 Next.js 的服务器组件优化首屏加载
+- 实现适当的代码分割和懒加载
+- 优化图片和静态资源
+- 使用 React 的 memo 和 useMemo 优化重渲染
+
+### 3. 开发体验
+- 配置完善的 TypeScript 和 ESLint 规则
+- 使用现代化的开发工具 (Biome, Vitest)
+- 实现自动化测试和 CI/CD
+- 保持依赖的最新和安全
+
+### 4. 可维护性
+- 编写清晰的代码注释和文档
+- 保持一致的代码风格
+- 定期重构和优化代码
+- 使用语义化的提交信息
+
+这个项目结构为构建现代化、可扩展的 AI SaaS 应用提供了坚实的基础，结合了 Next.js 15、tRPC、Better Auth 等最新技术栈的最佳实践。

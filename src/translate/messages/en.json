@@ -1,0 +1,567 @@
+{
+  "LocaleSwitcher": {
+    "zh": "Chinese",
+    "en": "English",
+    "label": "Language"
+  },
+
+  "locale": {
+    "zh": "Chinese",
+    "en": "English",
+    "label": "Language",
+    "professional": "Professional",
+    "pro": "Pro",
+    "enterprise": "Enterprise",
+    "switchTheme": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "navigation": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "ai": "AI",
+    "guides": "Guides",
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "adminPanel": "Admin Panel",
+    "signOut": "Sign Out",
+    "blogs": "Blog",
+    "docs": "Documentation"
+  },
+
+  "navbar": {
+    "logo": {
+      "alt": "AI SaaS Template Logo",
+      "title": "AI SaaS Template"
+    },
+    "auth": {
+      "login": "Sign In",
+      "signup": "Sign Up"
+    },
+    "menu": {
+      "blog": "Blog",
+      "document": "Docs",
+      "components": "Components",
+      "pricing": "Pricing",
+      "resources": "Resources",
+      "helpCenter": "Help Center",
+      "helpCenterDescription": "Get help and support",
+      "contactUs": "Contact Us",
+      "contactUsDescription": "Get in touch with our team",
+      "status": "Status",
+      "statusDescription": "Check system status",
+      "termsOfService": "Terms of Service",
+      "termsOfServiceDescription": "Read our terms and conditions"
+    }
+  },
+
+  "docs": {
+    "title": "Documentation",
+    "search": "Search documentation...",
+    "editPage": "Edit this page",
+    "lastUpdated": "Last updated",
+    "onThisPage": "On this page",
+    "previousPage": "Previous",
+    "nextPage": "Next"
+  },
+
+  "blog": {
+    "title": "Blog",
+    "description": "Read our latest articles and insights on AI SaaS development",
+    "aboutReadingTime": "About {time} min read",
+    "backToList": "Back to Blog",
+    "shareArticle": "Share this article",
+    "backToBlog": "Back to Blog",
+    "noArticles": "No articles found"
+  },
+
+  "themeConfig": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "app": {
+    "name": "AI Saas",
+    "textPro": "Pro"
+  },
+
+  "home": {
+    "hero": {
+      "badge": "New AI SaaS Template 2025",
+      "title": "Build the Future of AI Applications",
+      "subtitle": "Launch your next AI-powered SaaS application quickly with our modern template. Integrated with the latest tech stack, providing complete development solutions.",
+      "startFree": "Start Free",
+      "viewPricing": "View Pricing",
+      "techStack": "Built with Modern Tech Stack"
+    },
+    "features": {
+      "title": "Powerful Features",
+      "subtitle": "We provide all the features needed to build modern AI SaaS applications, so you can focus on core business logic",
+      "quickStart": {
+        "title": "Quick Start",
+        "description": "Built with Next.js 15 and TypeScript, providing modern development experience and optimal performance."
+      },
+      "aiIntegration": {
+        "title": "AI Integration",
+        "description": "Built-in integration with multiple AI services, supporting mainstream AI platforms like OpenAI, Anthropic."
+      },
+      "secureAuth": {
+        "title": "Secure Authentication",
+        "description": "Integrated with Clerk authentication system, providing secure and reliable user management and access control."
+      },
+      "modernUI": {
+        "title": "Modern UI",
+        "description": "Based on Tailwind CSS and Radix UI, providing beautiful and accessible user interface components."
+      },
+      "multiLanguage": {
+        "title": "Multi-language",
+        "description": "Built-in internationalization support, easily implement multi-language switching, covering global users."
+      },
+      "paymentIntegration": {
+        "title": "Payment Integration",
+        "description": "Integrated with Stripe payment system, supporting subscriptions, one-time payments and other payment modes."
+      }
+    },
+    "pricing": {
+      "title": "Choose the Right Plan for You",
+      "subtitle": "Start free and upgrade to more powerful features as your business grows"
+    }
+  },
+
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have any questions or need help? Our team is always here to support you",
+    "contactInfo": "Contact Information",
+    "email": "Email",
+    "website": "Website",
+    "workingHours": "Working Hours",
+    "monday": "Monday - Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "closed": "Closed",
+    "sendMessage": "Send Message",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "Your email",
+      "subject": "Subject",
+      "subjectPlaceholder": "Message subject",
+      "message": "Message",
+      "messagePlaceholder": "Please describe your question or requirements in detail...",
+      "send": "Send Message"
+    }
+  },
+
+  "login": {
+    "google": "Sign in with Google",
+    "github": "Sign in with Github",
+    "loginForm": {
+      "name": "Login",
+      "title1": "Enter your email below to login to your account",
+      "email": "Email",
+      "password": "Password",
+      "passwordInfo": "Please enter your password",
+      "btn": "Login",
+      "btn1": "Need an account? Sign Up",
+      "btn2": "Forgot password?",
+      "info1": "Logging in...",
+      "info2": "Login successful!",
+      "emailMessage": "Please enter a valid email address!",
+      "passwordMessage": "Password must be at least 8 characters long."
+    },
+    "signUpForm": {
+      "name": "Sign Up",
+      "title1": "Enter your information below to create an account",
+      "email": "Email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "fullNameMessage": "Your name must be at least 3 characters.",
+      "emailMessage": "Please enter a valid email address!",
+      "passwordString": "Password is required!",
+      "passwordMin": "Password must be at least 8 characters.",
+      "passwordRegex": "Password must contain 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+      "confirmPasswordInfo": "Confirm password is required!",
+      "passwordRefine": "Passwords don't match",
+      "info1": "Signing in...",
+      "signupInfo1": "Signing up...",
+      "info2": "Sign up successful! Please confirm your email address.",
+      "info3": "Don't have an account?",
+      "fullName": "Full Name",
+      "fullNameInfo": "Enter your full name",
+      "passwordInfo": "Enter your password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordEnter": "Confirm your password",
+      "btn1": "Sign In",
+      "signupBtn1": "Sign Up",
+      "btn2": "Sign Up",
+      "signupBtn2": "Already have an account? Sign In",
+      "btn3": "By clicking sign up, you agree to our",
+      "btn4": "Terms of Service",
+      "btn5": "and",
+      "btn6": "Privacy Policy.",
+      "or": "or"
+    },
+    "resetPassword": {
+      "name": "Reset Password",
+      "forgotPasswordTitle": "Forgot Password",
+      "forgotPasswordSubtitle": "Enter your email to reset your password",
+      "title1": "Enter your email below to reset your password",
+      "email": "Email",
+      "emailMessage": "Please enter a valid email address!",
+      "passwordMessage": "Password must be at least 8 characters long.",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter your new password (at least 8 characters)",
+      "confirmPasswordPlaceholder": "Confirm your new password",
+      "infoLoading": "Sending password reset email...",
+      "infoSuccess": "Password reset email sent! Please check your email for instructions.",
+      "infoError": "Error sending password reset email.",
+      "btn1": "Reset Password",
+      "btn2": "Back to Login",
+      "sendResetEmail": "Send Reset Email",
+      "resetSuccess": "Reset Successful!",
+      "resetSuccessDesc": "Your password has been successfully reset, redirecting to login page",
+      "loginNow": "Login Now",
+      "resetPageTitle": "Reset Password",
+      "resetPageSubtitle": "Set a new password for your account",
+      "invalidLink": "Invalid Reset Link",
+      "invalidLinkDesc": "The reset link is invalid or has expired",
+      "requestNewReset": "Request New Password Reset",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordMismatch": "Passwords do not match"
+    }
+  },
+
+  "billing": {
+    "title": "Plan & Billing",
+    "desc": "Manage your subscription and billing information.",
+    "planSummarry": {
+      "name": "Plan Overview",
+      "name1": "Price/Month",
+      "name2": "Included Credits",
+      "name3": "Renewal Date",
+      "noPlan": "No Plan",
+      "plan": "Plan",
+      "noInfo1": "Remaining Image Generation Credits",
+      "noInfo2": "0 Remaining",
+      "noInfo3": "Remaining Model Training Credits",
+      "noInfo4": "Please upgrade your plan to continue using the application.",
+      "info1": "Image Generation Credits",
+      "info2": "Model Training Credits"
+    },
+    "pricingSheet": {
+      "name": "Upgrade",
+      "title": "Change Subscription Plan",
+      "desc": "Choose a plan that fits your needs and budget to continue using our services."
+    },
+    "price": {
+      "btn1": "Manage Subscription",
+      "btn2": "Switch Plan",
+      "btn3": "Subscribe",
+      "infoError1": "An unknown error occurred.",
+      "infoError2": "Please try again later or contact us.",
+      "info1": "Redirecting to Stripe portal...",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "selected": "Selected",
+      "mostPopular": "Most Popular"
+    },
+    "processing": "Processing...",
+    "upgrading": "Upgrading...",
+    "billingNote": "All plans include SSL and 24/7 professional support.",
+    "notAvailable": "Not Available",
+    "upgradeOnly": "Upgrade Only"
+  },
+
+  "search": {
+    "noResults": "No relevant content found."
+  },
+
+  "auth": {
+    "signIn": {
+      "title": "Welcome Back",
+      "subtitle": "Login to your account",
+      "description": "Continue your AI SaaS development journey.",
+      "features": {
+        "secure": "Secure Login",
+        "fast": "Fast Access",
+        "sync": "Data Sync"
+      }
+    },
+    "signUp": {
+      "title": "Start Your AI SaaS Journey",
+      "subtitle": "Create your account",
+      "description": "Join our community and master AI SaaS development skills.",
+      "benefits": {
+        "learning": "Systematic Learning",
+        "projects": "Practical Projects",
+        "community": "Professional Community",
+        "support": "Technical Support"
+      }
+    },
+    "verifyEmail": {
+      "title": "Email Verification",
+      "subtitle": "Please check your email and click the verification link",
+      "verifying": "Verifying...",
+      "verifyingSubtitle": "Verifying your email address, please wait...",
+      "success": "Verification Successful!",
+      "successSubtitle": "Your email has been successfully verified, redirecting to login page",
+      "failed": "Email Verification Failed",
+      "invalidToken": "Verification link is invalid or expired",
+      "congratulations": "Congratulations! Your email has been successfully verified. You can now use your account.",
+      "loginNow": "Login Now",
+      "checkEmail": "Please check your email (including spam folder) and click the verification link.",
+      "tip": "Tip: If you didn't receive the email, check your spam folder or click the button below to resend.",
+      "resendEmail": "Resend Verification Email",
+      "resending": "Sending...",
+      "resendSuccess": "Verification email has been resent, please check your inbox.",
+      "resendFailed": "Failed to resend verification email",
+      "emailMissing": "Cannot resend verification email, email information is missing",
+      "networkError": "Network error, please check your connection and try again",
+      "verificationCode": "Verification Code",
+      "enterCode": "Enter 6-digit verification code",
+      "verifyButton": "Verify Email",
+      "backToSignup": "Back to Sign Up"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email address and we'll send you a link to reset your password",
+      "email": "Email Address",
+      "sendResetLink": "Send Reset Link",
+      "sending": "Sending...",
+      "checkEmail": "Check Your Email",
+      "emailSent": "We've sent a password reset link to your email",
+      "emailSentTo": "Reset link sent to",
+      "didntReceive": "Didn't receive the email? Check your spam folder or",
+      "tryAgain": "Try Again",
+      "backToLogin": "Back to Login",
+      "emailNotFound": "This email address is not registered",
+      "tooManyRequests": "Too many requests, please try again later",
+      "sendError": "Failed to send reset email, please try again later"
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your new password below",
+      "invalidLink": "Invalid Reset Link",
+      "linkExpired": "This password reset link is invalid or has expired.",
+      "requestNew": "Request New Reset Link",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "resetButton": "Reset Password",
+      "resetting": "Resetting...",
+      "success": "Password Reset Successful!",
+      "successMessage": "Your password has been successfully updated.",
+      "loginWithNew": "Sign In with New Password",
+      "passwordStrength": "Password Strength",
+      "requirements": {
+        "length": "At least 8 characters",
+        "uppercase": "At least one uppercase letter",
+        "lowercase": "At least one lowercase letter",
+        "number": "At least one number"
+      }
+    },
+    "errors": {
+      "syncFailed": "User information sync failed",
+      "needVerification": "Login requires additional verification steps",
+      "emailNotFound": "This email is not registered, please sign up first",
+      "incorrectPassword": "Incorrect password, please try again",
+      "tooManyAttempts": "Too many attempts, please try again later",
+      "loginFailed": "Login failed, please try again",
+      "networkError": "Network error, please check your connection and try again",
+      "oauthError": "Login failed, please try again later",
+      "emailExists": "This email is already registered, please sign in or use a different email",
+      "passwordTooWeak": "Password is too weak, please use a stronger password",
+      "invalidParams": "Registration parameters error, please contact administrator",
+      "signupFailed": "Sign up failed, please try again",
+      "verificationFailed": "Verification code error, please try again"
+    },
+    "ssoCallback": {
+      "title": "Completing login...",
+      "description": "Please wait while we process your login information",
+      "syncingUser": "Syncing user information...",
+      "syncSuccess": "User information synced successfully",
+      "syncError": "Sync failed, retrying...",
+      "redirecting": "Login successful, redirecting..."
+    }
+  },
+
+  "pricing": {
+    "title": "Choose Your Plan",
+    "description": "Start with our free plan and upgrade as you grow. All plans include access to our AI-powered workflow library.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "year": "year",
+    "month": "month",
+    "save20": "Save up to 20%",
+    "saveAmount": "Save {amount}",
+    "mostPopular": "Most Popular",
+    "currentPlan": "Current Plan",
+    "getStarted": "Get Started",
+    "subtitle": "Choose the right plan for you",
+    "subscribe": "Subscribe",
+    "upgrade": "Upgrade",
+    "downgrade": "Downgrade",
+    "processing": "Processing...",
+    "upgrading": "Upgrading...",
+    "notAvailable": "Not Available",
+    "upgradeOnly": "Upgrade Only",
+    "switchToYearly": "Switch to Yearly",
+    "switchToMonthly": "Switch to Monthly",
+    "useCases": "Use Cases",
+    "tutorials": "Tutorials",
+    "blogs": "Blog Posts",
+    "unlimited": "Unlimited",
+    "billingNote": "All plans include SSL and 24/7 professional support.",
+    "cancelAnytime": "No hidden fees. Cancel anytime.",
+    "freeTrial": "Instant access",
+    "securePayment": "Secure Payment",
+    "instantAccess": "Instant Access",
+    "page": {
+      "badge": "Subscription Plans",
+      "title": "Choose the Right Plan for You",
+      "description": "Start with our free version and upgrade anytime to unlock more automation possibilities",
+      "features": {
+        "securePayment": "Secure Payment",
+        "cancelAnytime": "Cancel Anytime",
+        "moneyBack": "Secure & Reliable"
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "description": "Common questions about subscriptions and payments",
+        "questions": {
+          "cancel": {
+            "title": "Can I cancel my subscription anytime?",
+            "answer": "Yes, you can cancel your subscription at any time. After cancellation, you can still use paid features until the current billing period ends."
+          },
+          "payment": {
+            "title": "What payment methods do you support?",
+            "answer": "We support all major credit and debit cards, including Visa, Mastercard, American Express, etc."
+          },
+          "yearly": {
+            "title": "What are the benefits of annual plans?",
+            "answer": "Annual plans save you 20% compared to monthly billing, equivalent to getting 2+ months free. You also enjoy more stable service experience."
+          },
+          "limitations": {
+            "title": "What are the limitations of the free version?",
+            "answer": "The free version allows access to 10 use cases, 5 tutorial modules, and 3 blog posts. Upgrade to paid plans to unlock all content and advanced features."
+          }
+        }
+      }
+    }
+  },
+
+  "errorPages": {
+    "error": {
+      "title": "An Error Occurred",
+      "description": "The application encountered an error",
+      "errorMessage": "Error Message:",
+      "errorId": "Error ID",
+      "development": "The system encountered an unexpected error, please try again later.",
+      "buttons": {
+        "retry": "Retry",
+        "home": "Back to Home",
+        "back": "Go Back"
+      },
+      "support": "If the problem persists, please contact technical support and provide the error ID"
+    },
+    "globalError": {
+      "title": "System Error",
+      "description": "The application encountered a critical error",
+      "support": "If the problem persists, please contact technical support"
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "Sorry, the page you are looking for does not exist",
+      "errorCode": "404 Error:",
+      "message": "The page you are looking for may have been deleted, moved, or the URL is incorrect.",
+      "buttons": {
+        "home": "Back to Home",
+        "back": "Go Back",
+        "search": "Search Content"
+      },
+      "support": "If you believe this is an error, please contact our technical support"
+    },
+    "unauthorized": {
+      "title": "Access Denied",
+      "description": "Sorry, you do not have permission to access this page",
+      "permissionDenied": "Insufficient permissions:",
+      "message": "This page is only accessible to administrators. If you believe this is an error, please contact the system administrator.",
+      "buttons": {
+        "login": "Login to Account",
+        "home": "Back to Home",
+        "back": "Go Back"
+      },
+      "adminContact": "To obtain administrator permissions, please contact the system administrator"
+    }
+  },
+  "user": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "billing": "Billing",
+    "logout": "Logout"
+  },
+  "errors": {
+    "unauthorized": "Unauthorized",
+    "notFound": "Not Found",
+    "goHome": "Go to Homepage"
+  },
+  "footer": {
+    "brand": {
+      "name": "AI SaaS Template",
+      "description": "Professional AI SaaS application development template, providing complete user authentication, payment integration, multi-language support and modern UI components."
+    },
+    "links": {
+      "product": {
+        "title": "Product",
+        "features": "Features",
+        "pricing": "Pricing",
+        "documentation": "Documentation",
+        "templates": "Templates"
+      },
+      "company": {
+        "title": "Company",
+        "about": "About Us",
+        "blog": "Blog",
+        "careers": "Careers",
+        "contact": "Contact"
+      },
+      "support": {
+        "title": "Support",
+        "help": "Help Center",
+        "community": "Community",
+        "status": "Status",
+        "feedback": "Feedback"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "cookies": "Cookie Policy"
+      }
+    },
+    "social": {
+      "title": "Follow Us",
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "discord": "Discord"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "description": "Get the latest updates and news about AI SaaS development.",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe",
+      "success": "Successfully subscribed!",
+      "error": "Subscription failed, please try again."
+    },
+    "copyright": "© {year} AI SaaS Template. All rights reserved.",
+    "madeWith": "Made with ❤️ for developers"
+  }
+}

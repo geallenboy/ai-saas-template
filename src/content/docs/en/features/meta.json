@@ -1,0 +1,5 @@
+{
+  "title": "Features",
+  "defaultOpen": true,
+  "pages": ["authentication", "file-management", "payment-billing"]
+}
