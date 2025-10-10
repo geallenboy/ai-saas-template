@@ -69,6 +69,16 @@ const clearSessionSchema = z.object({
   sessionId: z.string().uuid(),
 })
 
+const deleteSessionSchema = z.object({
+  sessionId: z.string().uuid(),
+})
+
+const updateSessionSchema = z.object({
+  sessionId: z.string().uuid(),
+  title: z.string().max(120).optional(),
+  systemPrompt: z.string().max(4000).optional(),
+})
+
 export type AiChatStreamEvent =
   | { type: 'session'; sessionId: string }
   | { type: 'user-message'; messageId: string }
@@ -228,11 +238,83 @@ export const aichatRouter = createTRPCRouter({
       return { success: true }
     }),
 
+  deleteSession: protectedProcedure
+    .input(deleteSessionSchema)
+    .mutation(async ({ ctx, input }) => {
+      await assertSessionOwnership(ctx, input.sessionId)
+
+      // 删除相关的附件
+      await ctx.db
+        .delete(aiChatAttachments)
+        .where(eq(aiChatAttachments.sessionId, input.sessionId))
+
+      // 删除相关的消息
+      await ctx.db
+        .delete(aiChatMessages)
+        .where(eq(aiChatMessages.sessionId, input.sessionId))
+
+      // 删除会话
+      await ctx.db
+        .delete(aiChatSessions)
+        .where(eq(aiChatSessions.id, input.sessionId))
+
+      return { success: true }
+    }),
+
+  updateSession: protectedProcedure
+    .input(updateSessionSchema)
+    .mutation(async ({ ctx, input }) => {
+      const session = await assertSessionOwnership(ctx, input.sessionId)
+
+      const updateData: Partial<AiChatSession> = {
+        updatedAt: new Date(),
+      }
+
+      if (input.title !== undefined) {
+        updateData.title = input.title
+      }
+
+      if (input.systemPrompt !== undefined) {
+        updateData.systemPrompt = input.systemPrompt
+      }
+
+      await ctx.db
+        .update(aiChatSessions)
+        .set(updateData)
+        .where(eq(aiChatSessions.id, input.sessionId))
+
+      return {
+        ...session,
+        ...updateData,
+      }
+    }),
+
   sendMessage: protectedProcedure
     .input(sendMessageInputSchema)
     .subscription(({ ctx, input }) => {
       return observable<AiChatStreamEvent>(observer => {
         const abortController = new AbortController()
+        let isObserverClosed = false
+
+        const safeNext = (event: AiChatStreamEvent) => {
+          if (!isObserverClosed) {
+            observer.next(event)
+          }
+        }
+
+        const safeComplete = () => {
+          if (!isObserverClosed) {
+            isObserverClosed = true
+            observer.complete()
+          }
+        }
+
+        const safeError = (error: unknown) => {
+          if (!isObserverClosed) {
+            isObserverClosed = true
+            observer.error(error)
+          }
+        }
 
         const run = async () => {
           const now = new Date()
@@ -268,7 +350,7 @@ export const aichatRouter = createTRPCRouter({
             await ctx.db.insert(aiChatSessions).values(session)
           }
 
-          observer.next({ type: 'session', sessionId: session.id })
+          safeNext({ type: 'session', sessionId: session.id })
 
           const resolvedModelId =
             input.modelId ?? session.modelId ?? DEFAULT_AI_MODEL_ID
@@ -309,7 +391,7 @@ export const aichatRouter = createTRPCRouter({
           }
 
           await ctx.db.insert(aiChatMessages).values(userMessage)
-          observer.next({ type: 'user-message', messageId: userMessageId })
+          safeNext({ type: 'user-message', messageId: userMessageId })
 
           const inferredTitle = session.title ?? maybeInferTitle(input.message)
 
@@ -353,7 +435,7 @@ export const aichatRouter = createTRPCRouter({
           }
 
           await ctx.db.insert(aiChatMessages).values(assistantPlaceholder)
-          observer.next({
+          safeNext({
             type: 'assistant-start',
             messageId: assistantMessageId,
           })
@@ -375,14 +457,16 @@ export const aichatRouter = createTRPCRouter({
 
           try {
             for await (const delta of result.textStream) {
-              if (!delta) continue
+              if (!delta || isObserverClosed) continue
               accumulated += delta
-              observer.next({
+              safeNext({
                 type: 'assistant-delta',
                 messageId: assistantMessageId,
                 delta,
               })
             }
+
+            if (isObserverClosed) return
 
             const [usage, totalUsage] = await Promise.all([
               result.usage.catch(() => undefined),
@@ -404,14 +488,14 @@ export const aichatRouter = createTRPCRouter({
               .set({ lastMessageAt: new Date(), updatedAt: new Date() })
               .where(eq(aiChatSessions.id, session.id))
 
-            observer.next({
+            safeNext({
               type: 'assistant-end',
               messageId: assistantMessageId,
               text: accumulated,
               usage,
               totalUsage,
             })
-            observer.complete()
+            safeComplete()
           } catch (error) {
             const descriptor = describeAiError(error)
             await ctx.db
@@ -423,25 +507,25 @@ export const aichatRouter = createTRPCRouter({
               })
               .where(eq(aiChatMessages.id, assistantMessageId))
 
-            observer.next({
+            safeNext({
               type: 'error',
               message: descriptor.message,
               retryable: descriptor.retryable,
               category: descriptor.category,
             })
-            observer.error(error)
+            safeError(error)
           }
         }
 
         run().catch(error => {
           const descriptor = describeAiError(error)
-          observer.next({
+          safeNext({
             type: 'error',
             message: descriptor.message,
             retryable: descriptor.retryable,
             category: descriptor.category,
           })
-          observer.error(error)
+          safeError(error)
         })
 
         return () => {

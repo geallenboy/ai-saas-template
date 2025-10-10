@@ -46,6 +46,7 @@ interface ChatInputProps {
   onModelChange: (model: string) => void
   webSearchEnabled: boolean
   onWebSearchToggle: () => void
+  isNewChat?: boolean
 }
 
 export function ChatInput({
@@ -55,6 +56,7 @@ export function ChatInput({
   onModelChange,
   webSearchEnabled,
   onWebSearchToggle,
+  isNewChat = false,
 }: ChatInputProps) {
   const promptInputRef = useRef<HTMLDivElement>(null)
 
@@ -106,7 +108,17 @@ export function ChatInput({
     }
     return undefined
   }, [handleKeyDown])
-
+  // Auto-focus textarea for new chat
+  useEffect(() => {
+    if (isNewChat && !isStreaming) {
+      const textarea = promptInputRef.current?.querySelector('textarea')
+      if (textarea) {
+        setTimeout(() => {
+          textarea.focus()
+        }, 100)
+      }
+    }
+  }, [isNewChat, isStreaming])
   return (
     <div className="pl-4 pr-4 pb-4 mx-auto w-full">
       <div ref={promptInputRef}>

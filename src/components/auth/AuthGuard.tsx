@@ -2,7 +2,7 @@
 
 import { AlertCircle, Loader2, Lock } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -21,29 +21,32 @@ interface AuthGuardProps {
   useSkeletonFallback?: boolean
 }
 
-export function AuthGuard({
+const AuthGuardComponent = function AuthGuard({
   children,
   fallback,
   redirectTo = '/auth/login',
   showLoginPrompt = true,
   useSkeletonFallback = false,
 }: AuthGuardProps) {
+  // 只获取必要的认证状态，减少重渲染
   const { isAuthenticated, isLoading, error, session } = useAuth()
 
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const getCurrentPath = useCallback(() => {
+  // 使用 useMemo 缓存当前路径，减少重计算
+  const currentPath = useMemo(() => {
     const search = searchParams.toString()
     return pathname + (search ? `?${search}` : '')
   }, [pathname, searchParams])
 
-  // 简化的认证检查：由于中间件已经处理了路由保护，这里只需要处理加载和错误状态
-  console.log('🔐 AuthGuard 状态:', { isAuthenticated, isLoading, error })
+  const getCurrentPath = useCallback(() => currentPath, [currentPath])
 
-  // 加载状态
-  if (isLoading) {
+  // 简化的认证检查：由于中间件已经处理了路由保护，这里只需要处理加载和错误状态
+
+  // 加载状态 - 使用 useMemo 缓存加载组件
+  const loadingComponent = useMemo(() => {
     if (fallback) {
       return <>{fallback}</>
     }
@@ -68,11 +71,11 @@ export function AuthGuard({
         </Card>
       </div>
     )
-  }
+  }, [fallback, useSkeletonFallback])
 
-  // 错误状态
-  if (error && !isAuthenticated) {
-    return (
+  // 错误状态 - 使用 useMemo 缓存错误组件
+  const errorComponent = useMemo(
+    () => (
       <div className="flex min-h-screen items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
@@ -103,13 +106,13 @@ export function AuthGuard({
           </CardContent>
         </Card>
       </div>
-    )
-  }
+    ),
+    [error, session, router, redirectTo]
+  )
 
-  // 由于中间件已经处理了路由保护，如果能到达这里说明用户已经被验证
-  // 只在明确未认证且不在加载状态时才显示登录提示
-  if (!(isLoading || isAuthenticated) && showLoginPrompt) {
-    return (
+  // 登录提示 - 使用 useMemo 缓存登录组件
+  const loginComponent = useMemo(
+    () => (
       <div className="flex min-h-screen items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
@@ -134,8 +137,17 @@ export function AuthGuard({
           </CardContent>
         </Card>
       </div>
-    )
-  }
+    ),
+    [getCurrentPath, redirectTo, router]
+  )
+
+  // 早期返回模式避免不必要的计算
+  if (isLoading) return loadingComponent
+  if (error && !isAuthenticated) return errorComponent
+  if (!(isLoading || isAuthenticated) && showLoginPrompt) return loginComponent
 
   return <>{children}</>
 }
+
+// 使用 memo 优化组件，只在 props 变化时重渲染
+export const AuthGuard = memo(AuthGuardComponent)

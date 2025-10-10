@@ -13,7 +13,7 @@ interface ChatSidebarProps {
   onSelectSession: (sessionId: string) => void
   onNewChat: () => void
   isLoading: boolean
-
+  isCreatingNewChat: boolean
   // 移动端侧边栏
   isSheetOpen: boolean
   onSheetOpenChange: (open: boolean) => void
@@ -27,6 +27,7 @@ export function ChatSidebar({
   isLoading,
   isSheetOpen,
   onSheetOpenChange,
+  isCreatingNewChat,
 }: ChatSidebarProps) {
   return (
     <>
@@ -50,6 +51,7 @@ export function ChatSidebar({
           selectedId={selectedSessionId}
           sessions={sessions}
           isLoading={isLoading}
+          isCreatingNewChat={isCreatingNewChat}
           searchValue=""
         />
       </aside>
@@ -67,6 +69,7 @@ export function ChatSidebar({
             selectedId={selectedSessionId}
             sessions={sessions}
             isLoading={isLoading}
+            isCreatingNewChat={isCreatingNewChat}
             searchValue=""
           />
         </SheetContent>

@@ -12,6 +12,7 @@ interface ProcessStreamEventArgs {
   setMessages: React.Dispatch<React.SetStateAction<UIChatMessage[]>>
   utils: ReturnType<typeof trpc.useUtils>
   setSessionSheetOpen: (value: boolean) => void
+  onNewSessionCreated?: (sessionId: string) => void
 }
 
 /**
@@ -27,12 +28,16 @@ export function processStreamEvent({
   setMessages,
   utils,
   setSessionSheetOpen,
+  onNewSessionCreated,
 }: ProcessStreamEventArgs) {
   switch (event.type) {
     case 'session':
       setSelectedSessionId(event.sessionId)
       setSessionSheetOpen(false)
       utils.aichat.listSessions.invalidate()
+      if (!sessionId && onNewSessionCreated) {
+        onNewSessionCreated(event.sessionId)
+      }
       return event.sessionId
     case 'user-message':
       setMessages(prev => {

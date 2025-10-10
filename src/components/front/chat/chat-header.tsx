@@ -7,13 +7,12 @@ import type { AiChatSession } from '@/drizzle/schemas'
 
 interface ChatHeaderProps {
   currentSession?: AiChatSession | null
-  onNewChat: () => void
   onOpenSidebar?: () => void
 }
 
 export function ChatHeader({
   currentSession,
-  onNewChat,
+
   onOpenSidebar,
 }: ChatHeaderProps) {
   return (
@@ -39,12 +38,6 @@ export function ChatHeader({
             <p className="text-xs text-muted-foreground">内容由 AI 生成</p>
           )}
         </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <Button onClick={onNewChat} variant="ghost" size="sm">
-          <PlusIcon className="mr-2 h-4 w-4" />
-          新建对话
-        </Button>
       </div>
     </header>
   )
