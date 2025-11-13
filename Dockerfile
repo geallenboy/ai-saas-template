@@ -12,8 +12,9 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # 复制依赖文件
 COPY package.json pnpm-lock.yaml* ./
 
-# 安装所有依赖（包括 devDependencies，构建时需要）
-RUN pnpm install --frozen-lockfile
+# 安装所有依赖，跳过 postinstall 脚本（避免缺少源文件的错误）
+# postinstall 会在 builder 阶段有完整源码后再运行
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # 构建阶段
 FROM base AS builder
@@ -29,6 +30,9 @@ COPY . .
 # 设置环境变量
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+
+# 运行 postinstall 脚本（fumadocs-mdx 生成类型）
+RUN pnpm run postinstall || true
 
 # 构建应用
 # 注意: 环境变量会在运行时通过 Coolify 注入，构建时会自动跳过验证
