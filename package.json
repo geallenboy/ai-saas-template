@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "next dev --turbo ",
     "build": "next build",
+    "build:docker": "next build",
     "start": "next start",
     "lint": "biome check --write .",
     "lint:check": "biome check .",
@@ -26,7 +27,7 @@
     "db:studio": "NODE_TLS_REJECT_UNAUTHORIZED=0 drizzle-kit studio",
     "db:push": "NODE_TLS_REJECT_UNAUTHORIZED=0 drizzle-kit push",
     "blog:import": "tsx scripts/import-blog-posts.ts",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "ci": "pnpm run type-check && pnpm run lint:check && pnpm run test",
     "fix:all": "node scripts/fix-code-standards.js",
     "fix:keys": "node scripts/batch-fix-react-keys.js",

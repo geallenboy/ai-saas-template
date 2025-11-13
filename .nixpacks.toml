@@ -1,0 +1,19 @@
+[phases.setup]
+nixPkgs = ['nodejs_20', 'pnpm']
+
+[phases.install]
+cmds = [
+  'pnpm install --frozen-lockfile --prod=false',
+]
+
+[phases.build]
+cmds = [
+  'pnpm run build'
+]
+
+[start]
+cmd = 'pnpm start'
+
+[variables]
+NODE_ENV = 'production'
+NEXT_TELEMETRY_DISABLED = '1'
