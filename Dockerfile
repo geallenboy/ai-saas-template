@@ -7,47 +7,63 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # 安装 pnpm
-RUN npm install -g pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # 复制依赖文件
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile --prod=false
+
+# 安装所有依赖（包括 devDependencies，构建时需要）
+RUN pnpm install --frozen-lockfile
 
 # 构建阶段
 FROM base AS builder
 WORKDIR /app
-RUN npm install -g pnpm
 
+# 安装 pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# 从 deps 阶段复制 node_modules
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # 设置环境变量
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
-# 构建应用 - 跳过环境变量验证
-RUN pnpm run build:docker
+# 构建应用
+# 注意: 环境变量会在运行时通过 Coolify 注入，构建时会自动跳过验证
+RUN pnpm run build
 
 # 运行阶段
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# 创建系统用户和组
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# 复制构建产物
+# 复制必要的文件
+# 1. 复制 public 目录（如果存在）
 COPY --from=builder /app/public ./public
+
+# 2. 复制 standalone 输出（包含所有运行时需要的文件）
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+
+# 3. 复制静态文件
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# 切换到非 root 用户
 USER nextjs
 
+# 暴露端口
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+# 设置运行时环境变量
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
+# 启动应用
 CMD ["node", "server.js"]

@@ -12,6 +12,14 @@ pnpm-debug.log*
 # Testing
 coverage
 .nyc_output
+*.test.ts
+*.test.tsx
+*.test.js
+*.test.jsx
+*.spec.ts
+*.spec.tsx
+**/__tests__
+**/__mocks__
 
 # Next.js
 .next/
@@ -28,11 +36,14 @@ dist
 # Debug
 *.log
 
-# Local env files
+# Local env files (IMPORTANT: Never include in image)
 .env
 .env.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 
 # Vercel
@@ -45,15 +56,39 @@ next-env.d.ts
 # IDE
 .vscode
 .idea
+*.swp
+*.swo
+*~
 
 # Git
 .git
 .gitignore
-README.md
+.gitattributes
 
 # CI/CD
 .github
+.gitlab-ci.yml
+.travis.yml
 
 # Docker
-Dockerfile
+Dockerfile*
 .dockerignore
+docker-compose*.yml
+
+# Documentation
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+docs/
+*.md
+
+# Claude Code
+.claude/
+
+# Other
+.prettierrc*
+.eslintrc*
+.editorconfig
+biome.json
+.lintstagedrc*
+.husky

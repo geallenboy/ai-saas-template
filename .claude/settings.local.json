@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build)",
+      "Bash(git add -A)",
+      "Bash(git reset HEAD .claude/settings.local.json .source/index.ts)",
+      "Bash(git add src/app/api/ai/guides/mcp-tools/route.ts)",
+      "Bash(git push)",
+      "Bash(docker build --target builder -t ai-saas-template:builder-test .)",
+      "Bash(test -f src/app/api/health/route.ts)",
+      "Bash(git add .coolify/ .dockerignore Dockerfile docker-compose.yml src/app/api/health/)",
+      "Bash(git add DEPLOYMENT.md)",
+      "Bash(git rm --cached docs/DEPLOYMENT.md)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
