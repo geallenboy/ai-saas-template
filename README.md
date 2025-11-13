@@ -387,7 +387,6 @@ chore: 构建/工具相关
 
 ## 📞 支持
 
-- **📚 文档**: 查看 [CLAUDE.md](CLAUDE.md) 了解详细开发指南
 - **🐛 问题反馈**: [GitHub Issues](https://github.com/geallenboy/ai-saas-template/issues)
 - **💬 讨论**: [GitHub Discussions](https://github.com/geallenboy/ai-saas-template/discussions)
 - **📧 联系**: gejialun88@gmail.com
