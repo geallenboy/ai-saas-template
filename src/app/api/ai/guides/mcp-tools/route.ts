@@ -1,67 +1,72 @@
 import { openai } from '@ai-sdk/openai'
-// Choose the correct import based on your node_modules structure.
+import { streamText } from 'ai'
+import { NextRequest } from 'next/server'
 
+// Choose the correct import based on your node_modules structure.
 // import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse'
 // import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp'
 // Or, if the correct path is '@modelcontextprotocol/sdk/stdio', use:
 // import { StdioClientTransport } from '@modelcontextprotocol/sdk/stdio'
-import { generateText, stepCountIs } from 'ai'
 
-const clientOne: any = null
-const clientTwo: any = null
-const clientThree: any = null
+export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
-try {
-  // Initialize an MCP client to connect to a `stdio` MCP server:
-  // const transport = new StdioClientTransport({
-  //   command: 'node',
-  //   args: ['src/stdio/dist/server.js'],
-  // })
+export async function POST(req: NextRequest) {
+  try {
+    const { prompt } = await req.json()
 
-  // const clientOne = await experimental_createMCPClient({
-  //   transport,
-  // })
+    // Note: MCP client setup is currently disabled
+    // Uncomment and configure the following code when you have MCP servers ready:
 
-  // // You can also connect to StreamableHTTP MCP servers
-  // const httpTransport = new StreamableHTTPClientTransport(
-  //   new URL('http://localhost:3000/mcp')
-  // )
-  // const clientTwo = await experimental_createMCPClient({
-  //   transport: httpTransport,
-  // })
+    // const transport = new StdioClientTransport({
+    //   command: 'node',
+    //   args: ['src/stdio/dist/server.js'],
+    // })
+    // const clientOne = await experimental_createMCPClient({ transport })
 
-  // Alternatively, you can connect to a Server-Sent Events (SSE) MCP server:
-  // const sseTransport = new SSEClientTransport(
-  //   new URL('http://localhost:3000/sse')
-  // )
-  // const clientThree = await experimental_createMCPClient({
-  //   transport: sseTransport,
-  // })
+    // const httpTransport = new StreamableHTTPClientTransport(
+    //   new URL('http://localhost:3000/mcp')
+    // )
+    // const clientTwo = await experimental_createMCPClient({ transport: httpTransport })
 
-  const toolSetOne = await clientOne.tools()
-  const toolSetTwo = await clientTwo.tools()
-  const toolSetThree = await clientThree.tools()
-  const tools = {
-    ...toolSetOne,
-    ...toolSetTwo,
-    ...toolSetThree, // note: this approach causes subsequent tool sets to override tools with the same name
-  }
+    // const sseTransport = new SSEClientTransport(
+    //   new URL('http://localhost:3000/sse')
+    // )
+    // const clientThree = await experimental_createMCPClient({ transport: sseTransport })
 
-  const response = await generateText({
-    model: openai('gpt-4o'),
-    tools,
-    stopWhen: stepCountIs(5),
-    messages: [
+    // const toolSetOne = await clientOne.tools()
+    // const toolSetTwo = await clientTwo.tools()
+    // const toolSetThree = await clientThree.tools()
+    // const tools = { ...toolSetOne, ...toolSetTwo, ...toolSetThree }
+
+    // For now, return a demo response without MCP tools
+    const result = await streamText({
+      model: openai('gpt-4o'),
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a helpful assistant. Note: MCP tools are not configured yet. This is a demo response.',
+        },
+        {
+          role: 'user',
+          content: prompt || 'Hello',
+        },
+      ],
+    })
+
+    return result.toTextStreamResponse()
+  } catch (error) {
+    console.error('MCP Tools API Error:', error)
+    return new Response(
+      JSON.stringify({
+        error: 'Failed to process request',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      }),
       {
-        role: 'user',
-        content: [{ type: 'text', text: 'Find products under $100' }],
-      },
-    ],
-  })
-
-  console.log(response.text)
-} catch (error) {
-  console.error(error)
-} finally {
-  await Promise.all([clientOne.close(), clientTwo.close(), clientThree.close()])
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+  }
 }
