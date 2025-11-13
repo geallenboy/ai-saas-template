@@ -4,7 +4,7 @@
   "description": "AI SaaS Template",
   "author": "gegarron <gejialun88@gmail.com>",
   "license": "MIT",
-  "homepage": "https://git.n.xiaomi.com/miui_security_fe/ai-saas-template",
+  "homepage": "https://github.com/geallenboy/ai-saas-template",
   "scripts": {
     "dev": "next dev --turbo ",
     "build": "next build",

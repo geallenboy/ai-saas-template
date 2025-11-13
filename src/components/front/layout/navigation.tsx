@@ -137,16 +137,16 @@ export default function Navigation() {
       label: t('docs'),
       active: pathname.startsWith(localizePath(locale, '/docs')),
     },
-    {
-      href: '/ai/chat',
-      label: t('ai'),
-      active: pathname.startsWith('/ai/chat'),
-    },
-    {
-      href: '/ai/guides',
-      label: t('guides'),
-      active: pathname.startsWith('/ai/guides'),
-    },
+    // {
+    //   href: '/ai/chat',
+    //   label: t('ai'),
+    //   active: pathname.startsWith('/ai/chat'),
+    // },
+    // {
+    //   href: '/ai/guides',
+    //   label: t('guides'),
+    //   active: pathname.startsWith('/ai/guides'),
+    // },
     {
       href: localizePath(locale, '/contact'),
       label: t('contact'),

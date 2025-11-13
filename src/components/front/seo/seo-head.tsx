@@ -66,7 +66,7 @@ export default function SEOHead({
       'query-input': 'required name=search_term_string',
     },
     sameAs: [
-      'https://git.n.xiaomi.com/miui_security_fe/ai-saas-template',
+      'https://github.com/geallenboy/ai-saas-template',
       'https://twitter.com/aisaastemplate',
     ],
   }

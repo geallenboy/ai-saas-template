@@ -135,9 +135,16 @@ export function ChatApp({
         })
       }
 
-      return Array.from(merged.values()).sort(
-        (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
-      )
+      // 按时间排序返回最终的消息列表，如果时间相同则按角色排序（用户消息在前）
+      return Array.from(merged.values()).sort((a, b) => {
+        const timeDiff = a.createdAt.getTime() - b.createdAt.getTime()
+        if (timeDiff !== 0) return timeDiff
+
+        // 如果时间相同，确保用户消息在AI消息前面
+        if (a.role === 'user' && b.role === 'assistant') return -1
+        if (a.role === 'assistant' && b.role === 'user') return 1
+        return 0
+      })
     })
   }, [messagesQuery.data, messagesQuery.isFetching, selectedSessionId])
 
@@ -294,7 +301,7 @@ export function ChatApp({
 
   // ========== 初始消息自动发送 ==========
 
-  // 用于标记初始消息是否已处理，防止重复发送
+  // 发用于标记初始消息是否已处理，防止重复送
   const [initialMessageProcessed, setInitialMessageProcessed] = useState(false)
   // 处理来自新对话页面的初始消息自动发送
   useEffect(() => {

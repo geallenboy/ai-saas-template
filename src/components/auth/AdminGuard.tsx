@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Shield } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -20,7 +20,7 @@ interface AdminGuardProps {
   showAccessDenied?: boolean
 }
 
-export function AdminGuard({
+const AdminGuardComponent = function ({
   children,
   fallback,
   redirectTo = '/dashboard',
@@ -98,3 +98,5 @@ export function AdminGuard({
 
   return <>{children}</>
 }
+// 使用 memo 优化组件，只在 props 变化时重渲染
+export const AdminGuard = memo(AdminGuardComponent)
