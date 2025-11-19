@@ -10,7 +10,10 @@
       "Bash(test -f src/app/api/health/route.ts)",
       "Bash(git add .coolify/ .dockerignore Dockerfile docker-compose.yml src/app/api/health/)",
       "Bash(git add DEPLOYMENT.md)",
-      "Bash(git rm --cached docs/DEPLOYMENT.md)"
+      "Bash(git rm --cached docs/DEPLOYMENT.md)",
+      "Bash(git add docker-compose.yml src/app/api/health/ .dockerignore)",
+      "Bash(git reset HEAD .claude/settings.local.json)",
+      "Bash(git commit -m \"fix: resolve fumadocs-mdx postinstall error in Docker build\n\nIssue: fumadocs-mdx postinstall script failed in deps stage because\nsource.config.ts and content directories were not yet copied.\n\nSolution:\n- Use --ignore-scripts during pnpm install in deps stage\n- Run postinstall manually in builder stage after COPY . .\n- This ensures fumadocs-mdx has access to source.config.ts and content files\n\nError fixed:\n  Error: Could not resolve \"\"/app/source.config.ts\"\"\n  at fumadocs-mdx postinstall script\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": []
