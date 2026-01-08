@@ -1,9 +1,13 @@
 @import "tailwindcss";
-@import "fumadocs-ui/css/preset.css";
-@import "fumadocs-ui/css/neutral.css";
 @import "tw-animate-css";
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Enable Tailwind utilities */
+}
 
 @theme inline {
   --font-sans:
@@ -141,11 +145,9 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
+  /* Removed global * selector to avoid conflicts with Fumadocs */
 
-  body {
+  body:not(.fd-body) {
     @apply bg-background text-foreground font-sans;
   }
 

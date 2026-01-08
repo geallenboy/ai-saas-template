@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { MarkdownContent } from '@/components/front/blog/MarkdownContent'
 import { formatDate, getBlogPost, getReadingTime } from '@/lib/fumadocs/blog'
 
 type Props = {
@@ -46,8 +47,8 @@ export default async function BlogPostPage({ params }: Props) {
   const readingMinutes = post.readingMinutes ?? getReadingTime(post.content)
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="mx-auto max-w-3xl space-y-8">
+    <div className="container mx-auto py-12">
+      <div className="mx-auto max-w-7xl space-y-8">
         <Button variant="ghost" asChild>
           <Link
             href={`/${locale}/blog`}
@@ -95,9 +96,10 @@ export default async function BlogPostPage({ params }: Props) {
           <Separator />
         </header>
 
-        <article className="prose prose-gray dark:prose-invert max-w-none whitespace-pre-wrap">
-          {post.content}
-        </article>
+        <MarkdownContent
+          content={post.content}
+          className="prose prose-gray dark:prose-invert max-w-none"
+        />
       </div>
     </div>
   )

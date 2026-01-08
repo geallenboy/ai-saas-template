@@ -9,7 +9,6 @@ import {
 } from '@/lib/seo-utils'
 
 import './globals.css'
-import '../styles/pdf-viewer.css'
 
 const MyAppFont = {
   variable: '--font-system',
@@ -17,14 +16,15 @@ const MyAppFont = {
 }
 
 interface LocaleLayoutParams {
-  params: Promise<{ locale: 'zh' | 'en' }>
+  params: Promise<{ locale?: 'zh' | 'en' }>
 }
 
 // 生成网站根metadata
 export async function generateMetadata({
   params: paramsPromise,
 }: LocaleLayoutParams): Promise<Metadata> {
-  const { locale } = await paramsPromise
+  const params = await paramsPromise
+  const locale = params.locale || 'zh'
   return generatePageMetadata({
     locale,
     type: 'website',
@@ -37,9 +37,10 @@ export default async function LocaleLayout({
   params: paramsPromise,
 }: {
   children: React.ReactNode
-  params: Promise<{ locale: 'zh' | 'en' }>
+  params: Promise<{ locale?: 'zh' | 'en' }>
 }) {
-  const { locale } = await paramsPromise
+  const params = await paramsPromise
+  const locale = params.locale || 'zh'
   const langConfig = SEO_CONFIG[locale] || SEO_CONFIG.zh
 
   const websiteStructuredData = generateWebsiteStructuredData({

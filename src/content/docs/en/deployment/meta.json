@@ -1,5 +1,0 @@
-{
-  "title": "Deployment",
-  "defaultOpen": true,
-  "pages": ["vercel", "docker"]
-}

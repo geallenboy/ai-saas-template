@@ -28,6 +28,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/.source": ["./.source"],
+      "@/.source/*": ["./.source/*"],
       "@/public/*": ["./public/*"],
       "@/components/*": ["./src/components/*"],
       "@/features/*": ["./src/features/*"],
@@ -37,7 +38,8 @@
       "@/translate/*": ["./src/translate/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/db/*": ["./src/db/*"],
-      "@/app/*": ["./src/app/*"]
+      "@/app/*": ["./src/app/*"],
+      "fumadocs-mdx:collections/*": [".source/*"]
     }
   },
   "include": [

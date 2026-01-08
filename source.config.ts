@@ -4,8 +4,6 @@ export const docs = defineDocs({
   dir: 'src/content/docs',
 })
 
-export const blog = defineDocs({
-  dir: 'src/content/blog',
-})
+// blog 配置已删除 - 项目使用数据库驱动的 blog 系统
 
 export default defineConfig()

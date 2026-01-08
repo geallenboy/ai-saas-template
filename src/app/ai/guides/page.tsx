@@ -10,11 +10,6 @@ import {
 
 const guides = [
   {
-    href: '/ai/guides/chat-with-pdf',
-    title: 'PDF 聊天机器人',
-    description: '学习如何构建一个可以回答 PDF 文档相关问题的聊天机器人。',
-  },
-  {
     href: '/ai/guides/generate-image',
     title: '图像生成',
     description: '学习如何根据文本提示生成图像。',
