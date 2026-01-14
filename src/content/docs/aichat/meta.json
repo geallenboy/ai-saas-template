@@ -1,5 +1,0 @@
-{
-  "title": "AI 多模态聊天",
-  "defaultOpen": true,
-  "pages": ["overview", "conversation-flow", "data-models", "ui-ux"]
-}

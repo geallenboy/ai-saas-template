@@ -27,8 +27,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@/.source": ["./.source"],
-      "@/.source/*": ["./.source/*"],
       "@/public/*": ["./public/*"],
       "@/components/*": ["./src/components/*"],
       "@/features/*": ["./src/features/*"],
@@ -39,7 +37,6 @@
       "@/utils/*": ["./src/utils/*"],
       "@/db/*": ["./src/db/*"],
       "@/app/*": ["./src/app/*"],
-      "fumadocs-mdx:collections/*": [".source/*"]
     }
   },
   "include": [

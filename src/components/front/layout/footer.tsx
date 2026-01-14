@@ -71,7 +71,7 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
           <p className="text-base text-gray-400 text-center">
-            &copy; 2025 AI SAAS. All rights reserved.
+            &copy; 2026 AI SAAS. All rights reserved.
           </p>
         </div>
       </div>

@@ -128,26 +128,6 @@ export default function Navigation() {
         pathname === localizePath(locale, '/') || pathname === `/${locale}`,
     },
     {
-      href: localizePath(locale, '/blog'),
-      label: t('blogs'),
-      active: pathname.startsWith(localizePath(locale, '/blog')),
-    },
-    {
-      href: localizePath(locale, '/docs'),
-      label: t('docs'),
-      active: pathname.startsWith(localizePath(locale, '/docs')),
-    },
-    // {
-    //   href: '/ai/chat',
-    //   label: t('ai'),
-    //   active: pathname.startsWith('/ai/chat'),
-    // },
-    // {
-    //   href: '/ai/guides',
-    //   label: t('guides'),
-    //   active: pathname.startsWith('/ai/guides'),
-    // },
-    {
       href: localizePath(locale, '/contact'),
       label: t('contact'),
       active: pathname.startsWith(localizePath(locale, '/contact')),

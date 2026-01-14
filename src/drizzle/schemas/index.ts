@@ -3,15 +3,6 @@
 // ===============================
 
 import {
-  aiChatAttachments,
-  aiChatEmbeddings,
-  aiChatFileChunks,
-  aiChatMessages,
-  aiChatSessions,
-} from './aichat'
-import { auditLogs } from './audit-logs'
-import { blogPosts } from './blog'
-import {
   coupons,
   membershipPlans,
   paymentRecords,
@@ -30,61 +21,6 @@ import {
   users,
   verificationTokens,
 } from './users'
-
-// ===============================
-// AI 会话模块导出
-// ===============================
-export {
-  type AiAttachmentKind,
-  AiAttachmentKinds,
-  type AiChatAttachment,
-  type AiChatEmbedding,
-  type AiChatFileChunk,
-  type AiChatMessage,
-  type AiChatSession,
-  type AiMessageContent,
-  type AiMessagePart,
-  type AiMessageRole,
-  AiMessageRoles,
-  type AiMessageStatus,
-  AiMessageStatuses,
-  aiChatAttachments,
-  aiChatEmbeddings,
-  aiChatFileChunks,
-  aiChatMessages,
-  aiChatSessions,
-  createAttachmentFixture,
-  createEmbeddingFixture,
-  createFileChunkFixture,
-  createMessageFixture,
-  createSessionFixture,
-  type NewAiChatAttachment,
-  type NewAiChatEmbedding,
-  type NewAiChatFileChunk,
-  type NewAiChatMessage,
-  type NewAiChatSession,
-} from './aichat'
-// ===============================
-// 审计日志模块导出
-// ===============================
-export {
-  AuditAction,
-  type AuditLog,
-  AuditModule,
-  AuditResource,
-  AuditSeverity,
-  auditLogs,
-  type NewAuditLog,
-} from './audit-logs'
-// ===============================
-// 博客模块导出
-// ===============================
-export {
-  type BlogPost,
-  blogPostStatusEnum,
-  blogPosts,
-  type NewBlogPost,
-} from './blog'
 
 // ===============================
 // 支付模块导出
@@ -178,19 +114,6 @@ export const schema = {
   apiKeys,
   notifications,
   systemConfigs,
-
-  // 审计日志模块
-  auditLogs,
-
-  // AI 会话模块
-  aiChatSessions,
-  aiChatMessages,
-  aiChatAttachments,
-  aiChatFileChunks,
-  aiChatEmbeddings,
-
-  // 博客模块
-  blogPosts,
 
   // 关系定义
   ...relations,

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { GoogleTools } from '@/components/front/seo/google-tools'
-import { ServerStructuredData } from '@/components/front/seo/structured-data'
+
 import {
   generateOrganizationStructuredData,
   generatePageMetadata,
@@ -69,18 +68,9 @@ export default async function LocaleLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <ServerStructuredData
-          data={websiteStructuredData}
-          id="website-structured-data"
-        />
-        <ServerStructuredData
-          data={organizationStructuredData}
-          id="organization-structured-data"
-        />
       </head>
       <body className={`${MyAppFont.variable} font-sans antialiased`}>
         {children}
-        <GoogleTools />
       </body>
     </html>
   )

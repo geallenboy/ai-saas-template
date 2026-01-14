@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -145,8 +144,7 @@
 }
 
 @layer base {
-  /* Removed global * selector to avoid conflicts with Fumadocs */
-
+ 
   body:not(.fd-body) {
     @apply bg-background text-foreground font-sans;
   }

@@ -6,28 +6,6 @@
 import type { UserMembership } from './payments'
 import type { AdminLevel } from './users'
 
-export type {
-  AiAttachmentKind,
-  AiChatAttachment,
-  AiChatEmbedding,
-  AiChatFileChunk,
-  AiChatMessage,
-  AiChatSession,
-  AiMessageContent,
-  AiMessagePart,
-  AiMessageRole,
-  AiMessageStatus,
-  NewAiChatAttachment,
-  NewAiChatEmbedding,
-  NewAiChatFileChunk,
-  NewAiChatMessage,
-  NewAiChatSession,
-} from './aichat'
-export {
-  AiAttachmentKinds,
-  AiMessageRoles,
-  AiMessageStatuses,
-} from './aichat'
 // 额外的通用类型定义
 export type {
   ApiResponse,

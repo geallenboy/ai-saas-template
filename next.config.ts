@@ -1,4 +1,4 @@
-import { createMDX } from 'fumadocs-mdx/next'
+
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
@@ -88,13 +88,6 @@ const config: NextConfig = {
             name: 'ui',
             chunks: 'all',
             priority: 30,
-          },
-          // AI SDK
-          ai: {
-            test: /[\\/]node_modules[\\/]@ai-sdk[\\/]/,
-            name: 'ai-sdk',
-            chunks: 'all',
-            priority: 25,
           },
           // 工具库
           utils: {
@@ -233,5 +226,4 @@ const config: NextConfig = {
   rewrites: async () => [],
 }
 
-const withMDX = createMDX()
-export default withNextIntl(withMDX(config))
+export default withNextIntl(config)

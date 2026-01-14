@@ -145,7 +145,7 @@ export default function PrivacyPage() {
             我们重视并保护您的隐私。本政策说明我们如何收集、使用和保护您的个人信息
           </p>
           <div className="mt-8 text-sm text-blue-200">
-            最后更新：2025年8月6日
+            最后更新：2026年8月6日
           </div>
         </div>
       </section>
