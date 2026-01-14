@@ -54,7 +54,6 @@ pnpm test -- -t "test name pattern"         # Run tests matching pattern
 - **API Layer**: tRPC 11.4 (end-to-end type safety)
 - **Database**: PostgreSQL + Drizzle ORM 0.43
 - **Auth**: Better Auth 1.3 (email/password + Google OAuth, RBAC)
-- **Payments**: Stripe 18.3 (subscriptions + one-time payments)
 - **AI**: Vercel AI SDK (OpenAI, Anthropic, Google AI, xAI)
 - **UI**: Tailwind CSS v4 + shadcn/ui (Radix primitives)
 - **State**: TanStack Query 5.83 + React Context
@@ -71,7 +70,7 @@ Business Logic Layer (Custom Hooks + Context Providers)
        ↓
 API Gateway Layer (tRPC Routers + Middleware)
        ↓
-Service Layer (Auth, Payment, AI, Email Services)
+Service Layer (Auth, AI, Email Services)
        ↓
 Data Access Layer (Drizzle ORM + Schemas)
        ↓
@@ -148,12 +147,11 @@ src/
 │   └── ai/                   # AI chat interface
 │
 ├── server/                    # tRPC backend
-│   ├── routers/              # API routes (auth, users, payments, aichat, blog, system)
+│   ├── routers/              # API routes (auth, aichat, blog, system)
 │   └── server.ts            # tRPC setup + middleware
 │
 ├── drizzle/schemas/          # Database schemas by domain
 │   ├── users.ts             # User/auth tables
-│   ├── payments.ts          # Subscriptions/billing
 │   ├── aichat.ts            # AI sessions/messages
 │   ├── blog.ts              # Blog posts
 │   ├── system.ts            # Config/API keys
@@ -165,7 +163,6 @@ src/
 │   ├── fumadocs/            # Documentation system
 │   ├── validators/          # Zod schemas for validation
 │   ├── db.ts               # Database connection
-│   ├── stripe.ts           # Stripe client
 │   ├── cache.ts            # Redis caching
 │   └── rate-limiter.ts     # Rate limiting logic
 ```
@@ -210,9 +207,6 @@ src/
 ### Required
 ```bash
 DATABASE_URL                           # PostgreSQL connection string
-STRIPE_SECRET_KEY                      # Stripe backend API key
-STRIPE_WEBHOOK_SECRET                  # Stripe webhook signing secret
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY     # Stripe frontend key
 BETTER_AUTH_SECRET                     # Min 32 chars, for session encryption
 NEXT_PUBLIC_SITE_URL                   # Application URL
 ```

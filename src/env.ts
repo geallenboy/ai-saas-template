@@ -13,10 +13,6 @@ export const env = createEnv({
     // Database (必需)
     DATABASE_URL: z.string().url(),
 
-    // Stripe (必需)
-    STRIPE_SECRET_KEY: z.string().min(1),
-    STRIPE_WEBHOOK_SECRET: z.string().min(1),
-
     // AI API Keys (至少需要一个)
     OPENAI_API_KEY: z.string().optional(),
     ANTHROPIC_API_KEY: z.string().optional(),
@@ -57,10 +53,6 @@ export const env = createEnv({
       .string()
       .default('true')
       .transform(val => val === 'true'),
-    ENABLE_PAYMENT_FEATURES: z
-      .string()
-      .default('true')
-      .transform(val => val === 'true'),
     ENABLE_ADMIN_FEATURES: z
       .string()
       .default('true')
@@ -91,12 +83,8 @@ export const env = createEnv({
     NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
     NEXT_PUBLIC_APP_URL: z.string().url().optional(),
 
-    // Stripe (必需)
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
-
     // Feature flags (客户端)
     NEXT_PUBLIC_ENABLE_AI_FEATURES: z.string().default('true'),
-    NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES: z.string().default('true'),
     NEXT_PUBLIC_DEFAULT_LOCALE: z.string().default('zh'),
     NEXT_PUBLIC_SUPPORTED_LOCALES: z.string().default('zh,en'),
 
@@ -121,8 +109,6 @@ export const env = createEnv({
   runtimeEnv: {
     // Server
     DATABASE_URL: process.env.DATABASE_URL,
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
@@ -141,7 +127,6 @@ export const env = createEnv({
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     ADMIN_EMAILS: process.env.ADMIN_EMAILS,
     ENABLE_AI_FEATURES: process.env.ENABLE_AI_FEATURES,
-    ENABLE_PAYMENT_FEATURES: process.env.ENABLE_PAYMENT_FEATURES,
     ENABLE_ADMIN_FEATURES: process.env.ENABLE_ADMIN_FEATURES,
     NODE_ENV: process.env.NODE_ENV,
     DB_POOL_MAX: process.env.DB_POOL_MAX,
@@ -156,11 +141,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_SIGN_UP_FALLBACK_REDIRECT_URL,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_ENABLE_AI_FEATURES: process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES,
-    NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES:
-      process.env.NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES,
     NEXT_PUBLIC_DEFAULT_LOCALE: process.env.NEXT_PUBLIC_DEFAULT_LOCALE,
     NEXT_PUBLIC_SUPPORTED_LOCALES: process.env.NEXT_PUBLIC_SUPPORTED_LOCALES,
     NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
@@ -199,16 +180,6 @@ export const getServerEnv = () => {
     throw new Error('getServerEnv() can only be called on the server side')
   }
   return env
-}
-
-// Helper function to check if Stripe is configured
-export const isStripeConfigured = () => {
-  if (typeof window !== 'undefined') {
-    // Client-side check
-    return !!env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-  }
-  // Server-side check
-  return !!(env.STRIPE_SECRET_KEY && env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 }
 
 // Helper function to check if Redis is configured
@@ -257,14 +228,12 @@ export const getFeatureFlags = () => {
     // Client-side
     return {
       aiFeatures: env.NEXT_PUBLIC_ENABLE_AI_FEATURES === 'true',
-      paymentFeatures: env.NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES === 'true',
       adminFeatures: true, // Admin features are server-side only
     }
   }
   // Server-side
   return {
     aiFeatures: env.ENABLE_AI_FEATURES,
-    paymentFeatures: env.ENABLE_PAYMENT_FEATURES,
     adminFeatures: env.ENABLE_ADMIN_FEATURES,
   }
 }

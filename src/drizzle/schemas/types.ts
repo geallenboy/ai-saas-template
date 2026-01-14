@@ -3,7 +3,6 @@
 // ===============================
 
 // 导入需要在本文件中使用的类型
-import type { UserMembership } from './payments'
 import type { AdminLevel } from './users'
 
 // 额外的通用类型定义
@@ -11,26 +10,8 @@ export type {
   ApiResponse,
   DatabaseTransaction,
   PaginationResult,
-  PermissionCheck,
   QueryFilters,
 } from './index'
-export type {
-  Coupon,
-  DiscountType,
-  DurationType,
-  MembershipPlan,
-  MembershipStatus,
-  NewCoupon,
-  NewMembershipPlan,
-  NewPaymentRecord,
-  NewUserMembership,
-  NewUserUsageLimit,
-  PaymentRecord,
-  PaymentSource,
-  PaymentStatus,
-  UserMembership,
-  UserUsageLimit,
-} from './payments'
 
 export type {
   ApiKey,
@@ -68,30 +49,6 @@ export type UserPermissionLevel = {
   canViewAnalytics: boolean
 }
 
-// 会员权限检查结果
-export type MembershipPermissionResult = {
-  isValid: boolean
-  isActive: boolean
-  isExpired: boolean
-  daysRemaining: number
-  features: string[]
-  limits: {
-    useCases: { used: number; max: number; unlimited: boolean }
-    tutorials: { used: number; max: number; unlimited: boolean }
-    blogs: { used: number; max: number; unlimited: boolean }
-    apiCalls: { used: number; max: number; unlimited: boolean }
-  }
-}
-
-// 支付处理结果
-export type PaymentProcessResult = {
-  success: boolean
-  paymentIntentId?: string
-  clientSecret?: string
-  error?: string
-  membership?: UserMembership
-}
-
 // AI对话上下文
 export type ConversationContext = {
   conversationId: string
@@ -110,8 +67,6 @@ export type PromptVariableValues = Record<string, string | number | boolean>
 export type SystemHealthCheck = {
   status: 'healthy' | 'degraded' | 'down'
   database: boolean
-  stripe: boolean
-  clerk: boolean
   ai: boolean
   lastChecked: Date
 }
@@ -123,12 +78,6 @@ export type AnalyticsData = {
     active: number
     new: number
     growth: number
-  }
-  memberships: {
-    total: number
-    active: number
-    expired: number
-    revenue: number
   }
   usage: {
     conversations: number

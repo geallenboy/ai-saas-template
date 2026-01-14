@@ -1,20 +1,10 @@
 'use client'
 
-import {
-  BarChart3,
-  CreditCard,
-  FileText,
-  Settings,
-  TrendingUp,
-} from 'lucide-react'
+import { FileText, Settings, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import { UserProfileClient } from '@/components/auth'
-import {
-  MembershipStatusClient,
-  PaymentHistoryClient,
-} from '@/components/front/payment'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -68,15 +58,14 @@ function DashboardContent() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* 左侧：用户资料和会员状态 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* 左侧：用户资料 */}
           <div className="lg:col-span-1 space-y-6">
             <UserProfileClient />
-            <MembershipStatusClient />
           </div>
 
           {/* 右侧：主要内容区域 */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:col-span-2 space-y-6">
             {/* 快速操作区域 */}
             <Card>
               <CardHeader>
@@ -86,30 +75,12 @@ function DashboardContent() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Button variant="outline" className="h-auto p-4" asChild>
-                    <Link href={`/${locale}/pricing`}>
-                      <div className="text-center">
-                        <CreditCard className="h-6 w-6 mx-auto mb-2" />
-                        <span className="text-sm">升级计划</span>
-                      </div>
-                    </Link>
-                  </Button>
-
+                <div className="grid grid-cols-2 gap-4">
                   <Button variant="outline" className="h-auto p-4" asChild>
                     <Link href={`/${locale}/settings`}>
                       <div className="text-center">
                         <Settings className="h-6 w-6 mx-auto mb-2" />
                         <span className="text-sm">账户设置</span>
-                      </div>
-                    </Link>
-                  </Button>
-
-                  <Button variant="outline" className="h-auto p-4" asChild>
-                    <Link href={`/${locale}/payment/history`}>
-                      <div className="text-center">
-                        <BarChart3 className="h-6 w-6 mx-auto mb-2" />
-                        <span className="text-sm">支付历史</span>
                       </div>
                     </Link>
                   </Button>
@@ -125,9 +96,6 @@ function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
-
-            {/* 支付历史 */}
-            <PaymentHistoryClient />
           </div>
         </div>
       </div>
@@ -143,7 +111,7 @@ function DashboardSkeleton() {
         <Skeleton className="h-5 w-96" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6">
           {/* 用户资料骨架 */}
           <Card>
@@ -157,20 +125,9 @@ function DashboardSkeleton() {
               </div>
             </CardContent>
           </Card>
-
-          {/* 会员状态骨架 */}
-          <Card>
-            <CardContent className="p-6">
-              <Skeleton className="h-8 w-24 mb-4" />
-              <div className="space-y-3">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           {/* 概览卡片骨架 */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -192,21 +149,9 @@ function DashboardSkeleton() {
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-24 mb-4" />
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {Array.from({ length: 4 }).map((_, i) => (
+              <div className="grid grid-cols-2 gap-4">
+                {Array.from({ length: 2 }).map((_, i) => (
                   <Skeleton key={`skeleton-${i}`} className="h-20" />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* 支付历史骨架 */}
-          <Card>
-            <CardContent className="p-6">
-              <Skeleton className="h-6 w-24 mb-4" />
-              <div className="space-y-3">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <Skeleton key={`skeleton-${i}`} className="h-16 w-full" />
                 ))}
               </div>
             </CardContent>

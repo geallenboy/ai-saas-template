@@ -1,5 +1,4 @@
 import { authRouter } from './routers/auth'
-import { paymentsRouter } from './routers/payments'
 import { createTRPCRouter } from './server'
 
 /**
@@ -8,7 +7,6 @@ import { createTRPCRouter } from './server'
  */
 export const appRouter = createTRPCRouter({
   auth: authRouter,
-  payments: paymentsRouter,
 })
 
 // 导出类型定义，用于客户端类型推断

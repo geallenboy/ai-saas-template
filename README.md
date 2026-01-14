@@ -89,9 +89,6 @@ cp .env.example .env.local
 
 # 配置必需的环境变量
 DATABASE_URL="postgresql://username:password@localhost:5432/ai_saas"
-STRIPE_SECRET_KEY="sk_test_..."
-STRIPE_WEBHOOK_SECRET="whsec_..."
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
 BETTER_AUTH_SECRET="your-secret-key-min-32-chars"
 NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 ```
@@ -241,11 +238,6 @@ src/translate/messages/
 ```bash
 # 数据库连接
 DATABASE_URL="postgresql://user:pass@host:5432/db"
-
-# Stripe支付
-STRIPE_SECRET_KEY="sk_..."
-STRIPE_WEBHOOK_SECRET="whsec_..."
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_..."
 
 # 认证配置
 BETTER_AUTH_SECRET="your-secret-key-min-32-chars"

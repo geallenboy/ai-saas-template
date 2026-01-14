@@ -1,13 +1,11 @@
 'use client'
 
 import {
-  Crown,
   Laptop,
   LogOut,
   Menu,
   Moon,
   Settings,
-  Star,
   Sun,
   User,
   X,
@@ -30,7 +28,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/hooks/auth'
-import { useUserMembership } from '@/hooks/use-membership'
 import { logger } from '@/lib/logger'
 import { cn, localizePath } from '@/lib/utils'
 import { locales } from '@/translate/i18n/config'
@@ -38,11 +35,6 @@ import { locales } from '@/translate/i18n/config'
 export default function Navigation() {
   const { isAuthenticated, isLoading, user, signOut } = useAuth()
 
-  // 使用tRPC查询会员状态，带性能优化
-  // 只在用户已认证且初始化完成时查询
-  const { hasActiveMembership, currentPlan } = useUserMembership(
-    isAuthenticated && user?.id ? user.id : undefined
-  )
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()
   const locale = useLocale()
@@ -234,23 +226,6 @@ export default function Navigation() {
             ) : user ? (
               // 已登录用户菜单
               <div className="flex items-center space-x-2">
-                {/* 会员标识 */}
-                {hasActiveMembership && currentPlan && (
-                  <div className="hidden md:flex items-center">
-                    {currentPlan.name === 'Professional' && (
-                      <div className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-medium rounded-full">
-                        <Star className="h-3 w-3" />
-                        <span>{localeT('professional')}</span>
-                      </div>
-                    )}
-                    {currentPlan.name === 'Enterprise' && (
-                      <div className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-medium rounded-full">
-                        <Crown className="h-3 w-3" />
-                        <span>{localeT('enterprise')}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -270,12 +245,6 @@ export default function Navigation() {
                         {/* 发光环效果 */}
                         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-sm animate-pulse" />
                       </div>
-                      {/* 会员状态小标识 - 增强版 */}
-                      {hasActiveMembership && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.6)] animate-pulse">
-                          <Crown className="h-3 w-3 text-white" />
-                        </div>
-                      )}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -296,20 +265,6 @@ export default function Navigation() {
                         <span>{t('dashboard')}</span>
                       </Link>
                     </DropdownMenuItem>
-                    {/* 会员用户显示会员中心入口 */}
-                    {hasActiveMembership && (
-                      <DropdownMenuItem asChild>
-                        <Link
-                          href={localizePath(locale, '/membership')}
-                          className="flex items-center text-blue-600 dark:text-blue-400"
-                        >
-                          <Crown className="mr-2 h-4 w-4" />
-                          <span>
-                            {locale === 'zh' ? '会员中心' : 'Membership Center'}
-                          </span>
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
                     <DropdownMenuItem asChild>
                       <Link
                         href={localizePath(locale, '/settings')}

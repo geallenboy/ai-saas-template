@@ -1,5 +1,4 @@
 import { relations } from 'drizzle-orm'
-import { paymentRecords, userMemberships, userUsageLimits } from './payments'
 import { apiKeys, notifications } from './system'
 import { loginLogs, users } from './users'
 
@@ -9,11 +8,6 @@ import { loginLogs, users } from './users'
 export const usersRelations = relations(users, ({ many }) => ({
   // 认证相关 (Better-Auth 统一管理)
   loginLogs: many(loginLogs),
-
-  // 支付相关
-  userMemberships: many(userMemberships),
-  paymentRecords: many(paymentRecords),
-  userUsageLimits: many(userUsageLimits),
 
   // 系统相关
   apiKeys: many(apiKeys),
@@ -29,36 +23,6 @@ export const loginLogsRelations = relations(loginLogs, ({ one }) => ({
     references: [users.id],
   }),
 }))
-
-// ===============================
-// 支付关系定义
-// ===============================
-export const userMembershipsRelations = relations(
-  userMemberships,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [userMemberships.userId],
-      references: [users.id],
-    }),
-  })
-)
-
-export const paymentRecordsRelations = relations(paymentRecords, ({ one }) => ({
-  user: one(users, {
-    fields: [paymentRecords.userId],
-    references: [users.id],
-  }),
-}))
-
-export const userUsageLimitsRelations = relations(
-  userUsageLimits,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [userUsageLimits.userId],
-      references: [users.id],
-    }),
-  })
-)
 
 // ===============================
 // 系统关系定义

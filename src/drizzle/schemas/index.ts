@@ -2,16 +2,6 @@
 // 导入所有表定义
 // ===============================
 
-import {
-  coupons,
-  membershipPlans,
-  paymentRecords,
-  type UserMembership,
-  type UserUsageLimit,
-  userMemberships,
-  userUsageLimits,
-} from './payments'
-
 import * as relations from './relations'
 import { apiKeys, notifications, systemConfigs } from './system'
 import {
@@ -21,32 +11,6 @@ import {
   users,
   verificationTokens,
 } from './users'
-
-// ===============================
-// 支付模块导出
-// ===============================
-export {
-  type Coupon,
-  coupons,
-  DiscountType,
-  DurationType,
-  type MembershipPlan,
-  MembershipStatus,
-  membershipPlans,
-  type NewCoupon,
-  type NewMembershipPlan,
-  type NewPaymentRecord,
-  type NewUserMembership,
-  type NewUserUsageLimit,
-  type PaymentRecord,
-  PaymentSource,
-  PaymentStatus,
-  paymentRecords,
-  type UserMembership,
-  type UserUsageLimit,
-  userMemberships,
-  userUsageLimits,
-} from './payments'
 
 // ===============================
 // 系统模块导出
@@ -103,13 +67,6 @@ export const schema = {
   verificationTokens,
   loginLogs,
 
-  // 支付模块
-  membershipPlans,
-  userMemberships,
-  paymentRecords,
-  userUsageLimits,
-  coupons,
-
   // 系统模块
   apiKeys,
   notifications,
@@ -154,12 +111,4 @@ export type QueryFilters = {
   sortOrder?: 'asc' | 'desc'
   startDate?: Date
   endDate?: Date
-}
-
-// 用户权限检查结果
-export type PermissionCheck = {
-  hasPermission: boolean
-  reason?: string
-  membership?: UserMembership
-  limits?: UserUsageLimit
 }
