@@ -107,40 +107,6 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 })
 
 /**
- * 管理员过程 - 需要管理员权限
- */
-export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
-  if (!ctx.user?.isAdmin || (ctx.user?.adminLevel ?? 0) < 1) {
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: '需要管理员权限',
-    })
-  }
-
-  return next({
-    ctx,
-  })
-})
-
-/**
- * 超级管理员过程 - 需要超级管理员权限
- */
-export const superAdminProcedure = protectedProcedure.use(
-  async ({ ctx, next }) => {
-    if (!ctx.user?.isAdmin || (ctx.user?.adminLevel ?? 0) < 2) {
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: '需要超级管理员权限',
-      })
-    }
-
-    return next({
-      ctx,
-    })
-  }
-)
-
-/**
  * 中间件：日志记录
  */
 export const loggerMiddleware = t.middleware(async ({ path, type, next }) => {

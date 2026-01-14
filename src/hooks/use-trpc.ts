@@ -25,39 +25,6 @@ export function useAuth() {
 }
 
 /**
- * 用户管理hooks（管理员）
- */
-export function useUsers(
-  params?: Parameters<typeof trpc.users.getUsers.useQuery>[0]
-) {
-  const utils = trpc.useUtils()
-  const usersQuery = trpc.users.getUsers.useQuery(params ?? {})
-  const userStatsQuery = trpc.users.getUserStats.useQuery()
-
-  const updateUser = trpc.users.updateUser.useMutation({
-    onSuccess: () => {
-      // 更新成功后刷新用户列表
-      utils.users.getUsers.invalidate()
-      utils.users.getUserStats.invalidate()
-    },
-  })
-
-  const toggleUserStatus = trpc.users.toggleUserStatus.useMutation({
-    onSuccess: () => {
-      utils.users.getUsers.invalidate()
-      utils.users.getUserStats.invalidate()
-    },
-  })
-
-  return {
-    usersQuery,
-    userStatsQuery,
-    updateUser,
-    toggleUserStatus,
-  }
-}
-
-/**
  * 支付和会员相关hooks
  */
 export function usePayments() {

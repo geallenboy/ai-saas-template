@@ -7,7 +7,6 @@ import {
   Menu,
   Moon,
   Settings,
-  Shield,
   Star,
   Sun,
   User,
@@ -32,7 +31,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/hooks/auth'
 import { useUserMembership } from '@/hooks/use-membership'
-import { AdminLevel } from '@/lib/auth/better-auth/roles'
 import { logger } from '@/lib/logger'
 import { cn, localizePath } from '@/lib/utils'
 import { locales } from '@/translate/i18n/config'
@@ -58,9 +56,6 @@ export default function Navigation() {
   useEffect(() => {
     setIsMounted(true)
   }, [])
-  // 检查用户是否是管理员
-  const adminLevel = user?.adminLevel ?? AdminLevel.USER
-  const isUserAdmin = user?.isAdmin === true || adminLevel >= AdminLevel.ADMIN
 
   const handleSignOut = async () => {
     try {
@@ -206,6 +201,7 @@ export default function Navigation() {
                 variant="outline"
                 size="icon"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                suppressHydrationWarning
               >
                 {theme === 'dark' ? (
                   <Sun className="h-4 w-4" />
@@ -323,21 +319,6 @@ export default function Navigation() {
                         <span>{t('settings')}</span>
                       </Link>
                     </DropdownMenuItem>
-                    {/* 管理员入口 */}
-                    {isUserAdmin && (
-                      <>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link
-                            href={localizePath(locale, '/admin')}
-                            className="text-amber-600 dark:text-amber-400"
-                          >
-                            <Shield className="mr-2 h-4 w-4" />
-                            <span>{t('adminPanel')}</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      </>
-                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="mr-2 h-4 w-4" />

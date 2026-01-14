@@ -11,12 +11,7 @@ export const AUTH_ROUTES = {
   SETTINGS: '/settings',
 } as const
 
-export const PROTECTED_ROUTES = [
-  '/admin',
-  '/dashboard',
-  '/settings',
-  '/profile',
-] as const
+export const PROTECTED_ROUTES = ['/dashboard', '/settings', '/profile'] as const
 
 export const PUBLIC_ROUTES = [
   '/',

@@ -31,5 +31,4 @@ export { ProfileForm } from './ProfileForm'
 export { RegisterForm } from './RegisterForm'
 // 其他认证组件
 export { SignInButton } from './SignInButton'
-export { SuperAdminGuardClient } from './SuperAdminGuardClient'
 export { UserProfileClient } from './UserProfileClient'
