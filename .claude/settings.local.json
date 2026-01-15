@@ -42,7 +42,8 @@
       "Bash(pnpm postinstall)",
       "Bash(tail:*)",
       "Bash(pnpm tsx:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Bash(timeout 120 pnpm build:*)"
     ],
     "deny": [],
     "ask": []

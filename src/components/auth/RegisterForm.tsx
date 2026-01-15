@@ -10,7 +10,7 @@ import {
   User,
 } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { z } from 'zod'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -20,7 +20,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { useAuth } from '@/hooks/auth'
-import { localizePath } from '@/lib/utils'
 
 // 注册表单验证模式
 const registerSchema = z.object({
@@ -63,17 +62,9 @@ export function RegisterForm({
 
   const router = useRouter()
   const searchParams = useSearchParams()
-  const pathname = usePathname()
 
-  // 获取当前语言前缀
-  const locale = pathname.split('/')[1] || 'zh'
-
-  // 从URL参数中获取重定向地址，确保包含语言前缀
-  const rawRedirectUrl = searchParams.get('redirect_url') || redirectTo
-  const redirectUrl =
-    rawRedirectUrl.startsWith('/') && !rawRedirectUrl.startsWith(`/${locale}`)
-      ? `/${locale}${rawRedirectUrl}`
-      : rawRedirectUrl
+  // Get redirect URL from URL parameters
+  const redirectUrl = searchParams.get('redirect_url') || redirectTo
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -358,14 +349,14 @@ export function RegisterForm({
             >
               我已阅读并同意{' '}
               <Link
-                href={localizePath(locale, '/terms')}
+                href="/terms"
                 className="text-blue-600 hover:text-blue-500 transition-colors duration-300"
               >
                 服务条款
               </Link>{' '}
               和{' '}
               <Link
-                href={localizePath(locale, '/privacy')}
+                href="/privacy"
                 className="text-blue-600 hover:text-blue-500 transition-colors duration-300"
               >
                 隐私政策
@@ -450,7 +441,7 @@ export function RegisterForm({
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             已有账户？
             <Link
-              href={`/${locale}/auth/login`}
+              href="/auth/login"
               className="ml-2 text-blue-600 hover:text-blue-500 font-medium transition-colors duration-300"
             >
               立即登录

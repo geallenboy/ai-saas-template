@@ -1,6 +1,12 @@
-import { redirect } from 'next/navigation'
-import { defaultLocale } from '@/translate/i18n/config'
+import { HomePage } from '@/components/front/home'
+import { Footer, Navigation } from '@/components/front/layout'
 
-export default function RootPage() {
-  redirect(`/${defaultLocale}`)
+export default function Home() {
+  return (
+    <>
+      <Navigation />
+      <HomePage />
+      <Footer />
+    </>
+  )
 }

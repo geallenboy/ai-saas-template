@@ -4,10 +4,7 @@
  * for Docker builds.
  */
 import type { NextConfig } from 'next'
-import createNextIntlPlugin from 'next-intl/plugin'
 import './src/env'
-
-const withNextIntl = createNextIntlPlugin('./src/translate/i18n/request.ts')
 
 const config: NextConfig = {
   devIndicators: false,
@@ -226,4 +223,4 @@ const config: NextConfig = {
   rewrites: async () => [],
 }
 
-export default withNextIntl(config)
+export default config

@@ -12,7 +12,6 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useLocale, useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { SignInButton } from '@/components/auth/SignInButton'
@@ -29,22 +28,17 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/hooks/auth'
 import { logger } from '@/lib/logger'
-import { cn, localizePath } from '@/lib/utils'
-import { locales } from '@/translate/i18n/config'
+import { cn } from '@/lib/utils'
 
 export default function Navigation() {
   const { isAuthenticated, isLoading, user, signOut } = useAuth()
 
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()
-  const locale = useLocale()
   const router = useRouter()
-  const t = useTranslations('navigation')
-  const localeT = useTranslations('locale')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
-  // 确保组件在客户端挂载后才显示用户相关内容
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -64,19 +58,8 @@ export default function Navigation() {
         userId: user?.id,
         action: 'sign_out',
       })
-      // 即使退出失败，也强制重定向
-      router.push(`/${locale}`)
+      router.push('/')
     }
-  }
-
-  // 更新语言切换逻辑，使用路由跳转
-  const handleLanguageChange = (newLocale: 'zh' | 'en') => {
-    const segments = pathname.split('/').filter(Boolean)
-    if (segments.length > 0 && locales.includes(segments[0] as string)) {
-      segments.shift()
-    }
-    const basePath = segments.length ? `/${segments.join('/')}` : '/'
-    router.push(localizePath(newLocale, basePath))
   }
 
   const getUserInitials = (user: any) => {
@@ -97,7 +80,6 @@ export default function Navigation() {
     return user?.fullName || user?.email || 'User'
   }
 
-  // 导航项类型定义
   interface NavItem {
     href: string
     label: string
@@ -106,18 +88,16 @@ export default function Navigation() {
     premium?: boolean
   }
 
-  // 更新导航项使用语言路由
   const navItems: NavItem[] = [
     {
-      href: localizePath(locale, '/'),
-      label: t('home'),
-      active:
-        pathname === localizePath(locale, '/') || pathname === `/${locale}`,
+      href: '/',
+      label: '首页',
+      active: pathname === '/',
     },
     {
-      href: localizePath(locale, '/contact'),
-      label: t('contact'),
-      active: pathname.startsWith(localizePath(locale, '/contact')),
+      href: '/contact',
+      label: '联系我们',
+      active: pathname.startsWith('/contact'),
     },
   ]
 
@@ -131,7 +111,6 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* 桌面端导航菜单 */}
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map(item => (
               <Link
@@ -159,7 +138,6 @@ export default function Navigation() {
                 {item.active && (
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
                 )}
-                {/* 3D悬浮效果背景 */}
                 <div
                   className={cn(
                     'absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10',
@@ -172,22 +150,7 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* 右侧操作区域 */}
           <div className="flex items-center space-x-2">
-            {/* 桌面端语言切换器 */}
-            <div className="hidden md:block">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  handleLanguageChange(locale === 'zh' ? 'en' : 'zh')
-                }
-              >
-                {locale === 'zh' ? 'EN' : '中文'}
-              </Button>
-            </div>
-
-            {/* 桌面端主题切换器 */}
             <div className="hidden md:block">
               <Button
                 variant="outline"
@@ -195,15 +158,18 @@ export default function Navigation() {
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 suppressHydrationWarning
               >
-                {theme === 'dark' ? (
-                  <Sun className="h-4 w-4" />
+                {isMounted ? (
+                  theme === 'dark' ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )
                 ) : (
-                  <Moon className="h-4 w-4" />
+                  <Sun className="h-4 w-4" />
                 )}
               </Button>
             </div>
 
-            {/* 移动端菜单按钮 */}
             <Button
               variant="ghost"
               size="icon"
@@ -217,14 +183,11 @@ export default function Navigation() {
               )}
             </Button>
 
-            {/* 用户菜单区域 - 优化渲染 */}
             {!isMounted || isLoading ? (
-              // 加载状态
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
               </div>
             ) : user ? (
-              // 已登录用户菜单
               <div className="flex items-center space-x-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -242,7 +205,6 @@ export default function Navigation() {
                             {getUserInitials(user)}
                           </AvatarFallback>
                         </Avatar>
-                        {/* 发光环效果 */}
                         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-sm animate-pulse" />
                       </div>
                     </Button>
@@ -257,33 +219,26 @@ export default function Navigation() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link
-                        href={localizePath(locale, '/dashboard')}
-                        className="flex items-center"
-                      >
+                      <Link href="/dashboard" className="flex items-center">
                         <User className="mr-2 h-4 w-4" />
-                        <span>{t('dashboard')}</span>
+                        <span>仪表板</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link
-                        href={localizePath(locale, '/settings')}
-                        className="flex items-center"
-                      >
+                      <Link href="/settings" className="flex items-center">
                         <Settings className="mr-2 h-4 w-4" />
-                        <span>{t('settings')}</span>
+                        <span>设置</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>{t('signOut')}</span>
+                      <span>退出登录</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             ) : (
-              // 未登录状态
               <div className="flex items-center space-x-2">
                 <SignInButton />
               </div>
@@ -292,11 +247,9 @@ export default function Navigation() {
         </div>
       </div>
 
-      {/* 移动端菜单 - 3D科技风格 */}
       {isMenuOpen && (
         <div className="md:hidden relative">
           <div className="relative z-10 px-4 py-6 space-y-4">
-            {/* 导航链接 */}
             <div className="space-y-2">
               {navItems.map(item => (
                 <Link
@@ -323,7 +276,6 @@ export default function Navigation() {
                   {item.active && (
                     <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
                   )}
-                  {/* 3D悬浮背景 */}
                   <div
                     className={cn(
                       'absolute inset-0 rounded-lg opacity-0 hover:opacity-100 transition-all duration-300 -z-10 transform hover:scale-105',
@@ -336,51 +288,27 @@ export default function Navigation() {
               ))}
             </div>
 
-            {/* 移动端工具 */}
             <div className="pt-4 border-t border-border/40">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-muted-foreground">
-                  {localeT('label')}
-                </span>
-                <div className="flex space-x-2">
-                  <Button
-                    variant={locale === 'zh' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => {
-                      handleLanguageChange('zh')
-                      setIsMenuOpen(false)
-                    }}
-                  >
-                    中文
-                  </Button>
-                  <Button
-                    variant={locale === 'en' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => {
-                      handleLanguageChange('en')
-                      setIsMenuOpen(false)
-                    }}
-                  >
-                    EN
-                  </Button>
-                </div>
-              </div>
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-sm font-medium text-muted-foreground">
                   主题
                 </span>
-                <div className="flex space-x-2">
+                <div className="flex space-x-2" suppressHydrationWarning>
                   <Button
-                    variant={theme === 'light' ? 'default' : 'outline'}
+                    variant={
+                      isMounted && theme === 'light' ? 'default' : 'outline'
+                    }
                     size="sm"
                     onClick={() => setTheme('light')}
                     className="transition-all duration-200"
                   >
                     <Sun className="h-4 w-4 mr-1" />
-                    <span className="text-xs">亮色</span>
+                    <span className="text-xs">浅色</span>
                   </Button>
                   <Button
-                    variant={theme === 'dark' ? 'default' : 'outline'}
+                    variant={
+                      isMounted && theme === 'dark' ? 'default' : 'outline'
+                    }
                     size="sm"
                     onClick={() => setTheme('dark')}
                     className="transition-all duration-200"
@@ -389,7 +317,9 @@ export default function Navigation() {
                     <span className="text-xs">深色</span>
                   </Button>
                   <Button
-                    variant={theme === 'system' ? 'default' : 'outline'}
+                    variant={
+                      isMounted && theme === 'system' ? 'default' : 'outline'
+                    }
                     size="sm"
                     onClick={() => setTheme('system')}
                     className="transition-all duration-200"

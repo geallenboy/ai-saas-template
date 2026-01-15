@@ -1,7 +1,6 @@
 'use client'
 
 import { Monitor, Moon, Sun } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
 import * as React from 'react'
 
@@ -15,14 +14,13 @@ import {
 
 export function ModeToggle() {
   const { setTheme, theme, resolvedTheme } = useTheme()
-  const t = useTranslations('locale')
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
     setMounted(true)
   }, [])
 
-  // 防止水合不匹配
+  // Prevent hydration mismatch
   if (!mounted) {
     return (
       <Button variant="ghost" size="icon" className="header-button">
@@ -53,7 +51,7 @@ export function ModeToggle() {
                 : '-rotate-90 scale-0'
             }`}
           />
-          <span className="sr-only">{t('switchTheme')}</span>
+          <span className="sr-only">切换主题</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="dropdown-enhanced">
@@ -62,7 +60,7 @@ export function ModeToggle() {
           className="dropdown-item-enhanced cursor-pointer"
         >
           <Sun className="h-5 w-5 text-yellow-500" />
-          <span className="flex-1">{t('light')}</span>
+          <span className="flex-1">浅色</span>
           {theme === 'light' && <div className="status-indicator" />}
         </DropdownMenuItem>
         <div className="dropdown-separator" />
@@ -71,7 +69,7 @@ export function ModeToggle() {
           className="dropdown-item-enhanced cursor-pointer"
         >
           <Moon className="h-5 w-5 text-blue-400" />
-          <span className="flex-1">{t('dark')}</span>
+          <span className="flex-1">深色</span>
           {theme === 'dark' && <div className="status-indicator" />}
         </DropdownMenuItem>
         <div className="dropdown-separator" />
@@ -80,7 +78,7 @@ export function ModeToggle() {
           className="dropdown-item-enhanced cursor-pointer"
         >
           <Monitor className="h-5 w-5 text-emerald-500" />
-          <span className="flex-1">{t('system')}</span>
+          <span className="flex-1">系统</span>
           {theme === 'system' && <div className="status-indicator" />}
         </DropdownMenuItem>
       </DropdownMenuContent>

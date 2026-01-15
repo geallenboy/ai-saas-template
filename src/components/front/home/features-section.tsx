@@ -1,10 +1,9 @@
 'use client'
 
 import { Globe, Palette, Rocket, Shield, Sparkles, Zap } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import type React from 'react'
 
-// 现代功能卡片组件
+// Modern Feature Card Component
 function ModernFeature({
   icon: Icon,
   title,
@@ -36,7 +35,7 @@ function ModernFeature({
           {description}
         </p>
 
-        {/* 装饰性元素 */}
+        {/* Decorative Element */}
         <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
     </div>
@@ -44,43 +43,46 @@ function ModernFeature({
 }
 
 export default function FeaturesSection() {
-  const t = useTranslations('home.features')
-
   const features = [
     {
       icon: Rocket,
-      title: t('quickStart.title'),
-      description: t('quickStart.description'),
+      title: '快速启动',
+      description:
+        '使用预构建的模板和组件，让您的 AI SaaS 平台在几分钟内启动运行。',
       gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     },
     {
       icon: Zap,
-      title: t('aiIntegration.title'),
-      description: t('aiIntegration.description'),
+      title: 'AI 集成',
+      description:
+        '内置 OpenAI、Anthropic、Google AI 和 xAI 支持，具备流式传输功能。',
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
     },
     {
       icon: Shield,
-      title: t('secureAuth.title'),
-      description: t('secureAuth.description'),
+      title: '安全认证',
+      description:
+        'Better Auth 集成，支持邮箱/密码和 Google OAuth 登录，以及基于角色的访问控制。',
       gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     },
     {
       icon: Palette,
-      title: t('modernUI.title'),
-      description: t('modernUI.description'),
+      title: '现代化 UI',
+      description:
+        '使用 Tailwind CSS v4 和 shadcn/ui 组件构建的精美响应式界面。',
       gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
     },
     {
       icon: Globe,
-      title: t('multiLanguage.title'),
-      description: t('multiLanguage.description'),
+      title: '全栈类型安全',
+      description:
+        '使用 TypeScript、tRPC 和 Drizzle ORM 实现端到端的类型安全，无缝开发。',
       gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
     },
     {
       icon: Sparkles,
-      title: t('paymentIntegration.title'),
-      description: t('paymentIntegration.description'),
+      title: '支付集成',
+      description: '集成 Stripe 支付，支持订阅管理和支付处理。',
       gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
     },
   ]
@@ -88,17 +90,17 @@ export default function FeaturesSection() {
   return (
     <section className="py-20 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 标题区域 */}
+        {/* Title Section */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            {t('title')}
+            强大功能
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            {t('subtitle')}
+            构建现代化 AI SaaS 平台所需的一切
           </p>
         </div>
 
-        {/* 功能网格 */}
+        {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <ModernFeature

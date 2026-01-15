@@ -2,16 +2,11 @@
 
 import { Rocket, Sparkles, Star } from 'lucide-react'
 import Link from 'next/link'
-import { useLocale, useTranslations } from 'next-intl'
-import { localizePath } from '@/lib/utils'
 
 export default function HeroSection() {
-  const t = useTranslations('home.hero')
-  const locale = useLocale()
-
   return (
     <header className="hero-enhanced relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-      {/* 动态背景元素 */}
+      {/* Dynamic background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-96 h-96 bg-blue-400/20 dark:bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl animate-float" />
         <div
@@ -25,58 +20,61 @@ export default function HeroSection() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-pink-400/10 rounded-full filter blur-3xl animate-pulse" />
       </div>
 
-      {/* 网格背景 */}
+      {/* Grid background */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10" />
 
-      {/* 渐变覆盖层 */}
+      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-white/20 dark:from-gray-900/30 dark:via-transparent dark:to-gray-900/20" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
-          {/* 标签 */}
+          {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 dark:bg-black/20 backdrop-blur-sm border border-white/20 dark:border-white/10 mb-8">
             <Sparkles className="w-4 h-4 mr-2 text-blue-400" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {t('badge')}
+              下一代 AI SaaS 平台
             </span>
           </div>
 
-          {/* 主标题 */}
+          {/* Main title */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
-            <span className="text-gradient-improved">{t('title')}</span>
+            <span className="text-gradient-improved">
+              构建您的 AI SaaS 平台
+            </span>
           </h1>
 
-          {/* 副标题 */}
+          {/* Subtitle */}
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
-            {t('subtitle')}
+            生产就绪的全栈模板，集成 Next.js 15、tRPC 和 AI
+            功能。立即开始构建您的 SaaS 产品。
           </p>
 
-          {/* 按钮组 */}
+          {/* Button group */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-            <Link href={localizePath(locale, '/auth/sign-up')}>
+            <Link href="/auth/register">
               <button
                 type="button"
                 className="btn-modern-primary text-lg px-10 py-4 w-full sm:w-auto min-w-[220px] group"
               >
                 <Rocket className="w-5 h-5 inline mr-3 group-hover:translate-x-1 transition-transform duration-300" />
-                {t('startFree')}
+                免费开始使用
               </button>
             </Link>
-            <Link href={localizePath(locale, '/pricing')}>
+            <Link href="/pricing">
               <button
                 type="button"
                 className="glass-card-improved px-10 py-4 text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 w-full sm:w-auto min-w-[220px] group"
               >
                 <Star className="w-5 h-5 inline mr-3 group-hover:rotate-12 transition-transform duration-300" />
-                {t('viewPricing')}
+                查看定价
               </button>
             </Link>
           </div>
 
-          {/* 技术栈展示 */}
+          {/* Tech stack showcase */}
           <div className="flex flex-col items-center justify-center gap-6">
             <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-              {t('techStack')}
+              现代化技术栈驱动
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
               {/* Next.js */}

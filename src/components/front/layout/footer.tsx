@@ -1,12 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useLocale } from 'next-intl'
 
 export default function Footer() {
-  const locale = useLocale()
-  const localePath = (path: string) => `/${locale}${path}`
-
   return (
     <footer className="bg-gray-50 dark:bg-gray-900 border-t">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -16,29 +12,29 @@ export default function Footer() {
               <span className="text-xl font-bold">AI SAAS</span>
             </div>
             <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-md">
-              基于 Next.js 15 和 React 19 构建的现代化 AI SAAS 平台
+              Modern AI SAAS platform built with Next.js 15 and React 19
             </p>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white tracking-wider uppercase">
-              产品
+              Product
             </h3>
             <ul className="mt-4 space-y-4">
               <li>
                 <Link
-                  href={localePath('/pricing')}
+                  href="/pricing"
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  定价
+                  Pricing
                 </Link>
               </li>
               <li>
                 <Link
-                  href={localePath('/docs')}
+                  href="/docs"
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  文档
+                  Documentation
                 </Link>
               </li>
             </ul>
@@ -46,23 +42,23 @@ export default function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white tracking-wider uppercase">
-              支持
+              Support
             </h3>
             <ul className="mt-4 space-y-4">
               <li>
                 <Link
-                  href={localePath('/contact')}
+                  href="/contact"
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  联系我们
+                  Contact Us
                 </Link>
               </li>
               <li>
                 <Link
-                  href={localePath('/privacy')}
+                  href="/privacy"
                   className="text-base text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                 >
-                  隐私政策
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
