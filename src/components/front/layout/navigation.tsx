@@ -1,84 +1,23 @@
 'use client'
 
-import {
-  Laptop,
-  LogOut,
-  Menu,
-  Moon,
-  Settings,
-  Sun,
-  User,
-  X,
-} from 'lucide-react'
+import { Laptop, Menu, Moon, Sun, X } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { SignInButton } from '@/components/auth/SignInButton'
 import { Logo } from '@/components/common/logo'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { useAuth } from '@/hooks/auth'
-import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 
 export default function Navigation() {
-  const { isAuthenticated, isLoading, user, signOut } = useAuth()
-
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()
-  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
-
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-      logger.info('User signed out successfully', {
-        category: 'auth',
-        userId: user?.id,
-        action: 'sign_out',
-      })
-    } catch (error) {
-      const errorObj = error instanceof Error ? error : new Error(String(error))
-      logger.error('Sign out failed', errorObj, {
-        category: 'auth',
-        userId: user?.id,
-        action: 'sign_out',
-      })
-      router.push('/')
-    }
-  }
-
-  const getUserInitials = (user: any) => {
-    if (user?.fullName) {
-      const names = user.fullName.split(' ')
-      if (names.length >= 2) {
-        return `${names[0][0]}${names[1][0]}`.toUpperCase()
-      }
-      return user.fullName[0].toUpperCase()
-    }
-    if (user?.email) {
-      return user.email[0].toUpperCase()
-    }
-    return 'U'
-  }
-
-  const getUserDisplayName = (user: any) => {
-    return user?.fullName || user?.email || 'User'
-  }
 
   interface NavItem {
     href: string
@@ -182,67 +121,6 @@ export default function Navigation() {
                 <Menu className="h-5 w-5" />
               )}
             </Button>
-
-            {!isMounted || isLoading ? (
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
-              </div>
-            ) : user ? (
-              <div className="flex items-center space-x-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="relative h-10 w-10 rounded-full p-0 transform transition-all duration-300 hover:scale-110 hover:shadow-[0_0_25px_rgba(59,130,246,0.4)]"
-                    >
-                      <div className="relative">
-                        <Avatar className="h-9 w-9 border-2 border-gradient-to-r from-blue-400 to-purple-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                          <AvatarImage
-                            src={user?.image || ''}
-                            alt={getUserDisplayName(user)}
-                          />
-                          <AvatarFallback className="text-xs bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
-                            {getUserInitials(user)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-sm animate-pulse" />
-                      </div>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-xs leading-none text-muted-foreground">
-                          {user?.email}
-                        </p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/dashboard" className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
-                        <span>仪表板</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/settings" className="flex items-center">
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>设置</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>退出登录</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <SignInButton />
-              </div>
-            )}
           </div>
         </div>
       </div>

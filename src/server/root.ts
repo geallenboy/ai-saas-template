@@ -1,4 +1,3 @@
-import { authRouter } from './routers/auth'
 import { createTRPCRouter } from './server'
 
 /**
@@ -6,7 +5,7 @@ import { createTRPCRouter } from './server'
  * 组合所有子路由器
  */
 export const appRouter = createTRPCRouter({
-  auth: authRouter,
+  // 在这里添加你的路由器
 })
 
 // 导出类型定义，用于客户端类型推断

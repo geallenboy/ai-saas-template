@@ -9,7 +9,6 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
-import { users } from './users'
 
 // ===============================
 // API 密钥表
@@ -19,9 +18,7 @@ export const apiKeys = pgTable(
   'api_keys',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    userId: varchar('user_id', { length: 255 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+    userId: varchar('user_id', { length: 255 }),
 
     name: varchar('name', { length: 100 }).notNull(),
     keyHash: text('key_hash').notNull().unique(),
@@ -53,9 +50,7 @@ export const notifications = pgTable(
   'notifications',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    userId: varchar('user_id', { length: 255 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+    userId: varchar('user_id', { length: 255 }),
 
     type: varchar('type', { length: 50 }).notNull(),
     title: varchar('title', { length: 200 }).notNull(),
@@ -97,9 +92,7 @@ export const systemConfigs = pgTable(
     isEditable: boolean('is_editable').default(true),
     isSecret: boolean('is_secret').default(false),
 
-    updatedBy: varchar('updated_by', { length: 255 }).references(
-      () => users.id
-    ),
+    updatedBy: varchar('updated_by', { length: 255 }),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },

@@ -4,13 +4,6 @@
 
 import * as relations from './relations'
 import { apiKeys, notifications, systemConfigs } from './system'
-import {
-  accounts,
-  loginLogs,
-  sessions,
-  users,
-  verificationTokens,
-} from './users'
 
 // ===============================
 // 系统模块导出
@@ -31,42 +24,11 @@ export {
   type SystemConfig,
   systemConfigs,
 } from './system'
-// ===============================
-// 用户模块导出
-// ===============================
-export {
-  type Account,
-  AdminLevel,
-  accounts,
-  Currency,
-  Language,
-  type LoginLog,
-  loginLogs,
-  type NewAccount,
-  type NewLoginLog,
-  type NewSession,
-  type NewUser,
-  type NewVerificationToken,
-  type Session,
-  sessions,
-  Theme,
-  type User,
-  users,
-  type VerificationToken,
-  verificationTokens,
-} from './users'
 
 // ===============================
 // 所有表的联合导出 (用于Drizzle Kit)
 // ===============================
 export const schema = {
-  // 用户模块 (已整合 Better Auth)
-  users,
-  sessions,
-  accounts,
-  verificationTokens,
-  loginLogs,
-
   // 系统模块
   apiKeys,
   notifications,

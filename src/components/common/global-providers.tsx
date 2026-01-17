@@ -4,9 +4,6 @@ import { ThemeProvider } from 'next-themes'
 import { type ReactNode, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Toaster } from 'sonner'
-// 认证系统
-import { AuthProvider } from '@/components/auth/AuthProvider'
-import { PermissionProvider } from '@/components/auth/PermissionProvider'
 import { TRPCProvider } from '@/server/provider'
 
 interface GlobalProvidersProps {
@@ -49,27 +46,23 @@ export function GlobalProviders({ children }: GlobalProvidersProps) {
       FallbackComponent={ErrorFallback}
       onReset={() => window.location.reload()}
     >
-      <AuthProvider>
-        <PermissionProvider>
-          <TRPCProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange={false}
-              storageKey="theme"
-            >
-              <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
-              <Toaster
-                position="top-right"
-                richColors
-                closeButton
-                duration={2000}
-              />
-            </ThemeProvider>
-          </TRPCProvider>
-        </PermissionProvider>
-      </AuthProvider>
+      <TRPCProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+          storageKey="theme"
+        >
+          <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            duration={2000}
+          />
+        </ThemeProvider>
+      </TRPCProvider>
     </ErrorBoundary>
   )
 }

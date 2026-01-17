@@ -1,7 +1,6 @@
 import { httpBatchLink, loggerLink, splitLink } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
 import superjson from 'superjson'
-import { authLink } from './auth-link'
 import { httpSubscriptionLink } from './http-subscription-link'
 import type { AppRouter } from './root'
 
@@ -41,7 +40,6 @@ export function getTRPCClientConfig() {
           process.env.NODE_ENV === 'development' ||
           (opts.direction === 'down' && opts.result instanceof Error),
       }),
-      authLink, // 动态认证链接，每次请求时获取最新令牌
       splitLink({
         condition: op => op.type === 'subscription',
         true: httpSubscriptionLink({
@@ -58,32 +56,6 @@ export function getTRPCClientConfig() {
               ...options,
               credentials: 'include',
             })
-
-            // 处理认证错误
-            if (response.status === 401) {
-              console.warn('tRPC: Received 401 UNAUTHORIZED from Better Auth')
-
-              // 在客户端清除认证状态
-              if (typeof window !== 'undefined') {
-                // 清除 Better Auth 相关的存储
-                localStorage.removeItem('ai-saas-auth')
-
-                // 尝试清除其他可能的认证存储
-                localStorage.removeItem('accessToken')
-                localStorage.removeItem('refreshToken')
-                localStorage.removeItem('auth-storage')
-
-                // 通知用户需要重新登录
-                console.log('Better Auth session expired, please login again')
-
-                // 可选择性地重定向到登录页面
-                if (window.location.pathname !== '/auth/login') {
-                  window.location.href = `/auth/login?redirect_url=${encodeURIComponent(
-                    window.location.pathname
-                  )}`
-                }
-              }
-            }
 
             return response
           },
