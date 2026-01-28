@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import {
   trackPageView,
   trackUserAction,
-} from '@/components/front/analytics/google-analytics'
+} from '@/components/analytics/google-analytics'
 
 // 页面视图跟踪Hook
 export function usePageTracking() {

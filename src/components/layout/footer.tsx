@@ -12,7 +12,7 @@ export default function Footer() {
               <span className="text-xl font-bold">AI SAAS</span>
             </div>
             <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-md">
-              Modern AI SAAS platform built with Next.js 15 and React 19
+              Modern AI SAAS platform built with Next.js and React
             </p>
           </div>
 

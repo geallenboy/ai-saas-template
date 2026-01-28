@@ -45,8 +45,8 @@ export default function HeroSection() {
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
-            生产就绪的全栈模板，集成 Next.js 15、tRPC 和 AI
-            功能。立即开始构建您的 SaaS 产品。
+            生产就绪的全栈模板，集成 Next.js、tRPC 和 AI 功能。立即开始构建您的
+            SaaS 产品。
           </p>
 
           {/* Button group */}

@@ -1,7 +1,7 @@
 'use client'
 
 import { Mail, Send } from 'lucide-react'
-import { Footer, Navigation } from '@/components/front/layout'
+import { Footer, Navigation } from '@/components/layout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'

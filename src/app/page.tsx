@@ -1,5 +1,5 @@
-import { HomePage } from '@/components/front/home'
-import { Footer, Navigation } from '@/components/front/layout'
+import { HomePage } from '@/components/home'
+import { Footer, Navigation } from '@/components/layout'
 
 export default function Home() {
   return (
