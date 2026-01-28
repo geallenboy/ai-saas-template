@@ -60,15 +60,6 @@ export default function HeroSection() {
                 免费开始使用
               </button>
             </Link>
-            <Link href="/pricing">
-              <button
-                type="button"
-                className="glass-card-improved px-10 py-4 text-lg font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 w-full sm:w-auto min-w-[220px] group"
-              >
-                <Star className="w-5 h-5 inline mr-3 group-hover:rotate-12 transition-transform duration-300" />
-                查看定价
-              </button>
-            </Link>
           </div>
 
           {/* Tech stack showcase */}

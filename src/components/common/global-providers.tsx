@@ -4,7 +4,6 @@ import { ThemeProvider } from 'next-themes'
 import { type ReactNode, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Toaster } from 'sonner'
-import { TRPCProvider } from '@/server/provider'
 
 interface GlobalProvidersProps {
   children: ReactNode
@@ -46,23 +45,16 @@ export function GlobalProviders({ children }: GlobalProvidersProps) {
       FallbackComponent={ErrorFallback}
       onReset={() => window.location.reload()}
     >
-      <TRPCProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange={false}
-          storageKey="theme"
-        >
-          <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
-          <Toaster
-            position="top-right"
-            richColors
-            closeButton
-            duration={2000}
-          />
-        </ThemeProvider>
-      </TRPCProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange={false}
+        storageKey="theme"
+      >
+        <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
+        <Toaster position="top-right" richColors closeButton duration={2000} />
+      </ThemeProvider>
     </ErrorBoundary>
   )
 }
