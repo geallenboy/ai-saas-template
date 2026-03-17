@@ -31,7 +31,7 @@ import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 
 export default function Navigation() {
-  const { isAuthenticated, isLoading, user, signOut } = useAuth()
+  const { isLoading, user, signOut } = useAuth()
 
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()

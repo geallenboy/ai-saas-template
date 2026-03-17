@@ -2,16 +2,15 @@
  * 统一认证系统 - 生产级 Better-Auth 实现
  */
 
+// 新的认证系统组件
+export { AuthProvider } from './AuthProvider'
 // Export from BetterAuthGuard
 export {
   AdminGuard,
   AuthGuard,
-  SuperAdminGuard,
   ShowForRole,
+  SuperAdminGuard,
 } from './BetterAuthGuard'
-
-// 新的认证系统组件
-export { AuthProvider } from './AuthProvider'
 export {
   PermissionProvider,
   PermissionWrapper,
@@ -26,8 +25,8 @@ export {
 // 旧系统已移除，现在完全使用 Better Auth
 
 // Backward compatibility aliases
-export { AdminGuard as AdminGuardClient } from './BetterAuthGuard'
 export {
+  AdminGuard as AdminGuardClient,
   AuthGuard as AuthGuardClient,
   AuthGuard as ProtectedRoute,
 } from './BetterAuthGuard'
