@@ -4,7 +4,6 @@
  * for Docker builds.
  */
 import type { NextConfig } from 'next'
-import './src/env'
 
 const config: NextConfig = {
   devIndicators: false,
@@ -13,13 +12,7 @@ const config: NextConfig = {
   compress: true,
   output: 'standalone',
 
-  // 跳过构建错误继续构建
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
+
 
   // 图片优化配置
   images: {
@@ -45,106 +38,7 @@ const config: NextConfig = {
     },
   },
 
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '10mb',
-    },
-    // 包导入优化
-    optimizePackageImports: [
-      '@radix-ui/react-icons',
-      '@tabler/icons-react',
-      'lucide-react',
-      'framer-motion',
-      'date-fns',
-    ],
-    // 启用 PPR (Partial Prerendering) - 暂时禁用
-    // ppr: process.env.NODE_ENV === 'production',
-  },
 
-  // Webpack 优化配置
-  webpack: (config, { dev, isServer, webpack }) => {
-    // 生产环境优化
-    if (!(dev || isServer)) {
-      // 代码分割优化
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        minSize: 20000,
-        maxSize: 244000, // 244KB
-        cacheGroups: {
-          // 框架代码
-          framework: {
-            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            name: 'framework',
-            chunks: 'all',
-            priority: 40,
-            enforce: true,
-          },
-          // UI 组件库
-          ui: {
-            test: /[\\/]node_modules[\\/](@radix-ui|@tabler|lucide-react)[\\/]/,
-            name: 'ui',
-            chunks: 'all',
-            priority: 30,
-          },
-          // 工具库
-          utils: {
-            test: /[\\/]node_modules[\\/](date-fns|clsx|class-variance-authority)[\\/]/,
-            name: 'utils',
-            chunks: 'all',
-            priority: 20,
-          },
-          // 其他第三方库
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-            priority: 10,
-          },
-          // 公共代码
-          common: {
-            name: 'common',
-            minChunks: 2,
-            chunks: 'all',
-            priority: 5,
-            reuseExistingChunk: true,
-          },
-        },
-      }
-
-      // 启用 Tree Shaking
-      config.optimization.usedExports = true
-      config.optimization.sideEffects = false
-
-      // 压缩优化
-      config.optimization.minimize = true
-    }
-
-    // Bundle 分析
-    if (process.env.ANALYZE === 'true') {
-      const BundleAnalyzerPlugin = require('@next/bundle-analyzer')({
-        enabled: true,
-        openAnalyzer: false,
-      })
-      config.plugins.push(BundleAnalyzerPlugin)
-    }
-
-    // 性能监控
-    if (!dev) {
-      config.plugins.push(
-        new webpack.DefinePlugin({
-          'process.env.ENABLE_PERFORMANCE_MONITORING': JSON.stringify('true'),
-        })
-      )
-    }
-
-    return config
-  },
-
-  // 缓存配置
-  onDemandEntries: {
-    maxInactiveAge: 25 * 1000, // 25秒
-    pagesBufferLength: 2,
-  },
 
   // 安全和性能头部
   headers: async () => [

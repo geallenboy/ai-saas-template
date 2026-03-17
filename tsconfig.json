@@ -51,14 +51,8 @@
       "@/types/*": [
         "./src/types/*"
       ],
-      "@/translate/*": [
-        "./src/translate/*"
-      ],
       "@/utils/*": [
         "./src/utils/*"
-      ],
-      "@/db/*": [
-        "./src/db/*"
       ],
       "@/app/*": [
         "./src/app/*"
@@ -80,6 +74,7 @@
     "dist",
     "coverage",
     ".source",
-    "public/next-app"
+    "public/next-app",
+    "drizzle.config.ts"
   ]
 }

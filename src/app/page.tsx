@@ -1,12 +1,5 @@
-import { HomePage } from '@/components/front/home'
-import { Footer, Navigation } from '@/components/front/layout'
+import { HomePage } from '@/components/home'
 
 export default function Home() {
-  return (
-    <>
-      <Navigation />
-      <HomePage />
-      <Footer />
-    </>
-  )
+  return <HomePage />
 }
