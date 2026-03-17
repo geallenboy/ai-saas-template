@@ -1,29 +1,27 @@
 # AI SaaS Template (Current Branch)
 
-当前分支已从完整 SaaS 模板裁剪为一个可运行的 **Next.js 15 基础展示模板**，用于快速搭建首页样式和基础工程骨架。
+当前分支已切换为可运行的 **Vite + React 19 基础展示模板**，用于快速搭建首页样式和基础工程骨架。
 
 ## 当前状态
 
-- 保留：Next.js App Router、React 19、Tailwind CSS v4、基础 UI 组件
-- 保留：首页展示页面、全局 Provider、错误页、404 页
-- 保留：健康检查与兼容会话接口
+- 保留：Vite、React 19、Tailwind CSS v4、基础 UI 组件
+- 保留：首页展示页面、全局 Provider、404 页面
+- 保留：健康检查与兼容会话接口（开发与生产启动均可用）
 
 ## 技术栈
 
-- Next.js 15
+- Vite 6
 - React 19
 - TypeScript 5（strict）
 - Tailwind CSS v4
 - Biome 2
-
 
 ## 页面与接口
 
 ### 页面
 
 - `/`：默认模板风格首页（Hero + CTA + 功能卡片）
-- `/_not-found`：404 页面
-- `/error`：运行时错误页面（由 App Router 错误边界触发）
+- `*`：404 页面（React Router）
 
 ### API
 
@@ -53,10 +51,8 @@ cp .env.example .env
 
 ```bash
 NODE_ENV=development
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+VITE_SITE_URL=http://localhost:3000
 ```
-
-> 当前分支不再进行 `env.ts` 强校验。
 
 ### 3. 启动开发
 
@@ -64,14 +60,15 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 pnpm dev
 ```
 
-默认端口 `3000`，若被占用会自动切换。
+默认端口 `3000`。
 
 ## 常用命令
 
 ```bash
-pnpm dev            # 本地开发（Turbopack）
-pnpm build          # 生产构建
-pnpm start          # 启动生产服务
+pnpm dev            # 本地开发（Vite）
+pnpm build          # 生产构建（输出 dist）
+pnpm preview        # 本地预览 dist（Vite preview）
+pnpm start          # Node 静态服务 + 兼容 API
 pnpm type-check     # TypeScript 检查
 pnpm lint:check     # Biome 检查
 pnpm lint           # Biome 检查并自动修复
@@ -82,15 +79,12 @@ pnpm test           # Vitest（允许无测试文件）
 
 ```text
 src/
-├── app/
-│   ├── api/
-│   │   ├── auth/get-session/route.ts
-│   │   └── health/route.ts
-│   ├── error.tsx
-│   ├── globals.css
-│   ├── layout.tsx
-│   ├── not-found.tsx
-│   └── page.tsx
+├── App.tsx
+├── main.tsx
+├── pages/
+│   └── not-found-page.tsx
+├── styles/
+│   └── globals.css
 ├── components/
 │   ├── common/global-providers.tsx
 │   ├── home/home-page.tsx
@@ -103,5 +97,20 @@ src/
 
 ## 说明
 
-- 本 README 仅描述当前分支实际保留内容。
-- 若后续恢复认证、数据库、支付、国际化等模块，请同步更新 README。
+- 当前分支已移除 Next.js App Router 与 Next API Route。
+- 兼容 API 由 `vite.config.ts`（dev/preview）与 `scripts/preview-server.mjs`（start）提供。
+
+## 从 Next.js 迁移到 Vite
+
+### 主要变化
+
+- 入口从 `src/app/layout.tsx + page.tsx` 改为 `index.html + src/main.tsx + src/App.tsx`
+- 路由从 Next App Router 改为 React Router
+- 构建产物从 `.next` 改为 `dist`
+- 开发与预览改为 Vite（`pnpm dev` / `pnpm preview`）
+- 生产启动改为 Node 静态服务（`pnpm start`）
+
+### 兼容性影响
+
+- 不再支持 Next.js 的 SSR、`metadata`、App Router 约定式文件路由
+- 如需恢复服务端渲染能力，建议拆分为独立后端服务或回迁 SSR 框架

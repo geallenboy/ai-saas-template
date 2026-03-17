@@ -18,10 +18,10 @@ db.sqlite
 # next.js
 /.next/
 /out/
-next-env.d.ts
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store

@@ -1,5 +1,3 @@
-'use client'
-
 import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -73,7 +71,7 @@ export function HomePage() {
       </section>
 
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        AI SaaS Template Base UI • Next.js 15 + React 19
+        AI SaaS Template Base UI • Vite + React 19
       </footer>
     </main>
   )

@@ -1,22 +1,22 @@
-'use client'
-
 import { ThemeProvider } from 'next-themes'
 import { type ReactNode, Suspense } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 
 interface GlobalProvidersProps {
   children: ReactNode
 }
 
 // 错误回退组件
-function ErrorFallback({ error, resetErrorBoundary }: any) {
+function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+  const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-red-50">
       <div className="text-center">
         <h2 className="text-lg font-semibold text-red-600 mb-2">
           出现了一些问题
         </h2>
-        <p className="text-sm text-red-500 mb-4">{error.message}</p>
+        <p className="text-sm text-red-500 mb-4">{errorMessage}</p>
         <button
           type="button"
           onClick={resetErrorBoundary}

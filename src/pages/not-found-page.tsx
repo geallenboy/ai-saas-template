@@ -1,9 +1,11 @@
 import { ArrowLeft, FileQuestion, Home } from 'lucide-react'
-import Link from 'next/link'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function NotFound() {
+export function NotFoundPage() {
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-md">
@@ -21,15 +23,17 @@ export default function NotFound() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button asChild variant="outline">
-              <Link href="javascript:history.back()">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                返回上页
-              </Link>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              返回上页
             </Button>
 
             <Button asChild>
-              <Link href="/">
+              <Link to="/">
                 <Home className="w-4 h-4 mr-2" />
                 返回首页
               </Link>
