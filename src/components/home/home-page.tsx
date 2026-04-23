@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -13,8 +14,8 @@ export function HomePage() {
               AI SaaS Template
             </span>
           </div>
-          <Button variant="outline" size="sm">
-            Dashboard
+          <Button asChild variant="outline" size="sm">
+            <Link to="/todo">Todo List</Link>
           </Button>
         </div>
       </header>
@@ -22,21 +23,24 @@ export function HomePage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col items-start gap-6 px-4 py-16 md:py-24">
         <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm text-muted-foreground">
           <Sparkles className="h-4 w-4 text-primary" />
-          默认模版基础样式
+          现在包含一个可用的 Todo List 功能页
         </div>
         <h1 className="max-w-3xl text-4xl font-bold tracking-tight md:text-6xl">
-          用最少代码，快速搭建你的 AI SaaS 首页
+          在现有模板里，直接开始管理你的任务流
         </h1>
         <p className="max-w-2xl text-lg text-muted-foreground">
-          已包含主视觉区、功能卡片、基础按钮样式和页脚结构，方便你直接继续扩展业务页面。
+          新增了一个本地持久化的 Todo List
+          页面，支持新增、筛选、完成、删除和清理已完成任务。
         </p>
         <div className="flex flex-wrap gap-3">
-          <Button size="lg">
-            开始使用
-            <ArrowRight className="ml-2 h-4 w-4" />
+          <Button asChild size="lg">
+            <Link to="/todo">
+              打开 Todo List
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
-          <Button size="lg" variant="outline">
-            查看文档
+          <Button asChild size="lg" variant="outline">
+            <Link to="/todo">查看任务面板</Link>
           </Button>
         </div>
       </section>
@@ -44,16 +48,16 @@ export function HomePage() {
       <section className="mx-auto grid w-full max-w-6xl gap-4 px-4 pb-20 md:grid-cols-3">
         {[
           {
-            title: '开箱可用',
-            desc: '默认页面结构与基础视觉风格已经搭好。',
+            title: '本地自动保存',
+            desc: '任务列表会持久化到浏览器，刷新页面后仍然保留。',
           },
           {
-            title: '组件化扩展',
-            desc: '基于 Button/Card 组件，便于继续叠加业务区块。',
+            title: '状态一目了然',
+            desc: '支持全部、进行中、已完成筛选和完成率展示。',
           },
           {
-            title: '构建可通过',
-            desc: '当前样式和页面已通过 type-check 与 build 验证。',
+            title: '继续扩展很方便',
+            desc: '当前实现基于独立组件和纯函数工具，后续可接 API 或数据库。',
           },
         ].map(item => (
           <Card key={item.title}>
