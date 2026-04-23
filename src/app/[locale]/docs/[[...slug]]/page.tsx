@@ -14,6 +14,7 @@ import {
 
 interface Props {
   params: Promise<{
+    locale: string
     slug?: string[]
   }>
 }
@@ -22,7 +23,7 @@ export default async function Page({ params }: Props) {
   const { slug } = await params
 
   // Direct slug mapping
-  // /docs -> [] (index), /docs/quickstart -> ['quickstart']
+  // /zh/docs -> [] (index), /zh/docs/quickstart -> ['quickstart']
   const page = getDocsPage(slug || [])
 
   if (!page) notFound()
