@@ -109,7 +109,11 @@ export function SystemSettingsForm({
   const [showSecret, setShowSecret] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
-    setFormValues(initialValues)
+    setFormValues(prev => {
+      const next = JSON.stringify(initialValues)
+      if (JSON.stringify(prev) === next) return prev
+      return initialValues
+    })
   }, [initialValues])
 
   const parseValueByType = (value: any, type: SettingFieldType) => {
@@ -333,7 +337,7 @@ export function SystemSettingsForm({
               : type === 'number'
                 ? Number(formValues[field.key]) !== Number(config.value)
                 : String(formValues[field.key] ?? '') !==
-                  String(config.value ?? '')
+                String(config.value ?? '')
 
           return (
             <div key={field.key} className="space-y-2 border rounded-lg p-4">
