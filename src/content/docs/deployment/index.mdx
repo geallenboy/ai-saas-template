@@ -1,0 +1,249 @@
+---
+title: 部署指南
+description: AI SaaS Template 部署指南总览，支持 Docker、Vercel、Railway 等多种部署方式
+---
+
+# 部署指南
+
+AI SaaS Template 支持多种部署方式，您可以根据团队需求和基础设施选择最适合的方案。
+
+## 部署方式对比
+
+| 特性 | Docker | Vercel | Railway |
+|------|--------|--------|---------|
+| 部署难度 | 中等 | 简单 | 简单 |
+| 自定义程度 | 高 | 中 | 中 |
+| 自动扩缩容 | 需自行配置 | 内置 | 内置 |
+| CI/CD | 需自行配置 | 内置 Git 集成 | 内置 Git 集成 |
+| 数据库托管 | 自行管理 | 需外部服务 | 内置 PostgreSQL |
+| Redis 支持 | 自行管理 | 需外部服务 | 内置 Redis |
+| 适用场景 | 私有化部署、完全控制 | 快速上线、Serverless | 全栈托管、快速原型 |
+
+## 前置要求
+
+无论选择哪种部署方式，您都需要准备：
+
+- **PostgreSQL 数据库**（14.0+）
+- **Redis 实例**（可选，用于缓存和限流）
+- **环境变量配置**（参见下方必需变量）
+
+### 必需环境变量
+
+```bash
+# 数据库
+DATABASE_URL="postgresql://user:password@host:5432/dbname"
+
+# 认证
+BETTER_AUTH_SECRET="your-secret-key-min-32-chars"
+NEXT_PUBLIC_SITE_URL="https://your-domain.com"
+
+# 支付（如需支付功能）
+STRIPE_SECRET_KEY="sk_live_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_live_..."
+```
+
+### 可选环境变量
+
+```bash
+# AI 服务（至少配置一个）
+OPENAI_API_KEY="sk-..."
+ANTHROPIC_API_KEY="sk-ant-..."
+GOOGLE_GENERATIVE_AI_API_KEY="..."
+XAI_API_KEY="..."
+
+# Redis 缓存
+UPSTASH_REDIS_REST_URL="https://..."
+UPSTASH_REDIS_REST_TOKEN="..."
+
+# 邮件服务
+RESEND_API_KEY="re_..."
+
+# OAuth
+GOOGLE_CLIENT_ID="..."
+GOOGLE_CLIENT_SECRET="..."
+GITHUB_CLIENT_ID="..."
+GITHUB_CLIENT_SECRET="..."
+
+# 监控
+SENTRY_DSN="https://..."
+```
+
+---
+
+## Docker 部署
+
+Docker 部署适合需要完全控制基础设施的场景。项目已包含优化的多阶段 `Dockerfile` 和 `docker-compose.yml`。
+
+### 快速开始
+
+```bash
+# 克隆项目
+git clone https://github.com/geallenboy/ai-saas-template
+cd ai-saas-template
+
+# 配置环境变量
+cp .env.example .env
+# 编辑 .env 填入实际值
+
+# 构建并启动
+docker-compose up -d
+
+# 运行数据库迁移
+docker-compose exec app pnpm db:migrate
+```
+
+### 生产环境构建
+
+```bash
+# 构建生产镜像
+docker build -t ai-saas-template:latest .
+
+# 运行容器
+docker run -p 3000:3000 \
+  --env-file .env \
+  ai-saas-template:latest
+```
+
+项目使用 Node.js 20 Alpine 基础镜像，采用多阶段构建优化镜像体积。生产镜像以非 root 用户运行，确保安全性。
+
+详细配置请参阅 [Docker 部署文档](./docker)。
+
+---
+
+## Vercel 部署
+
+Vercel 是 Next.js 应用的推荐部署平台，提供零配置部署体验。
+
+### 一键部署
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/geallenboy/ai-saas-template)
+
+### CLI 部署
+
+```bash
+# 安装 Vercel CLI
+npm i -g vercel
+
+# 登录
+vercel login
+
+# 部署
+vercel --prod
+```
+
+### 注意事项
+
+- 数据库需使用外部 PostgreSQL 服务（推荐 [Neon](https://neon.tech/) 或 [Supabase](https://supabase.com/)）
+- Redis 需使用 [Upstash](https://upstash.com/) 等 Serverless Redis 服务
+- 在 Vercel 控制面板中配置所有环境变量
+- Stripe Webhook 端点设置为 `https://your-domain.vercel.app/api/payments/webhook`
+
+详细配置请参阅 [Vercel 部署文档](./vercel)。
+
+---
+
+## Railway 部署
+
+[Railway](https://railway.app/) 提供一站式全栈托管，内置 PostgreSQL 和 Redis，适合快速部署。
+
+### 快速开始
+
+1. **创建 Railway 项目**
+
+   访问 [railway.app](https://railway.app/)，使用 GitHub 账号登录，点击 "New Project"。
+
+2. **从 GitHub 仓库部署**
+
+   选择 "Deploy from GitHub repo"，授权并选择 `ai-saas-template` 仓库。
+
+3. **添加 PostgreSQL 数据库**
+
+   在项目中点击 "New" → "Database" → "Add PostgreSQL"。Railway 会自动注入 `DATABASE_URL` 环境变量。
+
+4. **添加 Redis（可选）**
+
+   点击 "New" → "Database" → "Add Redis"。Railway 会自动注入 Redis 连接变量。
+
+5. **配置环境变量**
+
+   在服务的 "Variables" 标签页中添加必需的环境变量：
+
+   ```bash
+   BETTER_AUTH_SECRET=your-secret-key-min-32-chars
+   NEXT_PUBLIC_SITE_URL=https://your-app.up.railway.app
+   STRIPE_SECRET_KEY=sk_live_...
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
+   ```
+
+6. **配置构建命令**
+
+   Railway 会自动检测 Next.js 项目。如需自定义：
+
+   ```bash
+   # Build Command
+   pnpm install && pnpm build
+
+   # Start Command
+   pnpm start
+   ```
+
+7. **运行数据库迁移**
+
+   部署成功后，在 Railway 控制台中打开终端：
+
+   ```bash
+   pnpm db:migrate
+   ```
+
+### Railway 配置文件
+
+在项目根目录创建 `railway.toml`（可选）：
+
+```toml
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "pnpm start"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+```
+
+### Railway 优势
+
+- **内置数据库**：PostgreSQL 和 Redis 一键添加，无需外部服务
+- **自动部署**：推送到 GitHub 自动触发部署
+- **环境隔离**：支持 staging 和 production 环境
+- **日志和监控**：内置日志查看和资源监控
+- **自定义域名**：支持绑定自定义域名和自动 SSL
+
+### 注意事项
+
+- Railway 免费套餐有使用限制，生产环境建议使用付费计划
+- 确保 `NEXT_PUBLIC_SITE_URL` 设置为 Railway 分配的域名或自定义域名
+- Stripe Webhook 端点设置为 `https://your-app.up.railway.app/api/payments/webhook`
+- 数据库迁移需要在首次部署后手动执行
+
+---
+
+## 部署后检查清单
+
+无论使用哪种部署方式，部署完成后请确认：
+
+- [ ] 应用可正常访问（首页加载正常）
+- [ ] 健康检查端点返回 200（`/api/health`）
+- [ ] 数据库迁移已执行（`pnpm db:migrate`）
+- [ ] 用户注册和登录功能正常
+- [ ] 支付流程可正常发起（如已配置 Stripe）
+- [ ] AI 聊天功能可正常使用（如已配置 AI API Key）
+- [ ] 邮件发送功能正常（如已配置 Resend）
+- [ ] 语言切换功能正常（中文/英文）
+
+## 更多资源
+
+- [生产环境设置](./production-setup) - 安全加固、性能优化、监控配置
+- [CI/CD 流水线](./ci-cd) - GitHub Actions 自动化部署

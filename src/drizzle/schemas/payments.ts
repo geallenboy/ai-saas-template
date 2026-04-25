@@ -58,6 +58,8 @@ export const membershipPlans = pgTable(
     features: jsonb('features_en').$type<string[]>().notNull().default([]),
     featuresZh: jsonb('features_zh').$type<string[]>().default([]),
     maxApiCalls: integer('max_api_calls').default(-1), // API 调用限制
+    maxMonthlyAiTokens: integer('max_monthly_ai_tokens').default(100000), // AI Token 月度配额
+    maxMonthlyAiSessions: integer('max_monthly_ai_sessions').default(100), // AI 会话月度配额
 
     // 高级功能权限
     permissions: jsonb('permissions')
@@ -267,6 +269,10 @@ export const userUsageLimits = pgTable(
     monthlyTutorials: integer('monthly_tutorials').default(0),
     monthlyBlogs: integer('monthly_blogs').default(0),
     monthlyApiCalls: integer('monthly_api_calls').default(0),
+
+    // AI Token 使用量
+    monthlyAiTokens: integer('monthly_ai_tokens').default(0),
+    maxMonthlyAiTokens: integer('max_monthly_ai_tokens').default(-1), // -1 = 无限制
 
     // 重置信息
     lastCheckedAt: timestamp('last_checked_at').defaultNow(),

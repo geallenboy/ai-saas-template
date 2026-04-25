@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   description: '登录您的账户以继续使用 AI SaaS 服务',
 }
 
-export default function LoginPage({ params }: { params: { locale: string } }) {
-  const { locale } = params
+export default async function LoginPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* 左侧 - 登录表单 */}

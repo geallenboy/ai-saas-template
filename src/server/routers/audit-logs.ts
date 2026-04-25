@@ -432,4 +432,85 @@ export const auditLogsRouter = createTRPCRouter({
       recentCriticalLogs,
     }
   }),
+
+  /**
+   * 按操作类型聚合查询审计日志
+   * 支持快速筛选常见操作类型组合
+   * 需要管理员权限
+   */
+  getAuditLogsByCategory: adminProcedure
+    .input(
+      z.object({
+        category: z.enum([
+          'auth',        // 登录、登出、密码变更
+          'permission',  // 权限变更、角色修改
+          'payment',     // 支付操作、退款
+          'config',      // 系统配置变更
+          'content',     // 博客、内容管理
+          'all',         // 所有操作
+        ]),
+        userId: z.string().optional(),
+        startDate: z.date().optional(),
+        endDate: z.date().optional(),
+        page: z.number().min(1).default(1),
+        limit: z.number().min(1).max(100).default(20),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { category, userId, startDate, endDate, page, limit } = input
+
+      const conditions = []
+
+      // 按分类映射到操作类型
+      if (category !== 'all') {
+        const categoryModuleMap: Record<string, string> = {
+          auth: 'AUTH',
+          permission: 'USER',
+          payment: 'PAYMENT',
+          config: 'SYSTEM',
+          content: 'BLOG',
+        }
+        const moduleValue = categoryModuleMap[category]
+        if (moduleValue) {
+          conditions.push(eq(auditLogs.module, moduleValue as any))
+        }
+      }
+
+      if (userId) {
+        conditions.push(eq(auditLogs.userId, userId))
+      }
+
+      if (startDate) {
+        conditions.push(gte(auditLogs.createdAt, startDate))
+      }
+
+      if (endDate) {
+        conditions.push(lte(auditLogs.createdAt, endDate))
+      }
+
+      const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+      const [totalResult] = await ctx.db
+        .select({ total: count() })
+        .from(auditLogs)
+        .where(whereClause)
+
+      const total = totalResult?.total ?? 0
+
+      const logs = await ctx.db
+        .select()
+        .from(auditLogs)
+        .where(whereClause)
+        .orderBy(desc(auditLogs.createdAt))
+        .limit(limit)
+        .offset((page - 1) * limit)
+
+      return {
+        logs,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      }
+    }),
 })

@@ -8,6 +8,11 @@ import {
   verificationTokens,
 } from '@/drizzle/schemas'
 import { env } from '@/env'
+import { sendVerificationEmail as sendVerificationEmailFn } from '@/lib/auth/email-verification'
+import {
+  recordLoginAttempt,
+} from '@/lib/auth/login-security'
+import { sendResetEmail as sendResetEmailFn } from '@/lib/auth/password-reset'
 import { db } from '../../db'
 
 export const auth = betterAuth({
@@ -31,31 +36,56 @@ export const auth = betterAuth({
   // 邮箱密码认证
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // 简化配置，可以后续开启
+    requireEmailVerification: true,
+    sendVerificationEmail: async ({
+      user,
+      url,
+    }: { user: { email: string; name: string }; url: string }) => {
+      try {
+        await sendVerificationEmailFn(
+          { email: user.email, name: user.name },
+          url
+        )
+      } catch (error) {
+        console.error('📧 邮箱验证邮件发送失败:', error)
+        // 不抛出错误，避免阻塞注册流程（用户可以稍后重新发送）
+      }
+    },
     sendResetPassword: async ({ user, url }) => {
       try {
-        console.log('📧 发送密码重置邮件:', { email: user.email, url })
-        // TODO: 集成邮件服务
-        // await emailSender.sendPasswordResetEmail(user.email, user.name || user.email, url)
+        await sendResetEmailFn(
+          { email: user.email, name: user.name },
+          url
+        )
       } catch (error) {
-        console.error('密码重置邮件发送失败:', error)
+        console.error('📧 密码重置邮件发送失败:', error)
         throw error
       }
     },
   },
 
   // 社交登录提供商
-  socialProviders:
-    env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+  socialProviders: {
+    ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
       ? {
-          google: {
-            clientId: env.GOOGLE_CLIENT_ID,
-            clientSecret: env.GOOGLE_CLIENT_SECRET,
-            // 设置正确的重定向URI
-            redirectURI: `${env.BETTER_AUTH_URL || env.NEXT_PUBLIC_SITE_URL}/api/auth/callback/google`,
-          },
-        }
-      : {},
+        google: {
+          clientId: env.GOOGLE_CLIENT_ID,
+          clientSecret: env.GOOGLE_CLIENT_SECRET,
+          // 设置正确的重定向URI
+          redirectURI: `${env.BETTER_AUTH_URL || env.NEXT_PUBLIC_SITE_URL}/api/auth/callback/google`,
+        },
+      }
+      : {}),
+    ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET
+      ? {
+        github: {
+          clientId: env.GITHUB_CLIENT_ID,
+          clientSecret: env.GITHUB_CLIENT_SECRET,
+          redirectURI: `${env.BETTER_AUTH_URL || env.NEXT_PUBLIC_SITE_URL}/api/auth/callback/github`,
+        },
+      }
+      : {}),
+  },
 
   // 插件
   plugins: [username(), admin()],
@@ -115,7 +145,7 @@ export const auth = betterAuth({
     crossSubDomainCookies: {
       enabled: process.env.NODE_ENV === 'production',
       domain:
-        process.env.NODE_ENV === 'production' ? '.yourdomain.com' : undefined,
+        process.env.NODE_ENV === 'production' ? env.COOKIE_DOMAIN : undefined,
     },
     cookiePrefix: 'better-auth',
     defaultCookieAttributes: {
@@ -169,6 +199,17 @@ export const auth = betterAuth({
         user: user.email,
         account: account?.providerId,
       })
+
+      // 对邮箱密码登录进行安全检查
+      if (!account?.providerId || account.providerId === 'credential') {
+        try {
+          // 记录成功的登录尝试（清除失败计数）
+          await recordLoginAttempt(user.email, 'unknown', true)
+        } catch (error) {
+          console.error('记录登录尝试失败:', error)
+        }
+      }
+
       return user
     },
   },

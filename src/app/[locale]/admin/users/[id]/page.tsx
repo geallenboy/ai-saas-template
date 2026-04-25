@@ -3,7 +3,7 @@
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
-import { Suspense } from 'react'
+import { Suspense, use } from 'react'
 import { UserDetailClient } from '@/components/admin/user'
 import { AdminGuardClient } from '@/components/auth'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { localizePath } from '@/lib/utils'
 
 interface UserDetailPageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 function UserDetailContent({ userId }: { userId: string }) {
@@ -74,9 +74,10 @@ function UserDetailSkeleton() {
 }
 
 export default function UserDetailPage({ params }: UserDetailPageProps) {
+  const { id } = use(params)
   return (
     <AdminGuardClient>
-      <UserDetailContent userId={params.id} />
+      <UserDetailContent userId={id} />
     </AdminGuardClient>
   )
 }

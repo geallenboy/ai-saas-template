@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-# 运行质量检查
+# 运行质量检查（包含 TypeScript 类型检查）
 node scripts/pre-commit-quality.js
 
-# 运行 lint-staged
+# 运行 lint-staged（格式化 + lint）
 npx lint-staged

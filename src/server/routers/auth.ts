@@ -4,6 +4,10 @@ import { z } from 'zod'
 import { users } from '@/drizzle/schemas'
 import { auth } from '@/lib/auth/better-auth/server'
 import {
+  checkLoginAttempts,
+  recordLoginAttempt,
+} from '@/lib/auth/login-security'
+import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -13,6 +17,44 @@ import {
  * 认证路由 - 整合 Better-Auth
  */
 export const authRouter = createTRPCRouter({
+  /**
+   * 检查登录安全状态（IP 限流 + 账户锁定）
+   * 在客户端尝试登录前调用
+   */
+  checkLoginSecurity: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+      })
+    )
+    .query(async ({ input }) => {
+      const result = await checkLoginAttempts(input.email, 'unknown')
+      return {
+        allowed: result.allowed,
+        remainingAttempts: result.remainingAttempts,
+        lockUntil: result.lockUntil?.toISOString() ?? null,
+      }
+    }),
+
+  /**
+   * 记录登录失败（由客户端在登录失败后调用）
+   */
+  recordFailedLogin: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await recordLoginAttempt(input.email, 'unknown', false)
+      const result = await checkLoginAttempts(input.email, 'unknown')
+      return {
+        allowed: result.allowed,
+        remainingAttempts: result.remainingAttempts,
+        lockUntil: result.lockUntil?.toISOString() ?? null,
+      }
+    }),
+
   /**
    * 获取当前用户信息
    * 使用 Better-Auth 的会话验证

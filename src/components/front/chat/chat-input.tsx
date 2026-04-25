@@ -13,31 +13,12 @@ import {
   PromptInputBody,
   PromptInputButton,
   type PromptInputMessage,
-  PromptInputModelSelect,
-  PromptInputModelSelectContent,
-  PromptInputModelSelectItem,
-  PromptInputModelSelectTrigger,
-  PromptInputModelSelectValue,
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputToolbar,
   PromptInputTools,
 } from '@/components/ai-elements/prompt-input'
-
-const models = [
-  {
-    name: 'GPT-4o',
-    value: 'gpt-4o',
-  },
-  {
-    name: 'GPT-4',
-    value: 'gpt-4',
-  },
-  {
-    name: 'Claude 3 Opus',
-    value: 'claude-3-opus',
-  },
-]
+import type { AIProviderConfig } from '@/lib/ai-sdk/providers'
 
 interface ChatInputProps {
   onSubmit: (message: PromptInputMessage) => void
@@ -47,6 +28,8 @@ interface ChatInputProps {
   webSearchEnabled: boolean
   onWebSearchToggle: () => void
   isNewChat?: boolean
+  /** Available AI providers (with isEnabled resolved) */
+  providers?: AIProviderConfig[]
 }
 
 export function ChatInput({
@@ -156,25 +139,14 @@ export function ChatInput({
                 <GlobeIcon size={16} />
                 <span className="ml-2">联网搜索</span>
               </PromptInputButton>
-              <PromptInputModelSelect
-                onValueChange={onModelChange}
-                value={selectedModel}
+              <PromptInputButton
+                variant="ghost"
+                size="sm"
                 disabled={isStreaming}
+                className="text-xs"
               >
-                <PromptInputModelSelectTrigger>
-                  <PromptInputModelSelectValue />
-                </PromptInputModelSelectTrigger>
-                <PromptInputModelSelectContent>
-                  {models.map(model => (
-                    <PromptInputModelSelectItem
-                      key={model.value}
-                      value={model.value}
-                    >
-                      {model.name}
-                    </PromptInputModelSelectItem>
-                  ))}
-                </PromptInputModelSelectContent>
-              </PromptInputModelSelect>
+                <span className="truncate max-w-[100px]">{selectedModel || 'GPT-4o'}</span>
+              </PromptInputButton>
             </PromptInputTools>
             <PromptInputSubmit
               disabled={isStreaming}

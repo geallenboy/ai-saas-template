@@ -103,9 +103,9 @@ export default function PricingSection({
         console.error('Checkout error:', error)
         toast.error(
           error.message ||
-            (locale === 'zh'
-              ? '创建支付会话失败，请重试'
-              : 'Failed to create checkout session, please try again')
+          (locale === 'zh'
+            ? '创建支付会话失败，请重试'
+            : 'Failed to create checkout session, please try again')
         )
         setCheckoutLoading(null)
       },
@@ -415,7 +415,7 @@ export default function PricingSection({
                     'relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300',
                     plan.isPopular && 'ring-2 ring-blue-500 scale-105',
                     isCurrentPlan(plan) &&
-                      'ring-2 ring-green-500 bg-green-50 dark:bg-green-900/20'
+                    'ring-2 ring-green-500 bg-green-50 dark:bg-green-900/20'
                   )}
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -509,6 +509,28 @@ export default function PricingSection({
                       )}
                     </div>
 
+                    {/* AI 使用配额 */}
+                    {(plan.maxMonthlyAiTokens != null || plan.maxMonthlyAiSessions != null) && (
+                      <div className="mb-4 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800/30">
+                        <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-1.5">
+                          {locale === 'zh' ? 'AI 使用配额' : 'AI Usage Quota'}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-purple-600 dark:text-purple-400">
+                          <span>
+                            {plan.maxMonthlyAiTokens === -1
+                              ? (locale === 'zh' ? '无限 Token' : 'Unlimited tokens')
+                              : `${((plan.maxMonthlyAiTokens ?? 0) / 1000).toLocaleString()}K tokens/${locale === 'zh' ? '月' : 'mo'}`}
+                          </span>
+                          <span className="text-purple-300 dark:text-purple-600">|</span>
+                          <span>
+                            {plan.maxMonthlyAiSessions === -1
+                              ? (locale === 'zh' ? '无限会话' : 'Unlimited sessions')
+                              : `${plan.maxMonthlyAiSessions ?? 0} ${locale === 'zh' ? '会话/月' : 'sessions/mo'}`}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     {/* 功能列表 */}
                     <ul className="space-y-3 mb-8">
                       {(
@@ -519,7 +541,7 @@ export default function PricingSection({
                           key={featureIndex}
                           className="flex items-start gap-3"
                         >
-                          <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                          <Check className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
                           <span className="text-gray-700 dark:text-gray-300 text-sm">
                             {feature}
                           </span>

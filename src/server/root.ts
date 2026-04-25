@@ -1,3 +1,4 @@
+import { adminDashboardRouter } from './routers/admin-dashboard'
 import { aichatRouter } from './routers/aichat'
 import { auditLogsRouter } from './routers/audit-logs'
 import { authRouter } from './routers/auth'
@@ -12,6 +13,7 @@ import { createTRPCRouter } from './server'
  * 组合所有子路由器
  */
 export const appRouter = createTRPCRouter({
+  adminDashboard: adminDashboardRouter,
   aichat: aichatRouter,
   auth: authRouter,
   blog: blogRouter,

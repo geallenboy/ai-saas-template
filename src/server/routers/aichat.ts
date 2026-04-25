@@ -12,12 +12,14 @@ import {
   aiChatAttachments,
   aiChatMessages,
   aiChatSessions,
+  aiTokenUsage,
 } from '@/drizzle/schemas'
 import {
   DEFAULT_AI_MODEL_ID,
   describeAiError,
   streamAiText,
 } from '@/lib/ai-sdk'
+import { checkAiQuota } from '@/lib/ai-sdk/quota'
 import type { Context } from '../server'
 import { createTRPCRouter, protectedProcedure } from '../server'
 
@@ -65,6 +67,11 @@ const listMessagesSchema = z.object({
   limit: z.number().int().min(1).max(200).optional(),
 })
 
+const exportChatSchema = z.object({
+  sessionId: z.string().uuid(),
+  format: z.enum(['markdown', 'json']),
+})
+
 const clearSessionSchema = z.object({
   sessionId: z.string().uuid(),
 })
@@ -85,18 +92,18 @@ export type AiChatStreamEvent =
   | { type: 'assistant-start'; messageId: string }
   | { type: 'assistant-delta'; messageId: string; delta: string }
   | {
-      type: 'assistant-end'
-      messageId: string
-      text: string
-      usage?: LanguageModelUsage
-      totalUsage?: LanguageModelUsage
-    }
+    type: 'assistant-end'
+    messageId: string
+    text: string
+    usage?: LanguageModelUsage
+    totalUsage?: LanguageModelUsage
+  }
   | {
-      type: 'error'
-      message: string
-      retryable: boolean
-      category: string
-    }
+    type: 'error'
+    message: string
+    retryable: boolean
+    category: string
+  }
 
 const buildMessageContent = (text: string): AiMessageContent => {
   return [{ type: 'text', text }]
@@ -289,6 +296,63 @@ export const aichatRouter = createTRPCRouter({
       }
     }),
 
+  exportChat: protectedProcedure
+    .input(exportChatSchema)
+    .query(async ({ ctx, input }) => {
+      const session = await assertSessionOwnership(ctx, input.sessionId)
+
+      const messages = await ctx.db.query.aiChatMessages.findMany({
+        where: eq(aiChatMessages.sessionId, input.sessionId),
+        orderBy: [asc(aiChatMessages.createdAt)],
+      })
+
+      if (input.format === 'json') {
+        const exportData = {
+          sessionId: session.id,
+          title: session.title ?? 'Untitled',
+          modelId: session.modelId,
+          exportedAt: new Date().toISOString(),
+          messages: messages.map(msg => ({
+            role: msg.role,
+            content: msg.text ?? '',
+            createdAt: msg.createdAt.toISOString(),
+          })),
+        }
+        return {
+          content: JSON.stringify(exportData, null, 2),
+          filename: `chat-${session.id}.json`,
+          mimeType: 'application/json',
+        }
+      }
+
+      // Markdown format
+      const lines: string[] = []
+      lines.push(`# ${session.title ?? 'Untitled Chat'}`)
+      lines.push('')
+      lines.push(`> Model: ${session.modelId}`)
+      lines.push(`> Exported at: ${new Date().toISOString()}`)
+      lines.push('')
+
+      for (const msg of messages) {
+        const roleLabel =
+          msg.role === 'user'
+            ? 'User'
+            : msg.role === 'assistant'
+              ? 'Assistant'
+              : msg.role.charAt(0).toUpperCase() + msg.role.slice(1)
+        lines.push(`## ${roleLabel}`)
+        lines.push('')
+        lines.push(msg.text ?? '')
+        lines.push('')
+      }
+
+      return {
+        content: lines.join('\n'),
+        filename: `chat-${session.id}.md`,
+        mimeType: 'text/markdown',
+      }
+    }),
+
   sendMessage: protectedProcedure
     .input(sendMessageInputSchema)
     .subscription(({ ctx, input }) => {
@@ -321,6 +385,19 @@ export const aichatRouter = createTRPCRouter({
           const userId = ctx.userId as string
           let session: AiChatSession | null = null
           let sessionId = input.sessionId
+
+          // 配额检查：在处理 AI 请求前验证用户配额
+          const quotaCheck = await checkAiQuota(ctx.db, userId)
+          if (!quotaCheck.allowed) {
+            safeNext({
+              type: 'error',
+              message: quotaCheck.message ?? 'AI 使用配额已用尽，请升级会员计划。',
+              retryable: false,
+              category: 'quota_exceeded',
+            })
+            safeComplete()
+            return
+          }
 
           if (sessionId) {
             session = await assertSessionOwnership(ctx, sessionId)
@@ -468,10 +545,17 @@ export const aichatRouter = createTRPCRouter({
 
             if (isObserverClosed) return
 
-            const [usage, totalUsage] = await Promise.all([
-              result.usage.catch(() => undefined),
-              result.totalUsage.catch(() => undefined),
-            ])
+            let usage: LanguageModelUsage | undefined
+            let totalUsage: LanguageModelUsage | undefined
+            try {
+              ;[usage, totalUsage] = await Promise.all([
+                result.usage,
+                result.totalUsage,
+              ])
+            } catch {
+              usage = undefined
+              totalUsage = undefined
+            }
 
             await ctx.db
               .update(aiChatMessages)
@@ -487,6 +571,28 @@ export const aichatRouter = createTRPCRouter({
               .update(aiChatSessions)
               .set({ lastMessageAt: new Date(), updatedAt: new Date() })
               .where(eq(aiChatSessions.id, session.id))
+
+            // Record AI token usage
+            if (usage || totalUsage) {
+              const usageData = totalUsage ?? usage
+              try {
+                await ctx.db.insert(aiTokenUsage).values({
+                  userId,
+                  sessionId: session.id,
+                  modelId: resolvedModelId,
+                  inputTokens: usageData?.inputTokens ?? 0,
+                  outputTokens: usageData?.outputTokens ?? 0,
+                  totalTokens: usageData?.totalTokens ?? 0,
+                  costUsd: '0', // Cost calculation can be enhanced later based on model pricing
+                })
+              } catch (tokenTrackingError) {
+                // Token tracking failure should not break the chat flow
+                console.error(
+                  'Failed to record AI token usage:',
+                  tokenTrackingError
+                )
+              }
+            }
 
             safeNext({
               type: 'assistant-end',

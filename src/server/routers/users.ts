@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server'
-import { and, asc, count, desc, eq, ilike } from 'drizzle-orm'
+import { and, asc, count, desc, eq, gte, ilike, inArray, lte, or } from 'drizzle-orm'
 import { z } from 'zod'
-import { users } from '@/drizzle/schemas'
+import { userMemberships, users } from '@/drizzle/schemas'
 import { AdminLevel } from '@/lib/auth/better-auth/roles'
 import {
   adminProcedure,
@@ -495,5 +495,212 @@ export const usersRouter = createTRPCRouter({
       }
 
       return updatedUsers
+    }),
+
+  /**
+   * 高级用户搜索
+   * 支持按角色、会员等级、注册时间范围筛选
+   * 需要管理员权限
+   */
+  searchUsers: adminProcedure
+    .input(
+      z.object({
+        query: z.string().optional(),
+        role: z.enum(['user', 'admin', 'super_admin']).optional(),
+        membershipLevel: z.string().optional(),
+        registeredAfter: z.date().optional(),
+        registeredBefore: z.date().optional(),
+        isActive: z.boolean().optional(),
+        page: z.number().min(1).default(1),
+        pageSize: z.number().min(1).max(100).default(20),
+        sortBy: z
+          .enum(['createdAt', 'email', 'fullName'])
+          .default('createdAt'),
+        sortOrder: z.enum(['asc', 'desc']).default('desc'),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const {
+        query: searchQuery,
+        role,
+        membershipLevel,
+        registeredAfter,
+        registeredBefore,
+        isActive,
+        page,
+        pageSize,
+        sortBy,
+        sortOrder,
+      } = input
+
+      // 构建查询条件
+      const conditions = []
+
+      // 文本搜索（邮箱或姓名）
+      if (searchQuery) {
+        conditions.push(
+          or(
+            ilike(users.email, `%${searchQuery}%`),
+            ilike(users.fullName, `%${searchQuery}%`),
+            ilike(users.name, `%${searchQuery}%`)
+          )
+        )
+      }
+
+      // 按角色筛选
+      if (role === 'user') {
+        conditions.push(eq(users.adminLevel, 0))
+      } else if (role === 'admin') {
+        conditions.push(eq(users.adminLevel, 1))
+      } else if (role === 'super_admin') {
+        conditions.push(eq(users.adminLevel, 2))
+      }
+
+      // 按注册时间范围筛选
+      if (registeredAfter) {
+        conditions.push(gte(users.createdAt, registeredAfter))
+      }
+      if (registeredBefore) {
+        conditions.push(lte(users.createdAt, registeredBefore))
+      }
+
+      // 按活跃状态筛选
+      if (isActive !== undefined) {
+        conditions.push(eq(users.isActive, isActive))
+      }
+
+      const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+      // 获取总数
+      const [totalResult] = await ctx.db
+        .select({ total: count() })
+        .from(users)
+        .where(whereClause)
+
+      const total = totalResult?.total ?? 0
+
+      // 排序
+      const orderColumn = (users as any)[sortBy]
+      const orderDirection =
+        sortOrder === 'asc' ? asc(orderColumn) : desc(orderColumn)
+
+      // 获取用户列表
+      let userList = await ctx.db
+        .select()
+        .from(users)
+        .where(whereClause)
+        .orderBy(orderDirection)
+        .limit(pageSize)
+        .offset((page - 1) * pageSize)
+
+      // 如果需要按会员等级筛选，进行后过滤
+      // （因为会员信息在另一张表，需要 join 或后过滤）
+      if (membershipLevel) {
+        const userIds = userList.map(u => u.id)
+        if (userIds.length > 0) {
+          const memberships = await ctx.db
+            .select({
+              userId: userMemberships.userId,
+              planId: userMemberships.planId,
+            })
+            .from(userMemberships)
+            .where(
+              and(
+                inArray(userMemberships.userId, userIds),
+                eq(userMemberships.status, 'active')
+              )
+            )
+
+          const memberUserIds = new Set(
+            memberships
+              .filter(m => m.planId === membershipLevel)
+              .map(m => m.userId)
+          )
+
+          userList = userList.filter(u => memberUserIds.has(u.id))
+        }
+      }
+
+      return {
+        users: userList,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      }
+    }),
+
+  /**
+   * 批量操作用户（禁用、启用、修改角色）
+   * 需要超级管理员权限
+   */
+  batchUpdateUsers: superAdminProcedure
+    .input(
+      z.object({
+        userIds: z.array(z.string()).min(1),
+        action: z.enum(['activate', 'deactivate', 'setRole']),
+        role: z.enum(['user', 'admin', 'super_admin']).optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { userIds, action, role } = input
+
+      // 防止修改自己
+      if (userIds.includes(ctx.user.id)) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: '不能批量修改自己的账户',
+        })
+      }
+
+      // 验证 setRole 操作必须提供 role
+      if (action === 'setRole' && !role) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: '修改角色操作必须指定目标角色',
+        })
+      }
+
+      const now = new Date()
+      const updatedUsers = []
+
+      for (const userId of userIds) {
+        let updateData: Record<string, unknown> = { updatedAt: now }
+
+        switch (action) {
+          case 'activate':
+            updateData = { ...updateData, isActive: true }
+            break
+          case 'deactivate':
+            updateData = { ...updateData, isActive: false }
+            break
+          case 'setRole': {
+            const adminLevel =
+              role === 'super_admin' ? 2 : role === 'admin' ? 1 : 0
+            updateData = {
+              ...updateData,
+              adminLevel,
+              isAdmin: adminLevel >= AdminLevel.ADMIN,
+              role: role === 'super_admin' ? 'admin' : role,
+            }
+            break
+          }
+        }
+
+        const [updatedUser] = await ctx.db
+          .update(users)
+          .set(updateData)
+          .where(eq(users.id, userId))
+          .returning()
+
+        if (updatedUser) {
+          updatedUsers.push(updatedUser)
+        }
+      }
+
+      return {
+        updated: updatedUsers.length,
+        users: updatedUsers,
+      }
     }),
 })

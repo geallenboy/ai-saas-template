@@ -6,32 +6,37 @@
 [![tRPC](https://img.shields.io/badge/tRPC-398CCB?logo=trpc&logoColor=white)](https://trpc.io/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-> 🎯 **现代化企业级 AI SaaS 解决方案** - 基于 Next.js 15、React 19、TypeScript 和 tRPC 构建的全栈开发模板
+> 🎯 **现代化企业级 AI SaaS 解决方案** - 基于 Next.js 16、React 19、TypeScript 6 和 tRPC 构建的全栈开发模板
 
 ## ✨ 核心特性
 
 ### 🏗️ 现代化技术栈
-- **🔥 Next.js 15** - App Router + Server Components + React 19
-- **🛡️ TypeScript 5** - 端到端类型安全，严格模式配置
-- **🌐 tRPC** - 类型安全的全栈API，零代码生成
+- **🔥 Next.js 16** - App Router + Cache Components + Turbopack 默认打包
+- **🛡️ TypeScript 6** - 端到端类型安全，严格模式配置
+- **⚛️ React 19.2** - Server Components + View Transitions
+- **🌐 tRPC 11** - 类型安全的全栈API，零代码生成
 - **🎨 Tailwind CSS v4** - 现代化CSS框架 + shadcn/ui组件库
 - **🗄️ Drizzle ORM** - 类型安全的PostgreSQL ORM
 - **🔐 Better Auth** - 轻量级认证解决方案，支持多种登录方式
+- **🤖 AI SDK 6** - 多模型支持（OpenAI、Anthropic、Google AI、xAI）
 
 ### 🚀 企业级功能
 - **👥 用户管理系统** - 完整的RBAC权限控制（用户/管理员/超级管理员）
-- **💳 支付集成** - Stripe订阅和一次性支付
+- **💳 支付集成** - Stripe订阅、优惠码、退款流程
 - **🌍 国际化支持** - 中英双语，支持服务端渲染
-- **🤖 AI服务集成** - 支持 OpenAI、Anthropic、Google AI、xAI
-- **📊 系统监控** - 完整的审计日志和系统配置
+- **🤖 AI服务集成** - 多模型切换、Token追踪、配额控制、RAG、Agent工作流
+- **📊 管理仪表盘** - 业务指标、用户管理、审计日志、系统配置
+- **🔒 安全增强** - 邮箱验证、密码重置、GitHub OAuth、登录限流
 - **📱 响应式设计** - 移动端适配，支持深色模式
+- **📈 可观测性** - 结构化日志、Sentry错误追踪、性能追踪
 
 ### ⚡ 开发体验
-- **🔧 完整工具链** - Biome代码检查、Vitest测试、Playwright E2E
+- **🔧 完整工具链** - Biome 2.4 代码检查、Vitest 4 测试、Playwright E2E
 - **📝 严格规范** - Git hooks、代码格式化、提交规范
 - **🔍 类型安全** - 从数据库到前端的完整类型推断
-- **🚀 高性能** - 代码分割、图片优化、缓存策略
-- **📚 完整文档** - 详细的开发规范和架构说明
+- **🚀 高性能** - Turbopack 默认打包、Cache Components、代码分割
+- **📚 完整文档** - Fumadocs 文档系统、API文档、部署指南
+- **🛠️ 脚手架工具** - tRPC Router 代码生成器
 
 ## 🎯 架构设计
 
@@ -68,7 +73,7 @@
 ## 🚀 快速开始
 
 ### 环境要求
-- **Node.js** >= 18.17.0
+- **Node.js** >= 20.9.0
 - **pnpm** >= 8.0.0  
 - **PostgreSQL** >= 14.0
 
@@ -176,28 +181,33 @@ src/
 ## 🔧 核心功能
 
 ### 用户认证系统
-- **🔐 多种登录方式**: 邮箱密码、Google OAuth
+- **🔐 多种登录方式**: 邮箱密码、Google OAuth、GitHub OAuth
 - **👤 用户管理**: 注册、登录、密码重置、邮箱验证
 - **🛡️ 权限控制**: 基于角色的访问控制（RBAC）
 - **🔒 会话管理**: 安全的session处理，支持跨域
+- **🚨 登录安全**: IP限流 + 账户锁定机制
 
 ### 支付订阅系统
-- **💳 Stripe集成**: 订阅、一次性支付、发票管理
-- **📊 会员管理**: 会员状态、使用量追踪、到期提醒
-- **🎫 优惠券系统**: 折扣码、促销活动支持
-- **💰 多币种**: 支持多种货币和支付方式
+- **💳 Stripe集成**: 订阅、一次性支付、Webhook完整事件处理
+- **📊 会员管理**: 多层级会员计划、使用量追踪、到期提醒
+- **🎫 优惠码系统**: 百分比折扣和固定金额折扣
+- **💰 退款流程**: 管理员审批退款
+- **📧 订阅通知**: 到期前7天自动邮件提醒
 
 ### AI服务集成
-- **🤖 多供应商**: OpenAI、Anthropic、Google AI、xAI
-- **⚖️ 负载均衡**: 智能路由和故障转移
-- **💰 成本优化**: 动态模型选择和使用量控制
+- **🤖 多模型切换**: OpenAI、Anthropic、Google AI、xAI
+- **📊 Token追踪**: AI使用量记录和配额控制
 - **🔄 流式响应**: 实时响应流处理
+- **📥 对话导出**: 支持Markdown和JSON格式
+- **🔍 RAG示例**: 文档上传和基于文档的AI问答
+- **🤖 Agent示例**: 多步骤工具调用和自主决策工作流
 
-### 系统管理
-- **📋 审计日志**: 完整的用户操作记录
-- **⚙️ 系统配置**: 动态配置管理
-- **📊 使用统计**: 用户活跃度、功能使用分析
-- **🚨 监控告警**: 系统健康状态监控
+### 管理后台
+- **📋 管理仪表盘**: 用户统计、收入统计、AI使用量统计
+- **👥 用户管理**: 搜索、筛选、批量操作
+- **📋 审计日志**: 完整的操作记录查看
+- **⚙️ 系统配置**: AI模型、支付计划、邮件模板配置
+- **🏥 健康监控**: 数据库、Redis、外部API状态监控
 
 ## 🌍 国际化
 
@@ -270,6 +280,13 @@ RESEND_API_KEY="re_..."
 GOOGLE_CLIENT_ID="..."
 GOOGLE_CLIENT_SECRET="..."
 
+# GitHub OAuth
+GITHUB_CLIENT_ID="..."
+GITHUB_CLIENT_SECRET="..."
+
+# 跨子域Cookie
+COOKIE_DOMAIN=".yourdomain.com"
+
 # 监控分析
 NEXT_PUBLIC_GA_MEASUREMENT_ID="G-..."
 SENTRY_DSN="https://..."
@@ -281,7 +298,7 @@ SENTRY_DSN="https://..."
 - **⚡ 单元测试**: 工具函数和组件逻辑测试
 - **🔗 集成测试**: API路由和数据库操作测试
 - **🌐 E2E测试**: 完整用户流程测试
-- **📊 覆盖率**: 目标覆盖率70%+
+- **📊 覆盖率**: 目标覆盖率80%+
 
 ### 运行测试
 ```bash
@@ -336,10 +353,19 @@ docker build -t ai-saas .
 docker run -p 3000:3000 ai-saas
 ```
 
+### Railway部署
+```bash
+# 从 GitHub 仓库一键部署
+# 访问 railway.app，选择 "Deploy from GitHub repo"
+# Railway 内置 PostgreSQL 和 Redis，适合快速部署
+```
+
 ### 环境要求
-- **Node.js**: >= 18.17.0
+- **Node.js**: >= 20.9.0
 - **PostgreSQL**: >= 14.0
 - **Redis**: >= 6.0（可选，用于缓存）
+
+详细部署指南请参阅 [部署文档](./src/content/docs/deployment/index.mdx)。
 
 ## 🤝 贡献指南
 

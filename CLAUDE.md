@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AI SaaS Template - A production-ready, enterprise-grade full-stack TypeScript template for building AI-powered SaaS applications. Built with Next.js 15 App Router, React 19, tRPC, Drizzle ORM, and Better Auth.
+AI SaaS Template - A production-ready, enterprise-grade full-stack TypeScript template for building AI-powered SaaS applications. Built with Next.js 16 App Router, React 19.2, tRPC 11, Drizzle ORM, and Better Auth.
 
 **Key Stats**: ~43k lines of code, 49+ pages/layouts, fully internationalized (zh/en)
 
@@ -50,17 +50,19 @@ pnpm test -- -t "test name pattern"         # Run tests matching pattern
 ## Architecture Overview
 
 ### Tech Stack
-- **Frontend**: Next.js 15 (App Router), React 19, TypeScript 5 (strict mode)
-- **API Layer**: tRPC 11.4 (end-to-end type safety)
-- **Database**: PostgreSQL + Drizzle ORM 0.43
-- **Auth**: Better Auth 1.3 (email/password + Google OAuth, RBAC)
-- **Payments**: Stripe 18.3 (subscriptions + one-time payments)
-- **AI**: Vercel AI SDK (OpenAI, Anthropic, Google AI, xAI)
-- **UI**: Tailwind CSS v4 + shadcn/ui (Radix primitives)
-- **State**: TanStack Query 5.83 + React Context
-- **i18n**: next-intl 4.3 (zh/en server + client translations)
-- **Code Quality**: Biome 2.2 (replaces ESLint/Prettier), Vitest, Playwright
+- **Frontend**: Next.js 16 (App Router + Cache Components), React 19.2, TypeScript 6 (strict mode)
+- **API Layer**: tRPC 11.16 (end-to-end type safety)
+- **Database**: PostgreSQL + Drizzle ORM 0.45
+- **Auth**: Better Auth 1.6 (email/password + Google OAuth + GitHub OAuth, RBAC, email verification, login security)
+- **Payments**: Stripe 22 (subscriptions + one-time payments + webhooks + coupons + refunds)
+- **AI**: Vercel AI SDK 6 (OpenAI, Anthropic, Google AI, xAI) with multi-model switching, token tracking, quota control, RAG, Agent workflows
+- **UI**: Tailwind CSS v4.2 + shadcn/ui (Radix primitives)
+- **State**: TanStack Query 5 + React Context
+- **i18n**: next-intl 4.9 (zh/en server + client translations)
+- **Code Quality**: Biome 2.4 (replaces ESLint/Prettier), Vitest 4, Playwright
 - **Caching**: Redis (Upstash) for rate limiting and performance
+- **Observability**: Structured logging (JSON), Sentry error tracking, tRPC performance tracing
+- **Docs**: Fumadocs 16 documentation system
 
 ### Layered Architecture Pattern
 
@@ -199,10 +201,11 @@ src/
 7. **Migrations**: NEVER modify existing migration files, always generate new ones
 
 ### Testing Strategy
-- Unit tests: Vitest + Testing Library (utils, components)
+- Unit tests: Vitest 4 + Testing Library (utils, components)
 - Integration tests: tRPC routes + database operations
 - E2E tests: Playwright for critical user flows
-- Coverage target: 70%+
+- Property-based tests: fast-check for correctness properties
+- Coverage target: 80%+
 - Test files can be alongside source or in `/tests`
 
 ## Environment Configuration
@@ -319,13 +322,16 @@ pnpm db:studio
 3. Stripe webhooks configured
 4. Redis cache connected (optional but recommended)
 5. Email service configured (for auth emails)
-6. OAuth providers configured (if using)
+6. OAuth providers configured (if using Google/GitHub)
+7. Sentry DSN configured (for error tracking)
 
 ## Reference Materials
 
-- **Next.js 15 Docs**: https://nextjs.org/docs
+- **Next.js 16 Docs**: https://nextjs.org/docs
 - **tRPC Docs**: https://trpc.io/docs
 - **Drizzle ORM Docs**: https://orm.drizzle.team/docs
 - **Better Auth Docs**: https://www.better-auth.com/docs
 - **shadcn/ui**: https://ui.shadcn.com
 - **TanStack Query**: https://tanstack.com/query/latest
+- **AI SDK Docs**: https://sdk.vercel.ai/docs
+- **Stripe Docs**: https://docs.stripe.com

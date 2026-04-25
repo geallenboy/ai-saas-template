@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger'
 
 // 初始化Stripe客户端
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-08-27.basil',
+  apiVersion: '2026-03-25.dahlia',
   typescript: true,
   appInfo: {
     name: 'AI SaaS Template',

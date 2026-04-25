@@ -318,4 +318,51 @@ export const systemRouter = createTRPCRouter({
 
     return categories.map(c => c.category)
   }),
+
+  /**
+   * 获取指定分类的所有配置（用于可视化配置管理界面）
+   * 返回按分类分组的配置项，包含元数据
+   */
+  getConfigsByCategory: adminProcedure
+    .input(
+      z.object({
+        category: ConfigCategory,
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const configs = await ctx.db
+        .select()
+        .from(systemConfigs)
+        .where(eq(systemConfigs.category, input.category))
+        .orderBy(systemConfigs.key)
+
+      return configs.map(config => ({
+        ...config,
+        value: config.isSecret ? '***' : config.value,
+      }))
+    }),
+
+  /**
+   * 批量读取多个配置键的值
+   * 用于前端一次性加载多个配置
+   */
+  getConfigValues: adminProcedure
+    .input(
+      z.object({
+        keys: z.array(z.string().min(1)),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const configs = await ctx.db
+        .select()
+        .from(systemConfigs)
+        .where(inArray(systemConfigs.key, input.keys))
+
+      const result: Record<string, unknown> = {}
+      for (const config of configs) {
+        result[config.key] = config.isSecret ? '***' : config.value
+      }
+
+      return result
+    }),
 })

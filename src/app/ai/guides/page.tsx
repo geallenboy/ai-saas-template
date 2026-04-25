@@ -61,6 +61,12 @@ const guides = [
     title: 'MCP 工具集成',
     description: '学习如何集成和使用 Model Context Protocol (MCP) 工具。',
   },
+  {
+    href: '/ai/guides/rag',
+    title: 'RAG 检索增强生成',
+    description:
+      '学习如何实现完整的 RAG 流程：文档分块、向量化、相似度搜索和上下文注入。',
+  },
 ]
 
 export default function GuidesPage() {

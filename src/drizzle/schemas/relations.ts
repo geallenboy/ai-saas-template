@@ -1,4 +1,5 @@
 import { relations } from 'drizzle-orm'
+import { aiTokenUsage } from './ai-token-usage'
 import {
   aiChatAttachments,
   aiChatEmbeddings,
@@ -7,7 +8,9 @@ import {
   aiChatSessions,
 } from './aichat'
 import { blogPosts } from './blog'
+import { couponUsage } from './coupon-usage'
 import { paymentRecords, userMemberships, userUsageLimits } from './payments'
+import { refundRequests } from './refund-requests'
 import { apiKeys, notifications } from './system'
 import { loginLogs, users } from './users'
 
@@ -22,6 +25,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   userMemberships: many(userMemberships),
   paymentRecords: many(paymentRecords),
   userUsageLimits: many(userUsageLimits),
+  couponUsage: many(couponUsage),
+  refundRequests: many(refundRequests, { relationName: 'refundRequestUser' }),
 
   // 系统相关
   apiKeys: many(apiKeys),
@@ -31,6 +36,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   aiChatSessions: many(aiChatSessions),
   aiChatMessages: many(aiChatMessages),
   aiChatAttachments: many(aiChatAttachments),
+  aiTokenUsage: many(aiTokenUsage),
   blogPosts: many(blogPosts),
 }))
 
@@ -115,6 +121,7 @@ export const aiChatSessionsRelations = relations(
     }),
     messages: many(aiChatMessages),
     attachments: many(aiChatAttachments),
+    tokenUsage: many(aiTokenUsage),
   })
 )
 
@@ -169,6 +176,58 @@ export const aiChatEmbeddingsRelations = relations(
     chunk: one(aiChatFileChunks, {
       fields: [aiChatEmbeddings.chunkId],
       references: [aiChatFileChunks.id],
+    }),
+  })
+)
+
+
+// ===============================
+// AI Token 使用量关系定义
+// ===============================
+
+export const aiTokenUsageRelations = relations(aiTokenUsage, ({ one }) => ({
+  user: one(users, {
+    fields: [aiTokenUsage.userId],
+    references: [users.id],
+  }),
+  session: one(aiChatSessions, {
+    fields: [aiTokenUsage.sessionId],
+    references: [aiChatSessions.id],
+  }),
+}))
+
+
+// ===============================
+// 优惠码使用记录关系定义
+// ===============================
+
+export const couponUsageRelations = relations(couponUsage, ({ one }) => ({
+  user: one(users, {
+    fields: [couponUsage.userId],
+    references: [users.id],
+  }),
+}))
+
+// ===============================
+// 退款请求关系定义
+// ===============================
+
+export const refundRequestsRelations = relations(
+  refundRequests,
+  ({ one }) => ({
+    paymentRecord: one(paymentRecords, {
+      fields: [refundRequests.paymentRecordId],
+      references: [paymentRecords.id],
+    }),
+    user: one(users, {
+      fields: [refundRequests.userId],
+      references: [users.id],
+      relationName: 'refundRequestUser',
+    }),
+    admin: one(users, {
+      fields: [refundRequests.adminId],
+      references: [users.id],
+      relationName: 'refundRequestAdmin',
     }),
   })
 )

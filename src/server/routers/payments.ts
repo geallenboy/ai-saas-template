@@ -7,10 +7,12 @@ import {
   userMemberships,
   userUsageLimits,
 } from '@/drizzle/schemas'
+import { refundRequests } from '@/drizzle/schemas/refund-requests'
 import { env } from '@/env'
 import { getServerStripe } from '@/lib/stripe'
 import type { Context } from '../server'
 import {
+  adminProcedure,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
@@ -243,9 +245,8 @@ export const paymentsRouter = createTRPCRouter({
 
       const stripe = getServerStripe()
 
-      const defaultReturnUrl = `${
-        env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-      }/membership`
+      const defaultReturnUrl = `${env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+        }/membership`
 
       const session = await stripe.billingPortal.sessions.create({
         customer: membership.stripeCustomerId,
@@ -632,5 +633,222 @@ export const paymentsRouter = createTRPCRouter({
         currentPeriodEnd: usage.currentPeriodEnd,
         resetDate: usage.resetDate,
       }
+    }),
+
+  /**
+   * 用户提交退款请求
+   */
+  requestRefund: protectedProcedure
+    .input(
+      z.object({
+        paymentId: z.string().uuid(),
+        reason: z.string().min(10, '退款原因至少需要 10 个字符'),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { paymentId, reason } = input
+
+      // 查找支付记录
+      const payment = await ctx.db.query.paymentRecords.findFirst({
+        where: and(
+          eq(paymentRecords.id, paymentId),
+          eq(paymentRecords.userId, ctx.userId)
+        ),
+      })
+
+      if (!payment) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: '支付记录不存在',
+        })
+      }
+
+      if (payment.status !== 'succeeded') {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: '只有已成功的支付才能申请退款',
+        })
+      }
+
+      // 检查是否已有待处理的退款请求
+      const existingRequest = await ctx.db
+        .select()
+        .from(refundRequests)
+        .where(
+          and(
+            eq(refundRequests.paymentRecordId, paymentId),
+            eq(refundRequests.status, 'pending')
+          )
+        )
+        .limit(1)
+
+      if (existingRequest.length > 0) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: '该支付已有待处理的退款请求',
+        })
+      }
+
+      const now = new Date()
+
+      // 创建退款请求
+      await ctx.db.insert(refundRequests).values({
+        paymentRecordId: paymentId,
+        userId: ctx.userId,
+        reason,
+        status: 'pending',
+        requestedAmount: payment.amount,
+        createdAt: now,
+        updatedAt: now,
+      })
+
+      ctx.logger.info('退款请求已创建', {
+        userId: ctx.userId,
+        paymentId,
+      })
+
+      return { message: '退款请求已提交，等待管理员审批' }
+    }),
+
+  /**
+   * 管理员审批退款请求
+   */
+  approveRefund: adminProcedure
+    .input(
+      z.object({
+        refundRequestId: z.string().uuid(),
+        approved: z.boolean(),
+        adminNote: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { refundRequestId, approved, adminNote } = input
+
+      // 查找退款请求
+      const request = await ctx.db
+        .select()
+        .from(refundRequests)
+        .where(eq(refundRequests.id, refundRequestId))
+        .limit(1)
+
+      const refundRequest = request[0]
+
+      if (!refundRequest) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: '退款请求不存在',
+        })
+      }
+
+      if (refundRequest.status !== 'pending') {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: '该退款请求已被处理',
+        })
+      }
+
+      const now = new Date()
+
+      if (!approved) {
+        // 拒绝退款
+        await ctx.db
+          .update(refundRequests)
+          .set({
+            status: 'rejected',
+            adminId: ctx.userId,
+            adminNote: adminNote || '管理员拒绝了退款请求',
+            processedAt: now,
+            updatedAt: now,
+          })
+          .where(eq(refundRequests.id, refundRequestId))
+
+        return { message: '退款请求已拒绝' }
+      }
+
+      // 批准退款 - 查找对应的支付记录
+      const payment = await ctx.db.query.paymentRecords.findFirst({
+        where: eq(paymentRecords.id, refundRequest.paymentRecordId),
+      })
+
+      if (!payment) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: '关联的支付记录不存在',
+        })
+      }
+
+      // 调用 Stripe Refund API
+      let stripeRefundId: string | undefined
+
+      if (payment.stripePaymentIntentId) {
+        try {
+          const stripe = getServerStripe()
+          const refund = await stripe.refunds.create({
+            payment_intent: payment.stripePaymentIntentId,
+            amount: Math.round(Number(refundRequest.requestedAmount) * 100),
+            reason: 'requested_by_customer',
+          })
+          stripeRefundId = refund.id
+        } catch (stripeError) {
+          ctx.logger.error('Stripe 退款失败',
+            stripeError instanceof Error ? stripeError : new Error(String(stripeError)),
+            {
+              paymentIntentId: payment.stripePaymentIntentId,
+            }
+          )
+
+          // 标记退款请求为失败
+          await ctx.db
+            .update(refundRequests)
+            .set({
+              status: 'rejected',
+              adminId: ctx.userId,
+              adminNote: `Stripe 退款失败: ${(stripeError as Error).message}`,
+              processedAt: now,
+              updatedAt: now,
+            })
+            .where(eq(refundRequests.id, refundRequestId))
+
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Stripe 退款处理失败',
+          })
+        }
+      }
+
+      // 更新退款请求状态
+      await ctx.db
+        .update(refundRequests)
+        .set({
+          status: 'processed',
+          approvedAmount: refundRequest.requestedAmount,
+          adminId: ctx.userId,
+          adminNote: adminNote || '管理员批准了退款请求',
+          stripeRefundId,
+          processedAt: now,
+          updatedAt: now,
+        })
+        .where(eq(refundRequests.id, refundRequestId))
+
+      // 更新支付记录状态
+      await ctx.db
+        .update(paymentRecords)
+        .set({
+          status: 'refunded',
+          refundAmount: refundRequest.requestedAmount,
+          refundedAt: now,
+          refundReason: refundRequest.reason,
+          updatedAt: now,
+        })
+        .where(eq(paymentRecords.id, refundRequest.paymentRecordId))
+
+      ctx.logger.info('退款已处理', {
+        refundRequestId,
+        paymentId: refundRequest.paymentRecordId,
+        amount: refundRequest.requestedAmount,
+        stripeRefundId,
+      })
+
+      return { message: '退款已批准并处理' }
     }),
 })

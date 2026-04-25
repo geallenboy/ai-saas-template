@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2024",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
@@ -24,22 +28,49 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/.source": ["./.source"],
-      "@/.source/*": ["./.source/*"],
-      "@/public/*": ["./public/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/features/*": ["./src/features/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/types/*": ["./src/types/*"],
-      "@/translate/*": ["./src/translate/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/db/*": ["./src/db/*"],
-      "@/app/*": ["./src/app/*"],
-      "fumadocs-mdx:collections/*": [".source/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/.source": [
+        "./.source"
+      ],
+      "@/.source/*": [
+        "./.source/*"
+      ],
+      "@/public/*": [
+        "./public/*"
+      ],
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/features/*": [
+        "./src/features/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
+      ],
+      "@/translate/*": [
+        "./src/translate/*"
+      ],
+      "@/utils/*": [
+        "./src/utils/*"
+      ],
+      "@/db/*": [
+        "./src/db/*"
+      ],
+      "@/app/*": [
+        "./src/app/*"
+      ],
+      "fumadocs-mdx:collections/*": [
+        "./.source/*"
+      ]
     }
   },
   "include": [
@@ -48,7 +79,14 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/**/*",
-    "tests/**/*"
+    "tests/**/*",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", ".next", "dist", "coverage", ".source"]
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "coverage",
+    ".source"
+  ]
 }

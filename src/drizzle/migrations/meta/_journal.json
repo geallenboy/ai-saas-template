@@ -57,6 +57,13 @@
       "when": 1758341774027,
       "tag": "0007_open_gabe_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1777071115476,
+      "tag": "0008_empty_psylocke",
+      "breakpoints": true
     }
   ]
 }

@@ -2,16 +2,12 @@
 
 import { CheckIcon, CopyIcon } from 'lucide-react'
 import type { ComponentProps, HTMLAttributes, ReactNode } from 'react'
-import { createContext, useContext, useState } from 'react'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import {
-  oneDark,
-  oneLight,
-} from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { codeToHtml } from 'shiki'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-type CodeBlockContextType = {
+interface CodeBlockContextType {
   code: string
 }
 
@@ -33,71 +29,70 @@ export const CodeBlock = ({
   className,
   children,
   ...props
-}: CodeBlockProps) => (
-  <CodeBlockContext.Provider value={{ code }}>
-    <div
-      className={cn(
-        'relative w-full overflow-hidden rounded-md border bg-background text-foreground',
-        className
-      )}
-      {...props}
-    >
-      <div className="relative">
-        <SyntaxHighlighter
-          className="overflow-hidden dark:hidden"
-          codeTagProps={{
-            className: 'font-mono text-sm',
-          }}
-          customStyle={{
-            margin: 0,
-            padding: '1rem',
-            fontSize: '0.875rem',
-            background: 'hsl(var(--background))',
-            color: 'hsl(var(--foreground))',
-          }}
-          language={language}
-          lineNumberStyle={{
-            color: 'hsl(var(--muted-foreground))',
-            paddingRight: '1rem',
-            minWidth: '2.5rem',
-          }}
-          showLineNumbers={showLineNumbers}
-          style={oneLight}
-        >
-          {code}
-        </SyntaxHighlighter>
-        <SyntaxHighlighter
-          className="hidden overflow-hidden dark:block"
-          codeTagProps={{
-            className: 'font-mono text-sm',
-          }}
-          customStyle={{
-            margin: 0,
-            padding: '1rem',
-            fontSize: '0.875rem',
-            background: 'hsl(var(--background))',
-            color: 'hsl(var(--foreground))',
-          }}
-          language={language}
-          lineNumberStyle={{
-            color: 'hsl(var(--muted-foreground))',
-            paddingRight: '1rem',
-            minWidth: '2.5rem',
-          }}
-          showLineNumbers={showLineNumbers}
-          style={oneDark}
-        >
-          {code}
-        </SyntaxHighlighter>
-        {children && (
-          <div className="absolute top-2 right-2 flex items-center gap-2">
-            {children}
-          </div>
+}: CodeBlockProps) => {
+  const [lightHtml, setLightHtml] = useState<string>('')
+  const [darkHtml, setDarkHtml] = useState<string>('')
+
+  useEffect(() => {
+    let cancelled = false
+
+    const highlight = async () => {
+      try {
+        const [light, dark] = await Promise.all([
+          codeToHtml(code, { lang: language, theme: 'one-light' }),
+          codeToHtml(code, { lang: language, theme: 'one-dark-pro' }),
+        ])
+        if (!cancelled) {
+          setLightHtml(light)
+          setDarkHtml(dark)
+        }
+      } catch {
+        const escaped = code
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+        const fallback = `<pre style="margin:0;padding:1rem;font-size:0.875rem"><code class="font-mono text-sm">${escaped}</code></pre>`
+        if (!cancelled) {
+          setLightHtml(fallback)
+          setDarkHtml(fallback)
+        }
+      }
+    }
+
+    highlight()
+    return () => {
+      cancelled = true
+    }
+  }, [code, language])
+
+  return (
+    <CodeBlockContext.Provider value={{ code }}>
+      <div
+        className={cn(
+          'relative w-full overflow-hidden rounded-md border bg-background text-foreground',
+          className
         )}
+        {...props}
+      >
+        <div className="relative">
+          <div
+            className="overflow-hidden [&_pre]:m-0! [&_pre]:p-4! [&_pre]:text-sm! [&_pre]:bg-[hsl(var(--background))]! [&_code]:font-mono [&_code]:text-sm dark:hidden"
+            dangerouslySetInnerHTML={{ __html: lightHtml }}
+          />
+          <div
+            className="hidden overflow-hidden [&_pre]:m-0! [&_pre]:p-4! [&_pre]:text-sm! [&_pre]:bg-[hsl(var(--background))]! [&_code]:font-mono [&_code]:text-sm dark:block"
+            dangerouslySetInnerHTML={{ __html: darkHtml }}
+          />
+          {children && (
+            <div className="absolute top-2 right-2 flex items-center gap-2">
+              {children}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  </CodeBlockContext.Provider>
-)
+    </CodeBlockContext.Provider>
+  )
+}
 
 export type CodeBlockCopyButtonProps = ComponentProps<typeof Button> & {
   onCopy?: () => void
@@ -117,7 +112,7 @@ export const CodeBlockCopyButton = ({
   const { code } = useContext(CodeBlockContext)
 
   const copyToClipboard = async () => {
-    if (typeof window === 'undefined' || !navigator.clipboard.writeText) {
+    if (typeof window === 'undefined' || !navigator.clipboard?.writeText) {
       onError?.(new Error('Clipboard API not available'))
       return
     }

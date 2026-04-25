@@ -287,6 +287,59 @@ export function useAuth() {
     [getCurrentLocale]
   )
 
+  // GitHub 登录
+  const signInWithGithub = useCallback(
+    async (callbackURL?: string) => {
+      setOperationLoading(true)
+      setError(null)
+
+      try {
+        const locale = getCurrentLocale()
+
+        const finalCallbackURL =
+          callbackURL ||
+          `${typeof window !== 'undefined' ? window.location.origin : ''}/${locale}/auth/callback`
+
+        console.log('🚀 启动 GitHub 登录:', {
+          locale,
+          callbackURL: finalCallbackURL,
+        })
+
+        await authClient.signIn.social({
+          provider: 'github',
+          callbackURL: finalCallbackURL,
+        })
+      } catch (err) {
+        let errorMessage = 'GitHub登录失败'
+
+        if (err instanceof Error) {
+          console.error('❌ GitHub登录失败详情:', {
+            message: err.message,
+            stack: err.stack,
+            name: err.name,
+          })
+
+          if (err.message.includes('ECONNREFUSED')) {
+            errorMessage = '网络连接失败，请检查网络设置或稍后重试'
+          } else if (err.message.includes('timeout')) {
+            errorMessage = '连接超时，请稍后重试'
+          } else if (err.message.includes('CORS')) {
+            errorMessage = '跨域请求失败，请检查域名配置'
+          } else {
+            errorMessage = err.message
+          }
+        } else {
+          console.error('❌ GitHub登录失败 (未知错误):', err)
+        }
+
+        setError(errorMessage)
+        setOperationLoading(false)
+        toast.error(errorMessage)
+      }
+    },
+    [getCurrentLocale]
+  )
+
   // 更新用户信息
   const updateUser = useCallback(
     async (data: { name?: string; image?: string }) => {
@@ -343,6 +396,7 @@ export function useAuth() {
     signUp,
     signOut,
     signInWithGoogle,
+    signInWithGithub,
     updateUser,
     clearError,
     setError: setAuthError,

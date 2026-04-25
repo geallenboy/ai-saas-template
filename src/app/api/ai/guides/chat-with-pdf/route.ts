@@ -126,7 +126,7 @@ export async function POST(req: Request) {
 
     const messagesWithSystem = [
       { role: 'system' as const, content: systemMessage },
-      ...convertToModelMessages(messages),
+      ...(await convertToModelMessages(messages)),
     ]
 
     const result = streamText({

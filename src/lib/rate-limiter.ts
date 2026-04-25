@@ -553,4 +553,45 @@ export const RateLimitUtils = {
     remaining: result.remaining,
     resetTime: new Date(Date.now() + result.timeToReset).toISOString(),
   }),
+
+  /**
+   * Create a 429 Too Many Requests Response with proper headers.
+   * Use this in API route handlers when rate limit is exceeded.
+   *
+   * Returns a Response with:
+   * - 429 status code
+   * - Retry-After header (positive integer, seconds)
+   * - X-RateLimit-* headers
+   * - JSON body with error details
+   */
+  createRateLimitResponse: (
+    result: RateLimitResult,
+    config: RateLimitConfig
+  ): Response => {
+    const retryAfterSeconds = Math.max(
+      1,
+      Math.ceil(result.timeToReset / 1000)
+    )
+    const headers = {
+      'Content-Type': 'application/json',
+      'Retry-After': retryAfterSeconds.toString(),
+      'X-RateLimit-Limit': config.maxRequests.toString(),
+      'X-RateLimit-Remaining': '0',
+      'X-RateLimit-Reset': new Date(
+        Date.now() + result.timeToReset
+      ).toISOString(),
+    }
+
+    const body = JSON.stringify({
+      error: config.message || 'Too many requests',
+      retryAfter: retryAfterSeconds,
+      limit: config.maxRequests,
+      remaining: 0,
+    })
+
+    return new Response(body, {
+      status: 429,
+      headers,
+    })
+  },
 }

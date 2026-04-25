@@ -6,6 +6,7 @@ import { ZodError } from 'zod'
 import { users } from '@/drizzle/schemas'
 import { auth } from '@/lib/auth/better-auth/server'
 import { db } from '@/lib/db'
+import { logger } from '@/lib/logger'
 
 /**
  * 创建tRPC上下文
@@ -30,21 +31,21 @@ export async function createTRPCContext({ req }: { req: NextRequest }) {
 
       user = dbUser
         ? {
-            ...session.user,
-            ...dbUser,
-            // 解析 preferences JSON 字符串
-            preferences: dbUser.preferences
-              ? typeof dbUser.preferences === 'string'
-                ? JSON.parse(dbUser.preferences)
-                : dbUser.preferences
-              : null,
-          }
+          ...session.user,
+          ...dbUser,
+          // 解析 preferences JSON 字符串
+          preferences: dbUser.preferences
+            ? typeof dbUser.preferences === 'string'
+              ? JSON.parse(dbUser.preferences)
+              : dbUser.preferences
+            : null,
+        }
         : session.user
 
       userId = session.user.id
     }
   } catch (error) {
-    console.error('tRPC context - 获取用户会话失败:', error)
+    logger.error('tRPC context - 获取用户会话失败:', error as Error)
     // 继续执行，user 和 userId 保持 null
   }
 
@@ -53,7 +54,7 @@ export async function createTRPCContext({ req }: { req: NextRequest }) {
     userId,
     user,
     headers: req.headers,
-    logger: console, // 可以替换为更完善的日志系统
+    logger,
   }
 }
 
@@ -141,17 +142,52 @@ export const superAdminProcedure = protectedProcedure.use(
 )
 
 /**
- * 中间件：日志记录
+ * Slow query warning threshold in milliseconds.
+ * Requests exceeding this duration will produce a warn-level log.
+ */
+export const SLOW_REQUEST_THRESHOLD_MS = 1000
+
+/**
+ * 中间件：日志记录 + 性能追踪
+ *
+ * - Records request duration for every tRPC procedure call
+ * - Logs warn-level message for requests exceeding SLOW_REQUEST_THRESHOLD_MS (1000ms)
+ * - Uses structured logger for JSON output in production
  */
 export const loggerMiddleware = t.middleware(async ({ path, type, next }) => {
-  const start = Date.now()
+  const start = performance.now()
   const result = await next()
-  const durationMs = Date.now() - start
+  const durationMs = Math.round(performance.now() - start)
 
   if (result.ok) {
-    console.log(`✅ ${type} ${path} - ${durationMs}ms`)
+    logger.info('tRPC request completed', {
+      category: 'trpc',
+      action: type,
+      path,
+      duration: durationMs,
+    })
   } else {
-    console.error(`❌ ${type} ${path} - ${durationMs}ms`, result.error)
+    logger.error(
+      `tRPC request failed: ${type} ${path}`,
+      result.error instanceof Error ? result.error : undefined,
+      {
+        category: 'trpc',
+        action: type,
+        path,
+        duration: durationMs,
+      }
+    )
+  }
+
+  // Slow request warning
+  if (durationMs > SLOW_REQUEST_THRESHOLD_MS) {
+    logger.warn(`Slow tRPC request detected: ${type} ${path}`, {
+      category: 'trpc',
+      action: 'slow-request',
+      path,
+      duration: durationMs,
+      threshold: SLOW_REQUEST_THRESHOLD_MS,
+    })
   }
 
   return result

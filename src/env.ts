@@ -42,6 +42,13 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
 
+    // GitHub OAuth
+    GITHUB_CLIENT_ID: z.string().optional(),
+    GITHUB_CLIENT_SECRET: z.string().optional(),
+
+    // Cookie Domain (跨子域 Cookie)
+    COOKIE_DOMAIN: z.string().optional(),
+
     // Better Auth
     BETTER_AUTH_SECRET: z
       .string()
@@ -137,6 +144,9 @@ export const env = createEnv({
     SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     ADMIN_EMAILS: process.env.ADMIN_EMAILS,
@@ -249,6 +259,14 @@ export const isGoogleOAuthConfigured = () => {
   }
   // Server-side check
   return !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET)
+}
+
+// Helper function to check if GitHub OAuth is configured
+export const isGitHubOAuthConfigured = () => {
+  if (typeof window !== 'undefined') {
+    return false // GitHub OAuth config is server-side only
+  }
+  return !!(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET)
 }
 
 // Feature flag helpers

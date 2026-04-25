@@ -1,5 +1,12 @@
 import type { LanguageModel } from 'ai'
 
+import {
+  type AIModelConfig,
+  getAvailableModels as getAvailableModelsFromProviders,
+  getEnabledProviders,
+  getModelConfig,
+} from './providers'
+
 type ModelResolver = (modelId: string) => LanguageModel | undefined
 
 const resolvers = new Map<string, ModelResolver>()
@@ -41,3 +48,17 @@ export const clearAiModelResolvers = () => {
 export const listAiModelResolvers = () => {
   return Array.from(resolvers.keys())
 }
+
+/**
+ * Return all available AI models based on configured API keys.
+ * Re-exported from providers for convenience.
+ */
+export const getAvailableModels = (): AIModelConfig[] => {
+  return getAvailableModelsFromProviders()
+}
+
+/**
+ * Return all enabled providers with their models.
+ * Re-exported from providers for convenience.
+ */
+export { getEnabledProviders, getModelConfig }

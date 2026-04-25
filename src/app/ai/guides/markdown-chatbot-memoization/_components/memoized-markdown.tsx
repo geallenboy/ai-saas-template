@@ -1,10 +1,8 @@
-import { marked } from 'marked'
 import { memo, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 function parseMarkdownIntoBlocks(markdown: string): string[] {
-  const tokens = marked.lexer(markdown)
-  return tokens.map(token => token.raw)
+  return markdown.split(/\n\n+/).filter(block => block.trim().length > 0)
 }
 
 const MemoizedMarkdownBlock = memo(

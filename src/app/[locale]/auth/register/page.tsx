@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   description: '创建您的 AI SaaS 账户，开始智能化体验',
 }
 
-export default function RegisterPage({
+export default async function RegisterPage({
   params,
 }: {
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }) {
-  const { locale } = params
+  const { locale } = await params
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* 左侧 - 注册表单 */}

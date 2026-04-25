@@ -1,0 +1,202 @@
+---
+title: API 概览
+description: 所有 tRPC 端点的完整参考文档
+---
+
+# API 概览
+
+本项目使用 [tRPC](https://trpc.io/) 构建端到端类型安全的 API 层。所有端点通过 tRPC router 组织，支持自动类型推断，无需手动编写 API 客户端代码。
+
+## 认证级别
+
+| 级别 | 说明 |
+|------|------|
+| `public` | 无需认证，任何人可访问 |
+| `protected` | 需要用户登录 |
+| `admin` | 需要管理员角色 |
+| `superAdmin` | 需要超级管理员角色 |
+
+---
+
+## auth - 认证路由
+
+管理用户认证、会话和权限。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `auth.checkLoginAttempts` | query | public | 检查登录尝试次数和账户锁定状态 |
+| `auth.recordFailedLogin` | mutation | public | 记录登录失败尝试 |
+| `auth.getCurrentUser` | query | public | 获取当前登录用户信息 |
+| `auth.checkAuthStatus` | query | public | 检查认证状态 |
+| `auth.updatePassword` | mutation | protected | 更新用户密码 |
+| `auth.getSession` | query | public | 获取用户会话信息 |
+| `auth.refreshSession` | mutation | protected | 刷新用户会话 |
+| `auth.updateLastLogin` | mutation | protected | 更新最后登录时间 |
+| `auth.getUserPermissions` | query | protected | 获取用户权限信息 |
+| `auth.getUserSessions` | query | protected | 获取用户会话列表 |
+| `auth.terminateSession` | mutation | protected | 终止指定会话 |
+| `auth.terminateOtherSessions` | mutation | protected | 终止其他所有会话 |
+
+---
+
+## aichat - AI 聊天路由
+
+管理 AI 聊天会话、消息和导出。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `aichat.listSessions` | query | protected | 获取聊天会话列表（分页） |
+| `aichat.getSessionMessages` | query | protected | 获取指定会话的消息列表 |
+| `aichat.createSession` | mutation | protected | 创建新的聊天会话 |
+| `aichat.clearSession` | mutation | protected | 清空会话消息 |
+| `aichat.deleteSession` | mutation | protected | 删除聊天会话 |
+| `aichat.updateSession` | mutation | protected | 更新会话信息（标题等） |
+| `aichat.exportChat` | query | protected | 导出聊天记录（支持 Markdown/JSON） |
+| `aichat.sendMessage` | subscription | protected | 发送消息并接收流式 AI 响应 |
+
+---
+
+## users - 用户管理路由
+
+用户 CRUD、搜索、批量操作。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `users.getUsers` | query | admin | 获取用户列表（分页、筛选） |
+| `users.getUserById` | query | admin | 根据 ID 获取用户详情 |
+| `users.updateUser` | mutation | admin | 更新用户信息 |
+| `users.promoteUser` | mutation | superAdmin | 提升用户角色 |
+| `users.updateUserRole` | mutation | superAdmin | 修改用户角色 |
+| `users.toggleUserStatus` | mutation | admin | 启用/禁用用户 |
+| `users.getCurrentUser` | query | protected | 获取当前用户信息 |
+| `users.updateProfile` | mutation | protected | 更新个人资料 |
+| `users.getUserStats` | query | admin | 获取用户统计数据 |
+| `users.createUser` | mutation | admin | 创建新用户 |
+| `users.deleteUser` | mutation | superAdmin | 删除用户 |
+| `users.bulkUpdateUsers` | mutation | admin | 批量更新用户 |
+| `users.searchUsers` | query | admin | 搜索用户（支持多条件筛选） |
+| `users.batchUpdateUsers` | mutation | superAdmin | 批量操作用户（启用/禁用/修改角色） |
+
+---
+
+## payments - 支付路由
+
+会员计划、订阅、退款和优惠码。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `payments.getMembershipPlans` | query | public | 获取会员计划列表 |
+| `payments.getMembershipPlanById` | query | public | 根据 ID 获取会员计划详情 |
+| `payments.getUserMembershipStatus` | query | protected | 获取用户会员状态 |
+| `payments.createBillingPortalSession` | mutation | protected | 创建 Stripe 账单管理会话 |
+| `payments.getPaymentHistory` | query | protected | 获取支付历史记录 |
+| `payments.createCheckoutSession` | mutation | protected | 创建 Stripe 结账会话 |
+| `payments.assignMembership` | mutation | admin | 手动分配会员资格 |
+| `payments.adminAssignMembership` | mutation | admin | 管理员分配会员 |
+| `payments.getUserUsageLimits` | query | protected | 获取用户使用限额 |
+| `payments.requestRefund` | mutation | protected | 提交退款请求 |
+| `payments.approveRefund` | mutation | admin | 审批退款请求 |
+
+---
+
+## blog - 博客路由
+
+博客文章的 CRUD 和查询。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `blog.getPosts` | query | public | 获取博客文章列表（支持搜索、标签筛选） |
+| `blog.getPostBySlug` | query | public | 根据 slug 获取文章详情 |
+| `blog.getAdminPosts` | query | admin | 管理员获取文章列表 |
+| `blog.getById` | query | admin | 根据 ID 获取文章 |
+| `blog.create` | mutation | admin | 创建博客文章 |
+| `blog.update` | mutation | admin | 更新博客文章 |
+| `blog.delete` | mutation | admin | 删除博客文章 |
+
+---
+
+## adminDashboard - 管理仪表盘路由
+
+业务指标、收入统计和系统健康。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `adminDashboard.getMetrics` | query | admin | 获取仪表盘关键指标（用户数、收入、AI 使用量） |
+| `adminDashboard.getRevenueChart` | query | admin | 获取收入趋势图表数据 |
+| `adminDashboard.getUserGrowthChart` | query | admin | 获取用户增长趋势数据 |
+| `adminDashboard.getSystemHealth` | query | admin | 获取系统健康状态 |
+
+---
+
+## auditLogs - 审计日志路由
+
+审计日志查询、导出和管理。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `auditLogs.getAuditLogs` | query | admin | 获取审计日志列表（分页、筛选） |
+| `auditLogs.getAuditLogById` | query | admin | 根据 ID 获取审计日志详情 |
+| `auditLogs.getAuditStats` | query | admin | 获取审计统计数据 |
+| `auditLogs.getUserAuditLogs` | query | admin | 获取指定用户的审计日志 |
+| `auditLogs.cleanupOldLogs` | mutation | admin | 清理过期审计日志 |
+| `auditLogs.exportAuditLogs` | mutation | admin | 导出审计日志 |
+| `auditLogs.getAuditOverview` | query | admin | 获取审计概览 |
+| `auditLogs.getAuditLogsByCategory` | query | admin | 按分类获取审计日志 |
+
+---
+
+## system - 系统配置路由
+
+系统配置的 CRUD 和管理。
+
+| 端点 | 类型 | 认证 | 说明 |
+|------|------|------|------|
+| `system.getConfigs` | query | admin | 获取系统配置列表（支持分类筛选） |
+| `system.getConfigByKey` | query | admin | 根据 key 获取配置项 |
+| `system.updateConfig` | mutation | admin | 更新配置项 |
+| `system.createConfig` | mutation | admin | 创建新配置项 |
+| `system.deleteConfig` | mutation | admin | 删除配置项 |
+| `system.batchUpdateConfigs` | mutation | admin | 批量更新配置 |
+| `system.resetConfigToDefault` | mutation | admin | 重置配置为默认值 |
+| `system.getConfigCategories` | query | admin | 获取配置分类列表 |
+| `system.getConfigsByCategory` | query | admin | 按分类获取配置 |
+| `system.searchConfigs` | query | admin | 搜索配置项 |
+
+---
+
+## 使用示例
+
+### 客户端调用
+
+```typescript
+import { trpc } from '@/lib/trpc/client'
+
+// Query 示例
+const { data: sessions } = trpc.aichat.listSessions.useQuery({
+  limit: 10,
+  page: 1,
+})
+
+// Mutation 示例
+const createSession = trpc.aichat.createSession.useMutation()
+await createSession.mutateAsync({ title: '新对话' })
+```
+
+### 服务端调用
+
+```typescript
+import { appRouter } from '@/server/root'
+import { createContext } from '@/server/server'
+
+const caller = appRouter.createCaller(await createContext())
+const plans = await caller.payments.getMembershipPlans()
+```
+
+## Webhook 端点
+
+除 tRPC 端点外，项目还包含以下 REST API 端点：
+
+| 路径 | 方法 | 说明 |
+|------|------|------|
+| `/api/webhooks/stripe` | POST | Stripe webhook 事件处理 |
+| `/api/auth/*` | ALL | Better Auth 认证 API |

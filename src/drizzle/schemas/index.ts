@@ -2,6 +2,7 @@
 // 导入所有表定义
 // ===============================
 
+import { aiTokenUsage } from './ai-token-usage'
 import {
   aiChatAttachments,
   aiChatEmbeddings,
@@ -11,6 +12,7 @@ import {
 } from './aichat'
 import { auditLogs } from './audit-logs'
 import { blogPosts } from './blog'
+import { couponUsage } from './coupon-usage'
 import {
   coupons,
   membershipPlans,
@@ -20,6 +22,7 @@ import {
   userMemberships,
   userUsageLimits,
 } from './payments'
+import { refundRequests } from './refund-requests'
 
 import * as relations from './relations'
 import { apiKeys, notifications, systemConfigs } from './system'
@@ -31,6 +34,14 @@ import {
   verificationTokens,
 } from './users'
 
+// ===============================
+// AI Token 使用量模块导出
+// ===============================
+export {
+  type AiTokenUsage,
+  aiTokenUsage,
+  type NewAiTokenUsage,
+} from './ai-token-usage'
 // ===============================
 // AI 会话模块导出
 // ===============================
@@ -85,7 +96,14 @@ export {
   blogPosts,
   type NewBlogPost,
 } from './blog'
-
+// ===============================
+// 优惠码使用记录模块导出
+// ===============================
+export {
+  type CouponUsage,
+  couponUsage,
+  type NewCouponUsage,
+} from './coupon-usage'
 // ===============================
 // 支付模块导出
 // ===============================
@@ -111,6 +129,14 @@ export {
   userMemberships,
   userUsageLimits,
 } from './payments'
+// ===============================
+// 退款请求模块导出
+// ===============================
+export {
+  type NewRefundRequest,
+  type RefundRequest,
+  refundRequests,
+} from './refund-requests'
 
 // ===============================
 // 系统模块导出
@@ -173,6 +199,8 @@ export const schema = {
   paymentRecords,
   userUsageLimits,
   coupons,
+  couponUsage,
+  refundRequests,
 
   // 系统模块
   apiKeys,
@@ -188,6 +216,9 @@ export const schema = {
   aiChatAttachments,
   aiChatFileChunks,
   aiChatEmbeddings,
+
+  // AI Token 使用量
+  aiTokenUsage,
 
   // 博客模块
   blogPosts,

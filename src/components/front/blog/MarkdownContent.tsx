@@ -1,16 +1,61 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import type { Components } from 'react-markdown'
 import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import type { Components } from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { codeToHtml } from 'shiki'
 
 interface MarkdownContentProps {
   content: string
   className?: string
+}
+
+function ShikiCodeBlock({
+  language,
+  code,
+}: { language: string; code: string }) {
+  const [html, setHtml] = useState<string>('')
+
+  useEffect(() => {
+    let cancelled = false
+
+    const highlight = async () => {
+      try {
+        const result = await codeToHtml(code, {
+          lang: language,
+          theme: 'one-dark-pro',
+        })
+        if (!cancelled) {
+          setHtml(result)
+        }
+      } catch {
+        const escaped = code
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+        if (!cancelled) {
+          setHtml(
+            `<pre class="rounded-md"><code class="font-mono text-sm">${escaped}</code></pre>`
+          )
+        }
+      }
+    }
+
+    highlight()
+    return () => {
+      cancelled = true
+    }
+  }, [code, language])
+
+  return (
+    <div
+      className="overflow-hidden rounded-md [&_pre]:m-0! [&_pre]:p-4! [&_pre]:text-sm! [&_code]:font-mono [&_code]:text-sm"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  )
 }
 
 export function MarkdownContent({ content, className }: MarkdownContentProps) {
@@ -18,19 +63,14 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
     code({ className, children, ...props }) {
       const match = /language-(\w+)/.exec(className || '')
       const language = match ? match[1] : ''
-      const isInline = !language && !String(children).includes('\n')
+      const codeString = String(children).replace(/\n$/, '')
+      const isInline = !(language || codeString.includes('\n'))
 
-      return !isInline && language ? (
-        <SyntaxHighlighter
-          style={oneDark}
-          language={language}
-          PreTag="div"
-          className="rounded-md"
-          {...props}
-        >
-          {String(children).replace(/\n$/, '')}
-        </SyntaxHighlighter>
-      ) : (
+      if (!isInline && language) {
+        return <ShikiCodeBlock language={language} code={codeString} />
+      }
+
+      return (
         <code
           className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm"
           {...props}
@@ -83,7 +123,7 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
     },
     p({ children }) {
       return (
-        <p className="mb-4 leading-7 [&:not(:first-child)]:mt-4">{children}</p>
+        <p className="mb-4 leading-7 not-first:mt-4">{children}</p>
       )
     },
     ul({ children }) {

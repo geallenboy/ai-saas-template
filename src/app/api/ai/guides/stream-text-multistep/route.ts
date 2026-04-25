@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         // 系统提示，指导模型只做一件事：提取目标。
         system: '从对话中提取用户的目标。',
         // 将从UI接收到的消息转换为AI SDK要求的格式。
-        messages: convertToModelMessages(messages),
+        messages: await convertToModelMessages(messages),
         // `toolChoice: 'required'` 强制模型必须调用一个工具，而不是直接生成文本。
         toolChoice: 'required',
         // 定义可供模型使用的工具。
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
         // 这是将多步骤连接起来的关键：
         // 它包含了原始的对话历史，并附加了第1步（result1）中生成的所有消息（包括工具调用和结果）。
         messages: [
-          ...convertToModelMessages(messages),
+          ...(await convertToModelMessages(messages)),
           ...(await result1.response).messages,
         ],
       })
