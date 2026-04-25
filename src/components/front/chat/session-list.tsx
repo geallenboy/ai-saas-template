@@ -191,13 +191,18 @@ export function SessionList({
                   selectedId === session.id && 'bg-muted'
                 )}
               >
-                <button
-                  className="w-full px-3 py-3 text-left"
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className="w-full px-3 py-3 text-left cursor-pointer"
                   onClick={() =>
                     editingId !== session.id && onSelect(session.id)
                   }
-                  type="button"
-                  disabled={editingId === session.id}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      editingId !== session.id && onSelect(session.id)
+                    }
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     {editingId === session.id ? (
@@ -275,7 +280,7 @@ export function SessionList({
                       }
                     )}
                   </p>
-                </button>
+                </div>
               </div>
             ))
           ) : (
