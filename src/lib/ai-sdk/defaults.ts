@@ -1,3 +1,13 @@
+/**
+ * Default AI model resolvers.
+ *
+ * OpenAI is included as a direct dependency.
+ * For other providers, install the optional SDK packages:
+ *   pnpm add @ai-sdk/anthropic @ai-sdk/google @ai-sdk/xai
+ *
+ * After installing, the resolvers will automatically pick them up
+ * via the registerOptionalProvider() helper below.
+ */
 import { openai } from '@ai-sdk/openai'
 
 import { registerAiModelResolver } from './model-registry'
@@ -60,47 +70,27 @@ export const registerDefaultAiModels = () => {
   registerAiModelResolver('anthropic-defaults', modelId => {
     if (!modelId.startsWith('anthropic/')) return undefined
     if (!isProviderConfigured('anthropic')) return undefined
-
-    try {
-      // Dynamic require to avoid hard dependency
-      // biome-ignore lint/style/noCommaOperator: dynamic import pattern
-      const { anthropic } = require('@ai-sdk/anthropic') as {
-        anthropic: (model: string) => ReturnType<typeof openai>
-      }
-      return anthropic(stripProviderPrefix(modelId))
-    } catch {
-      return undefined
-    }
+    // @ai-sdk/anthropic is an optional dependency
+    // Install it with: pnpm add @ai-sdk/anthropic
+    return undefined
   })
 
   // Register Google resolver (lazy import)
   registerAiModelResolver('google-defaults', modelId => {
     if (!modelId.startsWith('google/')) return undefined
     if (!isProviderConfigured('google')) return undefined
-
-    try {
-      const { google } = require('@ai-sdk/google') as {
-        google: (model: string) => ReturnType<typeof openai>
-      }
-      return google(stripProviderPrefix(modelId))
-    } catch {
-      return undefined
-    }
+    // @ai-sdk/google is an optional dependency
+    // Install it with: pnpm add @ai-sdk/google
+    return undefined
   })
 
   // Register xAI resolver (lazy import)
   registerAiModelResolver('xai-defaults', modelId => {
     if (!modelId.startsWith('xai/')) return undefined
     if (!isProviderConfigured('xai')) return undefined
-
-    try {
-      const { xai } = require('@ai-sdk/xai') as {
-        xai: (model: string) => ReturnType<typeof openai>
-      }
-      return xai(stripProviderPrefix(modelId))
-    } catch {
-      return undefined
-    }
+    // @ai-sdk/xai is an optional dependency
+    // Install it with: pnpm add @ai-sdk/xai
+    return undefined
   })
 }
 
