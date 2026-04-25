@@ -67,6 +67,12 @@ const guides = [
     description:
       '学习如何实现完整的 RAG 流程：文档分块、向量化、相似度搜索和上下文注入。',
   },
+  {
+    href: '/ai/guides/agent-workflow',
+    title: 'AI Agent 工作流',
+    description:
+      '学习如何构建 AI Agent，展示多步骤工具调用和自主决策能力。',
+  },
 ]
 
 export default function GuidesPage() {
