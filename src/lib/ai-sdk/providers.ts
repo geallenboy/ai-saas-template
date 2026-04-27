@@ -79,7 +79,7 @@ export const AI_PROVIDERS: AIProviderConfig[] = [
         isEnabled: false,
         models: [
             {
-                id: 'anthropic/claude-sonnet-4-20250514',
+                id: 'anthropic/claude-sonnet-4-20260514',
                 displayName: 'Claude Sonnet 4',
                 provider: 'anthropic',
                 capabilities: ['chat'],

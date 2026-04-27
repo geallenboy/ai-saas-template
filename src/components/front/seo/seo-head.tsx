@@ -79,7 +79,7 @@ export default function SEOHead({
     url: siteUrl,
     logo: `${siteUrl}/images/logo.png`,
     description: '专业的AI SaaS应用开发模板平台',
-    foundingDate: '2025',
+    foundingDate: '2026',
     founders: [
       {
         '@type': 'Person',
@@ -97,18 +97,18 @@ export default function SEOHead({
   // 面包屑导航数据（如果提供了URL路径）
   const breadcrumbData = url
     ? {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: url
-          .split('/')
-          .filter(Boolean)
-          .map((segment, index, array) => ({
-            '@type': 'ListItem',
-            position: index + 1,
-            name: segment,
-            item: `${siteUrl}/${array.slice(0, index + 1).join('/')}`,
-          })),
-      }
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: url
+        .split('/')
+        .filter(Boolean)
+        .map((segment, index, array) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: segment,
+          item: `${siteUrl}/${array.slice(0, index + 1).join('/')}`,
+        })),
+    }
     : null
 
   return (

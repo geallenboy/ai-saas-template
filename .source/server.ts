@@ -20,10 +20,10 @@ import * as __fd_glob_10 from "../src/content/docs/aichat/conversation-flow.mdx?
 import * as __fd_glob_9 from "../src/content/docs/quickstart.mdx?collection=docs"
 import * as __fd_glob_8 from "../src/content/docs/index.mdx?collection=docs"
 import * as __fd_glob_7 from "../src/content/docs/architecture.mdx?collection=docs"
-import { default as __fd_glob_6 } from "../src/content/docs/development/meta.json?collection=docs"
-import { default as __fd_glob_5 } from "../src/content/docs/features/meta.json?collection=docs"
-import { default as __fd_glob_4 } from "../src/content/docs/customization/meta.json?collection=docs"
-import { default as __fd_glob_3 } from "../src/content/docs/deployment/meta.json?collection=docs"
+import { default as __fd_glob_6 } from "../src/content/docs/features/meta.json?collection=docs"
+import { default as __fd_glob_5 } from "../src/content/docs/development/meta.json?collection=docs"
+import { default as __fd_glob_4 } from "../src/content/docs/deployment/meta.json?collection=docs"
+import { default as __fd_glob_3 } from "../src/content/docs/customization/meta.json?collection=docs"
 import { default as __fd_glob_2 } from "../src/content/docs/api/meta.json?collection=docs"
 import { default as __fd_glob_1 } from "../src/content/docs/aichat/meta.json?collection=docs"
 import { default as __fd_glob_0 } from "../src/content/docs/meta.json?collection=docs"
@@ -35,4 +35,4 @@ const create = server<typeof Config, import("fumadocs-mdx/runtime/types").Intern
   }
 }>({"doc":{"passthroughs":["extractedReferences"]}});
 
-export const docs = await create.docs("docs", "src/content/docs", {"meta.json": __fd_glob_0, "aichat/meta.json": __fd_glob_1, "api/meta.json": __fd_glob_2, "deployment/meta.json": __fd_glob_3, "customization/meta.json": __fd_glob_4, "features/meta.json": __fd_glob_5, "development/meta.json": __fd_glob_6, }, {"architecture.mdx": __fd_glob_7, "index.mdx": __fd_glob_8, "quickstart.mdx": __fd_glob_9, "aichat/conversation-flow.mdx": __fd_glob_10, "aichat/data-models.mdx": __fd_glob_11, "aichat/overview.mdx": __fd_glob_12, "aichat/ui-ux.mdx": __fd_glob_13, "api/overview.mdx": __fd_glob_14, "customization/themes.mdx": __fd_glob_15, "deployment/ci-cd.mdx": __fd_glob_16, "deployment/docker.mdx": __fd_glob_17, "deployment/index.mdx": __fd_glob_18, "deployment/production-setup.mdx": __fd_glob_19, "deployment/vercel.mdx": __fd_glob_20, "development/api-development.mdx": __fd_glob_21, "development/configuration.mdx": __fd_glob_22, "development/database-development.mdx": __fd_glob_23, "development/project-structure.mdx": __fd_glob_24, "features/authentication.mdx": __fd_glob_25, "features/file-management.mdx": __fd_glob_26, "features/payment-billing.mdx": __fd_glob_27, });
+export const docs = await create.docs("docs", "src/content/docs", {"meta.json": __fd_glob_0, "aichat/meta.json": __fd_glob_1, "api/meta.json": __fd_glob_2, "customization/meta.json": __fd_glob_3, "deployment/meta.json": __fd_glob_4, "development/meta.json": __fd_glob_5, "features/meta.json": __fd_glob_6, }, {"architecture.mdx": __fd_glob_7, "index.mdx": __fd_glob_8, "quickstart.mdx": __fd_glob_9, "aichat/conversation-flow.mdx": __fd_glob_10, "aichat/data-models.mdx": __fd_glob_11, "aichat/overview.mdx": __fd_glob_12, "aichat/ui-ux.mdx": __fd_glob_13, "api/overview.mdx": __fd_glob_14, "customization/themes.mdx": __fd_glob_15, "deployment/ci-cd.mdx": __fd_glob_16, "deployment/docker.mdx": __fd_glob_17, "deployment/index.mdx": __fd_glob_18, "deployment/production-setup.mdx": __fd_glob_19, "deployment/vercel.mdx": __fd_glob_20, "development/api-development.mdx": __fd_glob_21, "development/configuration.mdx": __fd_glob_22, "development/database-development.mdx": __fd_glob_23, "development/project-structure.mdx": __fd_glob_24, "features/authentication.mdx": __fd_glob_25, "features/file-management.mdx": __fd_glob_26, "features/payment-billing.mdx": __fd_glob_27, });
